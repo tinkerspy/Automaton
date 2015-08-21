@@ -1,0 +1,51 @@
+#######################################
+# Syntax Coloring Map For Automaton
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Automaton	KEYWORD1
+Factory		KEYWORD1
+atm_timer	KEYWORD1
+atm_counter KEYWORD1
+Atm_led		KEYWORD1
+Atm_fade	KEYWORD1
+Atm_button	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+state	KEYWORD2
+hub	KEYWORD2
+asleep	KEYWORD2
+runtime	KEYWORD2
+decrement	KEYWORD2
+input	KEYWORD2
+output	KEYWORD2
+stateSwitch	KEYWORD2
+pinChange	KEYWORD2
+add	KEYWORD2
+calibrate	KEYWORD2
+run	KEYWORD2
+priority	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+ATM_QUEUESIZE	LITERAL1
+ATM_NO_OF_HUBS	LITERAL1
+ATM_HUBSCHED_SIZE	LITERAL1
+
+ATM_NOP	LITERAL1
+ATM_SLEEP	LITERAL1
+ATM_ON_ENTER	LITERAL1
+ATM_ON_LOOP	LITERAL1
+ATM_ON_EXIT	LITERAL1
+
+ATM_TIMER_OFF	LITERAL1
+ATM_COUNTER_OFF	LITERAL1
+
