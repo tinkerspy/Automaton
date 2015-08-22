@@ -31,9 +31,9 @@ void setup() {
   Serial.begin( 9600 );
   delay( 1000 );
   Serial.println( "start" );
-  led1.begin( 3 ).duration( 200 ).state( led1.START ).on_switch( sw );
-  led2.begin( 4 ).duration( 300 ).state( led2.START ).label( "LED2" ).on_switch( sw );
-  btn.begin( 14, cb ).on_switch( sw ); 
+  led1.begin( 3 ).duration( 200 ).state( led1.START ).onSwitch( sw );
+  led2.begin( 4 ).duration( 300 ).state( led2.START ).label( "LED2" ).onSwitch( sw );
+  btn.begin( 14, cb ).onSwitch( sw ); 
   factory.add( led1).add( led2 ).add( btn );  
 }
 

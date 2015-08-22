@@ -10,7 +10,7 @@ Machine & Machine::state(state_t state)
 { 
 	next = state; 
 	trigger = -1; 
-	sleeping = 0;
+	sleep = 0;
 	return *this; 
 }
 
@@ -26,7 +26,7 @@ Machine &Machine::toggle( state_t state1, state_t state2 )
 	return *this; 
 }
 
-Machine & Machine::on_switch( swcb_t callback ) 
+Machine & Machine::onSwitch( swcb_t callback ) 
 {
 	switch_callback = callback;
 	return *this;
@@ -74,7 +74,7 @@ Machine & Machine::priority( int8_t priority )
 
 uint8_t Machine::asleep() 
 { 
-	return sleeping; 
+	return sleep; 
 }
 
 // .runtime() Returns the number of millis since the machine entered the current state 
@@ -162,7 +162,7 @@ uint8_t Machine::pinChange( uint8_t pin, uint8_t hilo ) {
 Machine & Machine::signalWrite( uint8_t id )
 {
 	sig |= (uint32_t) 1 << id;
-	sleeping = 0;
+	sleep = 0;
 	return *this;
 }
 
@@ -190,7 +190,7 @@ Machine & Machine::signalClear( void )
 Machine & Machine::signalMap( uint32_t bitmap )
 {
 	sig |= bitmap;
-	sleeping = 0;
+	sleep = 0;
 	return *this;
 }
 
@@ -198,7 +198,7 @@ Machine & Machine::signalMap( uint32_t bitmap )
 Machine & Machine::cycle() 
 {
 	state_t i;
-	if ( sleeping ) return *this;
+	if ( sleep ) return *this;
 	cycles++;
 	if ( next != -1 ) {
 		action( ATM_ON_SWITCH );
@@ -208,7 +208,7 @@ Machine & Machine::cycle()
 		next = -1;
 		ms = millis();
 		action( read_state( state_table + ( current * width ) + ATM_ON_ENTER ) );
-		sleeping = read_state( state_table + ( current * width ) + ATM_ON_LOOP ) == ATM_SLEEP;
+		sleep = read_state( state_table + ( current * width ) + ATM_ON_LOOP ) == ATM_SLEEP;
 		cycles = 0;
 	}
 	i = read_state( state_table + ( current * width ) + ATM_ON_LOOP );
@@ -250,7 +250,7 @@ void Factory::run( int q )
 {
 	Machine * m = priority_root[ q ];
 	while ( m ) {
-		if ( q > 0 && !m->sleeping ) m->cycle();
+		if ( q > 0 && !m->sleep ) m->cycle();
 		// Request a recalibrate if the prio field doesn't match the current queue
 		if ( m->prio != q ) recalibrate = 1;
 		// Move to the next machine

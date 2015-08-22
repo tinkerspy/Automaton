@@ -66,11 +66,11 @@ class Machine
 	int signalRead( uint8_t id );
 	int signalPeek( uint8_t id );
 	Machine & cycle( void );
-	Machine & on_switch( swcb_t callback );
+	Machine & onSwitch( swcb_t callback );
 	Machine & label( const char label[] ) ;
   public:
 	int8_t prio;
-	int8_t sleeping;
+	int8_t sleep;
 	const char * inst_label;
 	const char * class_label;
 	Machine * inventory_next;
