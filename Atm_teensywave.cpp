@@ -51,15 +51,15 @@ void ATM_CLASSNAME::action( int id )
 	  set( phase, _steps );
 	  return;
 	case ACT_STARTSQ :
-      set( timer, (int)( _steps * _delay / 2 ) ); 
+      set( timer, (int) ( _steps * _delay / 2 ) ); 
 	  return;
 	case ACT_SINE :        
-	  val = sin( ( _steps - phase.value ) * _stepsize ) * 2000.0 + 2050.0;
+	  val = sin( phase.value * _stepsize ) * 2000.0 + 2050.0;
 	  analogWrite( pin, val );
 	  decrement( phase );
 	  return;
 	case ACT_SAW :        
-	  val = ( _steps - phase.value ) * 13;
+	  val = phase.value * 13;
 	  analogWrite( pin, val );
 	  decrement( phase );
 	  return;
