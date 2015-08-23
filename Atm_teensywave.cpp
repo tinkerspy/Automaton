@@ -41,7 +41,7 @@ int ATM_CLASSNAME::event( int id )
 
 void ATM_CLASSNAME::action( int id ) 
 {
-  float val;
+  int val;
   switch ( id ) {
 	case ACT_IDLE :
 	  analogWrite( pin, 0 );
@@ -55,12 +55,12 @@ void ATM_CLASSNAME::action( int id )
 	  return;
 	case ACT_SINE :        
 	  val = sin( ( _steps - phase.value ) * _stepsize ) * 2000.0 + 2050.0;
-	  analogWrite( pin, (int)val );
+	  analogWrite( pin, val );
 	  decrement( phase );
 	  return;
 	case ACT_SAW :        
 	  val = ( _steps - phase.value ) * 13;
-	  analogWrite( pin, (int)val );
+	  analogWrite( pin, val );
 	  decrement( phase );
 	  return;
 	case ACT_SQON :        
