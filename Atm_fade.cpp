@@ -4,15 +4,15 @@
 ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin )
 {  
 	const static state_t state_table[] PROGMEM = {
-	/*               ON_ENTER    ON_LOOP       ON_EXIT EVT_TM_FADE   EVT_TM_ON  EVT_TM_OFF  EVT_CNT_FADE   EVT_CNT_RPT    ELSE  */
-	/* IDLE   */      ACT_OFF, ATM_SLEEP,           -1,         -1,         -1,         -1,           -1,           -1,     -1,  // LED off
-	/* ON     */       ACT_ON, ATM_SLEEP,           -1,         -1,         -1,         -1,           -1,           -1,     -1,  // LED on
-	/* START  */      ACT_OFF,        -1,           -1,         -1,         -1,         -1,           -1,           -1, STARTU,  // Start fading
-	/* STARTU */    ACT_START,        -1,           -1,         -1,         -1,         UP,           -1,           -1,     -1,  
-	/* UP     */       ACT_UP,        -1,           -1,         UP,         -1,         -1,       STARTD,           -1,     -1,
-	/* STARTD */    ACT_START,        -1,           -1,         -1,       DOWN,         -1,           -1,           -1,     -1,
-	/* DOWN   */     ACT_DOWN,        -1,           -1,       DOWN,         -1,         -1,       REPEAT,           -1,     -1,
-	/* REPEAT */   ACT_REPEAT,        -1,           -1,         -1,         -1,         -1,           -1,         IDLE, STARTU };
+	/*               ON_ENTER    ON_LOOP       ON_EXIT  EVT_CNT_FADE EVT_TM_FADE   EVT_TM_ON  EVT_TM_OFF   EVT_CNT_RPT    ELSE  */
+	/* IDLE   */      ACT_OFF, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     -1,  // LED off
+	/* ON     */       ACT_ON, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     -1,  // LED on
+	/* START  */      ACT_OFF,        -1,           -1,           -1,         -1,         -1,         -1,           -1, STARTU,  // Start fading
+	/* STARTU */    ACT_START,        -1,           -1,           -1,         -1,         -1,         UP,           -1,     -1,  
+	/* UP     */       ACT_UP,        -1,           -1,       STARTD,         UP,         -1,         -1,           -1,     -1,
+	/* STARTD */    ACT_START,        -1,           -1,           -1,         -1,       DOWN,         -1,           -1,     -1,
+	/* DOWN   */     ACT_DOWN,        -1,           -1,       REPEAT,       DOWN,         -1,         -1,           -1,     -1,
+	/* REPEAT */   ACT_REPEAT,        -1,           -1,           -1,         -1,         -1,         -1,         IDLE, STARTU };
 	table( state_table, ELSE );
 	pin = attached_pin; 
 	pinMode( pin, OUTPUT );
@@ -25,17 +25,15 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin )
 	return *this;
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::duration( int duration ) 
+ATM_CLASSNAME & ATM_CLASSNAME::blink( int duration ) 
 {
 	set( timer_on, duration ); // Plateau between slopes (in which led is fully on)
-	set( timer_off, duration ); // Pause between slopes (in which led is fully off)
 	return *this;
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::duration( int on_duration, int off_duration ) 
+ATM_CLASSNAME & ATM_CLASSNAME::pause( int duration ) 
 {
-	set( timer_on, on_duration ); // Plateau between slopes (in which led is fully on)
-	set( timer_off, off_duration ); // Pause between slopes (in which led is fully off)
+	set( timer_off, duration ); // Pause between slopes (in which led is fully off)
 	return *this;
 }
 

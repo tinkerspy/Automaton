@@ -19,17 +19,15 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin )
 	return *this;
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::duration( int duration ) 
+ATM_CLASSNAME & ATM_CLASSNAME::blink( int duration ) 
 {
 	set( on_timer, duration ); // Time in which led is fully on
-	set( off_timer, duration ); // Time in which led is fully off
 	return *this;
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::duration( int on_duration, int off_duration ) 
+ATM_CLASSNAME & ATM_CLASSNAME::pause( int duration ) 
 {
-	set( on_timer, on_duration ); // Time in which led is fully on
-	set( off_timer, off_duration ); // Time in which led is fully off
+	set( off_timer, duration ); // Time in which led is fully off
 	return *this;
 }
 

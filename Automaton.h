@@ -32,7 +32,11 @@ const state_t ATM_ON_EXIT = 2;
 const uint32_t ATM_TIMER_OFF = 0xffffffff; // This timer value never expires
 const uint16_t ATM_COUNTER_OFF = 0xffff; // This counter value never expires
 
-class atm_timer {
+class atm_milli_timer {
+	public:	uint32_t value;
+};
+
+class atm_micro_timer {
 	public:	uint32_t value;
 };
 
@@ -48,16 +52,19 @@ class Machine
 	Machine &state( state_t state);
 	state_t state( void );
 	Machine & toggle( state_t state1, state_t state2 ); 
-	Machine & set(atm_timer &timer, uint32_t v); 
+	Machine & set(atm_milli_timer &timer, uint32_t v); 
+	Machine & set(atm_micro_timer &timer, uint32_t v); 
 	Machine & set(atm_counter &counter, uint16_t v); 
 	Machine & table( const state_t tbl[], state_t w );
-	uint8_t expired(atm_timer timer);
+	uint8_t expired(atm_milli_timer timer);
+	uint8_t expired(atm_micro_timer timer);
 	uint8_t expired(atm_counter &counter);
 	uint16_t decrement(atm_counter &counter);
 	uint8_t asleep( void );
 	Machine & priority( int8_t priority );
 	int8_t priority( void );
 	uint32_t runtime( void );
+	uint32_t micro_runtime( void );
 	uint8_t pinChange( uint8_t pin );
 	uint8_t pinChange( uint8_t pin, uint8_t hilo );
 	Machine & signalWrite( uint8_t id );
@@ -81,7 +88,7 @@ class Machine
 	state_t trigger = -1;
 	uint32_t pinstate;
 	uint32_t sig;
-	uint32_t ms;
+	uint32_t state_millis, state_micros;
 	const state_t* state_table;
 	uint8_t width;
 	swcb_t switch_callback;

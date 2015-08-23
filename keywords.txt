@@ -8,7 +8,8 @@
 
 Automaton	KEYWORD1
 Factory		KEYWORD1
-atm_timer	KEYWORD1
+atm_milli_timer	KEYWORD1
+atm_milli_timer	KEYWORD1
 atm_counter KEYWORD1
 Atm_led		KEYWORD1
 Atm_fade	KEYWORD1
@@ -19,6 +20,7 @@ Atm_button	KEYWORD1
 #######################################
 
 state	KEYWORD2
+toggle	KEYWORD2
 hub	KEYWORD2
 asleep	KEYWORD2
 runtime	KEYWORD2
@@ -29,8 +31,14 @@ stateSwitch	KEYWORD2
 pinChange	KEYWORD2
 add	KEYWORD2
 calibrate	KEYWORD2
-run	KEYWORD2
+cycle	KEYWORD2
 priority	KEYWORD2
+set	KEYWORD2
+expired	KEYWORD2
+blink	KEYWORD2
+pause	KEYWORD2
+fade	KEYWORD2
+repeat	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

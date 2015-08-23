@@ -80,11 +80,23 @@ uint8_t Machine::asleep()
 // .runtime() Returns the number of millis since the machine entered the current state 
 uint32_t Machine::runtime() 
 { 
-	return millis() - ms; 
+	return millis() - state_millis; 
+}
+
+uint32_t Machine::micro_runtime() 
+{ 
+	return micros() - state_micros; 
 }
 
 // .set( timer, value ) Sets a timer to a value
-Machine & Machine::set( atm_timer &timer, uint32_t v ) 
+Machine & Machine::set( atm_milli_timer &timer, uint32_t v ) 
+{ 
+	timer.value = v; 
+	return *this; 
+}
+
+// .set( timer, value ) Sets a timer to a value
+Machine & Machine::set( atm_micro_timer &timer, uint32_t v ) 
 { 
 	timer.value = v; 
 	return *this; 
@@ -107,9 +119,15 @@ Machine & Machine::table( const state_t* tbl, state_t w )
 }
 
 // .expired( timer) Returns true if the timer argument has expired
-uint8_t Machine::expired( atm_timer timer ) 
+uint8_t Machine::expired( atm_milli_timer timer ) 
 { 
 	return timer.value == ATM_TIMER_OFF ? 0 : runtime() >= timer.value; 
+}
+
+// .expired( timer) Returns true if the timer argument has expired
+uint8_t Machine::expired( atm_micro_timer timer ) 
+{ 
+	return timer.value == ATM_TIMER_OFF ? 0 : micro_runtime() >= timer.value; 
 }
 
 // .expired( counter) Returns true if the counter argument (unsigned int) has expired
@@ -206,7 +224,8 @@ Machine & Machine::cycle()
 			switch_callback( inst_label ? inst_label : class_label, current, next, trigger, runtime(), cycles );
 		current = next;
 		next = -1;
-		ms = millis();
+		state_millis = millis();
+		state_micros = micros();
 		action( read_state( state_table + ( current * width ) + ATM_ON_ENTER ) );
 		sleep = read_state( state_table + ( current * width ) + ATM_ON_LOOP ) == ATM_SLEEP;
 		cycles = 0;

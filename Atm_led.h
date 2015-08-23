@@ -21,13 +21,13 @@ class ATM_CLASSNAME : public Machine {
 	// Custom class variables
 	short pin;
 	int repeat_count;
-	atm_timer on_timer, off_timer;
+	atm_milli_timer on_timer, off_timer;
 	atm_counter counter;
 
 	// Methods used
 	ATM_CLASSNAME & begin( int attached_pin );
-	ATM_CLASSNAME & duration( int duration ); 
-	ATM_CLASSNAME & duration( int on_duration, int off_duration ); 
+	ATM_CLASSNAME & blink( int duration ); 
+	ATM_CLASSNAME & pause( int duration ); 
 	ATM_CLASSNAME & fade( int fade ); 
 	ATM_CLASSNAME & repeat( int repeat ); 
 	int event( int id );

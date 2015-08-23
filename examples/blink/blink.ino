@@ -6,7 +6,7 @@ class Blink : public Machine {
     Blink( void ) : Machine() { class_label = "BLNK"; };
 
     short pin;     
-    atm_timer timer;
+    atm_milli_timer timer;
 
 	enum { LED_ON, LED_OFF } STATES;
 	enum { EVT_TIMER, ELSE } EVENTS;

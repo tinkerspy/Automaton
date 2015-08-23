@@ -18,7 +18,7 @@ class ATM_CLASSNAME : public Machine {
 
 	// Your custom variables go here 
 	static const uint32_t TIMER = 1000;
-	atm_timer timer;
+	atm_milli_timer timer;
 	
 	// Prototypes for your methods, minimum: begin(), event() & action()
 	Machine & begin( void );

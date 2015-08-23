@@ -2,6 +2,10 @@
 #include <Atm_led.h>
 #include <Atm_button.h>
 
+int led1Pin = 3;
+int led2Pin = 4;
+int buttonPin = 11;
+
 Atm_led led1, led2;
 Atm_button btn;
 Factory factory;
@@ -31,9 +35,9 @@ void setup() {
   Serial.begin( 9600 );
   delay( 1000 );
   Serial.println( "start" );
-  led1.begin( 3 ).duration( 200 ).state( led1.START ).onSwitch( sw );
-  led2.begin( 4 ).duration( 300 ).state( led2.START ).label( "LED2" ).onSwitch( sw );
-  btn.begin( 14, cb ).onSwitch( sw ); 
+  led1.begin( led1Pin ).blink( 200 ).state( led1.START ).onSwitch( sw );
+  led2.begin( led2Pin ).blink( 300 ).state( led2.START ).label( "LED2" ).onSwitch( sw );
+  btn.begin( buttonPin, cb ).onSwitch( sw ); 
   factory.add( led1).add( led2 ).add( btn );  
 }
 
