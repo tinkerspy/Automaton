@@ -7,18 +7,19 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, presscb_t press_callback
 {
 	const static state_t state_table[] PROGMEM = {
 	/* Standard Mode: press/repeat */
-		/*                  ON_ENTER  ON_LOOP       ON_EXIT  EVT_LMODE  EVT_TIMER  EVT_DELAY  EVT_REPEAT EVT_PRESS  EVT_RELEASE  EVT_COUNTER   ELSE */
-		/* IDLE     */            -1,      -1,           -1,     LIDLE,        -1,        -1,         -1,     WAIT,          -1,          -1,    -1,
-		/* WAIT     */            -1,      -1,           -1,        -1,   PRESSED,        -1,         -1,       -1,        IDLE,          -1,    -1,
-		/* PRESSED  */     ACT_PRESS,      -1,           -1,        -1,        -1,    REPEAT,         -1,       -1,     RELEASE,          -1,    -1,
-		/* REPEAT   */     ACT_PRESS,      -1,           -1,        -1,        -1,        -1,     REPEAT,       -1,     RELEASE,          -1,    -1,
-		/* RELEASE  */   ACT_RELEASE,      -1,           -1,        -1,        -1,        -1,         -1,       -1,          -1,          -1,  IDLE,
+		/*                  ON_ENTER  ON_LOOP       ON_EXIT  EVT_LMODE  EVT_TIMER  EVT_DELAY  EVT_REPEAT EVT_PRESS  EVT_RELEASE  EVT_COUNTER   EVT_AUTO  ELSE */
+		/* IDLE     */            -1,      -1,           -1,     LIDLE,        -1,        -1,         -1,     WAIT,          -1,          -1,      AUTO,   -1,
+		/* WAIT     */            -1,      -1,           -1,        -1,   PRESSED,        -1,         -1,       -1,        IDLE,          -1,        -1,    -1,
+		/* PRESSED  */     ACT_PRESS,      -1,           -1,        -1,        -1,    REPEAT,         -1,       -1,     RELEASE,          -1,        -1,    -1,
+		/* REPEAT   */     ACT_PRESS,      -1,           -1,        -1,        -1,        -1,     REPEAT,       -1,     RELEASE,          -1,        -1,    -1,
+		/* RELEASE  */   ACT_RELEASE,      -1,           -1,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1,  IDLE,
 	/* Long Press Mode: press/long press */	
-		/* LIDLE    */            -1,      -1,           -1,        -1,        -1,        -1,         -1,    LWAIT,          -1,          -1,    -1,
-		/* LWAIT    */    ACT_LSTART,      -1,           -1,        -1,  LPRESSED,        -1,         -1,       -1,       LIDLE,          -1,    -1,
-		/* LPRESSED */    ACT_LCOUNT,      -1,           -1,        -1,        -1,  LPRESSED,         -1,       -1,    LRELEASE,    WRELEASE,    -1,
-		/* LRELEASE */  ACT_LRELEASE,      -1, ACT_WRELEASE,        -1,        -1,        -1,         -1,       -1,          -1,          -1, LIDLE,
-		/* WRELEASE */  ACT_LRELEASE,      -1, ACT_WRELEASE,        -1,        -1,        -1,         -1,       -1,       LIDLE,          -1,    -1,
+		/* LIDLE    */            -1,      -1,           -1,        -1,        -1,        -1,         -1,    LWAIT,          -1,          -1,        -1,    -1,
+		/* LWAIT    */    ACT_LSTART,      -1,           -1,        -1,  LPRESSED,        -1,         -1,       -1,       LIDLE,          -1,        -1,    -1,
+		/* LPRESSED */    ACT_LCOUNT,      -1,           -1,        -1,        -1,  LPRESSED,         -1,       -1,    LRELEASE,    WRELEASE,        -1,    -1,
+		/* LRELEASE */  ACT_LRELEASE,      -1, ACT_WRELEASE,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1, LIDLE,
+		/* WRELEASE */  ACT_LRELEASE,      -1, ACT_WRELEASE,        -1,        -1,        -1,         -1,       -1,       LIDLE,          -1,        -1,    -1,
+		/* AUTO     */      ACT_AUTO,      -1,           -1,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1,  IDLE,
 	};
 	table( state_table, ELSE );
 	pin = attached_pin;
@@ -27,6 +28,7 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, presscb_t press_callback
 	set( timer_debounce, DEBOUNCE );
 	set( timer_delay, ATM_TIMER_OFF );
 	set( timer_repeat, ATM_TIMER_OFF );
+	set( timer_auto, ATM_TIMER_OFF );
 	pinMode( pin, INPUT_PULLUP );
 	return *this;
 }
@@ -59,6 +61,14 @@ ATM_CLASSNAME & ATM_CLASSNAME::repeat( void ) {
 	return *this;
 }
 
+ATM_CLASSNAME & ATM_CLASSNAME::autoPress( int delay, int press ) {
+	
+    _auto_delay = delay;
+    _auto_press = press;
+	set( timer_auto, _auto_delay );    
+	return *this;
+}
+
 int ATM_CLASSNAME::event( int id ) 
 {
   switch ( id ) {
@@ -70,6 +80,8 @@ int ATM_CLASSNAME::event( int id )
 	  return expired( timer_delay );        
 	case EVT_REPEAT :
 	  return expired( timer_repeat );        
+	case EVT_AUTO :
+	  return expired( timer_auto );        
 	case EVT_PRESS :
 	  return pinChange( pin, LOW );        
 	case EVT_RELEASE :
@@ -85,6 +97,9 @@ void ATM_CLASSNAME::action( int id )
   switch ( id ) {
 	case ACT_PRESS :
 	  (*callback)( 1 );
+	  return;
+	case ACT_AUTO :
+	  (*callback)( _auto_press );
 	  return;
 	case ACT_RELEASE :
 	  (*callback)( 0 );

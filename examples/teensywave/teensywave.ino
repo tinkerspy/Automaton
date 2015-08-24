@@ -22,7 +22,7 @@ void setup()
 {
   // 314 steps, 50 usec period, start machine in SN (Sine Wave) state
   wave.begin( pinOut, 314, 50 ); 
-  btn.begin( pinIn, btnHandler );
+  btn.begin( pinIn, btnHandler ).autoPress( 10000, 1 );
   factory.add( wave ).add( btn );
   wave.signalWrite( wave.SIG_TOGGLE );
 }
@@ -31,4 +31,3 @@ void loop()
 {
   factory.cycle();
 }
-
