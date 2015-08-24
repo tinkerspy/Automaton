@@ -1,6 +1,6 @@
 #include <Automaton.h>
 #include "Atm_teensywave.h"
-	
+
 ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, int steps, int delay )
 {
       const static state_t state_table[] PROGMEM = {
