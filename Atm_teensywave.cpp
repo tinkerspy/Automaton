@@ -59,7 +59,7 @@ void ATM_CLASSNAME::action( int id )
 	  decrement( phase );
 	  return;
 	case ACT_SAW :        
-	  val = phase.value * 13;
+	  val = ( _steps - phase.value ) * 13;
 	  analogWrite( pin, val );
 	  decrement( phase );
 	  return;

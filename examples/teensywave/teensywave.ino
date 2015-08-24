@@ -21,9 +21,10 @@ void btnHandler( int press ) {
 void setup()
 {
   // 314 steps, 50 usec period, start machine in SN (Sine Wave) state
-  wave.begin( pinOut, 314, 50 ).state( wave.START_SN ); 
+  wave.begin( pinOut, 314, 50 ); 
   btn.begin( pinIn, btnHandler );
   factory.add( wave ).add( btn );
+  wave.signalWrite( wave.SIG_TOGGLE );
 }
 
 void loop()
