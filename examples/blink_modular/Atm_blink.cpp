@@ -4,9 +4,9 @@
 ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, int blinkrate )
 {
   const static state_t state_table[] PROGMEM = {
-  /*            ON_ENTER    ON_LOOP  ON_EXIT     ELSE */
-  /* LED_ON  */   ACT_ON,        -1,      -1, LED_OFF,
-  /* LED_OFF */  ACT_OFF,        -1,      -1,  LED_ON };
+  /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER   ELSE */
+  /* LED_ON  */   ACT_ON,        -1,      -1,   LED_OFF,    -1,
+  /* LED_OFF */  ACT_OFF,        -1,      -1,    LED_ON,    -1 };
   table( state_table, ELSE );
   pin = attached_pin; 
   set( timer, blinkrate ); 
