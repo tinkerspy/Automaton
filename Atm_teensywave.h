@@ -18,10 +18,10 @@ class ATM_CLASSNAME: public Machine {
     int _steps, _delay;
     float _stepsize;
 
-    enum { IDLE, START_SN, SINE, START_SW, SAW, START_SQ, SQON, SQOFF } STATES;
+    enum { IDLE, START_SN, SINE, START_SW, SAW, START_SR, SAWR, START_TR, TRI, START_SQ, SQON, SQOFF } STATES;
     enum { EVT_COUNTER, EVT_TIMER, EVT_TOGGLE, ELSE } EVENTS;
-    enum { ACT_IDLE, ACT_START, ACT_SINE, ACT_SAW, ACT_STARTSQ, ACT_SQON, ACT_SQOFF } ACTIONS;
-	enum { SIG_TOGGLE } SIGNALS;
+    enum { ACT_IDLE, ACT_START, ACT_SINE, ACT_SAW, ACT_SAWR, ACT_STARTTR, ACT_TRI, ACT_STARTSQ, ACT_SQON, ACT_SQOFF } ACTIONS;
+    enum { SIG_TOGGLE } SIGNALS;
 		
     ATM_CLASSNAME & begin( int attached_pin, int steps, int delay );
     int event( int id ); 
@@ -29,3 +29,4 @@ class ATM_CLASSNAME: public Machine {
 };
 
 #endif
+

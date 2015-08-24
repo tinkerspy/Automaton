@@ -1,16 +1,25 @@
 #include <Automaton.h>
 #include "Atm_teensywave.h"
 
+
+// TODO
+// - Triangle waveform
+// - Combine with LCD interface
+
 ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, int steps, int delay )
 {
       const static state_t state_table[] PROGMEM = {
       /*                ON_ENTER    ON_LOOP  ON_EXIT  EVT_COUNTER   EVT_TIMER  EVT_TOGGLE   ELSE */
       /* IDLE     */    ACT_IDLE, ATM_SLEEP,      -1,          -1,         -1,   START_SN,    -1,
-      /* START_SN */   ACT_START,        -1,      -1,          -1,         -1,         -1,  SINE,
+      /* START_SN */   ACT_START,        -1,      -1,          -1,         -1,         -1,  SINE, // SINE
       /* SINE     */    ACT_SINE,        -1,      -1,    START_SN,       SINE,   START_SW,    -1,
       /* START_SW */   ACT_START,        -1,      -1,          -1,         -1,         -1,   SAW,
-      /* SAW      */     ACT_SAW,        -1,      -1,    START_SW,        SAW,   START_SQ,    -1,
-      /* START_SQ */ ACT_STARTSQ,        -1,      -1,          -1,         -1,         -1,  SQON,
+      /* SAW      */     ACT_SAW,        -1,      -1,    START_SW,        SAW,   START_SR,    -1, // SAWTOOTH
+      /* START_SR */   ACT_START,        -1,      -1,          -1,         -1,         -1,  SAWR,
+      /* SAWR     */    ACT_SAWR,        -1,      -1,    START_SR,       SAWR,   START_TR,    -1, // SAWTOOTH REVERSED
+      /* START_TR */ ACT_STARTTR,        -1,      -1,          -1,         -1,         -1,   TRI,
+      /* TRI      */     ACT_TRI,        -1,      -1,    START_TR,        TRI,   START_SQ,    -1, // TRIANGLE
+      /* START_SQ */ ACT_STARTSQ,        -1,      -1,          -1,         -1,         -1,  SQON, // SQUARE
       /* SQON     */    ACT_SQON,        -1,      -1,          -1,      SQOFF,         -1,    -1,
       /* SQOFF    */   ACT_SQOFF,        -1,      -1,          -1,       SQON,   START_SN,    -1,
       };
@@ -41,7 +50,6 @@ int ATM_CLASSNAME::event( int id )
 
 void ATM_CLASSNAME::action( int id ) 
 {
-  int val;
   switch ( id ) {
     case ACT_IDLE :
       analogWrite( pin, 0 );
@@ -51,16 +59,30 @@ void ATM_CLASSNAME::action( int id )
       set( phase, _steps );
       return;
     case ACT_STARTSQ :
-      set( timer, (int) ( _steps * _delay / 2 ) ); 
+      set( timer, _steps * _delay / 2 ); 
       return;
     case ACT_SINE :        
-      val = sin( phase.value * _stepsize ) * 2000.0 + 2050.0;
-      analogWrite( pin, val );
+      analogWrite( pin, sin( phase.value * _stepsize ) * 2000.0 + 2050.0 );
       decrement( phase );
       return;
     case ACT_SAW :        
-      val = ( _steps - phase.value ) * 13;
-      analogWrite( pin, val );
+      analogWrite( pin, ( _steps - phase.value ) * 13 );
+      decrement( phase );
+      return;
+    case ACT_SAWR :        
+      analogWrite( pin, phase.value * 13 );
+      decrement( phase );
+      return;
+    case ACT_STARTTR :
+      set( timer, _delay ); 
+      set( phase, _steps );
+      return;
+    case ACT_TRI :        
+      if ( phase.value << 1 >= _steps ) {
+        analogWrite( pin, ( _steps - phase.value ) * 26 );
+      } else {
+        analogWrite( pin, phase.value * 26 );
+      }
       decrement( phase );
       return;
     case ACT_SQON :        
@@ -71,3 +93,4 @@ void ATM_CLASSNAME::action( int id )
       return;
    }
 }
+
