@@ -5,7 +5,7 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, int steps, int delay )
 {
       const static state_t state_table[] PROGMEM = {
       /*                ON_ENTER    ON_LOOP  ON_EXIT  EVT_COUNTER   EVT_TIMER  EVT_TOGGLE   ELSE */
-      /* IDLE     */    ACT_IDLE, ATM_SLEEP,      -1,          -1,         -1,         -1,    -1,
+      /* IDLE     */    ACT_IDLE, ATM_SLEEP,      -1,          -1,         -1,   START_SN,    -1,
       /* START_SN */   ACT_START,        -1,      -1,          -1,         -1,         -1,  SINE,
       /* SINE     */    ACT_SINE,        -1,      -1,    START_SN,       SINE,   START_SW,    -1,
       /* START_SW */   ACT_START,        -1,      -1,          -1,         -1,         -1,   SAW,
