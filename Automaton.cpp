@@ -212,32 +212,49 @@ Machine & Machine::signalMap( uint32_t bitmap )
     return *this;
 }
 
+Machine & Machine::flagSet( int id ) 
+{
+   flag |= (uint32_t) 1 << id;
+   return *this;
+}
+
+Machine & Machine::flagClear( int id ) 
+{
+   flag &= ~(uint32_t) 1 << id;
+   return *this;
+}
+
+int Machine::flagRead( int id ) 
+{
+   return ( flag >> id ) & 1;
+}
+
 // .cycle() Executes one cycle of a state machine
 Machine & Machine::cycle() 
 {
-    state_t i;
-    if ( sleep ) return *this;
-    cycles++;
-    if ( next != -1 ) {
-        action( ATM_ON_SWITCH );
-        if ( switch_callback ) 
-            switch_callback( inst_label ? inst_label : class_label, current, next, trigger, runtime(), cycles );
-        current = next;
-        next = -1;
-        state_millis = millis();
-        state_micros = micros();
-        action( read_state( state_table + ( current * width ) + ATM_ON_ENTER ) );
-        sleep = read_state( state_table + ( current * width ) + ATM_ON_LOOP ) == ATM_SLEEP;
-        cycles = 0;
-    }
-    i = read_state( state_table + ( current * width ) + ATM_ON_LOOP );
-    if ( i != -1 ) { action( i ); }
-    for ( i = ATM_ON_EXIT + 1; i < width; i++ ) { 
-        if ( ( read_state( state_table + ( current * width ) + i ) != -1 ) && ( event( i - ATM_ON_EXIT - 1 ) || i == width - 1 ) ) {
-            action( read_state( state_table + ( current * width ) + ATM_ON_EXIT ) );
-            state( read_state( state_table + ( current * width ) + i ) );
-            trigger = i - ATM_ON_EXIT - 1;
-            return *this;
+    if ( !sleep ) {
+        cycles++;
+        if ( next != -1 ) {
+            action( ATM_ON_SWITCH );
+            if ( switch_callback ) 
+                switch_callback( inst_label ? inst_label : class_label, current, next, trigger, runtime(), cycles );
+            current = next;
+            next = -1;
+            state_millis = millis();
+            state_micros = micros();
+            action( read_state( state_table + ( current * width ) + ATM_ON_ENTER ) );
+            sleep = read_state( state_table + ( current * width ) + ATM_ON_LOOP ) == ATM_SLEEP;
+            cycles = 0;
+        }
+        state_t i = read_state( state_table + ( current * width ) + ATM_ON_LOOP );
+        if ( i != -1 ) { action( i ); }
+        for ( i = ATM_ON_EXIT + 1; i < width; i++ ) { 
+            if ( ( read_state( state_table + ( current * width ) + i ) != -1 ) && ( event( i - ATM_ON_EXIT - 1 ) || i == width - 1 ) ) {
+                action( read_state( state_table + ( current * width ) + ATM_ON_EXIT ) );
+                state( read_state( state_table + ( current * width ) + i ) );
+                trigger = i - ATM_ON_EXIT - 1;
+                return *this;
+            }
         }
     }
     return *this;

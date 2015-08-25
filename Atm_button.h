@@ -24,8 +24,7 @@ class ATM_CLASSNAME : public Machine {
 	atm_counter counter_longpress;
 	void (*callback)( int press ) = 0;
 	int16_t longpress_max;
-    uint32_t _auto_delay = ATM_TIMER_OFF;
-    int16_t _auto_press = 1;
+        int16_t _auto_press = 1;
 
 	ATM_CLASSNAME & begin( int attached_pin, presscb_t press_callback );
 	ATM_CLASSNAME & begin( int attached_pin, presscb_t press_callback, int pulldown );

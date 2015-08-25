@@ -63,9 +63,8 @@ ATM_CLASSNAME & ATM_CLASSNAME::repeat( void ) {
 
 ATM_CLASSNAME & ATM_CLASSNAME::autoPress( int delay, int press ) {
 	
-    _auto_delay = delay;
-    _auto_press = press;
-	set( timer_auto, _auto_delay );    
+        _auto_press = press;
+	set( timer_auto, delay );    
 	return *this;
 }
 

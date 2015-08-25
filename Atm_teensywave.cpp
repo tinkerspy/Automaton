@@ -31,7 +31,10 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, int steps, int delay )
       set( phase, steps ); // 314 steps of 0.02 = 6.28 ( 2 * pi )
       _stepsize = (float) 6.28318 / _steps;
       pinMode( pin, OUTPUT ); 
-      analogWriteResolution( 12 );
+// Analog out is only available on Teensy 3.1 and LC      
+#if defined(__MK20DX256__) || defined(__MKL26Z64__)
+      analogWriteResolution( 12 ); 
+#endif
       return *this;          
 }
 

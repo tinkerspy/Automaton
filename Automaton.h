@@ -72,6 +72,9 @@ class Machine
 	Machine & signalMap( uint32_t bitmap );
 	int signalRead( uint8_t id );
 	int signalPeek( uint8_t id );
+    Machine & flagSet( int id );
+    Machine & flagClear( int id );
+    int flagRead( int id );
 	Machine & cycle( void );
 	Machine & onSwitch( swcb_t callback );
 	Machine & label( const char label[] ) ;
@@ -87,7 +90,7 @@ class Machine
 	state_t current = -1;
 	state_t trigger = -1;
 	uint32_t pinstate;
-	uint32_t sig;
+	uint32_t sig, flag;
 	uint32_t state_millis, state_micros;
 	const state_t* state_table;
 	uint8_t width;
