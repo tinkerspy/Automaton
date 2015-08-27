@@ -15,7 +15,7 @@ class ATM_CLASSNAME: public Machine {
     short pin;     
     atm_micro_timer timer;
     atm_counter phase;
-    int _steps, _delay;
+    uint16_t _steps, _delay;
     float _stepsize;
 
     enum { IDLE, START_SN, SINE, START_SW, SAW, START_SR, SAWR, START_TR, TRI, START_SQ, SQON, SQOFF } STATES;

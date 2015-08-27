@@ -1,7 +1,7 @@
 #include <Atm_fade.h>
 #include <Automaton.h>
 
-int ledPin = 3;
+int ledPin = 4;
 
 Atm_fade led;
 

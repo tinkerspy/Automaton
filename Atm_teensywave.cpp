@@ -81,7 +81,7 @@ void ATM_CLASSNAME::action( int id )
       set( phase, _steps );
       return;
     case ACT_TRI :        
-      if ( phase.value << 1 >= _steps ) {
+      if ( ( phase.value << 1 ) >= _steps ) {
         analogWrite( pin, ( _steps - phase.value ) * 26 );
       } else {
         analogWrite( pin, phase.value * 26 );
