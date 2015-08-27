@@ -27,10 +27,10 @@ void setup()
 {
   //Serial.begin(9600);delay(1000);Serial.println( "start" );
   // Initialize the machines
-  led1.begin( 3 ).blink( 200 ).fade( 5 ).state( led1.START );
-  led2.begin( 4 ).blink( 100 ).pause( 1000 ).fade( 5 ).state( led2.START );
-  led3.begin( 5 ).blink( 100 ).pause( 200 ).fade( 5 ).repeat( 10 ).state( led3.START );
-  btn.begin( 14, btn_change );
+  led1.begin( 3 ).blink( 20 ).fade( 5 ).state( led1.START );
+  led2.begin( 4 ).blink( 10 ).pause( 1000 ).fade( 5 ).state( led2.START );
+  led3.begin( 5 ).blink( 10 ).pause( 200 ).fade( 5 ).state( led3.START );
+  btn.begin( 11, btn_change );
   
   // Add the initialized machines to the factory
   factory.add( led1 );
