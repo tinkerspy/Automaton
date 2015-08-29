@@ -44,6 +44,8 @@ class atm_counter {
 	public: uint16_t value;
 };
 
+class Factory; // pre declare!
+
 class Machine
 {
   public:
@@ -77,7 +79,7 @@ class Machine
     int flagRead( int id );
 	Machine & cycle( void );
 	Machine & onSwitch( swcb_t callback );
-	Machine & label( const char label[] ) ;
+	Machine & label( const char label[] );
   public:
 	int8_t prio;
 	int8_t sleep;
@@ -85,6 +87,7 @@ class Machine
 	const char * class_label;
 	Machine * inventory_next;
 	Machine * priority_next;
+    Factory * factory;
   protected:
     state_t next;
 	state_t current = -1;
@@ -104,6 +107,7 @@ class Factory
   public:
 	Factory & add( Machine & machine );
 	Factory & cycle( void );
+    Machine * find( const char label[] );
   protected:
 	int8_t recalibrate = 1;
 	Machine * inventory_root;

@@ -299,8 +299,22 @@ Factory & Factory::add( Machine & machine )
 {	
     machine.inventory_next = inventory_root;
     inventory_root = &machine;
+    machine.factory = this;
     recalibrate = 1;
     return *this;
+}
+
+// .find() Search the factory inventory for a machine by instance label
+Machine * Factory::find( const char label[] )
+{
+    Machine * m = inventory_root;
+    while ( m ) {
+        if ( *label == *m->inst_label ) {
+            return m;
+        }
+        m = m->inventory_next;
+    }
+    return 0;        
 }
 
 // .cycle() executes one factory cycle (runs all priority queues a certain number of times)
