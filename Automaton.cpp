@@ -115,6 +115,7 @@ Machine & Machine::table( const state_t* tbl, state_t w )
     state_table = tbl;
     width = ATM_ON_EXIT + w + 2;
     prio = ATM_DEFAULT_PRIO;
+    inst_label = class_label;
     return *this; 
 }
 
@@ -237,7 +238,7 @@ Machine & Machine::cycle()
         if ( next != -1 ) {
             action( ATM_ON_SWITCH );
             if ( switch_callback ) 
-                switch_callback( inst_label ? inst_label : class_label, current, next, trigger, runtime(), cycles );
+                switch_callback( inst_label, current, next, trigger, runtime(), cycles );
             current = next;
             next = -1;
             state_millis = millis();
