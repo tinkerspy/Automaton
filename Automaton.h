@@ -49,8 +49,8 @@ class Factory; // pre declare!
 class Machine
 {
   public:
-	virtual int event( int id );
-	virtual void action( int id );
+	virtual int event( int id ) = 0; // Pure virtual methods -> make this an abstract class
+	virtual void action( int id ) = 0;
 	Machine &state( state_t state);
 	state_t state( void );
 	Machine & toggle( state_t state1, state_t state2 ); 

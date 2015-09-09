@@ -143,11 +143,11 @@ uint16_t Machine::decrement( atm_counter &counter )
     return counter.value > 0 && counter.value != ATM_COUNTER_OFF ? --counter.value : 0; 
 }
 
-
+/*
 int Machine::event( int id ) { 	return 0; }
 
 void Machine::action( int id ) { }
-
+*/
 /* 
  * Returns true if pin has changed
  * Clears any change for pin 
