@@ -91,7 +91,7 @@ class Machine
 	state_t current = -1;
 	state_t trigger = -1;
 	uint32_t pinstate;
-	uint32_t sig, flag;
+	uint32_t sig;
 	uint32_t state_millis, state_micros;
 	const state_t* state_table;
 	uint8_t width;
