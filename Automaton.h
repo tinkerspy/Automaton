@@ -71,12 +71,10 @@ class Machine
 	uint8_t pinChange( uint8_t pin, uint8_t hilo );
 	Machine & signalWrite( uint8_t id );
 	Machine & signalClear( void );
+    Machine & signalClear( uint8_t id  );
 	Machine & signalMap( uint32_t bitmap );
 	int signalRead( uint8_t id );
 	int signalPeek( uint8_t id );
-    Machine & flagSet( int id );
-    Machine & flagClear( int id );
-    int flagRead( int id );
 	Machine & cycle( void );
 	Machine & onSwitch( swcb_t callback );
 	Machine & label( const char label[] );

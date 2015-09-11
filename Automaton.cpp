@@ -206,28 +206,17 @@ Machine & Machine::signalClear( void )
     return *this;
 }
 
+Machine & Machine::signalClear( uint8_t id  )
+{
+    sig &= ~(uint32_t) 1 << id;
+    return *this;
+}
+
 Machine & Machine::signalMap( uint32_t bitmap )
 {
     sig |= bitmap;
     sleep = 0;
     return *this;
-}
-
-Machine & Machine::flagSet( int id ) 
-{
-   flag |= (uint32_t) 1 << id;
-   return *this;
-}
-
-Machine & Machine::flagClear( int id ) 
-{
-   flag &= ~(uint32_t) 1 << id;
-   return *this;
-}
-
-int Machine::flagRead( int id ) 
-{
-   return ( flag >> id ) & 1;
 }
 
 // .cycle() Executes one cycle of a state machine
