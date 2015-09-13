@@ -4,7 +4,7 @@
 ATM_CLASSNAME & ATM_CLASSNAME::begin( Stream * stream, char buffer[], int size )
 {
   const static state_t state_table[] PROGMEM = {
-  /*                  ON_ENTER    ON_LOOP    ON_EXIT  EVT_INPUT   EVT_OEL   ELSE */
+  /*                  ON_ENTER    ON_LOOP    ON_EXIT  EVT_INPUT   EVT_EOL   ELSE */
   /* IDLE     */            -1,        -1,        -1,  READCHAR,       -1,    -1,
   /* READCHAR */  ACT_READCHAR,        -1,        -1,  READCHAR,     SEND,    -1,
   /* SEND     */      ACT_SEND,        -1,        -1,        -1,       -1,  IDLE,
