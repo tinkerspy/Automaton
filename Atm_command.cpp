@@ -20,9 +20,17 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( Stream * stream, char buffer[], int size )
   return *this;          
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::onCmd( void (*callback)( ATM_CLASSNAME * cmd ) ) 
+ATM_CLASSNAME & ATM_CLASSNAME::onCommand(void (*callback)( int idx ), const char * commands  ) 
 {
-  _callback = callback;
+  _callback_idx = callback;
+  _commands = commands;
+  return *this;  
+}
+
+ATM_CLASSNAME & ATM_CLASSNAME::onCommand( void (*callback)( ATM_CLASSNAME * cmd ) ) 
+{
+  _callback_obj = callback;
+  _commands = 0;
   return *this;  
 }
 
@@ -48,7 +56,7 @@ char * ATM_CLASSNAME::arg( int id ) {
   return &_buffer[i];
 }
 
-int ATM_CLASSNAME::command( int id, const char * cmdlist ) {
+int ATM_CLASSNAME::lookup( int id, const char * cmdlist ) {
 
   int cnt = 0;
   char * pamem = arg( id );
@@ -98,7 +106,13 @@ void ATM_CLASSNAME::action( int id )
       return;
     case ACT_SEND :
       _buffer[--_bufptr] = '\0';
-      (*_callback)( this );
+      if ( _commands == 0 ) {
+        (*_callback_obj)( this );
+      } else {
+        int idx = lookup( 0, _commands );
+        if ( idx > -1 ) 
+          (*_callback_idx)( idx );
+      }
       _lastch = '\0';      
       _bufptr = 0;
   	  return;

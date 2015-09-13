@@ -14,23 +14,26 @@ class ATM_CLASSNAME: public Machine {
   public:
     ATM_CLASSNAME( void ) : Machine() { class_label = "CMD"; };
 
-    void (*_callback)( ATM_CLASSNAME * cmd ) = 0;
+    void (*_callback_obj)( ATM_CLASSNAME * cmd ) = 0;
+    void (*_callback_idx)( int idx ) = 0;
     Stream * _stream;
     char * _buffer;
     int _bufsize, _bufptr;
     char _eol, _lastch;
     const char * _sep;
+    const char * _commands;
 
     enum { IDLE, READCHAR, SEND } STATES;
     enum { EVT_INPUT, EVT_EOL, ELSE } EVENTS;
-	  enum { ACT_READCHAR, ACT_SEND } ACTIONS;
+	enum { ACT_READCHAR, ACT_SEND } ACTIONS;
 	
     ATM_CLASSNAME & begin( Stream * stream, char buffer[], int size );
     int event( int id ); 
     void action( int id ); 
-    ATM_CLASSNAME & onCmd( void (*callback)( ATM_CLASSNAME * cmd ) ); 
+    ATM_CLASSNAME & onCommand(void (*callback)( int idx ), const char * commands  );
+    ATM_CLASSNAME & onCommand( void (*callback)( ATM_CLASSNAME * cmd ) ); 
     ATM_CLASSNAME & separator( const char sep[] ); 
-    int command( int id, const char * cmdlist );
+    int lookup( int id, const char * cmdlist );
     char * arg( int id );
 };
 
