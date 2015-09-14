@@ -22,15 +22,8 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( Stream * stream, char buffer[], int size )
 
 ATM_CLASSNAME & ATM_CLASSNAME::onCommand(void (*callback)( int idx ), const char * commands  ) 
 {
-  _callback_idx = callback;
+  _callback = callback;
   _commands = commands;
-  return *this;  
-}
-
-ATM_CLASSNAME & ATM_CLASSNAME::onCommand( void (*callback)( ATM_CLASSNAME * cmd ) ) 
-{
-  _callback_obj = callback;
-  _commands = 0;
   return *this;  
 }
 
@@ -59,20 +52,20 @@ char * ATM_CLASSNAME::arg( int id ) {
 int ATM_CLASSNAME::lookup( int id, const char * cmdlist ) {
 
   int cnt = 0;
-  char * pamem = arg( id );
-  char * pa = pamem;
-  const char * pc = cmdlist;
-  while ( pc[0] != '\0' ) { 
-    while ( pc[0] != '\0' && pc[0] == pa[0] ) {
-      pc++;
-      pa++;
+  char * arg = this->arg( id );
+  char * a = arg;
+  const char * c = cmdlist;
+  while ( c[0] != '\0' ) { 
+    while ( c[0] != '\0' && toupper( c[0] ) == toupper( a[0] ) ) {
+      c++;
+      a++;
     }
-    if ( pa[0] == '\0' ) 
+    if ( a[0] == '\0' ) 
       return cnt;
-    if ( pc[0] == ' ' ) 
+    if ( c[0] == ' ' ) 
       cnt++;
-    pa = pamem;  
-    pc++;
+    a = arg;  
+    c++;
   }
   return -1;
 }
@@ -106,13 +99,7 @@ void ATM_CLASSNAME::action( int id )
       return;
     case ACT_SEND :
       _buffer[--_bufptr] = '\0';
-      if ( _commands == 0 ) {
-        (*_callback_obj)( this );
-      } else {
-        int idx = lookup( 0, _commands );
-        if ( idx > -1 ) 
-          (*_callback_idx)( idx );
-      }
+      (*_callback)( lookup( 0, _commands ) );
       _lastch = '\0';      
       _bufptr = 0;
   	  return;
