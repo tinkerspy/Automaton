@@ -4,13 +4,10 @@
 
 #include <Automaton.h>
 
-#undef ATM_CLASSNAME
-#define ATM_CLASSNAME Atm_teensywave
-
-class ATM_CLASSNAME: public Machine {
+class Atm_teensywave: public Machine {
 
   public:
-    ATM_CLASSNAME( void ) : Machine() { class_label = "WAVE"; };
+    Atm_teensywave( void ) : Machine() { class_label = "WAVE"; };
 
     short pin;     
     atm_micro_timer timer;
@@ -22,8 +19,8 @@ class ATM_CLASSNAME: public Machine {
     enum { EVT_COUNTER, EVT_TIMER, EVT_TOGGLE, ELSE } EVENTS;
     enum { ACT_IDLE, ACT_START, ACT_SINE, ACT_SAW, ACT_SAWR, ACT_STARTTR, ACT_TRI, ACT_STARTSQ, ACT_SQON, ACT_SQOFF } ACTIONS;
     enum { SIG_TOGGLE } SIGNALS;
-		
-    ATM_CLASSNAME & begin( int attached_pin, int steps, int delay );
+			
+    Atm_teensywave & begin( int attached_pin, int steps, int delay );
     int event( int id ); 
     void action( int id ); 
 };

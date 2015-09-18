@@ -5,7 +5,7 @@
 
 #include "Automaton.h"
 
-// .state( state ) Sets the (next) machine state
+/// .state( state ) Sets the (next) machine state
 Machine & Machine::state(state_t state) 
 { 
     next = state; 
@@ -14,21 +14,29 @@ Machine & Machine::state(state_t state)
     return *this; 
 }
 
-// .state() Returns the current machine state
+/// .state() Returns the current machine state
 state_t Machine::state() 
 { 
     return current; 
 }
 
-Machine &Machine::toggle( state_t state1, state_t state2 ) 
+Machine &  Machine::toggle( state_t state1, state_t state2 ) 
 { 
     state( current == state1 ? state2 : state1 ); 
     return *this; 
 }
 
-Machine & Machine::onSwitch( swcb_t callback ) 
+Machine & Machine::onSwitch( swcb_num_t callback ) 
 {
-    switch_callback = callback;
+    callback_num = callback;
+    return *this;
+}
+
+Machine & Machine::onSwitch( swcb_sym_t callback, const char sym_s[], const char sym_e[] ) 
+{
+    callback_sym = callback;
+    sym_states = sym_s;
+    sym_events = sym_e;
     return *this;
 }
 
@@ -50,6 +58,26 @@ void sw( const char label[], int current, int next, int trigger, uint32_t runtim
   Serial.print( runtime );
   Serial.println( " cycles/ms)" );
 }
+
+// Version with symbols
+void sw( const char label[], const char current[], const char next[], const char trigger[], uint32_t runtime, uint32_t cycles ) {
+  Serial.print( millis() );
+  Serial.print( " Switching " );
+  Serial.print( label );
+  Serial.print( " from state " );
+  Serial.print( current );
+  Serial.print( " to " );
+  Serial.print( next );
+  Serial.print( " on trigger " );
+  Serial.print( trigger );
+  Serial.print( " (" );
+  Serial.print( cycles );
+  Serial.print( " cycles in " );
+  Serial.print( runtime );
+  Serial.println( " ms)" );
+}
+
+
 
 */
 
@@ -78,7 +106,7 @@ uint8_t Machine::asleep()
 }
 
 // .runtime() Returns the number of millis since the machine entered the current state 
-uint32_t Machine::runtime() 
+uint32_t Machine::milli_runtime() 
 { 
     return millis() - state_millis; 
 }
@@ -109,26 +137,36 @@ Machine & Machine::set( atm_counter &counter, uint16_t v )
     return *this; 
 }
 
-// .set( state_table, ELSE ) Sets the state_table & table width
-Machine & Machine::table( const state_t* tbl, state_t w ) 
+Machine & Machine::begin( const state_t* tbl, state_t tbl_w ) 
 { 
     state_table = tbl;
-    width = ATM_ON_EXIT + w + 2;
+    width = ATM_ON_EXIT + tbl_w + 2;
     prio = ATM_DEFAULT_PRIO;
-    inst_label = class_label;
+    if ( !inst_label ) inst_label = class_label;
+    return *this; 
+}
+
+Machine & Machine::begin( const state_t* tbl, state_t tbl_w, atm_msg_t msg[], int msg_w ) 
+{ 
+    state_table = tbl;
+    width = ATM_ON_EXIT + tbl_w + 2;
+    msg_queue = msg;
+    msg_max = msg_w;
+    prio = ATM_DEFAULT_PRIO;
+    if ( !inst_label ) inst_label = class_label;
     return *this; 
 }
 
 // .expired( timer) Returns true if the timer argument has expired
 uint8_t Machine::expired( atm_milli_timer timer ) 
 { 
-    return timer.value == ATM_TIMER_OFF ? 0 : runtime() >= timer.value; 
+    return timer.value == ATM_TIMER_OFF ? 0 : this->milli_runtime() >= timer.value; 
 }
 
 // .expired( timer) Returns true if the timer argument has expired
 uint8_t Machine::expired( atm_micro_timer timer ) 
 { 
-    return timer.value == ATM_TIMER_OFF ? 0 : micro_runtime() >= timer.value; 
+    return timer.value == ATM_TIMER_OFF ? 0 : this->micro_runtime() >= timer.value; 
 }
 
 // .expired( counter) Returns true if the counter argument (unsigned int) has expired
@@ -142,16 +180,6 @@ uint16_t Machine::decrement( atm_counter &counter )
 { 
     return counter.value > 0 && counter.value != ATM_COUNTER_OFF ? --counter.value : 0; 
 }
-
-/*
-int Machine::event( int id ) { 	return 0; }
-
-void Machine::action( int id ) { }
-*/
-/* 
- * Returns true if pin has changed
- * Clears any change for pin 
- */
 
 unsigned char Machine::pinChange( uint8_t pin ) { 
 
@@ -219,6 +247,96 @@ Machine & Machine::signalMap( uint32_t bitmap )
     return *this;
 }
 
+int Machine::msgRead( uint8_t id_msg ) // Checks msg queue and removes 1 msg
+{
+  if ( msg_queue[id_msg] > 0 ) {
+      msg_queue[id_msg]--;
+      return 1;
+  }
+  return 0;
+}
+
+int Machine::msgRead( uint8_t id_msg, int cnt ) 
+{
+  if ( msg_queue[id_msg] > 0 ) {
+    if ( cnt >= msg_queue[id_msg] ) {
+        msg_queue[id_msg] = 0;
+    } else {      
+        msg_queue[id_msg] -= cnt;
+    }    
+    return 1;
+  }
+  return 0;
+}
+
+int Machine::msgPeek( uint8_t id_msg ) 
+{
+  if ( msg_queue[id_msg] > 0 ) {
+      return 1;
+  }
+  return 0;
+}
+
+int Machine::msgClear( uint8_t id_msg ) // Destructive read (clears queue for this type)
+{
+  sleep = 0;
+  if ( msg_queue[id_msg] > 0 ) {
+    msg_queue[id_msg] = 0;
+    return 1;
+  }  
+  return 0;
+}
+
+Machine & Machine::msgClear() 
+{
+  sleep = 0;
+  for ( int i = 0; i < msg_max; i++ ) {
+    msg_queue[i] = 0;
+  }  
+  return *this;
+}
+
+Machine & Machine::msgWrite( uint8_t id_msg ) 
+{
+  sleep = 0;
+  msg_queue[id_msg]++;
+  return *this;
+}
+
+Machine & Machine::msgWrite( uint8_t id_msg, int cnt ) 
+{
+  sleep = 0;
+  msg_queue[id_msg] += cnt;
+  return *this;
+}
+
+Machine & Machine::msgMap( uint32_t map ) // TESTME!
+{
+  sleep = 0;
+  for ( int i = 0; i < msg_max; i++ ) {
+      if ( map & ( 1 << i ) ) {
+          msg_queue[i]++;
+      }
+  }
+  return *this;
+}
+
+const char * Machine::map_symbol( int id, const char map[] )
+{ 
+  int cnt = 0;
+  int i = 0;
+  if ( id == -1 ) return "*NONE*";
+  if ( id ==  0 ) return map;
+  while ( 1 ) {
+    if ( map[i] == '\0' && ++cnt == id ) {
+      i++;
+      break;
+    }
+    i++;
+  }
+  return &map[i];
+}
+
 // .cycle() Executes one cycle of a state machine
 Machine & Machine::cycle() 
 {
@@ -226,8 +344,16 @@ Machine & Machine::cycle()
         cycles++;
         if ( next != -1 ) {
             action( ATM_ON_SWITCH );
-            if ( switch_callback ) 
-                switch_callback( inst_label, current, next, trigger, runtime(), cycles );
+            if ( callback_sym || callback_num ) {
+                if ( callback_sym ) {
+                    callback_sym( inst_label, 
+                        map_symbol( current, sym_states ), 
+                        map_symbol(    next, sym_states ), 
+                        map_symbol( trigger, sym_events ), this->milli_runtime(), cycles );                    
+                } else {
+                    callback_num( inst_label, current, next, trigger, this->milli_runtime(), cycles );
+                }
+            }
             current = next;
             next = -1;
             state_millis = millis();

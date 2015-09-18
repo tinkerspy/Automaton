@@ -1,7 +1,7 @@
 #include <Automaton.h>
 #include "Atm_led.h"
 
-ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin )
+Atm_led & Atm_led::begin( int attached_pin )
 { 
 	static const state_t state_table[] PROGMEM = {
 	/*               ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  ELSE */
@@ -9,7 +9,7 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin )
 	/* ON        */    ACT_ON, ATM_SLEEP,      -1,           -1,            -1,          -1,   -1, // LED on
 	/* START     */    ACT_ON,        -1,      -1,    BLINK_OFF,            -1,          -1,   -1, // Start blinking
 	/* BLINK_OFF */   ACT_OFF,        -1,      -1,           -1,         START,        IDLE,   -1 };
-	table( state_table, ELSE );
+	Machine::begin( state_table, ELSE );
 	pin = attached_pin; 
 	pinMode( pin, OUTPUT );
 	set( on_timer, 500 ); 
@@ -19,28 +19,28 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin )
 	return *this;
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::blink( int duration ) 
+Atm_led & Atm_led::blink( int duration ) 
 {
 	set( on_timer, duration ); // Time in which led is fully on
 	return *this;
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::pause( int duration ) 
+Atm_led & Atm_led::pause( int duration ) 
 {
 	set( off_timer, duration ); // Time in which led is fully off
 	return *this;
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::fade( int fade ) { return *this; } // Dummy for method compatibility with Atm_fade
+Atm_led & Atm_led::fade( int fade ) { return *this; } // Dummy for method compatibility with Atm_fade
 
-ATM_CLASSNAME & ATM_CLASSNAME::repeat( int repeat ) 
+Atm_led & Atm_led::repeat( int repeat ) 
 {
 	repeat_count = repeat >= 0 ? repeat : ATM_COUNTER_OFF;
     set( counter, repeat_count );
 	return *this;
 }
 
-int ATM_CLASSNAME::event( int id ) 
+int Atm_led::event( int id ) 
 {
 	switch ( id ) {
 		case EVT_ON_TIMER :
@@ -53,7 +53,7 @@ int ATM_CLASSNAME::event( int id )
 	return 0;
 }
 
-void ATM_CLASSNAME::action( int id ) 
+void Atm_led::action( int id ) 
 {
 	switch ( id ) {
 		case ACT_INIT :

@@ -18,7 +18,7 @@ class Blink : public Machine {
       /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER   ELSE */
       /* LED_ON  */   ACT_ON,        -1,      -1,   LED_OFF,    -1,
       /* LED_OFF */  ACT_OFF,        -1,      -1,    LED_ON,    -1 };
-      table( state_table, ELSE );
+      Machine::begin( state_table, ELSE );
       pin = attached_pin; 
       set( timer, blinkrate ); 
       pinMode( pin, OUTPUT ); 

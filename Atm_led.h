@@ -4,14 +4,11 @@
 
 #include <Automaton.h>
 
-#undef ATM_CLASSNAME
-#define ATM_CLASSNAME Atm_led
-
-class ATM_CLASSNAME : public Machine {
+class Atm_led : public Machine {
 
   public:
   	// Class constructor
-	ATM_CLASSNAME( void ) : Machine() { class_label = "LED"; };
+	Atm_led( void ) : Machine() { class_label = "LED"; };
 
 	// Custom state, event, action & signal constants (enum)
 	enum { IDLE, ON, START, BLINK_OFF } STATES; 
@@ -25,11 +22,11 @@ class ATM_CLASSNAME : public Machine {
 	atm_counter counter;
 
 	// Methods used
-	ATM_CLASSNAME & begin( int attached_pin );
-	ATM_CLASSNAME & blink( int duration ); 
-	ATM_CLASSNAME & pause( int duration ); 
-	ATM_CLASSNAME & fade( int fade ); 
-	ATM_CLASSNAME & repeat( int repeat ); 
+	Atm_led & begin( int attached_pin );
+	Atm_led & blink( int duration ); 
+	Atm_led & pause( int duration ); 
+	Atm_led & fade( int fade ); 
+	Atm_led & repeat( int repeat ); 
 	int event( int id );
 	void action( int id );
 };

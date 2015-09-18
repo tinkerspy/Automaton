@@ -4,15 +4,12 @@
 
 #include <Automaton.h>
 
-#undef ATM_CLASSNAME
-#define ATM_CLASSNAME Atm_button
-
 typedef void (*presscb_t)( int press );
 
-class ATM_CLASSNAME : public Machine {
+class Atm_button : public Machine {
 
   public:
-	ATM_CLASSNAME( void ) : Machine() { class_label = "BTN"; };
+	Atm_button( void ) : Machine() { class_label = "BTN"; };
  
 	enum { IDLE, WAIT, PRESSED, REPEAT, RELEASE, LIDLE, LWAIT, LPRESSED, LRELEASE, WRELEASE, AUTO } STATES;
 	enum { EVT_LMODE, EVT_TIMER, EVT_DELAY, EVT_REPEAT, EVT_PRESS, EVT_RELEASE, EVT_COUNTER, EVT_AUTO, ELSE } EVENTS;
@@ -26,13 +23,13 @@ class ATM_CLASSNAME : public Machine {
 	int16_t longpress_max;
         int16_t _auto_press = 1;
 
-	ATM_CLASSNAME & begin( int attached_pin, presscb_t press_callback );
-	ATM_CLASSNAME & begin( int attached_pin, presscb_t press_callback, int pulldown );
-	ATM_CLASSNAME & debounce( int delay );
-	ATM_CLASSNAME & longPress( int max, int delay );
-	ATM_CLASSNAME & repeat( int delay, int speed );
-	ATM_CLASSNAME & repeat( void );
-    ATM_CLASSNAME & autoPress( int delay, int press );
+	Atm_button & begin( int attached_pin, presscb_t press_callback );
+	Atm_button & begin( int attached_pin, presscb_t press_callback, int pulldown );
+	Atm_button & debounce( int delay );
+	Atm_button & longPress( int max, int delay );
+	Atm_button & repeat( int delay, int speed );
+	Atm_button & repeat( void );
+    Atm_button & autoPress( int delay, int press );
 	int event( int id );
 	void action( int id );
 };

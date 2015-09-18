@@ -17,7 +17,10 @@
 	#define read_state(addr) (state_t)pgm_read_word_near(addr)
 #endif
 
-typedef void (*swcb_t)( const char label[], int current, int next, int trigger, uint32_t runtime, uint32_t cycles );
+typedef void (*swcb_num_t)( const char label[], int current, int next, int trigger, uint32_t runtime, uint32_t cycles );
+typedef void (*swcb_sym_t)( const char label[], const char current[], const char next[], const char trigger[], uint32_t runtime, uint32_t cycles );
+
+typedef uint16_t atm_msg_t;
 
 const int8_t ATM_NO_OF_QUEUES = 5; // queues 0, 1, 2, 3, 4
 const int8_t ATM_DEFAULT_PRIO = 1;
@@ -44,6 +47,10 @@ class atm_counter {
 	public: uint16_t value;
 };
 
+class atm_message {
+	public: uint16_t cnt = 0;
+};
+
 class Factory; // pre declare!
 
 class Machine
@@ -57,7 +64,8 @@ class Machine
 	Machine & set(atm_milli_timer &timer, uint32_t v); 
 	Machine & set(atm_micro_timer &timer, uint32_t v); 
 	Machine & set(atm_counter &counter, uint16_t v); 
-	Machine & table( const state_t tbl[], state_t w );
+	Machine & begin( const state_t tbl[], state_t w );
+    Machine & begin( const state_t* tbl, state_t tbl_w, atm_msg_t msg[], int msg_w );
 	uint8_t expired(atm_milli_timer timer);
 	uint8_t expired(atm_micro_timer timer);
 	uint8_t expired(atm_counter &counter);
@@ -65,7 +73,7 @@ class Machine
 	uint8_t asleep( void );
 	Machine & priority( int8_t priority );
 	int8_t priority( void );
-	uint32_t runtime( void );
+	uint32_t milli_runtime( void );
 	uint32_t micro_runtime( void );
 	uint8_t pinChange( uint8_t pin );
 	uint8_t pinChange( uint8_t pin, uint8_t hilo );
@@ -75,9 +83,19 @@ class Machine
 	Machine & signalMap( uint32_t bitmap );
 	int signalRead( uint8_t id );
 	int signalPeek( uint8_t id );
+    int msgRead( uint8_t id_msg ); 
+    int msgRead( uint8_t id_msg, int cnt ); 
+    int msgPeek( uint8_t id_msg ); 
+    int msgClear( uint8_t id_msg ); 
+    Machine & msgClear( void ); 
+    Machine & msgWrite( uint8_t id_msg ); 
+    Machine & msgWrite( uint8_t id_msg, int cnt ); 
+    Machine & msgMap( uint32_t map );
 	Machine & cycle( void );
-	Machine & onSwitch( swcb_t callback );
+	Machine & onSwitch( swcb_num_t callback );
+	Machine & onSwitch( swcb_sym_t callback, const char sym_s[], const char sym_e[] );
 	Machine & label( const char label[] );
+   const char * map_symbol( int id, const char map[] );
   public:
 	int8_t prio;
 	int8_t sleep;
@@ -94,9 +112,14 @@ class Machine
 	uint32_t sig;
 	uint32_t state_millis, state_micros;
 	const state_t* state_table;
+    const char* sym_states;
+    const char* sym_events;
 	uint8_t width;
-	swcb_t switch_callback;
+	swcb_sym_t callback_sym;
+	swcb_num_t callback_num;
 	uint32_t cycles;
+    atm_msg_t * msg_queue;
+    uint8_t msg_max;
 };
 
 

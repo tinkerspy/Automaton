@@ -3,7 +3,7 @@
 
 // Add option for button press callback (for reading i2c buttons etc)
 
-ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, presscb_t press_callback )
+Atm_button & Atm_button::begin( int attached_pin, presscb_t press_callback )
 {
 	const static state_t state_table[] PROGMEM = {
 	/* Standard Mode: press/repeat */
@@ -21,7 +21,7 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, presscb_t press_callback
 		/* WRELEASE */  ACT_LRELEASE,      -1, ACT_WRELEASE,        -1,        -1,        -1,         -1,       -1,       LIDLE,          -1,        -1,    -1,
 		/* AUTO     */      ACT_AUTO,      -1,           -1,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1,  IDLE,
 	};
-	table( state_table, ELSE );
+	Machine::begin( state_table, ELSE );
 	pin = attached_pin;
     set( counter_longpress, 0 );	
 	callback = press_callback;
@@ -33,13 +33,13 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, presscb_t press_callback
 	return *this;
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::debounce( int delay ) {
+Atm_button & Atm_button::debounce( int delay ) {
 	
 	set( timer_debounce, delay );
 	return *this;
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::longPress( int max, int delay ) {
+Atm_button & Atm_button::longPress( int max, int delay ) {
 	
 	longpress_max = max;
     set( counter_longpress, longpress_max );
@@ -47,28 +47,28 @@ ATM_CLASSNAME & ATM_CLASSNAME::longPress( int max, int delay ) {
 	return *this;
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::repeat( int delay, int speed ) {
+Atm_button & Atm_button::repeat( int delay, int speed ) {
 	
 	set( timer_delay, delay );
 	set( timer_repeat, speed );	
 	return *this;
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::repeat( void ) {
+Atm_button & Atm_button::repeat( void ) {
 	
 	set( timer_delay, 500 );
 	set( timer_repeat, 50 );	
 	return *this;
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::autoPress( int delay, int press ) {
+Atm_button & Atm_button::autoPress( int delay, int press ) {
 	
-        _auto_press = press;
+    _auto_press = press;
 	set( timer_auto, delay );    
 	return *this;
 }
 
-int ATM_CLASSNAME::event( int id ) 
+int Atm_button::event( int id ) 
 {
   switch ( id ) {
 	case EVT_LMODE :
@@ -91,7 +91,7 @@ int ATM_CLASSNAME::event( int id )
   return 0;
 }
 
-void ATM_CLASSNAME::action( int id ) 
+void Atm_button::action( int id ) 
 {
   switch ( id ) {
 	case ACT_PRESS :

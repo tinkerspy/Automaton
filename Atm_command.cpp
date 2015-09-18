@@ -1,7 +1,7 @@
 #include <Automaton.h>
 #include "Atm_command.h"
 	
-ATM_CLASSNAME & ATM_CLASSNAME::begin( Stream * stream, char buffer[], int size )
+Atm_command & Atm_command::begin( Stream * stream, char buffer[], int size )
 {
   const static state_t state_table[] PROGMEM = {
   /*                  ON_ENTER    ON_LOOP    ON_EXIT  EVT_INPUT   EVT_EOL   ELSE */
@@ -9,31 +9,31 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( Stream * stream, char buffer[], int size )
   /* READCHAR */  ACT_READCHAR,        -1,        -1,  READCHAR,     SEND,    -1,
   /* SEND     */      ACT_SEND,        -1,        -1,        -1,       -1,  IDLE,
   };
-  table( state_table, ELSE );
+  Machine::begin( state_table, ELSE );
   _stream = stream;
   _buffer = buffer;
   _bufsize = size;
   _bufptr = 0;
-  _sep = " ";
+  _separator = " ";
   _eol = '\n';
   _lastch = '\0';      
   return *this;          
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::onCommand(void (*callback)( int idx ), const char * commands  ) 
+Atm_command & Atm_command::onCommand(void (*callback)( int idx ), const char * commands  ) 
 {
   _callback = callback;
   _commands = commands;
   return *this;  
 }
 
-ATM_CLASSNAME & ATM_CLASSNAME::separator( const char sep[] ) 
+Atm_command & Atm_command::separator( const char sep[] ) 
 {
-  _sep = sep;
+  _separator = sep;
   return *this;  
 }
 
-char * ATM_CLASSNAME::arg( int id ) {
+char * Atm_command::arg( int id ) {
 
   int cnt = 0;
   int i;
@@ -49,28 +49,27 @@ char * ATM_CLASSNAME::arg( int id ) {
   return &_buffer[i];
 }
 
-int ATM_CLASSNAME::lookup( int id, const char * cmdlist ) {
+int Atm_command::lookup( int id, const char * cmdlist ) {
 
   int cnt = 0;
   char * arg = this->arg( id );
   char * a = arg;
-  const char * c = cmdlist;
-  while ( c[0] != '\0' ) { 
-    while ( c[0] != '\0' && toupper( c[0] ) == toupper( a[0] ) ) {
-      c++;
+  while ( cmdlist[0] != '\0' ) { 
+    while ( cmdlist[0] != '\0' && toupper( cmdlist[0] ) == toupper( a[0] ) ) {
+      cmdlist++;
       a++;
     }
     if ( a[0] == '\0' ) 
       return cnt;
-    if ( c[0] == ' ' ) 
+    if ( cmdlist[0] == ' ' ) 
       cnt++;
+    cmdlist++;
     a = arg;  
-    c++;
   }
   return -1;
 }
 
-int ATM_CLASSNAME::event( int id ) 
+int Atm_command::event( int id ) 
 {
   switch ( id ) {
     case EVT_INPUT :
@@ -81,13 +80,13 @@ int ATM_CLASSNAME::event( int id )
   return 0;
 }
 
-void ATM_CLASSNAME::action( int id ) 
+void Atm_command::action( int id ) 
 {
   switch ( id ) {
   	case ACT_READCHAR :
       if ( _stream->available() ) {
         char ch = _stream->read();
-        if ( strchr( _sep, ch ) == NULL ) {
+        if ( strchr( _separator, ch ) == NULL ) {
           _buffer[_bufptr++] = ch; 
           _lastch = ch;
         } else {

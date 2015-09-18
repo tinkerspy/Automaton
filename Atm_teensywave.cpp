@@ -6,7 +6,7 @@
 // - Triangle waveform
 // - Combine with LCD interface
 
-ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, int steps, int delay )
+Atm_teensywave & Atm_teensywave::begin( int attached_pin, int steps, int delay )
 {
       const static state_t state_table[] PROGMEM = {
       /*                ON_ENTER    ON_LOOP  ON_EXIT  EVT_COUNTER   EVT_TIMER  EVT_TOGGLE   ELSE */
@@ -23,7 +23,7 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, int steps, int delay )
       /* SQON     */    ACT_SQON,        -1,      -1,          -1,      SQOFF,         -1,    -1,
       /* SQOFF    */   ACT_SQOFF,        -1,      -1,          -1,       SQON,   START_SN,    -1,
       };
-      table( state_table, ELSE );
+      Machine::begin( state_table, ELSE );
       pin = attached_pin; 
       _steps = steps;
       _delay = delay;
@@ -38,7 +38,7 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, int steps, int delay )
       return *this;          
 }
 
-int ATM_CLASSNAME::event( int id ) 
+int Atm_teensywave::event( int id ) 
 {
   switch ( id ) {
     case EVT_TIMER :
@@ -51,7 +51,7 @@ int ATM_CLASSNAME::event( int id )
    return 0;
 }
 
-void ATM_CLASSNAME::action( int id ) 
+void Atm_teensywave::action( int id ) 
 {
   switch ( id ) {
     case ACT_IDLE :
