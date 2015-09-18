@@ -14,7 +14,7 @@ Factory factory;
 
 void btnHandler( int press ) {
   if ( press ) {
-    wave.signalWrite( wave.SIG_TOGGLE );
+    wave.msgWrite( wave.MSG_TOGGLE );
   }
 }
 
@@ -24,7 +24,7 @@ void setup()
   wave.begin( pinOut, 314, 50 ); 
   btn.begin( pinIn, btnHandler ).autoPress( 10000, 1 );
   factory.add( wave ).add( btn );
-  wave.signalWrite( wave.SIG_TOGGLE );
+  wave.msgWrite( wave.MSG_TOGGLE );
 }
 
 void loop()

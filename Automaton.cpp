@@ -206,47 +206,6 @@ uint8_t Machine::pinChange( uint8_t pin, uint8_t hilo ) {
   return 0;
 }
 
-Machine & Machine::signalWrite( uint8_t id )
-{
-    sig |= (uint32_t) 1 << id;
-    sleep = 0;
-    return *this;
-}
-
-int Machine::signalRead( uint8_t id )
-{
-    if ( ( sig >> id ) & 1 )
-    {
-        sig ^= (uint32_t) 1 << id;
-        return 1;
-    }
-    return 0;
-}
-
-int Machine::signalPeek( uint8_t id )
-{
-    return ( sig >> id ) & 1;
-}
-
-Machine & Machine::signalClear( void )
-{
-    sig = 0;
-    return *this;
-}
-
-Machine & Machine::signalClear( uint8_t id  )
-{
-    sig &= ~(uint32_t) 1 << id;
-    return *this;
-}
-
-Machine & Machine::signalMap( uint32_t bitmap )
-{
-    sig |= bitmap;
-    sleep = 0;
-    return *this;
-}
-
 int Machine::msgRead( uint8_t id_msg ) // Checks msg queue and removes 1 msg
 {
   if ( msg_queue[id_msg] > 0 ) {

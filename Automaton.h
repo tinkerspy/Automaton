@@ -47,10 +47,6 @@ class atm_counter {
 	public: uint16_t value;
 };
 
-class atm_message {
-	public: uint16_t cnt = 0;
-};
-
 class Factory; // pre declare!
 
 class Machine
@@ -77,12 +73,6 @@ class Machine
 	uint32_t micro_runtime( void );
 	uint8_t pinChange( uint8_t pin );
 	uint8_t pinChange( uint8_t pin, uint8_t hilo );
-	Machine & signalWrite( uint8_t id );
-	Machine & signalClear( void );
-    Machine & signalClear( uint8_t id  );
-	Machine & signalMap( uint32_t bitmap );
-	int signalRead( uint8_t id );
-	int signalPeek( uint8_t id );
     int msgRead( uint8_t id_msg ); 
     int msgRead( uint8_t id_msg, int cnt ); 
     int msgPeek( uint8_t id_msg ); 

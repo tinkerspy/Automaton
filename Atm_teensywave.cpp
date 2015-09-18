@@ -23,7 +23,7 @@ Atm_teensywave & Atm_teensywave::begin( int attached_pin, int steps, int delay )
       /* SQON     */    ACT_SQON,        -1,      -1,          -1,      SQOFF,         -1,    -1,
       /* SQOFF    */   ACT_SQOFF,        -1,      -1,          -1,       SQON,   START_SN,    -1,
       };
-      Machine::begin( state_table, ELSE );
+      Machine::begin( state_table, ELSE, messages, MSG_END );
       pin = attached_pin; 
       _steps = steps;
       _delay = delay;
@@ -46,7 +46,7 @@ int Atm_teensywave::event( int id )
     case EVT_COUNTER :
       return expired( phase );        
     case EVT_TOGGLE :
-      return signalRead( SIG_TOGGLE );
+      return msgRead( MSG_TOGGLE );
    }
    return 0;
 }

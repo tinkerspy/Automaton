@@ -10,7 +10,7 @@ class Atm_led : public Machine {
   	// Class constructor
 	Atm_led( void ) : Machine() { class_label = "LED"; };
 
-	// Custom state, event, action & signal constants (enum)
+	// Custom state, event, action & message constants (enum)
 	enum { IDLE, ON, START, BLINK_OFF } STATES; 
 	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, ELSE } EVENTS; 
 	enum { ACT_INIT, ACT_ON, ACT_OFF } ACTIONS; 
