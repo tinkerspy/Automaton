@@ -21,7 +21,8 @@ class Atm_button : public Machine {
 	atm_counter counter_longpress;
 	void (*callback)( int press ) = 0;
 	int16_t longpress_max;
-        int16_t _auto_press = 1;
+    int16_t _auto_press = 1;
+    uint8_t lohi = -1;
 
 	Atm_button & begin( int attached_pin, presscb_t press_callback );
 	Atm_button & begin( int attached_pin, presscb_t press_callback, int pulldown );
@@ -30,6 +31,7 @@ class Atm_button : public Machine {
 	Atm_button & repeat( int delay, int speed );
 	Atm_button & repeat( void );
     Atm_button & autoPress( int delay, int press );
+    Atm_button & loHi( void );
 	int event( int id );
 	void action( int id );
 };
