@@ -324,7 +324,7 @@ Machine & Machine::cycle()
         state_t i = read_state( state_table + ( current * width ) + ATM_ON_LOOP );
         if ( i != -1 ) { action( i ); }
         for ( i = ATM_ON_EXIT + 1; i < width; i++ ) { 
-            if ( ( read_state( state_table + ( current * width ) + i ) != -1 ) && ( event( i - ATM_ON_EXIT - 1 ) || i == width - 1 ) ) {
+            if ( ( read_state( state_table + ( current * width ) + i ) != -1 ) && ( i == width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
                 action( read_state( state_table + ( current * width ) + ATM_ON_EXIT ) );
                 state( read_state( state_table + ( current * width ) + i ) );
                 trigger = i - ATM_ON_EXIT - 1;
