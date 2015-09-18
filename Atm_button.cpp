@@ -68,12 +68,6 @@ Atm_button & Atm_button::autoPress( int delay, int press ) {
 	return *this;
 }
 
-Atm_button & Atm_button::loHi( void ) {
-	
-    lohi = 1;
-	return *this;
-}
-
 int Atm_button::event( int id ) 
 {
   switch ( id ) {
