@@ -23,7 +23,8 @@ Atm_teensywave & Atm_teensywave::begin( int attached_pin, int steps, int delay )
       /* SQON     */    ACT_SQON,        -1,      -1,          -1,      SQOFF,         -1,    -1,
       /* SQOFF    */   ACT_SQOFF,        -1,      -1,          -1,       SQON,   START_SN,    -1,
       };
-      Machine::begin( state_table, ELSE, messages, MSG_END );
+      Machine::begin( state_table, ELSE );
+      Machine::msgQueue( messages, MSG_END );
       pin = attached_pin; 
       _steps = steps;
       _delay = delay;

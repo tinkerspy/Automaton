@@ -60,8 +60,8 @@ class Machine
 	Machine & set(atm_milli_timer &timer, uint32_t v); 
 	Machine & set(atm_micro_timer &timer, uint32_t v); 
 	Machine & set(atm_counter &counter, uint16_t v); 
-	Machine & begin( const state_t tbl[], state_t w );
-    Machine & begin( const state_t* tbl, state_t tbl_w, atm_msg_t msg[], int msg_w );
+	Machine & begin( const state_t tbl[], int width );
+    Machine & msgQueue( atm_msg_t msg[], int width );
 	uint8_t expired(atm_milli_timer timer);
 	uint8_t expired(atm_micro_timer timer);
 	uint8_t expired(atm_counter &counter);
@@ -69,8 +69,8 @@ class Machine
 	uint8_t asleep( void );
 	Machine & priority( int8_t priority );
 	int8_t priority( void );
-	uint32_t milli_runtime( void );
-	uint32_t micro_runtime( void );
+	uint32_t runtime_millis( void );
+	uint32_t runtime_micros( void );
 	uint8_t pinChange( uint8_t pin );
 	uint8_t pinChange( uint8_t pin, uint8_t hilo );
     int msgRead( uint8_t id_msg ); 
@@ -103,12 +103,12 @@ class Machine
 	const state_t* state_table;
     const char* sym_states;
     const char* sym_events;
-	uint8_t width;
+	uint8_t state_width;
 	swcb_sym_t callback_sym;
 	swcb_num_t callback_num;
 	uint32_t cycles;
-    atm_msg_t * msg_queue;
-    uint8_t msg_max;
+    atm_msg_t * msg_table;
+    int msg_width;
 };
 
 

@@ -106,12 +106,12 @@ uint8_t Machine::asleep()
 }
 
 // .runtime() Returns the number of millis since the machine entered the current state 
-uint32_t Machine::milli_runtime() 
+uint32_t Machine::runtime_millis() 
 { 
     return millis() - state_millis; 
 }
 
-uint32_t Machine::micro_runtime() 
+uint32_t Machine::runtime_micros() 
 { 
     return micros() - state_micros; 
 }
@@ -137,36 +137,32 @@ Machine & Machine::set( atm_counter &counter, uint16_t v )
     return *this; 
 }
 
-Machine & Machine::begin( const state_t* tbl, state_t tbl_w ) 
+Machine & Machine::begin( const state_t* tbl, state_t width ) 
 { 
     state_table = tbl;
-    width = ATM_ON_EXIT + tbl_w + 2;
+    state_width = ATM_ON_EXIT + width + 2;
     prio = ATM_DEFAULT_PRIO;
     if ( !inst_label ) inst_label = class_label;
     return *this; 
 }
 
-Machine & Machine::begin( const state_t* tbl, state_t tbl_w, atm_msg_t msg[], int msg_w ) 
+Machine & Machine::msgQueue( atm_msg_t msg[], int width ) 
 { 
-    state_table = tbl;
-    width = ATM_ON_EXIT + tbl_w + 2;
-    msg_queue = msg;
-    msg_max = msg_w;
-    prio = ATM_DEFAULT_PRIO;
-    if ( !inst_label ) inst_label = class_label;
+    msg_table = msg;
+    msg_width = width;
     return *this; 
 }
 
 // .expired( timer) Returns true if the timer argument has expired
 uint8_t Machine::expired( atm_milli_timer timer ) 
 { 
-    return timer.value == ATM_TIMER_OFF ? 0 : this->milli_runtime() >= timer.value; 
+    return timer.value == ATM_TIMER_OFF ? 0 : this->runtime_millis() >= timer.value; 
 }
 
 // .expired( timer) Returns true if the timer argument has expired
 uint8_t Machine::expired( atm_micro_timer timer ) 
 { 
-    return timer.value == ATM_TIMER_OFF ? 0 : this->micro_runtime() >= timer.value; 
+    return timer.value == ATM_TIMER_OFF ? 0 : this->runtime_micros() >= timer.value; 
 }
 
 // .expired( counter) Returns true if the counter argument (unsigned int) has expired
@@ -208,8 +204,8 @@ uint8_t Machine::pinChange( uint8_t pin, uint8_t hilo ) {
 
 int Machine::msgRead( uint8_t id_msg ) // Checks msg queue and removes 1 msg
 {
-  if ( msg_queue[id_msg] > 0 ) {
-      msg_queue[id_msg]--;
+  if ( msg_table[id_msg] > 0 ) {
+      msg_table[id_msg]--;
       return 1;
   }
   return 0;
@@ -217,11 +213,11 @@ int Machine::msgRead( uint8_t id_msg ) // Checks msg queue and removes 1 msg
 
 int Machine::msgRead( uint8_t id_msg, int cnt ) 
 {
-  if ( msg_queue[id_msg] > 0 ) {
-    if ( cnt >= msg_queue[id_msg] ) {
-        msg_queue[id_msg] = 0;
+  if ( msg_table[id_msg] > 0 ) {
+    if ( cnt >= msg_table[id_msg] ) {
+        msg_table[id_msg] = 0;
     } else {      
-        msg_queue[id_msg] -= cnt;
+        msg_table[id_msg] -= cnt;
     }    
     return 1;
   }
@@ -230,7 +226,7 @@ int Machine::msgRead( uint8_t id_msg, int cnt )
 
 int Machine::msgPeek( uint8_t id_msg ) 
 {
-  if ( msg_queue[id_msg] > 0 ) {
+  if ( msg_table[id_msg] > 0 ) {
       return 1;
   }
   return 0;
@@ -239,8 +235,8 @@ int Machine::msgPeek( uint8_t id_msg )
 int Machine::msgClear( uint8_t id_msg ) // Destructive read (clears queue for this type)
 {
   sleep = 0;
-  if ( msg_queue[id_msg] > 0 ) {
-    msg_queue[id_msg] = 0;
+  if ( msg_table[id_msg] > 0 ) {
+    msg_table[id_msg] = 0;
     return 1;
   }  
   return 0;
@@ -249,8 +245,8 @@ int Machine::msgClear( uint8_t id_msg ) // Destructive read (clears queue for th
 Machine & Machine::msgClear() 
 {
   sleep = 0;
-  for ( int i = 0; i < msg_max; i++ ) {
-    msg_queue[i] = 0;
+  for ( int i = 0; i < msg_width; i++ ) {
+    msg_table[i] = 0;
   }  
   return *this;
 }
@@ -258,23 +254,23 @@ Machine & Machine::msgClear()
 Machine & Machine::msgWrite( uint8_t id_msg ) 
 {
   sleep = 0;
-  msg_queue[id_msg]++;
+  msg_table[id_msg]++;
   return *this;
 }
 
 Machine & Machine::msgWrite( uint8_t id_msg, int cnt ) 
 {
   sleep = 0;
-  msg_queue[id_msg] += cnt;
+  msg_table[id_msg] += cnt;
   return *this;
 }
 
 Machine & Machine::msgMap( uint32_t map ) // TESTME!
 {
   sleep = 0;
-  for ( int i = 0; i < msg_max; i++ ) {
+  for ( int i = 0; i < msg_width; i++ ) {
       if ( map & ( 1 << i ) ) {
-          msg_queue[i]++;
+          msg_table[i]++;
       }
   }
   return *this;
@@ -308,25 +304,25 @@ Machine & Machine::cycle()
                     callback_sym( inst_label, 
                         map_symbol( current, sym_states ), 
                         map_symbol(    next, sym_states ), 
-                        map_symbol( trigger, sym_events ), this->milli_runtime(), cycles );                    
+                        map_symbol( trigger, sym_events ), this->runtime_millis(), cycles );                    
                 } else {
-                    callback_num( inst_label, current, next, trigger, this->milli_runtime(), cycles );
+                    callback_num( inst_label, current, next, trigger, this->runtime_millis(), cycles );
                 }
             }
             current = next;
             next = -1;
             state_millis = millis();
             state_micros = micros();
-            action( read_state( state_table + ( current * width ) + ATM_ON_ENTER ) );
-            sleep = read_state( state_table + ( current * width ) + ATM_ON_LOOP ) == ATM_SLEEP;
+            action( read_state( state_table + ( current * state_width ) + ATM_ON_ENTER ) );
+            sleep = read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP;
             cycles = 0;
         }
-        state_t i = read_state( state_table + ( current * width ) + ATM_ON_LOOP );
+        state_t i = read_state( state_table + ( current * state_width ) + ATM_ON_LOOP );
         if ( i != -1 ) { action( i ); }
-        for ( i = ATM_ON_EXIT + 1; i < width; i++ ) { 
-            if ( ( read_state( state_table + ( current * width ) + i ) != -1 ) && ( i == width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
-                action( read_state( state_table + ( current * width ) + ATM_ON_EXIT ) );
-                state( read_state( state_table + ( current * width ) + i ) );
+        for ( i = ATM_ON_EXIT + 1; i < state_width; i++ ) { 
+            if ( ( read_state( state_table + ( current * state_width ) + i ) != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
+                action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
+                state( read_state( state_table + ( current * state_width ) + i ) );
                 trigger = i - ATM_ON_EXIT - 1;
                 return *this;
             }
