@@ -82,9 +82,9 @@ int Atm_button::event( int id )
 	case EVT_AUTO :
 	  return expired( timer_auto );        
 	case EVT_PRESS :
-	  return pinChange( pin, LOW );        
+	  return !digitalRead( pin );        
 	case EVT_RELEASE :
-	  return pinChange( pin, HIGH );        
+	  return digitalRead( pin );        
 	case EVT_COUNTER :
 	  return expired( counter_longpress );        
   }

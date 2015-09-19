@@ -72,7 +72,6 @@ class Machine
 	uint32_t runtime_millis( void );
 	uint32_t runtime_micros( void );
 	uint8_t pinChange( uint8_t pin );
-	uint8_t pinChange( uint8_t pin, uint8_t hilo );
     int msgRead( uint8_t id_msg ); 
     int msgRead( uint8_t id_msg, int cnt ); 
     int msgPeek( uint8_t id_msg ); 

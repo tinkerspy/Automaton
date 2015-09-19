@@ -192,6 +192,7 @@ unsigned char Machine::pinChange( uint8_t pin ) {
  * Clears any change for pin 
  */
 
+/* Probably unnecessary: just use digitalRead()
 uint8_t Machine::pinChange( uint8_t pin, uint8_t hilo ) { 
 
   uint8_t v = digitalRead( pin ) ? 1 : 0;
@@ -201,6 +202,7 @@ uint8_t Machine::pinChange( uint8_t pin, uint8_t hilo ) {
   }
   return 0;
 }
+*/
 
 int Machine::msgRead( uint8_t id_msg ) // Checks msg queue and removes 1 msg
 {
