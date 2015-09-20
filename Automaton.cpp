@@ -137,7 +137,7 @@ Machine & Machine::set( atm_counter &counter, uint16_t v )
     return *this; 
 }
 
-Machine & Machine::begin( const state_t* tbl, state_t width ) 
+Machine & Machine::begin( const state_t* tbl, int width ) 
 { 
     state_table = tbl;
     state_width = ATM_ON_EXIT + width + 2;

@@ -35,17 +35,20 @@ Atm_timer & Atm_timer::interval( int v )
 {
   set( timer, v );  
   state( WAIT );
+  return *this;
 }
 
 Atm_timer & Atm_timer::repeat( int v )
 {
   set( counter, v );  
   state( WAIT );
+  return *this;
 }
 
 Atm_timer & Atm_timer::id( int v )
 {
   timer_id = v;  
+  return *this;
 }
 
 int Atm_timer::event( int id ) 
