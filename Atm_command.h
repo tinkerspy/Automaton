@@ -24,7 +24,7 @@ class Atm_command: public Machine {
     Atm_command & begin( Stream * stream, char buffer[], int size );
     int event( int id ); 
     void action( int id ); 
-    Atm_command & onCommand(void (*callback)( int idx ), const char * commands  );
+    Atm_command & onCommand(void (*callback)( int idx ), const char * cmds  );
     Atm_command & separator( const char sep[] ); 
     int lookup( int id, const char * cmdlist );
     char * arg( int id );

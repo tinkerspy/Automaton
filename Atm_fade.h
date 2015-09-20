@@ -10,7 +10,8 @@ class Atm_fade : public Machine {
 		Atm_fade( void ) : Machine( ) { class_label="FAD"; };
 		
 		enum { IDLE, ON, START, STARTU, UP, STARTD, DOWN, REPEAT } STATES;
-		enum { EVT_CNT_FADE, EVT_TM_FADE, EVT_TM_ON, EVT_TM_OFF, EVT_CNT_RPT, ELSE, ACT_REPEAT, ACT_OFF, ACT_ON, ACT_UP, ACT_DOWN, ACT_START } IO;
+		enum { EVT_CNT_FADE, EVT_TM_FADE, EVT_TM_ON, EVT_TM_OFF, EVT_CNT_RPT, ELSE } EVENTS;
+        enum { ACT_REPEAT, ACT_OFF, ACT_ON, ACT_UP, ACT_DOWN, ACT_START } ACTIONS;
 
 		static const uint8_t SLOPE_SIZE = 32;
 		uint8_t slope[SLOPE_SIZE] = { 	

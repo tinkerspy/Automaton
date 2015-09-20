@@ -20,10 +20,10 @@ Atm_command & Atm_command::begin( Stream * stream, char buffer[], int size )
   return *this;          
 }
 
-Atm_command & Atm_command::onCommand(void (*callback)( int idx ), const char * commands  ) 
+Atm_command & Atm_command::onCommand(void (*callback)( int idx ), const char * cmds  ) 
 {
   _callback = callback;
-  _commands = commands;
+  _commands = cmds;
   return *this;  
 }
 

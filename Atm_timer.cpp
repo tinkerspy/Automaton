@@ -5,14 +5,15 @@ Atm_timer & Atm_timer::begin( void )
 {
   const static state_t state_table[] PROGMEM = {
   /*             ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER   EVT_COUNTER  EVT_OFF  EVT_ON  ELSE */
-  /* IDLE    */        -1,        -1,      -1,        -1,           -1,      -1,   WAIT,   -1,
+  /* IDLE    */        -1, ATM_SLEEP,      -1,        -1,           -1,      -1,   WAIT,   -1,
   /* WAIT    */        -1,        -1,      -1,   TRIGGER,           -1,    IDLE,     -1,   -1,
   /* TRIGGER */  ACT_TRIG,        -1,      -1,        -1,         IDLE,    IDLE,     -1, WAIT,
   };
   Machine::begin( state_table, ELSE );
   Machine::msgQueue( messages, MSG_END );
   set( timer, ATM_TIMER_OFF ); 
-  set( timer, ATM_COUNTER_OFF ); 
+  set( counter, 1 ); 
+  state( WAIT );
   return *this;          
 }
 
@@ -33,11 +34,13 @@ Atm_timer & Atm_timer::onTimer( timer_cb_t timer_callback )
 Atm_timer & Atm_timer::interval( int v )
 {
   set( timer, v );  
+  state( WAIT );
 }
 
 Atm_timer & Atm_timer::repeat( int v )
 {
   set( counter, v );  
+  state( WAIT );
 }
 
 Atm_timer & Atm_timer::id( int v )
