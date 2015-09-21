@@ -4,12 +4,14 @@
 Atm_led & Atm_led::begin( int attached_pin )
 { 
 	static const state_t state_table[] PROGMEM = {
-	/*               ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  ELSE */
-	/* IDLE      */  ACT_INIT, ATM_SLEEP,      -1,           -1,            -1,          -1,   -1, // LED off
-	/* ON        */    ACT_ON, ATM_SLEEP,      -1,           -1,            -1,          -1,   -1, // LED on
-	/* START     */    ACT_ON,        -1,      -1,    BLINK_OFF,            -1,          -1,   -1, // Start blinking
-	/* BLINK_OFF */   ACT_OFF,        -1,      -1,           -1,         START,        IDLE,   -1 };
+	/*               ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  ELSE */
+	/* IDLE      */  ACT_INIT, ATM_SLEEP,      -1,           -1,            -1,          -1,     ON,      -1,     START,   -1, // LED off
+	/* ON        */    ACT_ON, ATM_SLEEP,      -1,           -1,            -1,          -1,     -1,    IDLE,     START,   -1, // LED on
+	/* START     */    ACT_ON,        -1,      -1,    BLINK_OFF,            -1,          -1,     ON,    IDLE,        -1,   -1, // Start blinking
+	/* BLINK_OFF */   ACT_OFF,        -1,      -1,           -1,         START,        IDLE,     ON,      -1,        -1,   -1,
+    };
 	Machine::begin( state_table, ELSE );
+    Machine::msgQueue( messages, MSG_END );
 	pin = attached_pin; 
 	pinMode( pin, OUTPUT );
 	set( on_timer, 500 ); 
@@ -49,6 +51,12 @@ int Atm_led::event( int id )
 			return expired( off_timer );        
 		case EVT_COUNTER :
 			return expired( counter );
+        case EVT_ON :
+            return msgRead( MSG_ON );
+        case EVT_OFF :
+            return msgRead( MSG_OFF );            
+        case EVT_BLINK :
+            return msgRead( MSG_BLINK );            
 	}
 	return 0;
 }

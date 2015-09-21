@@ -4,16 +4,18 @@
 Atm_fade & Atm_fade::begin( int attached_pin )
 {  
 	const static state_t state_table[] PROGMEM = {
-	/*               ON_ENTER    ON_LOOP       ON_EXIT  EVT_CNT_FADE EVT_TM_FADE   EVT_TM_ON  EVT_TM_OFF   EVT_CNT_RPT    ELSE  */
-	/* IDLE   */      ACT_OFF, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     -1,  // LED off
-	/* ON     */       ACT_ON, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     -1,  // LED on
-	/* START  */      ACT_OFF,        -1,           -1,           -1,         -1,         -1,         -1,           -1, STARTU,  // Start fading
-	/* STARTU */    ACT_START,        -1,           -1,           -1,         -1,         -1,         UP,           -1,     -1,  
-	/* UP     */       ACT_UP,        -1,           -1,       STARTD,         UP,         -1,         -1,           -1,     -1,
-	/* STARTD */    ACT_START,        -1,           -1,           -1,         -1,       DOWN,         -1,           -1,     -1,
-	/* DOWN   */     ACT_DOWN,        -1,           -1,       REPEAT,       DOWN,         -1,         -1,           -1,     -1,
-	/* REPEAT */   ACT_REPEAT,        -1,           -1,           -1,         -1,         -1,         -1,         IDLE, STARTU };
+	/*               ON_ENTER    ON_LOOP       ON_EXIT  EVT_CNT_FADE EVT_TM_FADE   EVT_TM_ON  EVT_TM_OFF   EVT_CNT_RPT  EVT_ON EVT_OFF EVT_BLINK    ELSE  */
+	/* IDLE   */      ACT_OFF, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     ON,     -1,    START,     -1,  // LED off
+	/* ON     */       ACT_ON, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     -1,   IDLE,    START,     -1,  // LED on
+	/* START  */      ACT_OFF,        -1,           -1,           -1,         -1,         -1,         -1,           -1,     ON,     -1,       -1, STARTU,  // Start fading
+	/* STARTU */    ACT_START,        -1,           -1,           -1,         -1,         -1,         UP,           -1,     ON,     -1,       -1,     -1,  
+	/* UP     */       ACT_UP,        -1,           -1,       STARTD,         UP,         -1,         -1,           -1,     ON,     -1,       -1,     -1,
+	/* STARTD */    ACT_START,        -1,           -1,           -1,         -1,       DOWN,         -1,           -1,     ON,     -1,       -1,     -1,
+	/* DOWN   */     ACT_DOWN,        -1,           -1,       REPEAT,       DOWN,         -1,         -1,           -1,     ON,     -1,       -1,     -1,
+	/* REPEAT */   ACT_REPEAT,        -1,           -1,           -1,         -1,         -1,         -1,         IDLE,     ON,   IDLE,       -1, STARTU,
+    };
 	Machine::begin( state_table, ELSE );
+    Machine::msgQueue( messages, MSG_END );
 	pin = attached_pin; 
 	pinMode( pin, OUTPUT );
 	set( timer_fade, 0 ); // Number of ms per slope step (slope duration: rate * 32 ms)
@@ -62,7 +64,13 @@ int Atm_fade::event( int id )
 	case EVT_CNT_FADE :
 	  return expired( counter_fade );        
 	case EVT_CNT_RPT :
-	  return expired( counter_repeat );        
+	  return expired( counter_repeat );      
+    case EVT_ON :
+      return msgRead( MSG_ON );    
+    case EVT_OFF :
+      return msgRead( MSG_OFF );    
+    case EVT_BLINK :
+      return msgRead( MSG_BLINK );    
   }
   return 0;
 }

@@ -1,12 +1,6 @@
 #include <Automaton.h>
 #include "Atm_comparator.h"
 
-// Features:
-// + Multiple thresholds
-// - Hysteresis (or...)
-// + Running average (custom buffer)
-// - Optie: tussenliggende waarden al dan niet overslaan
-// - Optie: opstartwaarden al dan niet overslaan
   
 Atm_comparator & Atm_comparator::begin( int attached_pin, int samplerate, triggercb_t cb )
 {
