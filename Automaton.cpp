@@ -5,7 +5,6 @@
 
 #include "Automaton.h"
 
-/// .state( state ) Sets the (next) machine state
 Machine & Machine::state(state_t state) 
 { 
     next = state; 
@@ -14,7 +13,6 @@ Machine & Machine::state(state_t state)
     return *this; 
 }
 
-/// .state() Returns the current machine state
 state_t Machine::state() 
 { 
     return current; 
