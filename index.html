@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Automaton by tinkerspy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Automaton</h1>
+      <h2 class="project-tagline">A multi tasking table driven finite state machine library for Arduino</h2>
+      <a href="https://github.com/tinkerspy/Automaton" class="btn">View on GitHub</a>
+      <a href="https://github.com/tinkerspy/Automaton/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/tinkerspy/Automaton/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p>Automaton is an event driven framework that allows you to create Arduino applications that consist entirely of concurrently running state machines interacting with each other. </p>
+
+<p><strong>Features</strong></p>
+
+<ul>
+<li>Cooperative multi tasking finite state machines base class for building your own state machines </li>
+<li>State machines are table based, you define the behavior using just a little coding</li>
+<li>Lightweight machine scheduling class with priorities </li>
+<li>Built in state timers (with milli- and microsecond resolutions) and counters</li>
+<li>Communication between machines via a messaging queue</li>
+<li>Sleep states to save microcontroller cycles</li>
+<li>Pin state monitor</li>
+<li>Debugging (state monitor) hooks (that let you see what the machines are doing)</li>
+<li>Enables modular design and separation of concerns</li>
+<li>State machines can be shared as stand alone Arduino libraries (dependent only on the Automaton library)</li>
+</ul>
+
+<p>Documentation for the (Factory &amp; Machine) base classes and the bundled state machines is linked in the textbox on the right. If you want to make your own machines, look at the machine tutorial.</p>
+
+<h3>
+<a id="machine-class" class="anchor" href="#machine-class" aria-hidden="true"><span class="octicon octicon-link"></span></a>Machine class</h3>
+
+<p>Base class for defining self contained multi-tasking state machine objects.</p>
+
+<h3>
+<a id="factory-class" class="anchor" href="#factory-class" aria-hidden="true"><span class="octicon octicon-link"></span></a>Factory class</h3>
+
+<p>Add your state machines to the factory class, assign them a priority and run them from the Arduino loop().</p>
+
+<h2>
+<a id="bundled-state-machines" class="anchor" href="#bundled-state-machines" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bundled state machines</h2>
+
+<p>To get you up and running quickly we've bundled a number of ready to use state machines. Combine them to create your application.</p>
+
+<h3>
+<a id="atm_button-class-state-machine" class="anchor" href="#atm_button-class-state-machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Atm_button class (state machine)</h3>
+
+<p>A state machine for handling button presses, longpresses, repeats, debouncing, etc.</p>
+
+<h3>
+<a id="atm_command-class-state-machine" class="anchor" href="#atm_command-class-state-machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Atm_command class (state machine)</h3>
+
+<p>A state machine that handles commands coming in over a serial line (Stream), parses and interprets them and fires off a handler callback.</p>
+
+<h3>
+<a id="atm_comparator-class-state-machine" class="anchor" href="#atm_comparator-class-state-machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Atm_comparator class (state machine)</h3>
+
+<p>This state machine monitors an analog input with a configurable sample rate and fires off a callback whenever one of a list of thresholds are crossed. Optionally keeps a running average to smooth out peaks and troughs.</p>
+
+<h3>
+<a id="atm_fade-class-state-machine" class="anchor" href="#atm_fade-class-state-machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Atm_fade class (state machine)</h3>
+
+<p>Control a led via a PWM enabled pin. Control blink speed, pause duration, fade in/out slope and number of repeats.</p>
+
+<h3>
+<a id="atm_led-class-state-machine" class="anchor" href="#atm_led-class-state-machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Atm_led class (state machine)</h3>
+
+<p>Control a led via a digital pin. Control blink speed, pause duration and number of repeats. Can also be used to control other on/off devices like relays and buzzers.</p>
+
+<h3>
+<a id="atm_pulse-class-state-machine" class="anchor" href="#atm_pulse-class-state-machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Atm_pulse class (state machine)</h3>
+
+<p>Monitor a digital pin for incoming pulses, fire a callback or send a message to another machine.</p>
+
+<h3>
+<a id="atm_teensywave-class-state-machine" class="anchor" href="#atm_teensywave-class-state-machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Atm_teensywave class (state machine)</h3>
+
+<p>Generate different waveforms (sine, sawtooth, reverse sawtooth, square, triangle) via the analog out pin of a teensy 3.1. </p>
+
+<h3>
+<a id="atm_timer-class-state-machine" class="anchor" href="#atm_timer-class-state-machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Atm_timer class (state machine)</h3>
+
+<p>Simple state machine that provides standard timing event functionality. Configure interval and number of repeats. Can be controlled via the message queue. Fires a callback or sends a message via the message queue when the timer triggers.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/tinkerspy/Automaton">Automaton</a> is maintained by <a href="https://github.com/tinkerspy">tinkerspy</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
