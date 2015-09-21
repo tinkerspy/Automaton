@@ -3,7 +3,7 @@
 
 // Add option for button press callback (for reading i2c buttons etc)
 
-Atm_button & Atm_button::begin( int attached_pin, presscb_t press_callback )
+Atm_button & Atm_button::begin( int attached_pin )
 {
 	const static state_t state_table[] PROGMEM = {
 	/* Standard Mode: press/repeat */
@@ -24,7 +24,6 @@ Atm_button & Atm_button::begin( int attached_pin, presscb_t press_callback )
 	Machine::begin( state_table, ELSE );
 	pin = attached_pin;
     set( counter_longpress, 0 );	
-	callback = press_callback;
 	set( timer_debounce, DEBOUNCE );
 	set( timer_delay, ATM_TIMER_OFF );
 	set( timer_repeat, ATM_TIMER_OFF );
@@ -32,6 +31,35 @@ Atm_button & Atm_button::begin( int attached_pin, presscb_t press_callback )
 	pinMode( pin, INPUT_PULLUP );
 	return *this;
 }
+
+Atm_button & Atm_button::begin( int attached_pin, presscb_t press_callback )
+{
+    begin( attached_pin );
+    callback = press_callback;
+    return *this;
+}
+
+Atm_button & Atm_button::onPress( Machine * machine, int msg ) 
+{
+  client_machine = machine;
+  client_press = msg;
+  return *this;  
+}
+
+Atm_button & Atm_button::onPress( Machine * machine, int msg_press, int msg_release ) 
+{
+  client_machine = machine;
+  client_press = msg_press;
+  client_release = msg_release;
+  return *this;  
+}
+
+Atm_button & Atm_button::onPress( presscb_t press_callback ) 
+{
+  callback = press_callback;
+  return *this;  
+}
+
 
 Atm_button & Atm_button::debounce( int delay ) {
 	
@@ -95,13 +123,23 @@ void Atm_button::action( int id )
 {
   switch ( id ) {
 	case ACT_PRESS :
-	  (*callback)( 1 );
+      if ( callback ) {
+        (*callback)( 1 );
+      }
+      if ( client_machine && client_press != -1 ) {
+          client_machine->msgWrite( client_press );
+      }
 	  return;
 	case ACT_AUTO :
 	  (*callback)( _auto_press );
 	  return;
 	case ACT_RELEASE :
-	  (*callback)( 0 );
+      if ( callback ) {
+        (*callback)( 0 );       
+      }
+      if ( client_machine && client_release != -1 ) {
+          client_machine->msgWrite( client_release );
+      }
 	  return;
 	case ACT_LSTART :
 	  set( counter_longpress, longpress_max );

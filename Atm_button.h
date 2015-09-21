@@ -22,9 +22,15 @@ class Atm_button : public Machine {
 	void (*callback)( int press ) = 0;
 	int16_t longpress_max;
     int16_t _auto_press = 1;
-
+    Machine * client_machine;
+    int client_press = -1;
+    int client_release = -1;
+    
 	Atm_button & begin( int attached_pin, presscb_t press_callback );
-	Atm_button & begin( int attached_pin, presscb_t press_callback, int pulldown );
+	Atm_button & begin( int attached_pin );
+    Atm_button & onPress( Machine * machine, int msg ); 
+    Atm_button & onPress( Machine * machine, int msg_press, int msg_release );
+    Atm_button & onPress( presscb_t press_callback );
 	Atm_button & debounce( int delay );
 	Atm_button & longPress( int max, int delay );
 	Atm_button & repeat( int delay, int speed );
