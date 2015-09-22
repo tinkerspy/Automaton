@@ -10,7 +10,7 @@ class Atm_teensywave: public Machine {
     Atm_teensywave( void ) : Machine() { class_label = "WAVE"; };
 
     short pin;     
-    atm_micro_timer timer;
+    atm_timer_micros timer;
     atm_counter phase;
     uint16_t _steps, _delay;
     float _stepsize;

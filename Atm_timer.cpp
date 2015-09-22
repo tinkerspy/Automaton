@@ -11,8 +11,8 @@ Atm_timer & Atm_timer::begin( void )
   };
   Machine::begin( state_table, ELSE );
   Machine::msgQueue( messages, MSG_END );
-  set( timer, ATM_TIMER_OFF ); 
-  set( counter, 1 ); 
+  timer.begin( this, ATM_TIMER_OFF ); 
+  counter.set( 1 ); 
   state( WAIT );
   return *this;          
 }
@@ -33,14 +33,14 @@ Atm_timer & Atm_timer::onTimer( timer_cb_t timer_callback )
 
 Atm_timer & Atm_timer::interval( int v )
 {
-  set( timer, v );  
+  timer.set( v );  
   state( WAIT );
   return *this;
 }
 
 Atm_timer & Atm_timer::repeat( int v )
 {
-  set( counter, v );  
+  counter.set( v );  
   state( WAIT );
   return *this;
 }
@@ -55,9 +55,9 @@ int Atm_timer::event( int id )
 {
   switch ( id ) {
     case EVT_COUNTER :
-      return expired( counter );        
+      return counter.expired();        
     case EVT_TIMER :
-      return expired( timer );        
+      return timer.expired();        
     case EVT_OFF :
       return msgRead( MSG_OFF );        
     case EVT_ON :
@@ -70,7 +70,7 @@ void Atm_timer::action( int id )
 {
   switch ( id ) {
   	case ACT_TRIG :
-      decrement( counter );
+      counter.decrement();
       if ( callback ) {
          (*callback)( timer_id );
       }

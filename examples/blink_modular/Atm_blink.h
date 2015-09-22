@@ -13,7 +13,7 @@ class ATM_CLASSNAME: public Machine {
     ATM_CLASSNAME( void ) : Machine() { class_label = "BLNK"; };
 
     short pin;     
-    atm_milli_timer timer;
+    atm_timer_millis timer;
 
     enum { LED_ON, LED_OFF } STATES;
     enum { EVT_TIMER, ELSE } EVENTS;

@@ -6,7 +6,7 @@ class Blink : public Machine {
     Blink( void ) : Machine() { class_label = "BLNK"; };
 
     short pin;     
-    atm_milli_timer timer;
+    atm_timer_millis timer;
 
 	enum { LED_ON, LED_OFF } STATES;
 	enum { EVT_TIMER, ELSE } EVENTS;
@@ -20,7 +20,7 @@ class Blink : public Machine {
       /* LED_OFF */  ACT_OFF,        -1,      -1,    LED_ON,    -1 };
       Machine::begin( state_table, ELSE );
       pin = attached_pin; 
-      set( timer, blinkrate ); 
+      timer.begin( this, blinkrate ); 
       pinMode( pin, OUTPUT ); 
       return *this;          
     }
@@ -29,7 +29,7 @@ class Blink : public Machine {
     {
       switch ( id ) {
         case EVT_TIMER :
-          return expired( timer );        
+          return timer.expired();        
        }
        return 0;
     }

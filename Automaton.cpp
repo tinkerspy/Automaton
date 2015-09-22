@@ -5,6 +5,51 @@
 
 #include "Automaton.h"
 
+void atm_timer::set( uint32_t v ) {
+    value = v;
+}
+
+void atm_timer::begin( Machine * machine, uint32_t v  ) {
+    pmachine = machine;
+    value = v;
+}
+
+int atm_timer_millis::expired( void ) {
+    return value == ATM_TIMER_OFF ? 0 : millis() - pmachine->state_millis >= value;
+}
+
+int atm_timer_micros::expired( void ) {
+    return value == ATM_TIMER_OFF ? 0 : micros() - pmachine->state_micros >= value;
+}
+
+/*
+uint8_t Machine::expired( atm_counter &counter ) 
+{ 
+    return counter.value == ATM_COUNTER_OFF ? 0 : ( counter.value > 0 ? 0 : 1 ); 
+}
+
+// .decrement( counter) 
+uint16_t Machine::decrement( atm_counter &counter ) 
+{ 
+    return counter.value > 0 && counter.value != ATM_COUNTER_OFF ? --counter.value : 0; 
+}
+
+*/
+
+void atm_counter::set( uint16_t v ) {
+    value = v;
+}
+
+uint16_t atm_counter::decrement( void ) 
+{
+    return value > 0 && value != ATM_COUNTER_OFF ? --value : 0; 
+}
+
+uint8_t atm_counter::expired() 
+{ 
+    return value == ATM_COUNTER_OFF ? 0 : ( value > 0 ? 0 : 1 ); 
+}
+
 Machine & Machine::state(state_t state) 
 { 
     next = state; 
@@ -114,27 +159,6 @@ uint32_t Machine::runtime_micros()
     return micros() - state_micros; 
 }
 
-// .set( timer, value ) Sets a timer to a value
-Machine & Machine::set( atm_milli_timer &timer, uint32_t v ) 
-{ 
-    timer.value = v; 
-    return *this; 
-}
-
-// .set( timer, value ) Sets a timer to a value
-Machine & Machine::set( atm_micro_timer &timer, uint32_t v ) 
-{ 
-    timer.value = v; 
-    return *this; 
-}
-
-// .set( counter, value ) Sets a counter to a value
-Machine & Machine::set( atm_counter &counter, uint16_t v ) 
-{ 
-    counter.value = v; 
-    return *this; 
-}
-
 Machine & Machine::begin( const state_t* tbl, int width ) 
 { 
     state_table = tbl;
@@ -151,30 +175,6 @@ Machine & Machine::msgQueue( atm_msg_t msg[], int width )
     return *this; 
 }
 
-// .expired( timer) Returns true if the timer argument has expired
-uint8_t Machine::expired( atm_milli_timer timer ) 
-{ 
-    return timer.value == ATM_TIMER_OFF ? 0 : this->runtime_millis() >= timer.value; 
-}
-
-// .expired( timer) Returns true if the timer argument has expired
-uint8_t Machine::expired( atm_micro_timer timer ) 
-{ 
-    return timer.value == ATM_TIMER_OFF ? 0 : this->runtime_micros() >= timer.value; 
-}
-
-// .expired( counter) Returns true if the counter argument (unsigned int) has expired
-uint8_t Machine::expired( atm_counter &counter ) 
-{ 
-    return counter.value == ATM_COUNTER_OFF ? 0 : ( counter.value > 0 ? 0 : 1 ); 
-}
-
-// .decrement( counter) 
-uint16_t Machine::decrement( atm_counter &counter ) 
-{ 
-    return counter.value > 0 && counter.value != ATM_COUNTER_OFF ? --counter.value : 0; 
-}
-
 unsigned char Machine::pinChange( uint8_t pin ) { 
 
   unsigned char v = digitalRead( pin ) ? 1 : 0;
@@ -184,23 +184,6 @@ unsigned char Machine::pinChange( uint8_t pin ) {
   }
   return 0;
 }
-
-/* 
- * Returns true if pin has changed to either HIGH or LOW (match hilo)
- * Clears any change for pin 
- */
-
-/* Probably unnecessary: just use digitalRead()
-uint8_t Machine::pinChange( uint8_t pin, uint8_t hilo ) { 
-
-  uint8_t v = digitalRead( pin ) ? 1 : 0;
-  if ( (( pinstate >> pin ) & 1 ) != ( v == 1 ) ) {
-    pinstate ^= ( (uint32_t)1 << pin );
-    return v == hilo ? 1 : 0;
-  }
-  return 0;
-}
-*/
 
 int Machine::msgRead( uint8_t id_msg ) // Checks msg queue and removes 1 msg
 {

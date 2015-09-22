@@ -18,37 +18,37 @@ Atm_fade & Atm_fade::begin( int attached_pin )
     Machine::msgQueue( messages, MSG_END );
 	pin = attached_pin; 
 	pinMode( pin, OUTPUT );
-	set( timer_fade, 0 ); // Number of ms per slope step (slope duration: rate * 32 ms)
-	set( timer_on, 500 ); // Plateau between slopes (in which led is fully on)
-	set( timer_off, 500 ); // Pause between slopes (in which led is fully off)
-	set( counter_fade, SLOPE_SIZE );
-	set( counter_repeat, ATM_COUNTER_OFF );
+	timer_fade.begin( this, 0 ); // Number of ms per slope step (slope duration: rate * 32 ms)
+	timer_on.begin( this, 500 ); // Plateau between slopes (in which led is fully on)
+	timer_off.begin( this, 500 ); // Pause between slopes (in which led is fully off)
+	counter_fade.set( SLOPE_SIZE );
+	counter_repeat.set( ATM_COUNTER_OFF );
 	repeat_count = ATM_COUNTER_OFF;
 	return *this;
 }
 
 Atm_fade & Atm_fade::blink( int duration ) 
 {
-	set( timer_on, duration ); // Plateau between slopes (in which led is fully on)
+	timer_on.set( duration ); // Plateau between slopes (in which led is fully on)
 	return *this;
 }
 
 Atm_fade & Atm_fade::pause( int duration ) 
 {
-	set( timer_off, duration ); // Pause between slopes (in which led is fully off)
+	timer_off.set( duration ); // Pause between slopes (in which led is fully off)
 	return *this;
 }
 
 Atm_fade & Atm_fade::fade( int fade ) 
 {
-	set( timer_fade, fade >= 0 ? fade : ATM_TIMER_OFF ); // Number of ms per slope step (slope duration: rate * 32 ms)
+	timer_fade.set( fade >= 0 ? fade : ATM_TIMER_OFF ); // Number of ms per slope step (slope duration: rate * 32 ms)
 	return *this;
 }
 
 Atm_fade & Atm_fade::repeat( int repeat ) 
 {
 	repeat_count = repeat >= 0 ? repeat : ATM_COUNTER_OFF;
-    set( counter_repeat, repeat_count );
+    counter_repeat.set( repeat_count );
 	return *this;
 }
 
@@ -56,15 +56,15 @@ int Atm_fade::event( int id )
 {
   switch ( id ) {
 	case EVT_TM_FADE :
-	  return expired( timer_fade );        
+	  return timer_fade.expired();        
 	case EVT_TM_ON :
-	  return expired( timer_on );        
+	  return timer_on.expired();        
 	case EVT_TM_OFF :
-	  return expired( timer_off );        
+	  return timer_off.expired();        
 	case EVT_CNT_FADE :
-	  return expired( counter_fade );        
+	  return counter_fade.expired();        
 	case EVT_CNT_RPT :
-	  return expired( counter_repeat );      
+	  return counter_repeat.expired();      
     case EVT_ON :
       return msgRead( MSG_ON );    
     case EVT_OFF :
@@ -83,22 +83,22 @@ void Atm_fade::action( int id )
 	  analogWrite( pin, 255 );
 	  return;
 	case ACT_REPEAT :
-	  decrement( counter_repeat );
+	  counter_repeat.decrement();
 	  return;
 	case ACT_OFF :
-	  set( counter_repeat, repeat_count );
+	  counter_repeat.set( repeat_count );
 	  analogWrite( pin, 0 );
 	  return;
 	case ACT_START :
-	  set( counter_fade, SLOPE_SIZE );
+	  counter_fade.set( SLOPE_SIZE );
 	  return;
 	case ACT_UP :
 	  analogWrite( pin, slope[SLOPE_SIZE - counter_fade.value] );
-	  decrement( counter_fade );
+	  counter_fade.decrement();
 	  return;
 	case ACT_DOWN :
 	  analogWrite( pin, slope[counter_fade.value - 1] );
-	  decrement( counter_fade );
+	  counter_fade.decrement();
 	  return;
   }
 }

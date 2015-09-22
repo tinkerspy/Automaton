@@ -9,7 +9,7 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, int blinkrate )
   /* LED_OFF */  ACT_OFF,        -1,      -1,    LED_ON,    -1 };
   Machine::begin( state_table, ELSE );
   pin = attached_pin; 
-  set( timer, blinkrate ); 
+  timer.begin( this, blinkrate ); 
   pinMode( pin, OUTPUT ); 
   return *this;          
 }
@@ -18,7 +18,7 @@ int ATM_CLASSNAME::event( int id )
 {
   switch ( id ) {
   	case EVT_TIMER :
-  	  return expired( timer );        
+  	  return timer.expired();        
    }
    return 0;
 }

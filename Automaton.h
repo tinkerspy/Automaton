@@ -35,6 +35,10 @@ const state_t ATM_ON_EXIT = 2;
 const uint32_t ATM_TIMER_OFF = 0xffffffff; // This timer value never expires
 const uint16_t ATM_COUNTER_OFF = 0xffff; // This counter value never expires
 
+class Factory; // pre declare!
+class Machine;
+
+
 class atm_milli_timer {
 	public:	uint32_t value;
 };
@@ -43,11 +47,33 @@ class atm_micro_timer {
 	public:	uint32_t value;
 };
 
-class atm_counter { 
-	public: uint16_t value;
+
+
+class atm_timer {
+	public:	
+    uint32_t value;
+    Machine * pmachine;
+    void begin( Machine * machine, uint32_t v );
+    void set( uint32_t v );
+    virtual int expired( void ) = 0;
 };
 
-class Factory; // pre declare!
+class atm_timer_millis: public atm_timer {
+	public:	
+    int expired( void );
+};
+
+class atm_timer_micros: public atm_timer {
+	public:	
+    int expired( void );
+};
+
+class atm_counter { 
+	public: uint16_t value;
+    void set( uint16_t v );
+    uint8_t expired( void );
+    uint16_t decrement( void );
+};
 
 class Machine
 {
@@ -57,15 +83,8 @@ class Machine
 	Machine &state( state_t state);
 	state_t state( void );
 	Machine & toggle( state_t state1, state_t state2 ); 
-	Machine & set(atm_milli_timer &timer, uint32_t v); 
-	Machine & set(atm_micro_timer &timer, uint32_t v); 
-	Machine & set(atm_counter &counter, uint16_t v); 
 	Machine & begin( const state_t tbl[], int width );
     Machine & msgQueue( atm_msg_t msg[], int width );
-	uint8_t expired(atm_milli_timer timer);
-	uint8_t expired(atm_micro_timer timer);
-	uint8_t expired(atm_counter &counter);
-	uint16_t decrement(atm_counter &counter);
 	uint8_t asleep( void );
 	Machine & priority( int8_t priority );
 	int8_t priority( void );
@@ -93,12 +112,12 @@ class Machine
 	Machine * inventory_next;
 	Machine * priority_next;
     Factory * factory;
+	uint32_t state_millis, state_micros;
   protected:
     state_t next;
 	state_t current = -1;
 	state_t trigger = -1;
 	uint32_t pinstate;
-	uint32_t state_millis, state_micros;
 	const state_t* state_table;
     const char* sym_states;
     const char* sym_events;

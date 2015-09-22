@@ -12,7 +12,7 @@ Atm_comparator & Atm_comparator::begin( int attached_pin, int samplerate, trigge
   };
   Machine::begin( state_table, ELSE );
   pin = attached_pin; 
-  set( timer, samplerate ); 
+  timer.begin( this, samplerate ); 
   bitmap_sample = 0;
   bitmap_previous = 0;
   callback = cb;
@@ -85,7 +85,7 @@ int Atm_comparator::event( int id )
       } 
       return 0;
     case EVT_TIMER :
-      return expired( timer );        
+      return timer.expired();        
    }
    return 0;
 }

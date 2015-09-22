@@ -17,7 +17,7 @@ class Atm_button : public Machine {
 	
 	static const int DEBOUNCE = 5;
 	short pin;
-	atm_milli_timer timer_debounce, timer_delay, timer_repeat, timer_auto;
+	atm_timer_millis timer_debounce, timer_delay, timer_repeat, timer_auto;
 	atm_counter counter_longpress;
 	void (*callback)( int press ) = 0;
 	int16_t longpress_max;

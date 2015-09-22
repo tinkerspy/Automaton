@@ -28,8 +28,8 @@ Atm_teensywave & Atm_teensywave::begin( int attached_pin, int steps, int delay )
       pin = attached_pin; 
       _steps = steps;
       _delay = delay;
-      set( timer, delay ); 
-      set( phase, steps ); // 314 steps of 0.02 = 6.28 ( 2 * pi )
+      timer.begin( this, delay ); 
+      phase.set( steps ); // 314 steps of 0.02 = 6.28 ( 2 * pi )
       _stepsize = (float) 6.28318 / _steps;
       pinMode( pin, OUTPUT ); 
 // Analog out is only available on Teensy 3.1 and LC      
@@ -43,9 +43,9 @@ int Atm_teensywave::event( int id )
 {
   switch ( id ) {
     case EVT_TIMER :
-      return expired( timer );        
+      return timer.expired();        
     case EVT_COUNTER :
-      return expired( phase );        
+      return phase.expired();        
     case EVT_TOGGLE :
       return msgRead( MSG_TOGGLE );
    }
@@ -59,27 +59,27 @@ void Atm_teensywave::action( int id )
       analogWrite( pin, 0 );
       return;
     case ACT_START :
-      set( timer, _delay ); 
-      set( phase, _steps );
+      timer.set( _delay ); 
+      phase.set( _steps );
       return;
     case ACT_STARTSQ :
-      set( timer, _steps * _delay / 2 ); 
+      timer.set( _steps * _delay / 2 ); 
       return;
     case ACT_SINE :        
       analogWrite( pin, sin( phase.value * _stepsize ) * 2000.0 + 2050.0 );
-      decrement( phase );
+      phase.decrement();
       return;
     case ACT_SAW :        
       analogWrite( pin, ( _steps - phase.value ) * 13 );
-      decrement( phase );
+      phase.decrement();
       return;
     case ACT_SAWR :        
       analogWrite( pin, phase.value * 13 );
-      decrement( phase );
+      phase.decrement();
       return;
     case ACT_STARTTR :
-      set( timer, _delay ); 
-      set( phase, _steps );
+      timer.set( _delay ); 
+      phase.set( _steps );
       return;
     case ACT_TRI :        
       if ( ( phase.value << 1 ) >= _steps ) {
@@ -87,7 +87,7 @@ void Atm_teensywave::action( int id )
       } else {
         analogWrite( pin, phase.value * 26 );
       }
-      decrement( phase );
+      phase.decrement();
       return;
     case ACT_SQON :        
       analogWrite( pin, 4095 );

@@ -20,7 +20,7 @@ class Atm_led : public Machine {
     atm_msg_t messages[MSG_END];
 	short pin;
 	int repeat_count;
-	atm_milli_timer on_timer, off_timer;
+	atm_timer_millis on_timer, off_timer;
 	atm_counter counter;
 
 	// Methods used

@@ -11,7 +11,7 @@ class Atm_timer: public Machine {
   public:
     Atm_timer( void ) : Machine() { class_label = "TMR"; };
 
-    atm_milli_timer timer;
+    atm_timer_millis timer;
     atm_counter counter;
     int timer_id;
     timer_cb_t callback = 0;

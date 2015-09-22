@@ -12,7 +12,7 @@ class Atm_comparator: public Machine {
     Atm_comparator( void ) : Machine() { class_label = "CMP"; };
 
     short pin;     
-    atm_milli_timer timer;
+    atm_timer_millis timer;
     int v_sample, v_threshold, v_previous;
     uint64_t bitmap_sample, bitmap_previous, bitmap_diff; 
     uint16_t * p_threshold; // Max 64 values

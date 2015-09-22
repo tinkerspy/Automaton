@@ -23,11 +23,11 @@ Atm_button & Atm_button::begin( int attached_pin )
 	};
 	Machine::begin( state_table, ELSE );
 	pin = attached_pin;
-    set( counter_longpress, 0 );	
-	set( timer_debounce, DEBOUNCE );
-	set( timer_delay, ATM_TIMER_OFF );
-	set( timer_repeat, ATM_TIMER_OFF );
-	set( timer_auto, ATM_TIMER_OFF );
+    counter_longpress.set( 0 );	
+	timer_debounce.begin( this, DEBOUNCE );
+	timer_delay.begin( this, ATM_TIMER_OFF );
+	timer_repeat.begin( this, ATM_TIMER_OFF );
+	timer_auto.begin( this, ATM_TIMER_OFF );
 	pinMode( pin, INPUT_PULLUP );
 	return *this;
 }
@@ -63,36 +63,36 @@ Atm_button & Atm_button::onPress( presscb_t press_callback )
 
 Atm_button & Atm_button::debounce( int delay ) {
 	
-	set( timer_debounce, delay );
+	timer_debounce.set( delay );
 	return *this;
 }
 
 Atm_button & Atm_button::longPress( int max, int delay ) {
 	
 	longpress_max = max;
-    set( counter_longpress, longpress_max );
-	set( timer_delay, delay );
+    counter_longpress.set( longpress_max );
+	timer_delay.set( delay );
 	return *this;
 }
 
 Atm_button & Atm_button::repeat( int delay, int speed ) {
 	
-	set( timer_delay, delay );
-	set( timer_repeat, speed );	
+	timer_delay.set( delay );
+	timer_repeat.set( speed );	
 	return *this;
 }
 
 Atm_button & Atm_button::repeat( void ) {
 	
-	set( timer_delay, 500 );
-	set( timer_repeat, 50 );	
+	timer_delay.set( 500 );
+	timer_repeat.set( 50 );	
 	return *this;
 }
 
 Atm_button & Atm_button::autoPress( int delay, int press ) {
 	
     _auto_press = press;
-	set( timer_auto, delay );    
+	timer_auto.set( delay );    
 	return *this;
 }
 
@@ -102,19 +102,19 @@ int Atm_button::event( int id )
 	case EVT_LMODE :
 	  return counter_longpress.value > 0;        
 	case EVT_TIMER :
-	  return expired( timer_debounce );        
+	  return timer_debounce.expired();
 	case EVT_DELAY :
-	  return expired( timer_delay );        
+	  return timer_delay.expired();        
 	case EVT_REPEAT :
-	  return expired( timer_repeat );        
+	  return timer_repeat.expired();        
 	case EVT_AUTO :
-	  return expired( timer_auto );        
+	  return timer_auto.expired();        
 	case EVT_PRESS :
 	  return !digitalRead( pin );        
 	case EVT_RELEASE :
 	  return digitalRead( pin );        
 	case EVT_COUNTER :
-	  return expired( counter_longpress );        
+	  return counter_longpress.expired();        
   }
   return 0;
 }
@@ -142,10 +142,10 @@ void Atm_button::action( int id )
       }
 	  return;
 	case ACT_LSTART :
-	  set( counter_longpress, longpress_max );
+	  counter_longpress.set( longpress_max );
 	  return;
 	case ACT_LCOUNT :
-	  decrement( counter_longpress );
+	  counter_longpress.decrement();
 	  (*callback)( ( longpress_max - counter_longpress.value ) * -1 );	  
 	  return;
 	case ACT_LRELEASE :

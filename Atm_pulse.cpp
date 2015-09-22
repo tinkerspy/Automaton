@@ -11,7 +11,7 @@ Atm_pulse & Atm_pulse::begin( int attached_pin, int minimum_duration )
   };
   Machine::begin( state_table, ELSE );
   pin = attached_pin; 
-  set( timer, minimum_duration ); 
+  timer.begin( this, minimum_duration );
   pinMode( pin, INPUT ); 
   return *this;          
 }
@@ -33,7 +33,7 @@ int Atm_pulse::event( int id )
 {
   switch ( id ) {
   	case EVT_TIMER :
-  	  return expired( timer );        
+  	  return timer.expired();
     case EVT_HIGH :
       return digitalRead( pin );
     case EVT_LOW :
