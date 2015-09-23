@@ -75,6 +75,13 @@ class atm_counter {
     uint16_t decrement( void );
 };
 
+class atm_counter_auto { 
+	public: uint16_t value;
+    void set( uint16_t v );
+    uint8_t expired( void );
+    uint16_t decrement( void );
+};
+
 class Machine
 {
   public:
