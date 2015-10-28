@@ -22,20 +22,6 @@ int atm_timer_micros::expired( void ) {
     return value == ATM_TIMER_OFF ? 0 : micros() - pmachine->state_micros >= value;
 }
 
-/*
-uint8_t Machine::expired( atm_counter &counter ) 
-{ 
-    return counter.value == ATM_COUNTER_OFF ? 0 : ( counter.value > 0 ? 0 : 1 ); 
-}
-
-// .decrement( counter) 
-uint16_t Machine::decrement( atm_counter &counter ) 
-{ 
-    return counter.value > 0 && counter.value != ATM_COUNTER_OFF ? --counter.value : 0; 
-}
-
-*/
-
 void atm_counter::set( uint16_t v ) {
     value = v;
 }
@@ -83,47 +69,6 @@ Machine & Machine::onSwitch( swcb_sym_t callback, const char sym_s[], const char
     return *this;
 }
 
-/* Sample callback function
-
-void sw( const char label[], int current, int next, int trigger, uint32_t runtime, uint32_t cycles ) {
-  Serial.print( millis() );
-  Serial.print( " Switching " );
-  Serial.print( label );
-  Serial.print( " from state " );
-  Serial.print( current );
-  Serial.print( " to " );
-  Serial.print( next );
-  Serial.print( " on trigger " );
-  Serial.print( trigger );
-  Serial.print( " (" );
-  Serial.print( cycles );
-  Serial.print( "/" );
-  Serial.print( runtime );
-  Serial.println( " cycles/ms)" );
-}
-
-// Version with symbols
-void sw( const char label[], const char current[], const char next[], const char trigger[], uint32_t runtime, uint32_t cycles ) {
-  Serial.print( millis() );
-  Serial.print( " Switching " );
-  Serial.print( label );
-  Serial.print( " from state " );
-  Serial.print( current );
-  Serial.print( " to " );
-  Serial.print( next );
-  Serial.print( " on trigger " );
-  Serial.print( trigger );
-  Serial.print( " (" );
-  Serial.print( cycles );
-  Serial.print( " cycles in " );
-  Serial.print( runtime );
-  Serial.println( " ms)" );
-}
-
-
-
-*/
-
 Machine & Machine::label( const char label[] ) 
 {
     inst_label = label;
@@ -148,12 +93,13 @@ uint8_t Machine::asleep()
     return sleep; 
 }
 
-// .runtime() Returns the number of millis since the machine entered the current state 
+// .runtime_millis() Returns the number of millis since the machine entered the current state 
 uint32_t Machine::runtime_millis() 
 { 
     return millis() - state_millis; 
 }
 
+// .runtime_millis() Returns the number of micros since the machine entered the current state 
 uint32_t Machine::runtime_micros() 
 { 
     return micros() - state_micros; 

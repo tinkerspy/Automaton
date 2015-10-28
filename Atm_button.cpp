@@ -36,6 +36,7 @@ Atm_button & Atm_button::begin( int attached_pin, presscb_t press_callback )
 {
     begin( attached_pin );
     callback = press_callback;
+    callback_idx = -1;
     return *this;
 }
 
@@ -57,6 +58,14 @@ Atm_button & Atm_button::onPress( Machine * machine, int msg_press, int msg_rele
 Atm_button & Atm_button::onPress( presscb_t press_callback ) 
 {
   callback = press_callback;
+  callback_idx = -1;
+  return *this;  
+}
+
+Atm_button & Atm_button::onPress( presscb_id_t press_callback, int idx ) 
+{
+  callback_id = press_callback;
+  callback_idx = idx;
   return *this;  
 }
 
@@ -119,24 +128,30 @@ int Atm_button::event( int id )
   return 0;
 }
 
+
+void Atm_button::cb( int press, int idx ) {
+
+    if ( callback ) 
+      (*callback)( press );
+    if ( callback_id ) 
+      (*callback_id)( press, idx );
+}
+
+
 void Atm_button::action( int id ) 
 {
   switch ( id ) {
 	case ACT_PRESS :
-      if ( callback ) {
-        (*callback)( 1 );
-      }
+      cb( 1, callback_idx );
       if ( client_machine && client_press != -1 ) {
           client_machine->msgWrite( client_press );
       }
 	  return;
 	case ACT_AUTO :
-	  (*callback)( _auto_press );
+      cb( _auto_press, callback_idx );
 	  return;
 	case ACT_RELEASE :
-      if ( callback ) {
-        (*callback)( 0 );       
-      }
+      cb( 0, callback_idx );
       if ( client_machine && client_release != -1 ) {
           client_machine->msgWrite( client_release );
       }
@@ -146,13 +161,13 @@ void Atm_button::action( int id )
 	  return;
 	case ACT_LCOUNT :
 	  counter_longpress.decrement();
-	  (*callback)( ( longpress_max - counter_longpress.value ) * -1 );	  
+	  cb( ( longpress_max - counter_longpress.value ) * -1, callback_idx );	  
 	  return;
 	case ACT_LRELEASE :
-	  (*callback)( longpress_max - counter_longpress.value );
+	  cb( longpress_max - counter_longpress.value, callback_idx );
 	  return;
 	case ACT_WRELEASE :
-	  (*callback)( 0 );
+	  cb( 0, callback_idx );
 	  return;
   }
 }

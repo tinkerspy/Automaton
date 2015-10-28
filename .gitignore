@@ -1,3 +1,5 @@
 *.hex
 *.swp
 *.dox
+.development
+
