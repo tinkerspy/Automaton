@@ -1,7 +1,7 @@
 #include <Automaton.h>
 #include "Atm_blink.h"
 	
-ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, int blinkrate )
+Atm_blink & Atm_blink::begin( int attached_pin, int blinkrate )
 {
   const static state_t state_table[] PROGMEM = {
   /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER   ELSE */
@@ -14,7 +14,7 @@ ATM_CLASSNAME & ATM_CLASSNAME::begin( int attached_pin, int blinkrate )
   return *this;          
 }
 
-int ATM_CLASSNAME::event( int id ) 
+int Atm_blink::event( int id ) 
 {
   switch ( id ) {
   	case EVT_TIMER :
@@ -23,7 +23,7 @@ int ATM_CLASSNAME::event( int id )
    return 0;
 }
 
-void ATM_CLASSNAME::action( int id ) 
+void Atm_blink::action( int id ) 
 {
   switch ( id ) {
   	case ACT_ON :

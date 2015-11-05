@@ -4,13 +4,10 @@
 
 #include <Automaton.h>
 
-#undef ATM_CLASSNAME
-#define ATM_CLASSNAME Atm_blink
-
-class ATM_CLASSNAME: public Machine {
+class Atm_blink: public Machine {
 
   public:
-    ATM_CLASSNAME( void ) : Machine() { class_label = "BLNK"; };
+    Atm_blink( void ) : Machine() { class_label = "BLNK"; };
 
     short pin;     
     atm_timer_millis timer;
@@ -19,7 +16,7 @@ class ATM_CLASSNAME: public Machine {
     enum { EVT_TIMER, ELSE } EVENTS;
 	  enum { ACT_ON, ACT_OFF } ACTIONS;
 	
-    ATM_CLASSNAME & begin( int attached_pin, int blinkrate );
+    Atm_blink & begin( int attached_pin, int blinkrate );
     int event( int id ); 
     void action( int id ); 
 };
