@@ -42,14 +42,16 @@ int Atm_comparator::sample()
   return avg_buf_size > 0 ? _avg() : read_sample();
 }
 
-Atm_comparator &  Atm_comparator::threshold( uint16_t * v, uint16_t size) 
+Atm_comparator &  Atm_comparator::threshold( uint16_t * v, uint16_t size, bool catchUp ) 
 {
    p_threshold = v;
    p_threshold_size = size;
-   v_sample = sample();
-   bitmap( v_sample );
-   v_previous = v_sample;
-   bitmap_previous = bitmap_sample;
+   if ( catchUp == false ){
+      v_sample = sample();
+      bitmap( v_sample );
+      v_previous = v_sample;
+      bitmap_previous = bitmap_sample;
+   }
    return *this;
 }
 
