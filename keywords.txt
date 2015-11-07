@@ -7,13 +7,15 @@
 #######################################
 
 Automaton	KEYWORD1
-Factory		KEYWORD1
+Factory	KEYWORD1
 atm_milli_timer	KEYWORD1
 atm_milli_timer	KEYWORD1
-atm_counter KEYWORD1
-Atm_led		KEYWORD1
+atm_counter	KEYWORD1
+Atm_led	KEYWORD1
 Atm_fade	KEYWORD1
 Atm_button	KEYWORD1
+Atm_timer	KEYWORD1
+Atm_comparator	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -39,6 +41,13 @@ blink	KEYWORD2
 pause	KEYWORD2
 fade	KEYWORD2
 repeat	KEYWORD2
+interval	KEYWORD2
+onTimer	KEYWORD2
+onPress	KEYWORD2
+msgWrite	KEYWORD2
+id	KEYWORD2
+onSwitch	KEYWORD2
+label	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
@@ -57,3 +66,6 @@ ATM_ON_EXIT	LITERAL1
 ATM_TIMER_OFF	LITERAL1
 ATM_COUNTER_OFF	LITERAL1
 
+MSG_ON	LITERAL1
+MSG_OFF	LITERAL1
+MSG_BLINK	LITERAL1
