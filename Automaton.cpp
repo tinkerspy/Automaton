@@ -1,6 +1,6 @@
 /*
-  Automaton.cpp - Library for creating Finite State Machines.
-  Created by TinkerSpy, july, 2015.
+  Automaton.cpp - Library for creating and running Finite State Machines.
+  Published under the MIT License (MIT), Copyright (c) 2015, J.P. van der Landen
 */
 
 #include "Automaton.h"
