@@ -97,12 +97,6 @@ class Machine
         uint8_t asleep( void );
         Machine & priority( int8_t priority );
         int8_t priority( void );
-        uint32_t runtime_millis( void );
-        uint32_t runtime_micros( void );
-        uint8_t pinChange( uint8_t pin );
-        int msgRead( uint8_t id_msg ); 
-        int msgRead( uint8_t id_msg, int cnt ); 
-        int msgPeek( uint8_t id_msg ); 
         int msgClear( uint8_t id_msg ); 
         Machine & msgClear( void ); 
         Machine & msgWrite( uint8_t id_msg ); 
@@ -127,6 +121,12 @@ class Machine
         Machine & begin( const state_t tbl[], int width );
         Machine & msgQueue( atm_msg_t msg[], int width );
         const char * map_symbol( int id, const char map[] );
+        uint32_t runtime_millis( void );
+        uint32_t runtime_micros( void );
+        uint8_t pinChange( uint8_t pin );
+        int msgRead( uint8_t id_msg ); 
+        int msgRead( uint8_t id_msg, int cnt ); 
+        int msgPeek( uint8_t id_msg ); 
         virtual int event( int id ) = 0; // Pure virtual methods -> make this an abstract class
         virtual void action( int id ) = 0;
         
