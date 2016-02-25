@@ -238,6 +238,8 @@ Machine & Machine::cycle()
                     callback_num( inst_label, current, next, trigger, this->runtime_millis(), cycles );
                 }
             }
+            if ( current > -1 )     
+		action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
             current = next;
             next = -1;
             state_millis = millis();
@@ -250,7 +252,6 @@ Machine & Machine::cycle()
         if ( i != -1 ) { action( i ); }
         for ( i = ATM_ON_EXIT + 1; i < state_width; i++ ) { 
             if ( ( read_state( state_table + ( current * state_width ) + i ) != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
-                action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
                 state( read_state( state_table + ( current * state_width ) + i ) );
                 trigger = i - ATM_ON_EXIT - 1;
                 return *this;
