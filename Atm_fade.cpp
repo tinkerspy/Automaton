@@ -66,11 +66,11 @@ int Atm_fade::event( int id )
 	case EVT_CNT_RPT :
 	  return counter_repeat.expired();      
     case EVT_ON :
-      return msgRead( MSG_ON );    
+      return msgRead( MSG_ON, 1, 1 );    
     case EVT_OFF :
-      return msgRead( MSG_OFF );    
+      return msgRead( MSG_OFF, 1, 1 );    
     case EVT_BLINK :
-      return msgRead( MSG_BLINK );    
+      return msgRead( MSG_BLINK, 1, 1 );    
   }
   return 0;
 }
