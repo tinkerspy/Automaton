@@ -5,8 +5,8 @@ Atm_led & Atm_led::begin( int attached_pin )
 { 
 	static const state_t state_table[] PROGMEM = {
 	/*               ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  ELSE */
-	/* IDLE      */  ACT_INIT, ATM_SLEEP,      -1,           -1,            -1,          -1,     ON,    IDLE,     START,   -1, // LED off
-	/* ON        */    ACT_ON, ATM_SLEEP,      -1,           -1,            -1,          -1,     ON,    IDLE,     START,   -1, // LED on
+	/* IDLE      */  ACT_INIT, ATM_SLEEP,      -1,           -1,            -1,          -1,     ON,      -1,     START,   -1, // LED off
+	/* ON        */    ACT_ON, ATM_SLEEP,      -1,           -1,            -1,          -1,     -1,    IDLE,     START,   -1, // LED on
 	/* START     */    ACT_ON,        -1,      -1,    BLINK_OFF,            -1,          -1,     ON,    IDLE,        -1,   -1, // Start blinking
 	/* BLINK_OFF */   ACT_OFF,        -1,      -1,           -1,         START,        IDLE,     ON,      -1,        -1,   -1,
     };
@@ -52,11 +52,11 @@ int Atm_led::event( int id )
 		case EVT_COUNTER :
 			return counter.expired();
         case EVT_ON :
-            return msgRead( MSG_ON );
+            return msgRead( MSG_ON, 1, 1 );
         case EVT_OFF :
-            return msgRead( MSG_OFF );            
+            return msgRead( MSG_OFF, 1, 1 );            
         case EVT_BLINK :
-            return msgRead( MSG_BLINK );            
+            return msgRead( MSG_BLINK, 1, 1 );            
 	}
 	return 0;
 }
@@ -70,6 +70,7 @@ void Atm_led::action( int id )
 			return;
 		case ACT_ON :
 			counter.decrement();
+			Serial.print( "decrement\n" );
 			digitalWrite( pin, HIGH );
 			return;
 		case ACT_OFF :

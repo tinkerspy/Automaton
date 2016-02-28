@@ -126,6 +126,7 @@ class Machine
         uint8_t pinChange( uint8_t pin );
         int msgRead( uint8_t id_msg ); 
         int msgRead( uint8_t id_msg, int cnt ); 
+        int msgRead( uint8_t id_msg, int cnt, int clear ); 
         int msgPeek( uint8_t id_msg ); 
         virtual int event( int id ) = 0; // Pure virtual methods -> make this an abstract class
         virtual void action( int id ) = 0;

@@ -153,6 +153,24 @@ int Machine::msgRead( uint8_t id_msg, int cnt )
   return 0;
 }
 
+int Machine::msgRead( uint8_t id_msg, int cnt, int clear ) 
+{
+  if ( msg_table[id_msg] > 0 ) {
+    if ( cnt >= msg_table[id_msg] ) {
+        msg_table[id_msg] = 0;
+    } else {      
+        msg_table[id_msg] -= cnt;
+    }    
+	if ( clear ) {
+		for ( int i = 0; i < msg_width; i++ ) {
+			msg_table[i] = 0;
+		}
+    }
+    return 1;
+  }
+  return 0;
+}
+
 int Machine::msgPeek( uint8_t id_msg ) 
 {
   if ( msg_table[id_msg] > 0 ) {
