@@ -70,7 +70,6 @@ void Atm_led::action( int id )
 			return;
 		case ACT_ON :
 			counter.decrement();
-			Serial.print( "decrement\n" );
 			digitalWrite( pin, HIGH );
 			return;
 		case ACT_OFF :
