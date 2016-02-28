@@ -59,9 +59,9 @@ int Atm_timer::event( int id )
     case EVT_TIMER :
       return timer.expired();        
     case EVT_OFF :
-      return msgRead( MSG_OFF );        
+      return msgRead( MSG_OFF, 1, 1 );        
     case EVT_ON :
-      return msgRead( MSG_ON );        
+      return msgRead( MSG_ON, 1, 1 );        
    }
    return 0;
 }
