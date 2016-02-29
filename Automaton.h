@@ -120,6 +120,8 @@ class Machine
   
         Machine & begin( const state_t tbl[], int width );
         Machine & msgQueue( atm_msg_t msg[], int width );
+        Machine & msgQueue( atm_msg_t msg[], int width, uint8_t autoclear );
+
         const char * map_symbol( int id, const char map[] );
         uint32_t runtime_millis( void );
         uint32_t runtime_micros( void );
@@ -135,6 +137,7 @@ class Machine
         state_t next;
         state_t current = -1;
         state_t trigger = -1;
+        state_t previous = -1;
         uint32_t pinstate;
         const char* sym_states;
         const char* sym_events;
@@ -144,6 +147,7 @@ class Machine
         uint32_t cycles;
         atm_msg_t * msg_table;
         int msg_width;
+	uint8_t msg_autoclear = 0;
         
 };
 

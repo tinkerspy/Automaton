@@ -41,6 +41,7 @@ Machine & Machine::state(state_t state)
     next = state; 
     trigger = -1; 
     sleep = 0;
+    if ( msg_autoclear ) msgClear();
     return *this; 
 }
 
@@ -118,6 +119,14 @@ Machine & Machine::msgQueue( atm_msg_t msg[], int width )
 { 
     msg_table = msg;
     msg_width = width;
+    return *this; 
+}
+
+Machine & Machine::msgQueue( atm_msg_t msg[], int width, uint8_t autoclear ) 
+{ 
+    msg_table = msg;
+    msg_width = width;
+    msg_autoclear = autoclear;
     return *this; 
 }
 
@@ -258,6 +267,7 @@ Machine & Machine::cycle()
             }
             if ( current > -1 )     
 		action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
+            previous = current;
             current = next;
             next = -1;
             state_millis = millis();
