@@ -15,7 +15,7 @@ Atm_fade & Atm_fade::begin( int attached_pin )
 	/* REPEAT */   ACT_REPEAT,        -1,           -1,           -1,         -1,         -1,         -1,         IDLE,     ON,   IDLE,       -1, STARTU,
     };
 	Machine::begin( state_table, ELSE );
-    Machine::msgQueue( messages, MSG_END );
+    Machine::msgQueue( messages, MSG_END, 1 );
 	pin = attached_pin; 
 	pinMode( pin, OUTPUT );
 	timer_fade.begin( this, 0 ); // Number of ms per slope step (slope duration: rate * 32 ms)
@@ -66,11 +66,11 @@ int Atm_fade::event( int id )
 	case EVT_CNT_RPT :
 	  return counter_repeat.expired();      
     case EVT_ON :
-      return msgRead( MSG_ON, 1, 1 );    
+      return msgRead( MSG_ON );    
     case EVT_OFF :
-      return msgRead( MSG_OFF, 1, 1 );    
+      return msgRead( MSG_OFF );    
     case EVT_BLINK :
-      return msgRead( MSG_BLINK, 1, 1 );    
+      return msgRead( MSG_BLINK );    
   }
   return 0;
 }

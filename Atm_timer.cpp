@@ -10,7 +10,7 @@ Atm_timer & Atm_timer::begin( void )
   /* TRIGGER */  ACT_TRIG,        -1,      -1,        -1,         IDLE,    IDLE,     -1, WAIT,
   };
   Machine::begin( state_table, ELSE );
-  Machine::msgQueue( messages, MSG_END );
+  Machine::msgQueue( messages, MSG_END, 1 );
   timer.begin( this, ATM_TIMER_OFF ); 
   counter.set( 1 ); 
   state( WAIT );
@@ -59,9 +59,9 @@ int Atm_timer::event( int id )
     case EVT_TIMER :
       return timer.expired();        
     case EVT_OFF :
-      return msgRead( MSG_OFF, 1, 1 );        
+      return msgRead( MSG_OFF );        
     case EVT_ON :
-      return msgRead( MSG_ON, 1, 1 );        
+      return msgRead( MSG_ON );        
    }
    return 0;
 }
