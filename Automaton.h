@@ -105,6 +105,7 @@ class Machine: public BaseMachine
     public:
         Machine &state( state_t state);
         state_t state( void );
+        Machine & trigger( int evt );
         Machine & toggle( state_t state1, state_t state2 ); 
         Machine & priority( int8_t priority );
         int8_t priority( void );
@@ -141,7 +142,7 @@ class Machine: public BaseMachine
         const state_t* state_table;
         state_t next;
         state_t current = -1;
-        state_t trigger = -1;
+        state_t last_trigger = -1;
         state_t previous = -1;
         uint32_t pinstate;
         const char* sym_states;
@@ -162,6 +163,7 @@ class TinyMachine: public BaseMachine
         TinyMachine & state( tiny_state_t state);
         tiny_state_t state( void );
         TinyMachine & cycle( void );
+        TinyMachine & trigger( int evt );
 
     protected:
 

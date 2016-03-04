@@ -39,7 +39,7 @@ uint8_t atm_counter::expired()
 Machine & Machine::state(state_t state) 
 { 
     next = state; 
-    trigger = -1; 
+    last_trigger = -1; 
     sleep = 0;
     if ( msg_autoclear ) msgClear();
     return *this; 
@@ -48,6 +48,14 @@ Machine & Machine::state(state_t state)
 state_t Machine::state() 
 { 
     return current; 
+}
+
+Machine & Machine::trigger( int evt )
+{
+    int new_state = read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
+    if ( new_state > -1 ) state( new_state );
+    last_trigger = evt;
+    return *this;
 }
 
 Machine &  Machine::toggle( state_t state1, state_t state2 ) 
@@ -258,11 +266,11 @@ Machine & Machine::cycle()
             if ( callback_sym || callback_num ) {
                 if ( callback_sym ) {
                     callback_sym( inst_label, 
-                        map_symbol( current, sym_states ), 
-                        map_symbol(    next, sym_states ), 
-                        map_symbol( trigger, sym_events ), this->runtime_millis(), cycles );                    
+                        map_symbol(      current, sym_states ), 
+                        map_symbol(         next, sym_states ), 
+                        map_symbol( last_trigger, sym_events ), this->runtime_millis(), cycles );                    
                 } else {
-                    callback_num( inst_label, current, next, trigger, this->runtime_millis(), cycles );
+                    callback_num( inst_label, current, next, last_trigger, this->runtime_millis(), cycles );
                 }
             }
             if ( current > -1 )     
@@ -281,7 +289,7 @@ Machine & Machine::cycle()
         for ( i = ATM_ON_EXIT + 1; i < state_width; i++ ) { 
             if ( ( read_state( state_table + ( current * state_width ) + i ) != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
                 state( read_state( state_table + ( current * state_width ) + i ) );
-                trigger = i - ATM_ON_EXIT - 1;
+                last_trigger = i - ATM_ON_EXIT - 1;
                 return *this;
             }
         }
@@ -302,6 +310,13 @@ TinyMachine & TinyMachine::state(tiny_state_t state)
 tiny_state_t TinyMachine::state()
 {
     return current;
+}
+
+TinyMachine & TinyMachine::trigger( int evt )
+{
+    int new_state = tiny_read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
+    if ( new_state > -1 ) state( new_state );
+    return *this;
 }
 
 TinyMachine & TinyMachine::begin( const tiny_state_t* tbl, int width )
