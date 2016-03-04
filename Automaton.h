@@ -10,7 +10,8 @@
 
 typedef int16_t state_t; 
 typedef int8_t tiny_state_t;
-#define tiny_read_state(addr) (state_t)pgm_read_byte_near(addr)
+
+#define tiny_read_state(addr) (tiny_state_t)pgm_read_byte_near(addr)
 #define read_state(addr) (state_t)pgm_read_word_near(addr)
 
 typedef void (*swcb_num_t)( const char label[], int current, int next, int trigger, uint32_t runtime, uint32_t cycles );
