@@ -8,15 +8,10 @@
 
 #include "Arduino.h"
 
-#define ATM_MAX_STATES 32767
-
-#if ATM_MAX_STATES < 128
-    typedef int8_t state_t;
-    #define read_state(addr) (state_t)pgm_read_byte_near(addr)
-#else
-    typedef int16_t state_t; 
-    #define read_state(addr) (state_t)pgm_read_word_near(addr)
-#endif
+typedef int16_t state_t; 
+typedef int8_t tiny_state_t;
+#define tiny_read_state(addr) (state_t)pgm_read_byte_near(addr)
+#define read_state(addr) (state_t)pgm_read_word_near(addr)
 
 typedef void (*swcb_num_t)( const char label[], int current, int next, int trigger, uint32_t runtime, uint32_t cycles );
 typedef void (*swcb_sym_t)( const char label[], const char current[], const char next[], const char trigger[], uint32_t runtime, uint32_t cycles );
@@ -38,7 +33,7 @@ const uint16_t ATM_COUNTER_OFF = 0xffff; // This counter value never expires
 
 class Factory;
 class Machine;
-
+class BaseMachine;
 
 class atm_milli_timer {
     public:    uint32_t value;
@@ -53,20 +48,22 @@ class atm_micro_timer {
 class atm_timer {
     public:    
         uint32_t value;
-        Machine * pmachine;
-        void begin( Machine * machine, uint32_t v );
+        BaseMachine * pmachine;
+        void begin( BaseMachine * machine, uint32_t v );
         void set( uint32_t v );
         virtual int expired( void ) = 0;
 };
 
 
-class atm_timer_millis: public atm_timer {
+class atm_timer_millis: public atm_timer 
+{
     public:    
         int expired( void );
 };
 
 
-class atm_timer_micros: public atm_timer {
+class atm_timer_micros: public atm_timer 
+{
     public:    
         int expired( void );
 };
@@ -88,13 +85,26 @@ class atm_counter_auto {
 };
 
 
-class Machine
+class BaseMachine
+{
+  public:
+        int8_t sleep;
+        uint32_t state_millis, state_micros;
+
+        uint8_t asleep( void );
+        uint32_t runtime_millis( void );
+        uint32_t runtime_micros( void );
+        virtual int event( int id ) = 0; // Pure virtual methods -> make this an abstract class
+        virtual void action( int id ) = 0;
+};
+
+
+class Machine: public BaseMachine
 {
     public:
         Machine &state( state_t state);
         state_t state( void );
         Machine & toggle( state_t state1, state_t state2 ); 
-        uint8_t asleep( void );
         Machine & priority( int8_t priority );
         int8_t priority( void );
         int msgClear( uint8_t id_msg ); 
@@ -108,13 +118,11 @@ class Machine
         Machine & label( const char label[] );
 
         int8_t prio;
-        int8_t sleep;
         const char * inst_label;
         const char * class_label;
         Machine * inventory_next;
         Machine * priority_next;
         Factory * factory;
-        uint32_t state_millis, state_micros;
 
     protected:
   
@@ -123,15 +131,11 @@ class Machine
         Machine & msgQueue( atm_msg_t msg[], int width, uint8_t autoclear );
 
         const char * map_symbol( int id, const char map[] );
-        uint32_t runtime_millis( void );
-        uint32_t runtime_micros( void );
         uint8_t pinChange( uint8_t pin );
         int msgRead( uint8_t id_msg ); 
         int msgRead( uint8_t id_msg, int cnt ); 
         int msgRead( uint8_t id_msg, int cnt, int clear ); 
         int msgPeek( uint8_t id_msg ); 
-        virtual int event( int id ) = 0; // Pure virtual methods -> make this an abstract class
-        virtual void action( int id ) = 0;
         
         const state_t* state_table;
         state_t next;
@@ -148,7 +152,24 @@ class Machine
         atm_msg_t * msg_table;
         int msg_width;
 	uint8_t msg_autoclear = 0;
-        
+};
+
+
+class TinyMachine: public BaseMachine
+{
+    public:
+        TinyMachine & state( tiny_state_t state);
+        tiny_state_t state( void );
+        TinyMachine & cycle( void );
+
+    protected:
+
+        TinyMachine & begin( const tiny_state_t tbl[], int width );
+        const tiny_state_t* state_table;
+        tiny_state_t next;
+        tiny_state_t current = -1;
+        tiny_state_t previous = -1;
+        uint8_t state_width;
 };
 
 

@@ -9,7 +9,7 @@ void atm_timer::set( uint32_t v ) {
     value = v;
 }
 
-void atm_timer::begin( Machine * machine, uint32_t v  ) {
+void atm_timer::begin( BaseMachine * machine, uint32_t v  ) {
     pmachine = machine;
     value = v;
 }
@@ -89,19 +89,19 @@ Machine & Machine::priority( int8_t priority )
 
 // .asleep() Returns true if the machine is in a sleeping state
 
-uint8_t Machine::asleep() 
+uint8_t BaseMachine::asleep() 
 { 
     return sleep; 
 }
 
 // .runtime_millis() Returns the number of millis since the machine entered the current state 
-uint32_t Machine::runtime_millis() 
+uint32_t BaseMachine::runtime_millis() 
 { 
     return millis() - state_millis; 
 }
 
 // .runtime_millis() Returns the number of micros since the machine entered the current state 
-uint32_t Machine::runtime_micros() 
+uint32_t BaseMachine::runtime_micros() 
 { 
     return micros() - state_micros; 
 }
@@ -288,6 +288,58 @@ Machine & Machine::cycle()
     }
     return *this;
 }
+
+// TINY MACHINE
+
+
+TinyMachine & TinyMachine::state(tiny_state_t state)
+{
+    next = state;
+    sleep = 0;
+    return *this;
+}
+
+tiny_state_t TinyMachine::state()
+{
+    return current;
+}
+
+TinyMachine & TinyMachine::begin( const tiny_state_t* tbl, int width )
+{
+    state_table = tbl;
+    state_width = ATM_ON_EXIT + width + 2;
+    return *this;
+}
+
+// .cycle() Executes one cycle of a state machine
+TinyMachine & TinyMachine::cycle()
+{
+    if ( !sleep ) {
+        if ( next != -1 ) {
+            action( ATM_ON_SWITCH );
+            if ( current > -1 )
+                action( tiny_read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
+            previous = current;
+            current = next;
+            next = -1;
+            state_millis = millis();
+            state_micros = micros();
+            action( tiny_read_state( state_table + ( current * state_width ) + ATM_ON_ENTER ) );
+            sleep = tiny_read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP;
+        }
+        tiny_state_t i = tiny_read_state( state_table + ( current * state_width ) + ATM_ON_LOOP );
+        if ( i != -1 ) { action( i ); }
+        for ( i = ATM_ON_EXIT + 1; i < state_width; i++ ) {
+            if ( ( tiny_read_state( state_table + ( current * state_width ) + i ) != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
+                state( tiny_read_state( state_table + ( current * state_width ) + i ) );
+                return *this;
+            }
+        }
+    }
+    return *this;
+}
+
+
 
 // FACTORY
 
