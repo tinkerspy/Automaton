@@ -52,9 +52,11 @@ state_t Machine::state()
 
 Machine & Machine::trigger( int evt )
 {
-    int new_state = read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
-    if ( new_state > -1 ) state( new_state );
-    last_trigger = evt;
+    if ( current > -1 ) {
+        int new_state = read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
+        if ( new_state > -1 ) state( new_state );
+        last_trigger = evt;
+    }
     return *this;
 }
 
@@ -314,8 +316,10 @@ tiny_state_t TinyMachine::state()
 
 TinyMachine & TinyMachine::trigger( int evt )
 {
-    int new_state = tiny_read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
-    if ( new_state > -1 ) state( new_state );
+    if ( current > -1 ) {
+        int new_state = tiny_read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
+        if ( new_state > -1 ) state( new_state );
+    }
     return *this;
 }
 
@@ -353,8 +357,6 @@ TinyMachine & TinyMachine::cycle()
     }
     return *this;
 }
-
-
 
 // FACTORY
 
@@ -423,4 +425,30 @@ Factory & Factory::cycle( void )
     run( 1 ); run( 2 );	run( 1 ); run( 0 );
     return *this;
 }
+
+
+// TINYFACTORY
+
+// .add( machine ) Adds a state machine to the factory by prepending it to the inventory list
+TinyFactory & TinyFactory::add( TinyMachine & machine ) 
+{	
+    machine.inventory_next = inventory_root;
+    inventory_root = &machine;
+    return *this;
+}
+
+
+// .cycle() executes one factory cycle (runs all priority queues a certain number of times)
+TinyFactory & TinyFactory::cycle( void ) 
+{
+    TinyMachine * m = inventory_root;
+    while ( m ) {
+        if ( !m->sleep ) m->cycle();
+        // Move to the next machine
+        m = m->inventory_next;
+    }
+    return *this;
+}
+
+
 

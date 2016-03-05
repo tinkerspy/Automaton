@@ -164,9 +164,8 @@ class TinyMachine: public BaseMachine
         tiny_state_t state( void );
         TinyMachine & cycle( void );
         TinyMachine & trigger( int evt );
-
+        TinyMachine * inventory_next;
     protected:
-
         TinyMachine & begin( const tiny_state_t tbl[], int width );
         const tiny_state_t* state_table;
         tiny_state_t next;
@@ -188,6 +187,14 @@ class Factory
         Machine * priority_root[ATM_NO_OF_QUEUES];
         void calibrate( void );
         void run( int q );
+};
+
+class TinyFactory 
+{
+  public:
+        TinyFactory & add( TinyMachine & machine );
+        TinyFactory & cycle( void );
+        TinyMachine * inventory_root;
 };
 
 #endif
