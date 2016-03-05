@@ -32,5 +32,31 @@ class Atm_pulse: public Machine {
     Atm_pulse & onPulse( pulsecb_t press_callback ); 
 };
 
+// TinyMachine version
+
+class Att_pulse: public TinyMachine {
+
+  public:
+    Att_pulse( void ) : TinyMachine() { };
+
+    short pin;     
+    Machine * client_machine;
+    uint8_t client_msg;
+    void (*callback)( void ) = 0;
+    int state_high, state_low;
+    atm_timer_millis timer;
+
+    enum { IDLE, WAIT, PULSE } STATES;
+    enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE } EVENTS;
+	enum { ACT_PULSE } ACTIONS;
+	
+    Att_pulse & begin( int attached_pin, int minimum_duration );
+    int event( int id ); 
+    void action( int id ); 
+    Att_pulse & onPulse( Machine * machine, uint8_t msg ); 
+    Att_pulse & onPulse( pulsecb_t press_callback ); 
+};
+
+
 #endif
 

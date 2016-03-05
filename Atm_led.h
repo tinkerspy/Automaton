@@ -33,4 +33,32 @@ class Atm_led : public Machine {
 	void action( int id );
 };
 
+
+class Att_led : public TinyMachine {
+
+  public:
+  	// Class constructor
+	Att_led( void ) : TinyMachine() { };
+
+	// Custom state, event, action & message constants (enum)
+	enum { IDLE, ON, START, BLINK_OFF } STATES; 
+	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, ELSE } EVENTS; 
+	enum { ACT_INIT, ACT_ON, ACT_OFF } ACTIONS; 
+		
+	// Custom class variables
+	short pin;
+	int repeat_count;
+	atm_timer_millis on_timer, off_timer;
+	atm_counter counter;
+
+	// Methods used
+	Att_led & begin( int attached_pin );
+	Att_led & blink( int duration ); 
+	Att_led & pause( int duration ); 
+	Att_led & fade( int fade ); 
+	Att_led & repeat( int repeat ); 
+	int event( int id );
+	void action( int id );
+};
+
 #endif

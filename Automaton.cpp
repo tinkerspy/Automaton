@@ -427,7 +427,7 @@ Factory & Factory::cycle( void )
 }
 
 
-// TINYFACTORY
+// TINYFACTORY - A factory for TinyMachines
 
 // .add( machine ) Adds a state machine to the factory by prepending it to the inventory list
 TinyFactory & TinyFactory::add( TinyMachine & machine ) 
@@ -438,7 +438,7 @@ TinyFactory & TinyFactory::add( TinyMachine & machine )
 }
 
 
-// .cycle() executes one factory cycle (runs all priority queues a certain number of times)
+// .cycle() executes the factory cycle 
 TinyFactory & TinyFactory::cycle( void ) 
 {
     TinyMachine * m = inventory_root;

@@ -35,4 +35,33 @@ class Atm_timer: public Machine {
     void action( int id ); 
 };
 
+// TinyMachine version
+
+class Att_timer: public TinyMachine {
+
+  public:
+    Att_timer( void ) : TinyMachine() { };
+
+    atm_timer_millis timer;
+    atm_counter counter;
+    int timer_id;
+    timer_cb_t callback = 0;
+    Machine * client_machine;
+    uint8_t client_msg;
+
+    enum { IDLE, WAIT, TRIGGER } STATES;
+    enum { EVT_TIMER, EVT_COUNTER, EVT_OFF, EVT_ON, ELSE } EVENTS;
+	enum { ACT_TRIG } ACTIONS;
+	
+    Att_timer & begin( void );
+    Att_timer & onTimer( Machine * machine, uint8_t msg );
+    Att_timer & onTimer( timer_cb_t timer_callback ); 
+    Att_timer & interval( int v );
+    Att_timer & repeat( int v );
+    Att_timer & id( int v );
+    int event( int id ); 
+    void action( int id ); 
+};
+
+
 #endif
