@@ -190,6 +190,11 @@ int Machine::msgRead( uint8_t id_msg, int cnt, int clear )
   return 0;
 }
 
+int Machine::msgCount( uint8_t id_msg ) 
+{
+  return msg_table[id_msg];
+}
+
 int Machine::msgPeek( uint8_t id_msg ) 
 {
   if ( msg_table[id_msg] > 0 ) {
@@ -416,14 +421,14 @@ Machine * Factory::find( const char label[] )
 }
 
 // .cycle() executes one factory cycle (runs all priority queues a certain number of times)
-Factory & Factory::cycle( void ) 
+int Factory::cycle( void ) 
 {
     if ( recalibrate ) calibrate();
     run( 1 ); run( 2 );	run( 1 ); run( 2 );
     run( 1 ); run( 3 );	run( 1 ); run( 4 );
     run( 1 ); run( 2 );	run( 1 ); run( 3 );
     run( 1 ); run( 2 );	run( 1 ); run( 0 );
-    return *this;
+    return  initialized ? 0: initialized = 1;
 }
 
 
@@ -439,7 +444,7 @@ TinyFactory & TinyFactory::add( TinyMachine & machine )
 
 
 // .cycle() executes the factory cycle 
-TinyFactory & TinyFactory::cycle( void ) 
+int TinyFactory::cycle( void ) 
 {
     TinyMachine * m = inventory_root;
     while ( m ) {
@@ -447,7 +452,7 @@ TinyFactory & TinyFactory::cycle( void )
         // Move to the next machine
         m = m->inventory_next;
     }
-    return *this;
+    return initialized ? 0 : initialized = 1; 
 }
 
 

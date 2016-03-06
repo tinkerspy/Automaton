@@ -138,6 +138,7 @@ class Machine: public BaseMachine
         int msgRead( uint8_t id_msg, int cnt ); 
         int msgRead( uint8_t id_msg, int cnt, int clear ); 
         int msgPeek( uint8_t id_msg ); 
+        int msgCount( uint8_t id_msg );
         
         const state_t* state_table;
         state_t next;
@@ -179,9 +180,10 @@ class Factory
 {
   public:
         Factory & add( Machine & machine );
-        Factory & cycle( void );
         Machine * find( const char label[] );
+        int cycle( void );
   private:
+        int8_t initialized = 1;
         int8_t recalibrate = 1;
         Machine * inventory_root;
         Machine * priority_root[ATM_NO_OF_QUEUES];
@@ -193,8 +195,10 @@ class TinyFactory
 {
   public:
         TinyFactory & add( TinyMachine & machine );
-        TinyFactory & cycle( void );
         TinyMachine * inventory_root;
+        int cycle( void );
+  private:
+        int8_t initialized;
 };
 
 #endif
