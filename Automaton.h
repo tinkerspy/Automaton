@@ -181,9 +181,8 @@ class Factory
   public:
         Factory & add( Machine & machine );
         Machine * find( const char label[] );
-        int cycle( void );
+        Factory & cycle( void );
   private:
-        int8_t initialized = 1;
         int8_t recalibrate = 1;
         Machine * inventory_root;
         Machine * priority_root[ATM_NO_OF_QUEUES];
@@ -196,9 +195,7 @@ class TinyFactory
   public:
         TinyFactory & add( TinyMachine & machine );
         TinyMachine * inventory_root;
-        int cycle( void );
-  private:
-        int8_t initialized;
+        TinyFactory & cycle( void );
 };
 
 #endif

@@ -404,6 +404,7 @@ Factory & Factory::add( Machine & machine )
     inventory_root = &machine;
     machine.factory = this;
     recalibrate = 1;
+    machine.cycle();
     return *this;
 }
 
@@ -421,14 +422,14 @@ Machine * Factory::find( const char label[] )
 }
 
 // .cycle() executes one factory cycle (runs all priority queues a certain number of times)
-int Factory::cycle( void ) 
+Factory & Factory::cycle( void ) 
 {
     if ( recalibrate ) calibrate();
     run( 1 ); run( 2 );	run( 1 ); run( 2 );
     run( 1 ); run( 3 );	run( 1 ); run( 4 );
     run( 1 ); run( 2 );	run( 1 ); run( 3 );
     run( 1 ); run( 2 );	run( 1 ); run( 0 );
-    return  initialized ? 0: initialized = 1;
+    return  *this;
 }
 
 
@@ -439,12 +440,13 @@ TinyFactory & TinyFactory::add( TinyMachine & machine )
 {	
     machine.inventory_next = inventory_root;
     inventory_root = &machine;
+    machine.cycle();
     return *this;
 }
 
 
 // .cycle() executes the factory cycle 
-int TinyFactory::cycle( void ) 
+TinyFactory &  TinyFactory::cycle( void ) 
 {
     TinyMachine * m = inventory_root;
     while ( m ) {
@@ -452,7 +454,7 @@ int TinyFactory::cycle( void )
         // Move to the next machine
         m = m->inventory_next;
     }
-    return initialized ? 0 : initialized = 1; 
+    return *this; 
 }
 
 
