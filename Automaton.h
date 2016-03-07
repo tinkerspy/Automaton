@@ -141,7 +141,7 @@ class Machine: public BaseMachine
         int msgCount( uint8_t id_msg );
         
         const state_t* state_table;
-        state_t next;
+        state_t next = 0;
         state_t current = -1;
         state_t last_trigger = -1;
         state_t previous = -1;
@@ -154,7 +154,7 @@ class Machine: public BaseMachine
         uint32_t cycles;
         atm_msg_t * msg_table;
         int msg_width;
-	uint8_t msg_autoclear = 0;
+        uint8_t msg_autoclear = 0;
 };
 
 
@@ -169,7 +169,7 @@ class TinyMachine: public BaseMachine
     protected:
         TinyMachine & begin( const tiny_state_t tbl[], int width );
         const tiny_state_t* state_table;
-        tiny_state_t next;
+        tiny_state_t next = 0;
         tiny_state_t current = -1;
         tiny_state_t previous = -1;
         uint8_t state_width;
