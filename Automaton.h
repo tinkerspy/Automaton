@@ -105,7 +105,7 @@ class Machine: public BaseMachine
     public:
         Machine &state( state_t state);
         state_t state( void );
-        Machine & trigger( int evt );
+        int trigger( int evt );
         Machine & toggle( state_t state1, state_t state2 ); 
         Machine & priority( int8_t priority );
         int8_t priority( void );
@@ -138,10 +138,9 @@ class Machine: public BaseMachine
         int msgRead( uint8_t id_msg, int cnt ); 
         int msgRead( uint8_t id_msg, int cnt, int clear ); 
         int msgPeek( uint8_t id_msg ); 
-        int msgCount( uint8_t id_msg );
         
         const state_t* state_table;
-        state_t next = 0;
+        state_t next;
         state_t current = -1;
         state_t last_trigger = -1;
         state_t previous = -1;
@@ -154,7 +153,7 @@ class Machine: public BaseMachine
         uint32_t cycles;
         atm_msg_t * msg_table;
         int msg_width;
-        uint8_t msg_autoclear = 0;
+	uint8_t msg_autoclear = 0;
 };
 
 
@@ -164,7 +163,7 @@ class TinyMachine: public BaseMachine
         TinyMachine & state( tiny_state_t state);
         tiny_state_t state( void );
         TinyMachine & cycle( void );
-        TinyMachine & trigger( int evt );
+        int trigger( int evt );
         TinyMachine * inventory_next;
     protected:
         TinyMachine & begin( const tiny_state_t tbl[], int width );

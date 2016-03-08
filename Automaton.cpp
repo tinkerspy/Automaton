@@ -50,14 +50,17 @@ state_t Machine::state()
     return current; 
 }
 
-Machine & Machine::trigger( int evt )
+int Machine::trigger( int evt )
 {
     if ( current > -1 ) {
         int new_state = read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
-        if ( new_state > -1 ) state( new_state );
-        last_trigger = evt;
+        if ( new_state > -1 ) {
+	  state( new_state );
+          last_trigger = evt;
+          return 1;
+        }
     }
-    return *this;
+    return 0;
 }
 
 Machine &  Machine::toggle( state_t state1, state_t state2 ) 
@@ -190,17 +193,9 @@ int Machine::msgRead( uint8_t id_msg, int cnt, int clear )
   return 0;
 }
 
-int Machine::msgCount( uint8_t id_msg ) 
-{
-  return msg_table[id_msg];
-}
-
 int Machine::msgPeek( uint8_t id_msg ) 
 {
-  if ( msg_table[id_msg] > 0 ) {
-      return 1;
-  }
-  return 0;
+  return msg_table[id_msg];
 }
 
 int Machine::msgClear( uint8_t id_msg ) // Destructive read (clears queue for this type)
@@ -319,13 +314,16 @@ tiny_state_t TinyMachine::state()
     return current;
 }
 
-TinyMachine & TinyMachine::trigger( int evt )
+int TinyMachine::trigger( int evt )
 {
     if ( current > -1 ) {
         int new_state = tiny_read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
-        if ( new_state > -1 ) state( new_state );
+        if ( new_state > -1 ) {
+          state( new_state );
+          return 1;
+        }
     }
-    return *this;
+    return 0;
 }
 
 TinyMachine & TinyMachine::begin( const tiny_state_t* tbl, int width )
