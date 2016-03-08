@@ -231,17 +231,6 @@ Machine & Machine::msgWrite( uint8_t id_msg, int cnt )
   return *this;
 }
 
-Machine & Machine::msgMap( uint32_t map ) // TESTME!
-{
-  sleep = 0;
-  for ( int i = 0; i < msg_width; i++ ) {
-      if ( map & ( 1 << i ) ) {
-          msg_table[i]++;
-      }
-  }
-  return *this;
-}
-
 const char * Machine::map_symbol( int id, const char map[] )
 { 
   int cnt = 0;

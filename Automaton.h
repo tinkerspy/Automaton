@@ -113,7 +113,6 @@ class Machine: public BaseMachine
         Machine & msgClear( void ); 
         Machine & msgWrite( uint8_t id_msg ); 
         Machine & msgWrite( uint8_t id_msg, int cnt ); 
-        Machine & msgMap( uint32_t map );
         Machine & cycle( void );
         Machine & onSwitch( swcb_num_t callback );
         Machine & onSwitch( swcb_sym_t callback, const char sym_s[], const char sym_e[] );
