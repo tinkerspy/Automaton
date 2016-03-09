@@ -93,8 +93,6 @@ class BaseMachine
         uint32_t state_millis, state_micros;
 
         uint8_t asleep( void );
-        uint32_t runtime_millis( void );
-        uint32_t runtime_micros( void );
         virtual int event( int id ) = 0; // Pure virtual methods -> make this an abstract class
         virtual void action( int id ) = 0;
 };

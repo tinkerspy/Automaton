@@ -107,18 +107,6 @@ uint8_t BaseMachine::asleep()
     return sleep; 
 }
 
-// .runtime_millis() Returns the number of millis since the machine entered the current state 
-uint32_t BaseMachine::runtime_millis() 
-{ 
-    return millis() - state_millis; 
-}
-
-// .runtime_millis() Returns the number of micros since the machine entered the current state 
-uint32_t BaseMachine::runtime_micros() 
-{ 
-    return micros() - state_micros; 
-}
-
 Machine & Machine::begin( const state_t* tbl, int width ) 
 { 
     state_table = tbl;
@@ -259,9 +247,9 @@ Machine & Machine::cycle()
                     callback_sym( inst_label, 
                         map_symbol(      current, sym_states ), 
                         map_symbol(         next, sym_states ), 
-                        map_symbol( last_trigger, sym_events ), this->runtime_millis(), cycles );                    
+                        map_symbol( last_trigger, sym_events ), millis() - state_millis, cycles );                    
                 } else {
-                    callback_num( inst_label, current, next, last_trigger, this->runtime_millis(), cycles );
+                    callback_num( inst_label, current, next, last_trigger, millis() - state_millis, cycles );
                 }
             }
             if ( current > -1 )     
