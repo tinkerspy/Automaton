@@ -396,16 +396,21 @@ Machine * Factory::find( const char label[] )
     return 0;        
 }
 
+    
 int Factory::msgSend( const char label[], int msg )
 {
-    Machine * m = find( label );
-    if ( m ) {
-        m->msgWrite( msg );
-        return 1;
+    int r = 0;
+    Machine * m = inventory_root;
+    while ( m ) {
+        if ( strcmp( label, m->inst_label ) == 0 ) {
+            m->msgWrite( msg );
+            r = 1;
+        }
+        m = m->inventory_next;
     }
-    return 0;
-}
-    
+    return 0;        
+}    
+
 int Factory::msgSendClass( const char label[], int msg )
 {
     int r = 0;
