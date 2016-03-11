@@ -55,7 +55,7 @@ int Machine::trigger( int evt )
     if ( current > -1 ) {
         int new_state = read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
         if ( new_state > -1 ) {
-	  state( new_state );
+	      state( new_state );
           last_trigger = evt;
           return 1;
         }
@@ -406,6 +406,19 @@ int Factory::msgSend( const char label[], int msg )
     return 0;
 }
     
+int Factory::msgSendClass( const char label[], int msg )
+{
+    int r = 0;
+    Machine * m = inventory_root;
+    while ( m ) {
+        if ( strcmp( label, m->class_label ) == 0 ) {
+            m->msgWrite( msg );
+            r = 1;
+        }
+        m = m->inventory_next;
+    }
+    return 0;        
+}    
 
 // .cycle() executes one factory cycle (runs all priority queues a certain number of times)
 Factory & Factory::cycle( void ) 
