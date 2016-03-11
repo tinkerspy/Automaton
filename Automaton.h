@@ -177,6 +177,7 @@ class Factory
   public:
         Factory & add( Machine & machine );
         Machine * find( const char label[] );
+        int msgSend( const char label[], int msg );
         Factory & cycle( void );
   private:
         int8_t recalibrate = 1;

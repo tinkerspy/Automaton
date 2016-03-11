@@ -388,13 +388,24 @@ Machine * Factory::find( const char label[] )
 {
     Machine * m = inventory_root;
     while ( m ) {
-        if ( *label == *m->inst_label ) {
+        if ( strcmp( label, m->inst_label ) == 0 ) {
             return m;
         }
         m = m->inventory_next;
     }
     return 0;        
 }
+
+int Factory::msgSend( const char label[], int msg )
+{
+    Machine * m = find( label );
+    if ( m ) {
+        m->msgWrite( msg );
+        return 1;
+    }
+    return 0;
+}
+    
 
 // .cycle() executes one factory cycle (runs all priority queues a certain number of times)
 Factory & Factory::cycle( void ) 
