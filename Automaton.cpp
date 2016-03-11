@@ -404,11 +404,11 @@ int Factory::msgSend( const char label[], int msg )
     while ( m ) {
         if ( strcmp( label, m->inst_label ) == 0 ) {
             m->msgWrite( msg );
-            r = 1;
+            r++;
         }
         m = m->inventory_next;
     }
-    return 0;        
+    return r;        
 }    
 
 int Factory::msgSendClass( const char label[], int msg )
@@ -418,11 +418,11 @@ int Factory::msgSendClass( const char label[], int msg )
     while ( m ) {
         if ( strcmp( label, m->class_label ) == 0 ) {
             m->msgWrite( msg );
-            r = 1;
+            r++;
         }
         m = m->inventory_next;
     }
-    return 0;        
+    return r;        
 }    
 
 // .cycle() executes one factory cycle (runs all priority queues a certain number of times)
