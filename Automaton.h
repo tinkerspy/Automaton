@@ -14,7 +14,6 @@ typedef int8_t tiny_state_t;
 #define tiny_read_state(addr) (tiny_state_t)pgm_read_byte_near(addr)
 #define read_state(addr) (state_t)pgm_read_word_near(addr)
 
-typedef void (*swcb_num_t)( const char label[], int current, int next, int trigger, uint32_t runtime, uint32_t cycles );
 typedef void (*swcb_sym_t)( const char label[], const char current[], const char next[], const char trigger[], uint32_t runtime, uint32_t cycles );
 
 typedef uint16_t atm_msg_t;
@@ -43,6 +42,12 @@ class atm_milli_timer {
 
 class atm_micro_timer {
     public:    uint32_t value;
+};
+
+
+class atm_serial_debug {
+  public: static void onSwitch( const char label[], const char current[], const char next[], 
+        const char trigger[], uint32_t runtime, uint32_t cycles );
 };
 
 
@@ -112,8 +117,7 @@ class Machine: public BaseMachine
         Machine & msgWrite( uint8_t id_msg ); 
         Machine & msgWrite( uint8_t id_msg, int cnt ); 
         Machine & cycle( void );
-        Machine & onSwitch( swcb_num_t callback );
-        Machine & onSwitch( swcb_sym_t callback, const char sym_s[], const char sym_e[] );
+        virtual Machine & onSwitch( swcb_sym_t callback, const char sym_s[], const char sym_e[] );
         Machine & label( const char label[] );
 
         int8_t prio;
@@ -146,7 +150,6 @@ class Machine: public BaseMachine
         const char* sym_events;
         uint8_t state_width;
         swcb_sym_t callback_sym;
-        swcb_num_t callback_num;
         uint32_t cycles;
         atm_msg_t * msg_table;
         int msg_width;

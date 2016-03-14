@@ -22,6 +22,7 @@ class Atm_command: public Machine {
 	enum { ACT_READCHAR, ACT_SEND } ACTIONS;
 	
     Atm_command & begin( Stream * stream, char buffer[], int size );
+    Atm_command & onSwitch( swcb_sym_t switch_callback );
     int event( int id ); 
     void action( int id ); 
     Atm_command & onCommand(void (*callback)( int idx ), const char * cmds  );

@@ -30,6 +30,7 @@ class Atm_comparator: public Machine {
 	  enum { ACT_SAMPLE, ACT_SEND } ACTIONS;
 	
     Atm_comparator & begin( int attached_pin, int blinkrate, triggercb_t callback );
+    Atm_comparator & onSwitch( swcb_sym_t switch_callback );
     Atm_comparator & threshold( uint16_t * v, uint16_t size, bool catchUp=false );
     Atm_comparator & average( uint16_t * v, uint16_t size );
     int _avg();

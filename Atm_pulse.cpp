@@ -55,6 +55,15 @@ void Atm_pulse::action( int id )
    }
 }
 
+Atm_pulse & Atm_pulse::onSwitch( swcb_sym_t switch_callback ) {
+
+  Machine::onSwitch( switch_callback, 
+   "IDLE\0WAIT\0PULSE",
+    "EVT_TIMER\0EVT_HIGH\0EVT_LOW\0ELSE" );
+  return *this;
+}
+
+
 // TinyMachine version
 	
 Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration )

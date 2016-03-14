@@ -26,6 +26,7 @@ class Atm_timer: public Machine {
     atm_msg_t messages[MSG_END];
 	
     Atm_timer & begin( void );
+    Atm_timer & onSwitch( swcb_sym_t switch_callback );
     Atm_timer & onTimer( Machine * machine, uint8_t msg );
     Atm_timer & onTimer( timer_cb_t timer_callback ); 
     Atm_timer & interval( int v );

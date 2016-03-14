@@ -105,6 +105,14 @@ void Atm_command::action( int id )
    }
 }
 
+Atm_command & Atm_command::onSwitch( swcb_sym_t switch_callback ) {
+
+  Machine::onSwitch( switch_callback, 
+    "IDLE\0READCHAR\0SEND",
+    "EVT_INPUT\0EVT_EOL\0ELSE" );
+  return *this;
+}
+
 // TinyMachine version
 
 Att_command & Att_command::begin( Stream * stream, char buffer[], int size )

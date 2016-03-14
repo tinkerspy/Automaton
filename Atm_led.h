@@ -29,6 +29,7 @@ class Atm_led : public Machine {
 	Atm_led & pause( int duration ); 
 	Atm_led & fade( int fade ); 
 	Atm_led & repeat( int repeat ); 
+    Atm_led & onSwitch( swcb_sym_t switch_callback );
 	int event( int id );
 	void action( int id );
 };

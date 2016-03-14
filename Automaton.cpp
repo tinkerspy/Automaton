@@ -36,6 +36,26 @@ uint8_t atm_counter::expired()
     return value == ATM_COUNTER_OFF ? 0 : ( value > 0 ? 0 : 1 ); 
 }
 
+
+void atm_serial_debug::onSwitch( const char label[], const char current[], const char next[], 
+        const char trigger[], uint32_t runtime, uint32_t cycles ) {
+    Serial.print( millis() );
+    Serial.print( F(" Switch ") );
+    Serial.print( label );
+    Serial.print( F(" from ") );
+    Serial.print( current );
+    Serial.print( F( " to ") );
+    Serial.print( next );
+    Serial.print( F(" on ") );
+    Serial.print( trigger );
+    Serial.print( F(" (") );
+    Serial.print( cycles );
+    Serial.print( F(" cycles in ") );
+    Serial.print( runtime );
+    Serial.println( F(" ms)") );
+}
+
+
 Machine & Machine::state(state_t state) 
 { 
     next = state; 
@@ -67,12 +87,6 @@ Machine &  Machine::toggle( state_t state1, state_t state2 )
 { 
     state( current == state1 ? state2 : state1 ); 
     return *this; 
-}
-
-Machine & Machine::onSwitch( swcb_num_t callback ) 
-{
-    callback_num = callback;
-    return *this;
 }
 
 Machine & Machine::onSwitch( swcb_sym_t callback, const char sym_s[], const char sym_e[] ) 
@@ -242,15 +256,11 @@ Machine & Machine::cycle()
         cycles++;
         if ( next != -1 ) {
             action( ATM_ON_SWITCH );
-            if ( callback_sym || callback_num ) {
-                if ( callback_sym ) {
-                    callback_sym( inst_label, 
-                        map_symbol(      current, sym_states ), 
-                        map_symbol(         next, sym_states ), 
-                        map_symbol( last_trigger, sym_events ), millis() - state_millis, cycles );                    
-                } else {
-                    callback_num( inst_label, current, next, last_trigger, millis() - state_millis, cycles );
-                }
+            if ( callback_sym ) {
+                callback_sym( inst_label, 
+                    map_symbol(      current, sym_states ), 
+                    map_symbol(         next, sym_states ), 
+                    map_symbol( last_trigger, sym_events ), millis() - state_millis, cycles );                    
             }
             if ( current > -1 )     
 		action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );

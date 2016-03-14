@@ -31,6 +31,7 @@ class Atm_button : public Machine {
     
 	Atm_button & begin( int attached_pin, presscb_t press_callback );
 	Atm_button & begin( int attached_pin );
+    Atm_button & onSwitch( swcb_sym_t switch_callback );
     Atm_button & onPress( Machine * machine, int msg ); 
     Atm_button & onPress( Machine * machine, int msg_press, int msg_release );
     Atm_button & onPress( presscb_t press_callback );

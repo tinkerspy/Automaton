@@ -119,6 +119,14 @@ void Atm_comparator::action( int id )
    }
 }
 
+Atm_comparator & Atm_comparator::onSwitch( swcb_sym_t switch_callback ) {
+
+  Machine::onSwitch( switch_callback, 
+    "IDLE\0SAMPLE\0SEND",
+    "EVT_TRIGGER\0EVT_TIMER\0ELSE" );
+  return *this;
+}
+
 // TinyMachine version
   
 Att_comparator & Att_comparator::begin( int attached_pin, int samplerate, triggercb_t cb )

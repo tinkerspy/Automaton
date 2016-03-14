@@ -78,6 +78,15 @@ void Atm_led::action( int id )
 	}
 }
 
+Atm_led & Atm_led::onSwitch( swcb_sym_t switch_callback ) {
+
+  Machine::onSwitch( switch_callback, 
+    "IDLE\0ON\0START\0BLINK_OFF",
+    "EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_BLINK\0ELSE" );
+  return *this;
+}
+
+
 // TinyMachine version
 
 Att_led & Att_led::begin( int attached_pin )

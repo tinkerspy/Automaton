@@ -98,6 +98,15 @@ void Atm_teensywave::action( int id )
    }
 }
 
+Atm_teensywave & Atm_teensywave::onSwitch( swcb_sym_t switch_callback ) {
+
+  Machine::onSwitch( switch_callback, 
+  "IDLE\0START_SN\0SINE\0START_SW\0SAW\0START_SR\0SAWR"
+  "\0START_TR\0TRI\0START_SQ\0SQON\0SQOFF",
+  "EVT_COUNTER\0EVT_TIMER\0EVT_TOGGLE\0ELSE" );    
+  return *this;
+}
+
 // TinyMachine version
 
 

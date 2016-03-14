@@ -81,6 +81,14 @@ void Atm_timer::action( int id )
    }
 }
 
+Atm_timer & Atm_timer::onSwitch( swcb_sym_t switch_callback ) {
+
+  Machine::onSwitch( switch_callback, 
+    "IDLE\0WAIT\0TRIGGER", 
+    "EVT_TIMER\0EVT_COUNTER\0EVT_OFF\0EVT_ON\0ELSE" );  
+  return *this;
+}
+
 // TinyMachine version
 	
 Att_timer & Att_timer::begin( void )

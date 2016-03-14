@@ -22,6 +22,7 @@ class Atm_teensywave: public Machine {
     atm_msg_t messages[MSG_END];
 			
     Atm_teensywave & begin( int attached_pin, int steps, int delay );
+    Atm_teensywave & onSwitch( swcb_sym_t switch_callback );
     int event( int id ); 
     void action( int id ); 
 };
