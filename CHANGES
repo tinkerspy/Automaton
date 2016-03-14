@@ -1,0 +1,23 @@
+
+Version 0.2.0 (in development)
+=============
+
+New features:
+- autoclear option msgQueue added
+- previous machine variable added
+- Machine::trigger() method
+- Tiny machines
+- Tiny factory
+- Att_* tiny machines for all bundled machines
+- msgPeek() now returns number of messages (for data sending)
+- made Factory::add() process one cycle for the added machine 
+- obj.onSwitch( atm_serial_debug::onSwitch ) for all bundled machines!
+
+Breaking changes:
+- trigger machine variable changed to last_trigger
+- dropped toggle, runtime_*, msgMap, runtime_millis(), runtime_micros()
+- ON_ENTER is now fired after each state( new_state ) call
+- factory.add() now runs the added machine exactly one cycle to initialize it
+- machine.msgPeek() returns number of messages instead of just 0 or 1
+- Dropped numeric version of onSwitch()
+
