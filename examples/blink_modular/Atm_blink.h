@@ -17,6 +17,7 @@ class Atm_blink: public Machine {
 	  enum { ACT_ON, ACT_OFF } ACTIONS;
 	
     Atm_blink & begin( int attached_pin, int blinkrate );
+    Atm_blink & onSwitch( swcb_sym_t switch_callback );
     int event( int id ); 
     void action( int id ); 
 };
