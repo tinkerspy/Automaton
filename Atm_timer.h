@@ -29,7 +29,7 @@ class Atm_timer: public Machine {
     Atm_timer & onSwitch( swcb_sym_t switch_callback );
     Atm_timer & onTimer( Machine * machine, uint8_t msg );
     Atm_timer & onTimer( timer_cb_t timer_callback ); 
-    Atm_timer & interval( int v );
+    Atm_timer & interval( uint32_t v );
     Atm_timer & repeat( int v );
     Atm_timer & id( int v );
     int event( int id ); 
@@ -57,7 +57,7 @@ class Att_timer: public TinyMachine {
     Att_timer & begin( void );
     Att_timer & onTimer( Machine * machine, uint8_t msg );
     Att_timer & onTimer( timer_cb_t timer_callback ); 
-    Att_timer & interval( int v );
+    Att_timer & interval( uint32_t v );
     Att_timer & repeat( int v );
     Att_timer & id( int v );
     int event( int id ); 

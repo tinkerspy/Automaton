@@ -31,7 +31,7 @@ Atm_timer & Atm_timer::onTimer( timer_cb_t timer_callback )
   return *this;  
 }
 
-Atm_timer & Atm_timer::interval( int v )
+Atm_timer & Atm_timer::interval( uint32_t v )
 {
   timer.set( v );  
   state( WAIT );
@@ -120,7 +120,7 @@ Att_timer & Att_timer::onTimer( timer_cb_t timer_callback )
   return *this;  
 }
 
-Att_timer & Att_timer::interval( int v )
+Att_timer & Att_timer::interval( uint32_t v )
 {
   timer.set( v );  
   state( WAIT );
