@@ -25,8 +25,8 @@ class Atm_led : public Machine {
 
 	// Methods used
 	Atm_led & begin( int attached_pin );
-	Atm_led & blink( int duration ); 
-	Atm_led & pause( int duration ); 
+	Atm_led & blink( uint32_t duration ); 
+	Atm_led & pause( uint32_t duration ); 
 	Atm_led & fade( int fade ); 
 	Atm_led & repeat( int repeat ); 
     Atm_led & onSwitch( swcb_sym_t switch_callback );
@@ -54,8 +54,8 @@ class Att_led : public TinyMachine {
 
 	// Methods used
 	Att_led & begin( int attached_pin );
-	Att_led & blink( int duration ); 
-	Att_led & pause( int duration ); 
+	Att_led & blink( uint32_t duration ); 
+	Att_led & pause( uint32_t duration ); 
 	Att_led & fade( int fade ); 
 	Att_led & repeat( int repeat ); 
 	int event( int id );

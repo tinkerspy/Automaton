@@ -21,13 +21,13 @@ Atm_led & Atm_led::begin( int attached_pin )
 	return *this;
 }
 
-Atm_led & Atm_led::blink( int duration ) 
+Atm_led & Atm_led::blink( uint32_t duration ) 
 {
 	on_timer.set( duration ); // Time in which led is fully on
 	return *this;
 }
 
-Atm_led & Atm_led::pause( int duration ) 
+Atm_led & Atm_led::pause( uint32_t duration ) 
 {
 	off_timer.set( duration ); // Time in which led is fully off
 	return *this;
@@ -108,13 +108,13 @@ Att_led & Att_led::begin( int attached_pin )
 	return *this;
 }
 
-Att_led & Att_led::blink( int duration ) 
+Att_led & Att_led::blink( uint32_t duration ) 
 {
 	on_timer.set( duration ); // Time in which led is fully on
 	return *this;
 }
 
-Att_led & Att_led::pause( int duration ) 
+Att_led & Att_led::pause( uint32_t duration ) 
 {
 	off_timer.set( duration ); // Time in which led is fully off
 	return *this;
