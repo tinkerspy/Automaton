@@ -27,13 +27,13 @@ Atm_fade & Atm_fade::begin( int attached_pin )
 	return *this;
 }
 
-Atm_fade & Atm_fade::blink( int duration ) 
+Atm_fade & Atm_fade::blink( uint32_t duration ) 
 {
 	timer_on.set( duration ); // Plateau between slopes (in which led is fully on)
 	return *this;
 }
 
-Atm_fade & Atm_fade::pause( int duration ) 
+Atm_fade & Atm_fade::pause( uint32_t duration ) 
 {
 	timer_off.set( duration ); // Pause between slopes (in which led is fully off)
 	return *this;
@@ -138,13 +138,13 @@ Att_fade & Att_fade::begin( int attached_pin )
 	return *this;
 }
 
-Att_fade & Att_fade::blink( int duration ) 
+Att_fade & Att_fade::blink( uint32_t duration ) 
 {
 	timer_on.set( duration ); // Plateau between slopes (in which led is fully on)
 	return *this;
 }
 
-Att_fade & Att_fade::pause( int duration ) 
+Att_fade & Att_fade::pause( uint32_t duration ) 
 {
 	timer_off.set( duration ); // Pause between slopes (in which led is fully off)
 	return *this;

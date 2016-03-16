@@ -29,8 +29,8 @@ class Atm_fade : public Machine {
 		
 		Atm_fade & begin( int attached_pin );
         Atm_fade & onSwitch( swcb_sym_t switch_callback );
-		Atm_fade & blink( int duration ); 
-		Atm_fade & pause( int duration ); 
+		Atm_fade & blink( uint32_t duration ); 
+		Atm_fade & pause( uint32_t duration ); 
 		Atm_fade & fade( int fade ); 
 		Atm_fade & repeat( int repeat ); 
 		int event( int id );
@@ -61,8 +61,8 @@ class Att_fade : public TinyMachine {
 		atm_counter counter_fade, counter_repeat;
 		
 		Att_fade & begin( int attached_pin );
-		Att_fade & blink( int duration ); 
-		Att_fade & pause( int duration ); 
+		Att_fade & blink( uint32_t duration ); 
+		Att_fade & pause( uint32_t duration ); 
 		Att_fade & fade( int fade ); 
 		Att_fade & repeat( int repeat ); 
 		int event( int id );
