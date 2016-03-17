@@ -12,6 +12,7 @@ New features:
 - msgPeek() now returns number of messages (for data sending)
 - made Factory::add() process one cycle for the added machine 
 - obj.onSwitch( atm_serial_debug::onSwitch ) for all bundled machines!
+- Atm_timer: added interval_seconds(), now supports timers up to 137 years
 
 Breaking changes:
 - trigger machine variable changed to last_trigger
@@ -20,4 +21,5 @@ Breaking changes:
 - factory.add() now runs the added machine exactly one cycle to initialize it
 - machine.msgPeek() returns number of messages instead of just 0 or 1
 - Dropped numeric version of onSwitch()
+- Atm_timer added extra 'int cnt' argument to callback
 
