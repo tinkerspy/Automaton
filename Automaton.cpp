@@ -37,23 +37,6 @@ uint8_t atm_counter::expired()
 }
 
 
-void atm_serial_debug::onSwitch( const char label[], const char current[], const char next[], 
-        const char trigger[], uint32_t runtime, uint32_t cycles ) {
-    Serial.print( millis() );
-    Serial.print( F(" Switch ") );
-    Serial.print( label );
-    Serial.print( F(" from ") );
-    Serial.print( current );
-    Serial.print( F( " to ") );
-    Serial.print( next );
-    Serial.print( F(" on ") );
-    Serial.print( trigger );
-    Serial.print( F(" (") );
-    Serial.print( cycles );
-    Serial.print( F(" cycles in ") );
-    Serial.print( runtime );
-    Serial.println( F(" ms)") );
-}
 
 
 Machine & Machine::state(state_t state) 

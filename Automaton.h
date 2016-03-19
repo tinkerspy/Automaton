@@ -46,8 +46,25 @@ class atm_micro_timer {
 
 
 class atm_serial_debug {
-  public: static void onSwitch( const char label[], const char current[], const char next[], 
-        const char trigger[], uint32_t runtime, uint32_t cycles );
+  public: 
+  static void onSwitch( const char label[], const char current[], const char next[], 
+        const char trigger[], uint32_t runtime, uint32_t cycles ) {
+    Serial.print( millis() );
+    Serial.print( " Switch " );
+    Serial.print( label );
+    Serial.print( " from " );
+    Serial.print( current );
+    Serial.print( " to " );
+    Serial.print( next );
+    Serial.print( " on " );
+    Serial.print( trigger );
+    Serial.print( " (" );
+    Serial.print( cycles );
+    Serial.print( " cycles in " );
+    Serial.print( runtime );
+    Serial.println( " ms)" );
+  }
+
 };
 
 
