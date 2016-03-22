@@ -3,6 +3,17 @@
   Published under the MIT License (MIT), Copyright (c) 2015, J.P. van der Landen
 */
 
+/* 
+More memory savings!
+
+flags byte: sleep, msg_autoclear, micro_mode
+Nog maar 1 soort timer per machine micro( 0 | 1 )
+Ditch tiny machine previous
+Ditch TinyFactory!
+
+
+*/
+
 #ifndef Automaton_h
 #define Automaton_h
 
@@ -179,7 +190,6 @@ class TinyMachine: public BaseMachine
         tiny_state_t state( void );
         TinyMachine & cycle( void );
         int trigger( int evt );
-        TinyMachine * inventory_next;
     protected:
         TinyMachine & begin( const tiny_state_t tbl[], int width );
         const tiny_state_t* state_table;
@@ -208,12 +218,5 @@ class Factory
         void run( int q );
 };
 
-class TinyFactory 
-{
-  public:
-        TinyFactory & add( TinyMachine & machine );
-        TinyMachine * inventory_root;
-        TinyFactory & cycle( void );
-};
 
 #endif

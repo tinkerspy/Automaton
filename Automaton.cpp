@@ -434,30 +434,3 @@ Factory & Factory::cycle( void )
     return  *this;
 }
 
-
-// TINYFACTORY - A factory for TinyMachines
-
-// .add( machine ) Adds a state machine to the factory by prepending it to the inventory list
-TinyFactory & TinyFactory::add( TinyMachine & machine ) 
-{	
-    machine.inventory_next = inventory_root;
-    inventory_root = &machine;
-    machine.cycle();
-    return *this;
-}
-
-
-// .cycle() executes the factory cycle 
-TinyFactory &  TinyFactory::cycle( void ) 
-{
-    TinyMachine * m = inventory_root;
-    while ( m ) {
-        if ( !m->sleep ) m->cycle();
-        // Move to the next machine
-        m = m->inventory_next;
-    }
-    return *this; 
-}
-
-
-
