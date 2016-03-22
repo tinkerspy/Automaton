@@ -9,17 +9,12 @@ void atm_timer::set( uint32_t v ) {
     value = v;
 }
 
-void atm_timer::begin( BaseMachine * machine, uint32_t v  ) {
-    pmachine = machine;
-    value = v;
+int atm_timer_millis::expired( BaseMachine * machine ) {
+    return value == ATM_TIMER_OFF ? 0 : millis() - machine->state_millis >= value;
 }
 
-int atm_timer_millis::expired( void ) {
-    return value == ATM_TIMER_OFF ? 0 : millis() - pmachine->state_millis >= value;
-}
-
-int atm_timer_micros::expired( void ) {
-    return value == ATM_TIMER_OFF ? 0 : micros() - pmachine->state_micros >= value;
+int atm_timer_micros::expired( BaseMachine * machine ) {
+    return value == ATM_TIMER_OFF ? 0 : micros() - machine->state_micros >= value;
 }
 
 void atm_counter::set( uint16_t v ) {

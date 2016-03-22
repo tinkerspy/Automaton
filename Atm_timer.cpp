@@ -17,8 +17,8 @@ Atm_timer & Atm_timer::begin( uint32_t ms )
   };
   Machine::begin( state_table, ELSE );
   Machine::msgQueue( messages, MSG_END, 1 );
-  daytimer.begin( this, (uint32_t) DIVIDER * 1000 ); // Always set to one day
-  mstimer.begin( this, ms );
+  daytimer.set( (uint32_t) DIVIDER * 1000 ); // Always set to one day
+  mstimer.set( ms );
   daycounter.set( days = 0 );
   repeat( repeat_cnt = 1 );
   return *this;          
@@ -88,9 +88,9 @@ int Atm_timer::event( int id )
     case EVT_DAYCNT :
       return daycounter.expired();        
     case EVT_MSTIMER :
-      return mstimer.expired();        
+      return mstimer.expired( this );        
     case EVT_DAYTIMER :
-      return daytimer.expired();        
+      return daytimer.expired( this );        
     case EVT_OFF :
       return msgRead( MSG_OFF );        
     case EVT_ON :
@@ -141,8 +141,8 @@ Att_timer & Att_timer::begin( uint32_t ms )
   /* TRIGGER */  ACT_TRIG,        -1,        -1,         -1,           -1,          -1,       IDLE,    IDLE,  START, START,
   };
   TinyMachine::begin( state_table, ELSE );
-  daytimer.begin( this, (uint32_t) DIVIDER * 1000 ); // Always set to one day
-  mstimer.begin( this, ms );
+  daytimer.set( (uint32_t) DIVIDER * 1000 ); // Always set to one day
+  mstimer.set( ms );
   daycounter.set( days = 0 );
   repeat( repeat_cnt = 1 );
   return *this;          
@@ -211,9 +211,9 @@ int Att_timer::event( int id )
     case EVT_DAYCNT :
       return daycounter.expired();        
     case EVT_MSTIMER :
-      return mstimer.expired();        
+      return mstimer.expired( this );        
     case EVT_DAYTIMER :
-      return daytimer.expired();        
+      return daytimer.expired( this );        
    }
    return 0;
 }

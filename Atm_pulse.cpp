@@ -11,7 +11,7 @@ Atm_pulse & Atm_pulse::begin( int attached_pin, int minimum_duration )
   };
   Machine::begin( state_table, ELSE );
   pin = attached_pin; 
-  timer.begin( this, minimum_duration );
+  timer.set( minimum_duration );
   pinMode( pin, INPUT ); 
   return *this;          
 }
@@ -33,7 +33,7 @@ int Atm_pulse::event( int id )
 {
   switch ( id ) {
   	case EVT_TIMER :
-  	  return timer.expired();
+  	  return timer.expired( this );
     case EVT_HIGH :
       return digitalRead( pin );
     case EVT_LOW :
@@ -76,7 +76,7 @@ Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration )
   };
   TinyMachine::begin( state_table, ELSE );
   pin = attached_pin; 
-  timer.begin( this, minimum_duration );
+  timer.set( minimum_duration );
   pinMode( pin, INPUT ); 
   return *this;          
 }
@@ -98,7 +98,7 @@ int Att_pulse::event( int id )
 {
   switch ( id ) {
   	case EVT_TIMER :
-  	  return timer.expired();
+  	  return timer.expired( this );
     case EVT_HIGH :
       return digitalRead( pin );
     case EVT_LOW :

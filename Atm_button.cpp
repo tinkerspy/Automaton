@@ -24,10 +24,10 @@ Atm_button & Atm_button::begin( int attached_pin )
 	Machine::begin( state_table, ELSE );
 	pin = attached_pin;
     counter_longpress.set( 0 );	
-	timer_debounce.begin( this, DEBOUNCE );
-	timer_delay.begin( this, ATM_TIMER_OFF );
-	timer_repeat.begin( this, ATM_TIMER_OFF );
-	timer_auto.begin( this, ATM_TIMER_OFF );
+	timer_debounce.set( DEBOUNCE );
+	timer_delay.set( ATM_TIMER_OFF );
+	timer_repeat.set( ATM_TIMER_OFF );
+	timer_auto.set( ATM_TIMER_OFF );
 	pinMode( pin, INPUT_PULLUP );
 	return *this;
 }
@@ -111,13 +111,13 @@ int Atm_button::event( int id )
 	case EVT_LMODE :
 	  return counter_longpress.value > 0;        
 	case EVT_TIMER :
-	  return timer_debounce.expired();
+	  return timer_debounce.expired( this );
 	case EVT_DELAY :
-	  return timer_delay.expired();        
+	  return timer_delay.expired( this );        
 	case EVT_REPEAT :
-	  return timer_repeat.expired();        
+	  return timer_repeat.expired( this );        
 	case EVT_AUTO :
-	  return timer_auto.expired();        
+	  return timer_auto.expired( this );        
 	case EVT_PRESS :
 	  return !digitalRead( pin );        
 	case EVT_RELEASE :
@@ -204,10 +204,10 @@ Att_button & Att_button::begin( int attached_pin )
 	TinyMachine::begin( state_table, ELSE );
 	pin = attached_pin;
     counter_longpress.set( 0 );	
-	timer_debounce.begin( this, DEBOUNCE );
-	timer_delay.begin( this, ATM_TIMER_OFF );
-	timer_repeat.begin( this, ATM_TIMER_OFF );
-	timer_auto.begin( this, ATM_TIMER_OFF );
+	timer_debounce.set( DEBOUNCE );
+	timer_delay.set( ATM_TIMER_OFF );
+	timer_repeat.set( ATM_TIMER_OFF );
+	timer_auto.set( ATM_TIMER_OFF );
 	pinMode( pin, INPUT_PULLUP );
 	return *this;
 }
@@ -290,13 +290,13 @@ int Att_button::event( int id )
 	case EVT_LMODE :
 	  return counter_longpress.value > 0;        
 	case EVT_TIMER :
-	  return timer_debounce.expired();
+	  return timer_debounce.expired( this );
 	case EVT_DELAY :
-	  return timer_delay.expired();        
+	  return timer_delay.expired( this );        
 	case EVT_REPEAT :
-	  return timer_repeat.expired();        
+	  return timer_repeat.expired( this );        
 	case EVT_AUTO :
-	  return timer_auto.expired();        
+	  return timer_auto.expired( this );        
 	case EVT_PRESS :
 	  return !digitalRead( pin );        
 	case EVT_RELEASE :

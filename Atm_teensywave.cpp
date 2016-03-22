@@ -28,7 +28,7 @@ Atm_teensywave & Atm_teensywave::begin( int attached_pin, int steps, int delay )
       pin = attached_pin; 
       _steps = steps;
       _delay = delay;
-      timer.begin( this, delay ); 
+      timer.set( delay ); 
       phase.set( steps ); // 314 steps of 0.02 = 6.28 ( 2 * pi )
       _stepsize = (float) 6.28318 / _steps;
       pinMode( pin, OUTPUT ); 
@@ -43,7 +43,7 @@ int Atm_teensywave::event( int id )
 {
   switch ( id ) {
     case EVT_TIMER :
-      return timer.expired();        
+      return timer.expired( this );        
     case EVT_COUNTER :
       return phase.expired();        
     case EVT_TOGGLE :
@@ -131,7 +131,7 @@ Att_teensywave & Att_teensywave::begin( int attached_pin, int steps, int delay )
       pin = attached_pin; 
       _steps = steps;
       _delay = delay;
-      timer.begin( this, delay ); 
+      timer.set( delay ); 
       phase.set( steps ); // 314 steps of 0.02 = 6.28 ( 2 * pi )
       _stepsize = (float) 6.28318 / _steps;
       pinMode( pin, OUTPUT ); 
@@ -146,7 +146,7 @@ int Att_teensywave::event( int id )
 {
   switch ( id ) {
     case EVT_TIMER :
-      return timer.expired();        
+      return timer.expired( this );        
     case EVT_COUNTER :
       return phase.expired();        
    }

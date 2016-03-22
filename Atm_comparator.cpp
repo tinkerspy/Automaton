@@ -12,7 +12,7 @@ Atm_comparator & Atm_comparator::begin( int attached_pin, int samplerate, trigge
   };
   Machine::begin( state_table, ELSE );
   pin = attached_pin; 
-  timer.begin( this, samplerate ); 
+  timer.set( samplerate ); 
   bitmap_sample = 0;
   bitmap_previous = 0;
   callback = cb;
@@ -87,7 +87,7 @@ int Atm_comparator::event( int id )
       } 
       return 0;
     case EVT_TIMER :
-      return timer.expired();        
+      return timer.expired( this );        
    }
    return 0;
 }
@@ -139,7 +139,7 @@ Att_comparator & Att_comparator::begin( int attached_pin, int samplerate, trigge
   };
   TinyMachine::begin( state_table, ELSE );
   pin = attached_pin; 
-  timer.begin( this, samplerate ); 
+  timer.set( samplerate ); 
   bitmap_sample = 0;
   bitmap_previous = 0;
   callback = cb;
@@ -214,7 +214,7 @@ int Att_comparator::event( int id )
       } 
       return 0;
     case EVT_TIMER :
-      return timer.expired();        
+      return timer.expired( this );        
    }
    return 0;
 }

@@ -20,7 +20,7 @@ class Blink : public Machine {
       /* LED_OFF */  ACT_OFF,        -1,      -1,    LED_ON,    -1 };
       Machine::begin( state_table, ELSE );
       pin = attached_pin; 
-      timer.begin( this, blinkrate ); 
+      timer.set( blinkrate ); 
       pinMode( pin, OUTPUT ); 
       return *this;          
     }
@@ -29,7 +29,7 @@ class Blink : public Machine {
     {
       switch ( id ) {
         case EVT_TIMER :
-          return timer.expired();        
+          return timer.expired( this );        
        }
        return 0;
     }

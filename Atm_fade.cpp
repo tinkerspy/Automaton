@@ -18,9 +18,9 @@ Atm_fade & Atm_fade::begin( int attached_pin )
     Machine::msgQueue( messages, MSG_END, 1 );
 	pin = attached_pin; 
 	pinMode( pin, OUTPUT );
-	timer_fade.begin( this, 0 ); // Number of ms per slope step (slope duration: rate * 32 ms)
-	timer_on.begin( this, 500 ); // Plateau between slopes (in which led is fully on)
-	timer_off.begin( this, 500 ); // Pause between slopes (in which led is fully off)
+	timer_fade.set( 0 ); // Number of ms per slope step (slope duration: rate * 32 ms)
+	timer_on.set( 500 ); // Plateau between slopes (in which led is fully on)
+	timer_off.set( 500 ); // Pause between slopes (in which led is fully off)
 	counter_fade.set( SLOPE_SIZE );
 	counter_repeat.set( ATM_COUNTER_OFF );
 	repeat_count = ATM_COUNTER_OFF;
@@ -56,11 +56,11 @@ int Atm_fade::event( int id )
 {
   switch ( id ) {
 	case EVT_TM_FADE :
-	  return timer_fade.expired();        
+	  return timer_fade.expired( this );        
 	case EVT_TM_ON :
-	  return timer_on.expired();        
+	  return timer_on.expired( this );        
 	case EVT_TM_OFF :
-	  return timer_off.expired();        
+	  return timer_off.expired( this );        
 	case EVT_CNT_FADE :
 	  return counter_fade.expired();        
 	case EVT_CNT_RPT :
@@ -129,9 +129,9 @@ Att_fade & Att_fade::begin( int attached_pin )
 	TinyMachine::begin( state_table, ELSE );
 	pin = attached_pin; 
 	pinMode( pin, OUTPUT );
-	timer_fade.begin( this, 0 ); // Number of ms per slope step (slope duration: rate * 32 ms)
-	timer_on.begin( this, 500 ); // Plateau between slopes (in which led is fully on)
-	timer_off.begin( this, 500 ); // Pause between slopes (in which led is fully off)
+	timer_fade.set( 0 ); // Number of ms per slope step (slope duration: rate * 32 ms)
+	timer_on.set( 500 ); // Plateau between slopes (in which led is fully on)
+	timer_off.set( 500 ); // Pause between slopes (in which led is fully off)
 	counter_fade.set( SLOPE_SIZE );
 	counter_repeat.set( ATM_COUNTER_OFF );
 	repeat_count = ATM_COUNTER_OFF;
@@ -167,11 +167,11 @@ int Att_fade::event( int id )
 {
   switch ( id ) {
 	case EVT_TM_FADE :
-	  return timer_fade.expired();        
+	  return timer_fade.expired( this );        
 	case EVT_TM_ON :
-	  return timer_on.expired();        
+	  return timer_on.expired( this );        
 	case EVT_TM_OFF :
-	  return timer_off.expired();        
+	  return timer_off.expired( this );        
 	case EVT_CNT_FADE :
 	  return counter_fade.expired();        
 	case EVT_CNT_RPT :

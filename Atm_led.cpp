@@ -14,8 +14,8 @@ Atm_led & Atm_led::begin( int attached_pin )
     Machine::msgQueue( messages, MSG_END, 1 );
 	pin = attached_pin; 
 	pinMode( pin, OUTPUT );
-    on_timer.begin( this, 500 );    
-    off_timer.begin( this, 500 );    
+    on_timer.set( 500 );    
+    off_timer.set( 500 );    
 	repeat_count = ATM_COUNTER_OFF;
 	counter.set( repeat_count );
 	return *this;
@@ -46,9 +46,9 @@ int Atm_led::event( int id )
 {
 	switch ( id ) {
 		case EVT_ON_TIMER :
-			return on_timer.expired();        
+			return on_timer.expired( this );        
 		case EVT_OFF_TIMER :
-			return off_timer.expired();        
+			return off_timer.expired( this );        
 		case EVT_COUNTER :
 			return counter.expired();
         case EVT_ON :
@@ -101,8 +101,8 @@ Att_led & Att_led::begin( int attached_pin )
 	TinyMachine::begin( state_table, ELSE );
 	pin = attached_pin; 
 	pinMode( pin, OUTPUT );
-    on_timer.begin( this, 500 );    
-    off_timer.begin( this, 500 );    
+    on_timer.set( 500 );    
+    off_timer.set( 500 );    
 	repeat_count = ATM_COUNTER_OFF;
 	counter.set( repeat_count );
 	return *this;
@@ -133,9 +133,9 @@ int Att_led::event( int id )
 {
 	switch ( id ) {
 		case EVT_ON_TIMER :
-			return on_timer.expired();        
+			return on_timer.expired( this );        
 		case EVT_OFF_TIMER :
-			return off_timer.expired();        
+			return off_timer.expired( this );        
 		case EVT_COUNTER :
 			return counter.expired();
 	}
