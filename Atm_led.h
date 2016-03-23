@@ -14,13 +14,13 @@ class Atm_led : public Machine {
 	enum { IDLE, ON, START, BLINK_OFF }; 
 	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, ELSE }; 
 	enum { ACT_INIT, ACT_ON, ACT_OFF }; 
-        enum { MSG_ON, MSG_OFF, MSG_BLINK, MSG_END };
+    enum { MSG_ON, MSG_OFF, MSG_BLINK, MSG_END };
 		
 	// Custom class variables
     atm_msg_t messages[MSG_END];
 	short pin;
 	int repeat_count;
-	atm_timer on_timer, off_timer;
+	atm_timer_millis on_timer, off_timer;
 	atm_counter counter;
 
 	// Methods used
@@ -49,7 +49,7 @@ class Att_led : public TinyMachine {
 	// Custom class variables
 	short pin;
 	int repeat_count;
-	atm_timer on_timer, off_timer;
+	atm_timer_millis on_timer, off_timer;
 	atm_counter counter;
 
 	// Methods used

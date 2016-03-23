@@ -29,8 +29,7 @@ typedef int16_t state_t;
 typedef int8_t tiny_state_t;
 
 const uint8_t ATM_SLEEP_FLAG = 1;
-const uint8_t ATM_MICROS_FLAG = 2;
-const uint8_t ATM_MSGAC_FLAG = 4;
+const uint8_t ATM_MSGAC_FLAG = 2;
 
 #define tiny_read_state(addr) (tiny_state_t)pgm_read_byte_near(addr)
 #define read_state(addr) (state_t)pgm_read_word_near(addr)
@@ -78,14 +77,26 @@ class atm_serial_debug {
 
 };
 
-
 class atm_timer {
     public:    
         uint32_t value;
         void set( uint32_t v );
+        virtual int expired( BaseMachine * machine ) = 0;
+};
+
+
+class atm_timer_millis: public atm_timer 
+{
+    public:    
         int expired( BaseMachine * machine );
 };
 
+
+class atm_timer_micros: public atm_timer 
+{
+    public:    
+        int expired( BaseMachine * machine  );
+};
 
 class atm_counter { 
     public: 
@@ -101,7 +112,7 @@ class BaseMachine
   protected:
         uint8_t micros_timer( uint8_t v );
   public:
-        uint32_t state_timer;
+        uint32_t state_millis, state_micros;
         uint8_t flags = 0;
  
         uint8_t asleep( void );

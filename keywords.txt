@@ -8,8 +8,6 @@
 
 Automaton	KEYWORD1
 Factory	KEYWORD1
-atm_milli_timer	KEYWORD1
-atm_milli_timer	KEYWORD1
 atm_counter	KEYWORD1
 Atm_led	KEYWORD1
 Atm_fade	KEYWORD1

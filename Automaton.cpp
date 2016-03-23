@@ -9,13 +9,12 @@ void atm_timer::set( uint32_t v ) {
     value = v;
 }
 
-int atm_timer::expired( BaseMachine * machine ) 
-{
-    return value == ATM_TIMER_OFF ? 0 : (
-      ( machine->flags & ATM_MICROS_FLAG ) > 0 
-        ? micros() - machine->state_timer >= value
-        : millis() - machine->state_timer >= value        
-      );
+int atm_timer_millis::expired( BaseMachine * machine ) {
+    return value == ATM_TIMER_OFF ? 0 : millis() - machine->state_millis >= value;
+}
+
+int atm_timer_micros::expired( BaseMachine * machine ) {
+    return value == ATM_TIMER_OFF ? 0 : micros() - machine->state_micros >= value;
 }
 
 void atm_counter::set( uint16_t v ) 
@@ -99,13 +98,6 @@ Machine & Machine::priority( int8_t priority )
 uint8_t BaseMachine::asleep() 
 { 
     return ( flags & ATM_SLEEP_FLAG ) > 0;
-}
-
-
-uint8_t BaseMachine::micros_timer( uint8_t v ) 
-{ 
-    flags = v ? flags | ATM_MICROS_FLAG : flags & ~ATM_MICROS_FLAG;
-    return ( flags & ATM_MICROS_FLAG ) > 0;
 }
 
 Machine & Machine::begin( const state_t* tbl, int width ) 
@@ -247,14 +239,15 @@ Machine & Machine::cycle()
                 callback_sym( inst_label, 
                     map_symbol(      current, sym_states ), 
                     map_symbol(         next, sym_states ), 
-                    map_symbol( last_trigger, sym_events ), millis() - state_timer, cycles ); //FIXME Timer!!!                   
+                    map_symbol( last_trigger, sym_events ), millis() - state_millis, cycles ); 
             }
             if ( current > -1 )     
 		action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
             previous = current;
             current = next;
             next = -1;
-            state_timer = ( flags & ATM_MICROS_FLAG ) > 0 ? micros() : millis();
+            state_millis = millis();
+            state_micros = micros();
             action( read_state( state_table + ( current * state_width ) + ATM_ON_ENTER ) );
             if ( read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP ) {
                   flags |= ATM_SLEEP_FLAG;
@@ -320,7 +313,8 @@ TinyMachine & TinyMachine::cycle()
                 action( tiny_read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
             current = next;
             next = -1;
-            state_timer = ( flags & ATM_MICROS_FLAG ) > 0 ? micros() : millis();
+            state_millis = millis();
+            state_micros = micros();
             action( tiny_read_state( state_table + ( current * state_width ) + ATM_ON_ENTER ) );
             if ( read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP ) {
                   flags |= ATM_SLEEP_FLAG;

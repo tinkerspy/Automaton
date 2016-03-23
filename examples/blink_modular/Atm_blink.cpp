@@ -9,7 +9,7 @@ Atm_blink & Atm_blink::begin( int attached_pin, int blinkrate )
   /* LED_OFF */  ACT_OFF,        -1,      -1,    LED_ON,    -1 };
   Machine::begin( state_table, ELSE );
   pin = attached_pin; 
-  timer.begin( this, blinkrate ); 
+  timer.set( blinkrate ); 
   pinMode( pin, OUTPUT ); 
   return *this;          
 }
@@ -18,7 +18,7 @@ int Atm_blink::event( int id )
 {
   switch ( id ) {
   	case EVT_TIMER :
-  	  return timer.expired();        
+  	  return timer.expired( this );        
    }
    return 0;
 }

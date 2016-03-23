@@ -4,15 +4,13 @@
 
 #include <Automaton.h>
 
-/// FIXME this should be a MICROS timer!!!!
-
 class Atm_teensywave: public Machine {
 
   public:
     Atm_teensywave( void ) : Machine() { class_label = "WAVE"; };
 
     short pin;     
-    atm_timer timer;
+    atm_timer_micros timer;
     atm_counter phase;
     uint16_t _steps, _delay;
     float _stepsize;
@@ -37,7 +35,7 @@ class Att_teensywave: public TinyMachine {
     Att_teensywave( void ) : TinyMachine() { };
 
     short pin;     
-    atm_timer timer;
+    atm_timer_micros timer;
     atm_counter phase;
     uint16_t _steps, _delay;
     float _stepsize;
