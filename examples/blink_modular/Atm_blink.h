@@ -12,9 +12,9 @@ class Atm_blink: public Machine {
     short pin;     
     atm_timer_millis timer;
 
-    enum { LED_ON, LED_OFF } STATES;
-    enum { EVT_TIMER, ELSE } EVENTS;
-	  enum { ACT_ON, ACT_OFF } ACTIONS;
+    enum { LED_ON, LED_OFF };
+    enum { EVT_TIMER, ELSE };
+    enum { ACT_ON, ACT_OFF };
 	
     Atm_blink & begin( int attached_pin, int blinkrate );
     Atm_blink & onSwitch( swcb_sym_t switch_callback );
