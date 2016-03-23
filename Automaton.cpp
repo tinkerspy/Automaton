@@ -9,15 +9,17 @@ void atm_timer::set( uint32_t v ) {
     value = v;
 }
 
-int atm_timer_millis::expired( BaseMachine * machine ) {
-    return value == ATM_TIMER_OFF ? 0 : millis() - machine->state_millis >= value;
+int atm_timer::expired( BaseMachine * machine ) 
+{
+    return value == ATM_TIMER_OFF ? 0 : (
+      ( machine->flags & ATM_MICROS_FLAG ) > 0 
+        ? micros() - machine->state_timer >= value
+        : millis() - machine->state_timer >= value        
+      );
 }
 
-int atm_timer_micros::expired( BaseMachine * machine ) {
-    return value == ATM_TIMER_OFF ? 0 : micros() - machine->state_micros >= value;
-}
-
-void atm_counter::set( uint16_t v ) {
+void atm_counter::set( uint16_t v ) 
+{
     value = v;
 }
 
@@ -38,8 +40,8 @@ Machine & Machine::state(state_t state)
 { 
     next = state; 
     last_trigger = -1; 
-    sleep = 0;
-    if ( msg_autoclear ) msgClear();
+    flags &= ~ATM_SLEEP_FLAG;
+    if ( ( flags & ATM_MSGAC_FLAG ) > 0 ) msgClear();
     return *this; 
 }
 
@@ -96,7 +98,14 @@ Machine & Machine::priority( int8_t priority )
 
 uint8_t BaseMachine::asleep() 
 { 
-    return sleep; 
+    return ( flags & ATM_SLEEP_FLAG ) > 0;
+}
+
+
+uint8_t BaseMachine::micros_timer( uint8_t v ) 
+{ 
+    flags = v ? flags | ATM_MICROS_FLAG : flags & ~ATM_MICROS_FLAG;
+    return ( flags & ATM_MICROS_FLAG ) > 0;
 }
 
 Machine & Machine::begin( const state_t* tbl, int width ) 
@@ -119,7 +128,7 @@ Machine & Machine::msgQueue( atm_msg_t msg[], int width, uint8_t autoclear )
 { 
     msg_table = msg;
     msg_width = width;
-    msg_autoclear = autoclear;
+    flags = autoclear ? flags | ATM_MSGAC_FLAG : flags & ~ATM_MSGAC_FLAG;
     return *this; 
 }
 
@@ -180,7 +189,7 @@ int Machine::msgPeek( uint8_t id_msg )
 
 int Machine::msgClear( uint8_t id_msg ) // Destructive read (clears queue for this type)
 {
-  sleep = 0;
+  flags &= ~ATM_SLEEP_FLAG;
   if ( msg_table[id_msg] > 0 ) {
     msg_table[id_msg] = 0;
     return 1;
@@ -190,7 +199,7 @@ int Machine::msgClear( uint8_t id_msg ) // Destructive read (clears queue for th
 
 Machine & Machine::msgClear() 
 {
-  sleep = 0;
+  flags &= ~ATM_SLEEP_FLAG;
   for ( int i = 0; i < msg_width; i++ ) {
     msg_table[i] = 0;
   }  
@@ -199,14 +208,14 @@ Machine & Machine::msgClear()
 
 Machine & Machine::msgWrite( uint8_t id_msg ) 
 {
-  sleep = 0;
+  flags &= ~ATM_SLEEP_FLAG;
   msg_table[id_msg]++;
   return *this;
 }
 
 Machine & Machine::msgWrite( uint8_t id_msg, int cnt ) 
 {
-  sleep = 0;
+  flags &= ~ATM_SLEEP_FLAG;
   msg_table[id_msg] += cnt;
   return *this;
 }
@@ -230,7 +239,8 @@ const char * Machine::map_symbol( int id, const char map[] )
 // .cycle() Executes one cycle of a state machine
 Machine & Machine::cycle() 
 {
-    if ( !sleep ) {
+    Serial.println( flags );
+    if ( ( flags & ATM_SLEEP_FLAG ) == 0 ) {
         cycles++;
         if ( next != -1 ) {
             action( ATM_ON_SWITCH );
@@ -238,17 +248,20 @@ Machine & Machine::cycle()
                 callback_sym( inst_label, 
                     map_symbol(      current, sym_states ), 
                     map_symbol(         next, sym_states ), 
-                    map_symbol( last_trigger, sym_events ), millis() - state_millis, cycles );                    
+                    map_symbol( last_trigger, sym_events ), millis() - state_timer, cycles );                    
             }
             if ( current > -1 )     
 		action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
             previous = current;
             current = next;
             next = -1;
-            state_millis = millis();
-            state_micros = micros();
+            state_timer = ( flags & ATM_MICROS_FLAG ) > 0 ? micros() : millis();
             action( read_state( state_table + ( current * state_width ) + ATM_ON_ENTER ) );
-            sleep = read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP;
+            if ( read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP ) {
+                  flags |= ATM_SLEEP_FLAG;
+            } else {
+                  flags &= ~ATM_SLEEP_FLAG;
+            }
             cycles = 0;
         }
         state_t i = read_state( state_table + ( current * state_width ) + ATM_ON_LOOP );
@@ -270,7 +283,7 @@ Machine & Machine::cycle()
 TinyMachine & TinyMachine::state(tiny_state_t state)
 {
     next = state;
-    sleep = 0;
+    flags &= ~ATM_SLEEP_FLAG;
     return *this;
 }
 
@@ -301,18 +314,20 @@ TinyMachine & TinyMachine::begin( const tiny_state_t* tbl, int width )
 // .cycle() Executes one cycle of a state machine
 TinyMachine & TinyMachine::cycle()
 {
-    if ( !sleep ) {
+    if ( ( flags & ATM_SLEEP_FLAG ) == 0 ) {
         if ( next != -1 ) {
             action( ATM_ON_SWITCH );
             if ( current > -1 )
                 action( tiny_read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
-            previous = current;
             current = next;
             next = -1;
-            state_millis = millis();
-            state_micros = micros();
+            state_timer = ( flags & ATM_MICROS_FLAG ) > 0 ? micros() : millis();
             action( tiny_read_state( state_table + ( current * state_width ) + ATM_ON_ENTER ) );
-            sleep = tiny_read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP;
+            if ( read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP ) {
+                  flags |= ATM_SLEEP_FLAG;
+            } else {
+                  flags &= ~ATM_SLEEP_FLAG;
+            }
         }
         tiny_state_t i = tiny_read_state( state_table + ( current * state_width ) + ATM_ON_LOOP );
         if ( i != -1 ) { action( i ); }
@@ -352,7 +367,7 @@ void Factory::run( int q )
 {
     Machine * m = priority_root[ q ];
     while ( m ) {
-        if ( q > 0 && !m->sleep ) m->cycle();
+        if ( q > 0 && ( m->flags & ATM_SLEEP_FLAG ) == 0 ) m->cycle();
         // Request a recalibrate if the prio field doesn't match the current queue
         if ( m->prio != q ) recalibrate = 1;
         // Move to the next machine

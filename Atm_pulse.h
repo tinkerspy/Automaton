@@ -19,7 +19,7 @@ class Atm_pulse: public Machine {
     uint8_t client_msg;
     void (*callback)( void ) = 0;
     int state_high, state_low;
-    atm_timer_millis timer;
+    atm_timer timer;
 
     enum { IDLE, WAIT, PULSE } STATES;
     enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE } EVENTS;
@@ -45,7 +45,7 @@ class Att_pulse: public TinyMachine {
     uint8_t client_msg;
     void (*callback)( void ) = 0;
     int state_high, state_low;
-    atm_timer_millis timer;
+    atm_timer timer;
 
     enum { IDLE, WAIT, PULSE } STATES;
     enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE } EVENTS;

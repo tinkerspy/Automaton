@@ -11,6 +11,11 @@ Nog maar 1 soort timer per machine micro( 0 | 1 )
 Ditch tiny machine previous
 Ditch TinyFactory!
 
+TODO: 
+add micros_timer( 0 | 1 ) method
+change teensywave to micros timer
+test
+
 
 */
 
@@ -21,6 +26,10 @@ Ditch TinyFactory!
 
 typedef int16_t state_t; 
 typedef int8_t tiny_state_t;
+
+#define ATM_SLEEP_FLAG 1
+#define ATM_MICROS_FLAG 2
+#define ATM_MSGAC_FLAG 4
 
 #define tiny_read_state(addr) (tiny_state_t)pgm_read_byte_near(addr)
 #define read_state(addr) (state_t)pgm_read_word_near(addr)
@@ -45,16 +54,6 @@ const uint16_t ATM_COUNTER_OFF = 0xffff; // This counter value never expires
 class Factory;
 class Machine;
 class BaseMachine;
-
-class atm_milli_timer {
-    public:    uint32_t value;
-};
-
-
-class atm_micro_timer {
-    public:    uint32_t value;
-};
-
 
 class atm_serial_debug {
   public: 
@@ -83,21 +82,7 @@ class atm_timer {
     public:    
         uint32_t value;
         void set( uint32_t v );
-        virtual int expired( BaseMachine * machine ) = 0;
-};
-
-
-class atm_timer_millis: public atm_timer 
-{
-    public:    
         int expired( BaseMachine * machine );
-};
-
-
-class atm_timer_micros: public atm_timer 
-{
-    public:    
-        int expired( BaseMachine * machine  );
 };
 
 
@@ -119,9 +104,11 @@ class atm_counter_auto {
 
 class BaseMachine
 {
+  protected:
+        uint8_t micros_timer( uint8_t v );
   public:
-        int8_t sleep;
-        uint32_t state_millis, state_micros;
+        uint32_t state_timer;
+        uint8_t flags = 0;
 
         uint8_t asleep( void );
         virtual int event( int id ) = 0; // Pure virtual methods -> make this an abstract class
@@ -179,7 +166,6 @@ class Machine: public BaseMachine
         uint32_t cycles;
         atm_msg_t * msg_table;
         int msg_width;
-	uint8_t msg_autoclear = 0;
 };
 
 
@@ -195,7 +181,6 @@ class TinyMachine: public BaseMachine
         const tiny_state_t* state_table;
         tiny_state_t next = 0;
         tiny_state_t current = -1;
-        tiny_state_t previous = -1;
         uint8_t state_width;
 };
 

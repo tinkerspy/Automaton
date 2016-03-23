@@ -11,7 +11,7 @@ class Atm_timer: public Machine {
   public:
     Atm_timer( void ) : Machine() { class_label = "TMR"; };
 
-    atm_timer_millis daytimer, mstimer;
+    atm_timer daytimer, mstimer;
     atm_counter daycounter, repcounter;
     int timer_id;
     timer_cb_t callback = 0;
@@ -48,7 +48,7 @@ class Att_timer: public TinyMachine {
   public:
     Att_timer( void ) : TinyMachine() { };
 
-    atm_timer_millis daytimer, mstimer;
+    atm_timer daytimer, mstimer;
     atm_counter daycounter, repcounter;
     int timer_id;
     timer_cb_t callback = 0;

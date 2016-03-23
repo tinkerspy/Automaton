@@ -24,7 +24,7 @@ class Atm_fade : public Machine {
 			90, 108, 127, 153, 180, 217, 230, 255 };
 		short pin;
 		int repeat_count;
-		atm_timer_millis timer_fade, timer_on, timer_off;
+		atm_timer timer_fade, timer_on, timer_off;
 		atm_counter counter_fade, counter_repeat;
 		
 		Atm_fade & begin( int attached_pin );
@@ -57,7 +57,7 @@ class Att_fade : public TinyMachine {
 			90, 108, 127, 153, 180, 217, 230, 255 };
 		short pin;
 		int repeat_count;
-		atm_timer_millis timer_fade, timer_on, timer_off;
+		atm_timer timer_fade, timer_on, timer_off;
 		atm_counter counter_fade, counter_repeat;
 		
 		Att_fade & begin( int attached_pin );
