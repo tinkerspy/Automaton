@@ -21,9 +21,9 @@ class Atm_pulse: public Machine {
     int state_high, state_low;
     atm_timer timer;
 
-    enum { IDLE, WAIT, PULSE } STATES;
-    enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE } EVENTS;
-	enum { ACT_PULSE } ACTIONS;
+    enum { IDLE, WAIT, PULSE };
+    enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };
+    enum { ACT_PULSE };
 	
     Atm_pulse & begin( int attached_pin, int minimum_duration );
     Atm_pulse & onSwitch( swcb_sym_t switch_callback );
@@ -47,9 +47,9 @@ class Att_pulse: public TinyMachine {
     int state_high, state_low;
     atm_timer timer;
 
-    enum { IDLE, WAIT, PULSE } STATES;
-    enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE } EVENTS;
-	enum { ACT_PULSE } ACTIONS;
+    enum { IDLE, WAIT, PULSE };
+    enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };
+    enum { ACT_PULSE };
 	
     Att_pulse & begin( int attached_pin, int minimum_duration );
     int event( int id ); 

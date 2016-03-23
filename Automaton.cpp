@@ -239,7 +239,6 @@ const char * Machine::map_symbol( int id, const char map[] )
 // .cycle() Executes one cycle of a state machine
 Machine & Machine::cycle() 
 {
-    Serial.println( flags );
     if ( ( flags & ATM_SLEEP_FLAG ) == 0 ) {
         cycles++;
         if ( next != -1 ) {
@@ -248,7 +247,7 @@ Machine & Machine::cycle()
                 callback_sym( inst_label, 
                     map_symbol(      current, sym_states ), 
                     map_symbol(         next, sym_states ), 
-                    map_symbol( last_trigger, sym_events ), millis() - state_timer, cycles );                    
+                    map_symbol( last_trigger, sym_events ), millis() - state_timer, cycles ); //FIXME Timer!!!                   
             }
             if ( current > -1 )     
 		action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );

@@ -14,6 +14,7 @@ Ditch TinyFactory!
 TODO: 
 add micros_timer( 0 | 1 ) method
 change teensywave to micros timer
+REMOVE NAMES FROM ALL ENUMS!!!!
 test
 
 
@@ -27,9 +28,9 @@ test
 typedef int16_t state_t; 
 typedef int8_t tiny_state_t;
 
-#define ATM_SLEEP_FLAG 1
-#define ATM_MICROS_FLAG 2
-#define ATM_MSGAC_FLAG 4
+const uint8_t ATM_SLEEP_FLAG = 1;
+const uint8_t ATM_MICROS_FLAG = 2;
+const uint8_t ATM_MSGAC_FLAG = 4;
 
 #define tiny_read_state(addr) (tiny_state_t)pgm_read_byte_near(addr)
 #define read_state(addr) (state_t)pgm_read_word_near(addr)
@@ -87,15 +88,8 @@ class atm_timer {
 
 
 class atm_counter { 
-    public: uint16_t value;
-        void set( uint16_t v );
-        uint8_t expired( void );
-        uint16_t decrement( void );
-};
-
-
-class atm_counter_auto { 
-    public: uint16_t value;
+    public: 
+        uint16_t value;
         void set( uint16_t v );
         uint8_t expired( void );
         uint16_t decrement( void );
@@ -109,7 +103,7 @@ class BaseMachine
   public:
         uint32_t state_timer;
         uint8_t flags = 0;
-
+ 
         uint8_t asleep( void );
         virtual int event( int id ) = 0; // Pure virtual methods -> make this an abstract class
         virtual void action( int id ) = 0;

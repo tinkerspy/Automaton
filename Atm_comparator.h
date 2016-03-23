@@ -25,9 +25,9 @@ class Atm_comparator: public Machine {
     
     void (*callback)( int v, int up, int idx_threshold, int v_threshold ) = 0;
     
-    enum { IDLE, SAMPLE, SEND } STATES;
-    enum { EVT_TRIGGER, EVT_TIMER, ELSE } EVENTS;
-	  enum { ACT_SAMPLE, ACT_SEND } ACTIONS;
+    enum { IDLE, SAMPLE, SEND };
+    enum { EVT_TRIGGER, EVT_TIMER, ELSE };
+    enum { ACT_SAMPLE, ACT_SEND };
 	
     Atm_comparator & begin( int attached_pin, int blinkrate, triggercb_t callback );
     Atm_comparator & onSwitch( swcb_sym_t switch_callback );
@@ -62,9 +62,9 @@ class Att_comparator: public TinyMachine {
     
     void (*callback)( int v, int up, int idx_threshold, int v_threshold ) = 0;
     
-    enum { IDLE, SAMPLE, SEND } STATES;
-    enum { EVT_TRIGGER, EVT_TIMER, ELSE } EVENTS;
-	enum { ACT_SAMPLE, ACT_SEND } ACTIONS;
+    enum { IDLE, SAMPLE, SEND };
+    enum { EVT_TRIGGER, EVT_TIMER, ELSE };
+    enum { ACT_SAMPLE, ACT_SEND };
 	
     Att_comparator & begin( int attached_pin, int blinkrate, triggercb_t callback );
     Att_comparator & threshold( uint16_t * v, uint16_t size, bool catchUp=false );

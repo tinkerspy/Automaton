@@ -11,10 +11,10 @@ class Atm_led : public Machine {
 	Atm_led( void ) : Machine() { class_label = "LED"; };
 
 	// Custom state, event, action & message constants (enum)
-	enum { IDLE, ON, START, BLINK_OFF } STATES; 
-	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, ELSE } EVENTS; 
-	enum { ACT_INIT, ACT_ON, ACT_OFF } ACTIONS; 
-    enum { MSG_ON, MSG_OFF, MSG_BLINK, MSG_END } MESSAGES;
+	enum { IDLE, ON, START, BLINK_OFF }; 
+	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, ELSE }; 
+	enum { ACT_INIT, ACT_ON, ACT_OFF }; 
+        enum { MSG_ON, MSG_OFF, MSG_BLINK, MSG_END };
 		
 	// Custom class variables
     atm_msg_t messages[MSG_END];
@@ -42,9 +42,9 @@ class Att_led : public TinyMachine {
 	Att_led( void ) : TinyMachine() { };
 
 	// Custom state, event, action & message constants (enum)
-	enum { IDLE, ON, START, BLINK_OFF } STATES; 
-	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, ELSE } EVENTS; 
-	enum { ACT_INIT, ACT_ON, ACT_OFF } ACTIONS; 
+	enum { IDLE, ON, START, BLINK_OFF }; 
+	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, ELSE }; 
+	enum { ACT_INIT, ACT_ON, ACT_OFF }; 
 		
 	// Custom class variables
 	short pin;

@@ -17,9 +17,9 @@ class Atm_command: public Machine {
     const char * _separator;
     const char * _commands;
 
-    enum { IDLE, READCHAR, SEND } STATES;
-    enum { EVT_INPUT, EVT_EOL, ELSE } EVENTS;
-	enum { ACT_READCHAR, ACT_SEND } ACTIONS;
+    enum { IDLE, READCHAR, SEND };
+    enum { EVT_INPUT, EVT_EOL, ELSE };
+	enum { ACT_READCHAR, ACT_SEND };
 	
     Atm_command & begin( Stream * stream, char buffer[], int size );
     Atm_command & onSwitch( swcb_sym_t switch_callback );
@@ -46,9 +46,9 @@ class Att_command: public TinyMachine {
     const char * _separator;
     const char * _commands;
 
-    enum { IDLE, READCHAR, SEND } STATES;
-    enum { EVT_INPUT, EVT_EOL, ELSE } EVENTS;
-	enum { ACT_READCHAR, ACT_SEND } ACTIONS;
+    enum { IDLE, READCHAR, SEND };
+    enum { EVT_INPUT, EVT_EOL, ELSE };
+	enum { ACT_READCHAR, ACT_SEND };
 	
     Att_command & begin( Stream * stream, char buffer[], int size );
     int event( int id ); 

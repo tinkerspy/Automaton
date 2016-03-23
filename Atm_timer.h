@@ -20,10 +20,10 @@ class Atm_timer: public Machine {
     uint16_t days; 
     uint16_t repeat_cnt; 
     
-    enum { IDLE, START, WAITD, WAITMS, TRIGGER } STATES;
-    enum { EVT_DAYCNT, EVT_DAYTIMER, EVT_MSTIMER, EVT_REPCNT, EVT_OFF, EVT_ON, ELSE } EVENTS;
-	  enum { ACT_START, ACT_TRIG, ACT_WAITD } ACTIONS;
-    enum { MSG_OFF, MSG_ON, MSG_END } MESSAGES;
+    enum { IDLE, START, WAITD, WAITMS, TRIGGER };
+    enum { EVT_DAYCNT, EVT_DAYTIMER, EVT_MSTIMER, EVT_REPCNT, EVT_OFF, EVT_ON, ELSE };
+    enum { ACT_START, ACT_TRIG, ACT_WAITD };
+    enum { MSG_OFF, MSG_ON, MSG_END };
 
     atm_msg_t messages[MSG_END];
 	
@@ -57,9 +57,9 @@ class Att_timer: public TinyMachine {
     uint16_t days; 
     uint16_t repeat_cnt; 
     
-    enum { IDLE, START, WAITD, WAITMS, TRIGGER } STATES;
-    enum { EVT_DAYCNT, EVT_DAYTIMER, EVT_MSTIMER, EVT_REPCNT, EVT_OFF, EVT_ON, ELSE } EVENTS;
-    enum { ACT_START, ACT_TRIG, ACT_WAITD } ACTIONS;
+    enum { IDLE, START, WAITD, WAITMS, TRIGGER };
+    enum { EVT_DAYCNT, EVT_DAYTIMER, EVT_MSTIMER, EVT_REPCNT, EVT_OFF, EVT_ON, ELSE };
+    enum { ACT_START, ACT_TRIG, ACT_WAITD };
 	
     Att_timer & begin( void );
     Att_timer & begin( uint32_t ms );
