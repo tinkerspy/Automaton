@@ -3,22 +3,6 @@
   Published under the MIT License (MIT), Copyright (c) 2015, J.P. van der Landen
 */
 
-/* 
-More memory savings!
-
-flags byte: sleep, msg_autoclear, micro_mode
-Nog maar 1 soort timer per machine micro( 0 | 1 )
-Ditch tiny machine previous
-Ditch TinyFactory!
-
-TODO: 
-add micros_timer( 0 | 1 ) method
-change teensywave to micros timer
-REMOVE NAMES FROM ALL ENUMS!!!!
-test
-
-
-*/
 
 #ifndef Automaton_h
 #define Automaton_h
