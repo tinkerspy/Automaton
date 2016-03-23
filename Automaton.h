@@ -61,25 +61,20 @@ class atm_serial_debug {
 
 };
 
-class atm_timer {
+class atm_timer_millis 
+{
     public:    
         uint32_t value;
         void set( uint32_t v );
-        virtual int expired( BaseMachine * machine ) = 0;
-};
-
-
-class atm_timer_millis: public atm_timer 
-{
-    public:    
         int expired( BaseMachine * machine );
 };
 
-
-class atm_timer_micros: public atm_timer 
+class atm_timer_micros 
 {
     public:    
-        int expired( BaseMachine * machine  );
+        uint32_t value;
+        void set( uint32_t v );
+        int expired( BaseMachine * machine );
 };
 
 class atm_counter { 

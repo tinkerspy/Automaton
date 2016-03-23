@@ -5,7 +5,11 @@
 
 #include "Automaton.h"
 
-void atm_timer::set( uint32_t v ) {
+void atm_timer_millis::set( uint32_t v ) {
+    value = v;
+}
+
+void atm_timer_micros::set( uint32_t v ) {
     value = v;
 }
 
