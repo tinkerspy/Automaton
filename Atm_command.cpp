@@ -189,7 +189,7 @@ int Att_command::event( int id )
     case EVT_INPUT :
       return _stream->available();   
     case EVT_EOL :
-      return _buffer[_bufptr-1] == _eol || _bufptr >= _bufsize;   
+      return _buffer[_bufptr-1] == '\r' || _buffer[_bufptr-1] == '\n'  || _bufptr >= _bufsize;   
   }
   return 0;
 }

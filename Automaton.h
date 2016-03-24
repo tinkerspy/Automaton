@@ -85,7 +85,6 @@ class atm_counter {
         uint16_t decrement( void );
 };
 
-
 class BaseMachine
 {
   protected:
