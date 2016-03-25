@@ -94,6 +94,7 @@ class BaseMachine
         uint8_t flags = 0;
  
         uint8_t asleep( void );
+        BaseMachine & sleep( void );
         virtual int event( int id ) = 0; // Pure virtual methods -> make this an abstract class
         virtual void action( int id ) = 0;
 };

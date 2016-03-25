@@ -36,9 +36,6 @@ uint8_t atm_counter::expired()
     return value == ATM_COUNTER_OFF ? 0 : ( value > 0 ? 0 : 1 ); 
 }
 
-
-
-
 Machine & Machine::state(state_t state) 
 { 
     next = state; 
@@ -102,6 +99,12 @@ Machine & Machine::priority( int8_t priority )
 uint8_t BaseMachine::asleep() 
 { 
     return ( flags & ATM_SLEEP_FLAG ) > 0;
+}
+
+BaseMachine & BaseMachine::sleep() 
+{
+    flags |=  ATM_SLEEP_FLAG;
+    return *this;     
 }
 
 Machine & Machine::begin( const state_t* tbl, int width ) 
