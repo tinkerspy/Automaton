@@ -15,7 +15,6 @@ Atm_command & Atm_command::begin( Stream * stream, char buffer[], int size )
   _bufsize = size;
   _bufptr = 0;
   _separator = " ";
-  _eol = '\n';
   _lastch = '\0';      
   return *this;          
 }
@@ -59,12 +58,12 @@ int Atm_command::lookup( int id, const char * cmdlist ) {
       cmdlist++;
       a++;
     }
-    if ( a[0] == '\0' ) 
+    if ( a[0] == '\0' && ( cmdlist[0] == ' ' || cmdlist[0] == '\0' ) ) 
       return cnt;
-    if ( cmdlist[0] == ' ' ) 
-      cnt++;
+    while ( cmdlist[0] != ' ' && cmdlist[0] != '\0' ) cmdlist++;
     cmdlist++;
     a = arg;  
+    cnt++;
   }
   return -1;
 }
@@ -75,7 +74,7 @@ int Atm_command::event( int id )
     case EVT_INPUT :
       return _stream->available();   
     case EVT_EOL :
-      return _buffer[_bufptr-1] == _eol || _bufptr >= _bufsize;   
+      return _buffer[_bufptr-1] == '\n' || _buffer[_bufptr-1] == '\r' || _bufptr >= _bufsize;   
   }
   return 0;
 }
@@ -129,7 +128,6 @@ Att_command & Att_command::begin( Stream * stream, char buffer[], int size )
   _bufsize = size;
   _bufptr = 0;
   _separator = " ";
-  _eol = '\n';
   _lastch = '\0';      
   return *this;          
 }
@@ -173,12 +171,12 @@ int Att_command::lookup( int id, const char * cmdlist ) {
       cmdlist++;
       a++;
     }
-    if ( a[0] == '\0' ) 
+    if ( a[0] == '\0' && ( cmdlist[0] == ' ' || cmdlist[0] == '\0' ) ) 
       return cnt;
-    if ( cmdlist[0] == ' ' ) 
-      cnt++;
+    while ( cmdlist[0] != ' ' && cmdlist[0] != '\0' ) cmdlist++;
     cmdlist++;
     a = arg;  
+    cnt++;
   }
   return -1;
 }
@@ -189,7 +187,7 @@ int Att_command::event( int id )
     case EVT_INPUT :
       return _stream->available();   
     case EVT_EOL :
-      return _buffer[_bufptr-1] == _eol || _bufptr >= _bufsize;   
+      return _buffer[_bufptr-1] == '\n' || _buffer[_bufptr-1] == '\r' || _bufptr >= _bufsize;   
   }
   return 0;
 }
