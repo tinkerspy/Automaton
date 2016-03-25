@@ -7,8 +7,8 @@ Atm_led & Atm_led::begin( int attached_pin )
 	/*               ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  ELSE */
 	/* IDLE      */  ACT_INIT, ATM_SLEEP,      -1,           -1,            -1,          -1,     ON,      -1,     START,   -1, // LED off
 	/* ON        */    ACT_ON, ATM_SLEEP,      -1,           -1,            -1,          -1,     -1,    IDLE,     START,   -1, // LED on
-	/* START     */    ACT_ON,        -1,      -1,    BLINK_OFF,            -1,        IDLE,     ON,    IDLE,        -1,   -1, // Start blinking
-	/* BLINK_OFF */   ACT_OFF,        -1,      -1,           -1,         START,          -1,     ON,      -1,        -1,   -1,
+	/* START     */    ACT_ON,        -1,      -1,    BLINK_OFF,            -1,          -1,     ON,    IDLE,        -1,   -1, // Start blinking
+	/* BLINK_OFF */   ACT_OFF,        -1,      -1,           -1,         START,        IDLE,     ON,      -1,        -1,   -1,
     };
 	Machine::begin( state_table, ELSE );
     Machine::msgQueue( messages, MSG_END, 1 );
@@ -95,8 +95,8 @@ Att_led & Att_led::begin( int attached_pin )
 	/*               ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  ELSE */
 	/* IDLE      */  ACT_INIT, ATM_SLEEP,      -1,           -1,            -1,          -1,     ON,      -1,     START,   -1, // LED off
 	/* ON        */    ACT_ON, ATM_SLEEP,      -1,           -1,            -1,          -1,     -1,    IDLE,     START,   -1, // LED on
-	/* START     */    ACT_ON,        -1,      -1,    BLINK_OFF,            -1,        IDLE,     ON,    IDLE,        -1,   -1, // Start blinking
-	/* BLINK_OFF */   ACT_OFF,        -1,      -1,           -1,         START,          -1,     ON,      -1,        -1,   -1,
+	/* START     */    ACT_ON,        -1,      -1,    BLINK_OFF,            -1,          -1,     ON,    IDLE,        -1,   -1, // Start blinking
+	/* BLINK_OFF */   ACT_OFF,        -1,      -1,           -1,         START,        IDLE,     ON,      -1,        -1,   -1,
     };
 	TinyMachine::begin( state_table, ELSE );
 	pin = attached_pin; 
