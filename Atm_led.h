@@ -24,6 +24,7 @@ class Atm_led : public Machine {
 	atm_counter counter;
     Machine * chain_next;
     Machine * chain_previous;
+    uint8_t chain_event;
 
 	// Methods used
 	Atm_led & begin( int attached_pin );
@@ -32,7 +33,7 @@ class Atm_led : public Machine {
 	Atm_led & fade( int fade ); 
 	Atm_led & repeat( int repeat ); 
     Atm_led & onSwitch( swcb_sym_t switch_callback );
-    Atm_led & chain( Machine * n, Machine * p = 0);
+    Atm_led & chain( Machine * n, Machine * p = 0, uint8_t event = EVT_BLINK );
 	int event( int id );
 	void action( int id );
 };
@@ -56,6 +57,7 @@ class Att_led : public TinyMachine {
 	atm_counter counter;
     TinyMachine * chain_next;
     TinyMachine * chain_previous;
+    uint8_t chain_event;
 
 	// Methods used
 	Att_led & begin( int attached_pin );
@@ -64,7 +66,7 @@ class Att_led : public TinyMachine {
 	Att_led & fade( int fade ); 
 	Att_led & repeat( int repeat ); 
     Att_led & onSwitch( swcb_sym_t switch_callback );
-    Att_led & chain( TinyMachine * n, TinyMachine * p = 0);
+    Att_led & chain( TinyMachine * n, TinyMachine * p = 0, uint8_t event = EVT_BLINK );
 	int event( int id );
 	void action( int id );
 };

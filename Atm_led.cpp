@@ -22,10 +22,11 @@ Atm_led & Atm_led::begin( int attached_pin )
 	return *this;
 }
 
-Atm_led & Atm_led::chain( Machine * n, Machine * p /* default 0 */ ) {
-
+Atm_led & Atm_led::chain( Machine * n, Machine * p /* default 0 */, uint8_t event /* default EVT_BLINK */) 
+{
     chain_next = n;
     chain_previous = p;    
+    chain_event = event;
     flags &= ~ATM_USR1_FLAG;
 }
 
@@ -85,10 +86,10 @@ void Atm_led::action( int id )
 			return;
         case ACT_CHAIN :            
             if ( chain_previous && ( flags & ATM_USR1_FLAG ) > 0 ) {
-              chain_previous->trigger( EVT_BLINK );
+              chain_previous->trigger( chain_event );
             } else {
               if ( chain_next )
-                chain_next->trigger( EVT_BLINK );
+                chain_next->trigger( chain_event );
             }              
             flags ^= ATM_USR1_FLAG;
             return;
@@ -126,10 +127,11 @@ Att_led & Att_led::begin( int attached_pin )
 	return *this;
 }
 
-Att_led & Att_led::chain( TinyMachine * n, TinyMachine * p /* default 0 */ ) {
-
+Att_led & Att_led::chain( TinyMachine * n, TinyMachine * p /* default 0 */, uint8_t event /* default EVT_BLINK */) 
+{
     chain_next = n;
     chain_previous = p;    
+    chain_event = event;
     flags &= ~ATM_USR1_FLAG;
 }
 
