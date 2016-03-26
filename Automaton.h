@@ -14,6 +14,10 @@ typedef int8_t tiny_state_t;
 
 const uint8_t ATM_SLEEP_FLAG = 1;
 const uint8_t ATM_MSGAC_FLAG = 2;
+const uint8_t ATM_USR1_FLAG = 16;
+const uint8_t ATM_USR2_FLAG = 32;
+const uint8_t ATM_USR3_FLAG = 64;
+const uint8_t ATM_USR4_FLAG = 128;
 
 #define tiny_read_state(addr) (tiny_state_t)pgm_read_byte_near(addr)
 #define read_state(addr) (state_t)pgm_read_word_near(addr)

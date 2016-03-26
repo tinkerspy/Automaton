@@ -4,11 +4,12 @@
 Atm_led & Atm_led::begin( int attached_pin )
 { 
 	static const state_t state_table[] PROGMEM = {
-	/*               ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  ELSE */
-	/* IDLE      */  ACT_INIT, ATM_SLEEP,      -1,           -1,            -1,          -1,     ON,      -1,     START,   -1, // LED off
-	/* ON        */    ACT_ON, ATM_SLEEP,      -1,           -1,            -1,          -1,     -1,    IDLE,     START,   -1, // LED on
-	/* START     */    ACT_ON,        -1,      -1,    BLINK_OFF,            -1,          -1,     ON,    IDLE,        -1,   -1, // Start blinking
-	/* BLINK_OFF */   ACT_OFF,        -1,      -1,           -1,         START,        IDLE,     ON,      -1,        -1,   -1,
+	/*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  ELSE */
+	/* IDLE      */  ACT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,     ON,      -1,     START,   -1, // LED off
+	/* ON        */    ACT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,     -1,    IDLE,     START,   -1, // LED on
+	/* START     */    ACT_ON,        -1,        -1,    BLINK_OFF,            -1,        IDLE,     ON,    IDLE,     START,   -1, // Start blinking
+	/* BLINK_OFF */   ACT_OFF,        -1,        -1,           -1,         START,        DONE,     ON,    IDLE,     START,   -1,
+	/* DONE      */        -1,        -1, ACT_CHAIN,           -1,          IDLE,          -1,     ON,    IDLE,     START,   -1, // Wait after last blink
     };
 	Machine::begin( state_table, ELSE );
     Machine::msgQueue( messages, MSG_END, 1 );
@@ -19,6 +20,13 @@ Atm_led & Atm_led::begin( int attached_pin )
 	repeat_count = ATM_COUNTER_OFF;
 	counter.set( repeat_count );
 	return *this;
+}
+
+Atm_led & Atm_led::chain( Machine * n, Machine * p /* default 0 */ ) {
+
+    chain_next = n;
+    chain_previous = p;    
+    flags &= ~ATM_USR1_FLAG;
 }
 
 Atm_led & Atm_led::blink( uint32_t duration ) 
@@ -65,23 +73,31 @@ void Atm_led::action( int id )
 {
 	switch ( id ) {
 		case ACT_INIT :
-			counter.set( repeat_count );
 			digitalWrite( pin, LOW );
+			counter.set( repeat_count );
 			return;
 		case ACT_ON :
-			counter.decrement();
 			digitalWrite( pin, HIGH );
 			return;
 		case ACT_OFF :
+			counter.decrement();
 			digitalWrite( pin, LOW );
 			return;
+        case ACT_CHAIN :            
+            if ( chain_previous && ( flags & ATM_USR1_FLAG ) > 0 ) {
+              chain_previous->trigger( EVT_BLINK );
+            } else {
+              chain_next->trigger( EVT_BLINK );
+            }              
+            flags ^= ATM_USR1_FLAG;
+            return;
 	}
 }
 
 Atm_led & Atm_led::onSwitch( swcb_sym_t switch_callback ) {
 
   Machine::onSwitch( switch_callback, 
-    "IDLE\0ON\0START\0BLINK_OFF",
+    "IDLE\0ON\0START\0BLINK_OFF\0DONE",
     "EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_BLINK\0ELSE" );
   return *this;
 }
