@@ -45,15 +45,17 @@ class Att_led : public TinyMachine {
 	Att_led( void ) : TinyMachine() { };
 
 	// Custom state, event, action & message constants (enum)
-	enum { IDLE, ON, START, BLINK_OFF }; 
+	enum { IDLE, ON, START, BLINK_OFF, DONE }; 
 	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, ELSE }; 
-	enum { ACT_INIT, ACT_ON, ACT_OFF }; 
+	enum { ACT_INIT, ACT_ON, ACT_OFF, ACT_CHAIN }; 
 		
 	// Custom class variables
 	short pin;
 	int repeat_count;
 	atm_timer_millis on_timer, off_timer;
 	atm_counter counter;
+    TinyMachine * chain_next;
+    TinyMachine * chain_previous;
 
 	// Methods used
 	Att_led & begin( int attached_pin );
@@ -61,6 +63,8 @@ class Att_led : public TinyMachine {
 	Att_led & pause( uint32_t duration ); 
 	Att_led & fade( int fade ); 
 	Att_led & repeat( int repeat ); 
+    Att_led & onSwitch( swcb_sym_t switch_callback );
+    Att_led & chain( TinyMachine * n, TinyMachine * p = 0);
 	int event( int id );
 	void action( int id );
 };
