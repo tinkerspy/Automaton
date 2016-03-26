@@ -185,7 +185,8 @@ void Att_led::action( int id )
             if ( chain_previous && ( flags & ATM_USR1_FLAG ) > 0 ) {
               chain_previous->trigger( EVT_BLINK );
             } else {
-              chain_next->trigger( EVT_BLINK );
+              if ( chain_next )
+                chain_next->trigger( EVT_BLINK );
             }              
             flags ^= ATM_USR1_FLAG;
             return;
