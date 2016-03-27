@@ -64,12 +64,6 @@ int Machine::trigger( int evt )
     return 0;
 }
 
-Machine &  Machine::toggle( state_t state1, state_t state2 ) 
-{ 
-    state( current == state1 ? state2 : state1 ); 
-    return *this; 
-}
-
 Machine & Machine::onSwitch( swcb_sym_t callback, const char sym_s[], const char sym_e[] ) 
 {
     callback_sym = callback;
