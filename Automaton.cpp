@@ -129,29 +129,7 @@ unsigned char Machine::pinChange( uint8_t pin ) {
   return 0;
 }
 
-int Machine::msgRead( uint8_t id_msg ) // Checks msg queue and removes 1 msg
-{
-  if ( msg_table[id_msg] > 0 ) {
-      msg_table[id_msg]--;
-      return 1;
-  }
-  return 0;
-}
-
-int Machine::msgRead( uint8_t id_msg, int cnt ) 
-{
-  if ( msg_table[id_msg] > 0 ) {
-    if ( cnt >= msg_table[id_msg] ) {
-        msg_table[id_msg] = 0;
-    } else {      
-        msg_table[id_msg] -= cnt;
-    }    
-    return 1;
-  }
-  return 0;
-}
-
-int Machine::msgRead( uint8_t id_msg, int cnt, int clear ) 
+int Machine::msgRead( uint8_t id_msg, int cnt /* = 1 */, int clear /* = 0 */ ) 
 {
   if ( msg_table[id_msg] > 0 ) {
     if ( cnt >= msg_table[id_msg] ) {
@@ -193,14 +171,7 @@ Machine & Machine::msgClear()
   return *this;
 }
 
-Machine & Machine::msgWrite( uint8_t id_msg ) 
-{
-  flags &= ~ATM_SLEEP_FLAG;
-  msg_table[id_msg]++;
-  return *this;
-}
-
-Machine & Machine::msgWrite( uint8_t id_msg, int cnt ) 
+Machine & Machine::msgWrite( uint8_t id_msg, int cnt /* = 1 */ ) 
 {
   flags &= ~ATM_SLEEP_FLAG;
   msg_table[id_msg] += cnt;
@@ -267,7 +238,7 @@ Machine & Machine::cycle()
 // TINY MACHINE
 
 
-TinyMachine & TinyMachine::state(tiny_state_t state)
+TinyMachine & TinyMachine::state( tiny_state_t state )
 {
     next = state;
     flags &= ~ATM_SLEEP_FLAG;

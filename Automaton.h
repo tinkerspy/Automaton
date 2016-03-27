@@ -113,8 +113,7 @@ class Machine: public BaseMachine
         int8_t priority( void );
         int msgClear( uint8_t id_msg ); 
         Machine & msgClear( void ); 
-        Machine & msgWrite( uint8_t id_msg ); 
-        Machine & msgWrite( uint8_t id_msg, int cnt ); 
+        Machine & msgWrite( uint8_t id_msg, int cnt = 1 ); 
         Machine & cycle( void );
         virtual Machine & onSwitch( swcb_sym_t callback, const char sym_s[], const char sym_e[] );
         Machine & label( const char label[] );
@@ -130,14 +129,11 @@ class Machine: public BaseMachine
     protected:
   
         Machine & begin( const state_t tbl[], int width );
-        //Machine & msgQueue( atm_msg_t msg[], int width );
         Machine & msgQueue( atm_msg_t msg[], int width, uint8_t autoclear = 0);
 
         const char * map_symbol( int id, const char map[] );
         uint8_t pinChange( uint8_t pin );
-        int msgRead( uint8_t id_msg ); 
-        int msgRead( uint8_t id_msg, int cnt ); 
-        int msgRead( uint8_t id_msg, int cnt, int clear ); 
+        int msgRead( uint8_t id_msg, int cnt = 1, int clear = 0 ); 
         int msgPeek( uint8_t id_msg ); 
         
         const state_t* state_table;
