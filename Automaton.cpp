@@ -17,7 +17,7 @@ int atm_timer_millis::expired( BaseMachine * machine ) {
     return value == ATM_TIMER_OFF ? 0 : millis() - machine->state_millis >= value;
 }
 
-int atm_timer_micros::expired( BaseMachine * machine ) {
+int atm_timer_micros::expired( Machine * machine ) {
     return value == ATM_TIMER_OFF ? 0 : micros() - machine->state_micros >= value;
 }
 
@@ -323,7 +323,6 @@ TinyMachine & TinyMachine::cycle()
             current = next;
             next = -1;
             state_millis = millis();
-            state_micros = micros();
             action( tiny_read_state( state_table + ( current * state_width ) + ATM_ON_ENTER ) );
             if ( read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP ) {
                   flags |= ATM_SLEEP_FLAG;

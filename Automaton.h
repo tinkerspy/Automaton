@@ -78,7 +78,7 @@ class atm_timer_micros
     public:    
         uint32_t value;
         void set( uint32_t v );
-        int expired( BaseMachine * machine );
+        int expired( Machine * machine );
 };
 
 class atm_counter { 
@@ -91,10 +91,8 @@ class atm_counter {
 
 class BaseMachine
 {
-  protected:
-        uint8_t micros_timer( uint8_t v );
   public:
-        uint32_t state_millis, state_micros;
+        uint32_t state_millis;
         uint8_t flags = 0;
  
         uint8_t asleep( void );
@@ -122,6 +120,7 @@ class Machine: public BaseMachine
         Machine & label( const char label[] );
 
         int8_t prio;
+        uint32_t state_micros;
         const char * inst_label;
         const char * class_label;
         Machine * inventory_next;
