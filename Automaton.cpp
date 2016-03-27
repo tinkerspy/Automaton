@@ -162,6 +162,7 @@ int Machine::msgClear( uint8_t id_msg ) // Destructive read (clears queue for th
   return 0;
 }
 
+
 Machine & Machine::msgClear() 
 {
   flags &= ~ATM_SLEEP_FLAG;
