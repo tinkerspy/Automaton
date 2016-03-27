@@ -130,8 +130,8 @@ class Machine: public BaseMachine
     protected:
   
         Machine & begin( const state_t tbl[], int width );
-        Machine & msgQueue( atm_msg_t msg[], int width );
-        Machine & msgQueue( atm_msg_t msg[], int width, uint8_t autoclear );
+        //Machine & msgQueue( atm_msg_t msg[], int width );
+        Machine & msgQueue( atm_msg_t msg[], int width, uint8_t autoclear = 0);
 
         const char * map_symbol( int id, const char map[] );
         uint8_t pinChange( uint8_t pin );

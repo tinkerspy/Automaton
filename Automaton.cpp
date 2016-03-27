@@ -111,14 +111,7 @@ Machine & Machine::begin( const state_t* tbl, int width )
     return *this; 
 }
 
-Machine & Machine::msgQueue( atm_msg_t msg[], int width ) 
-{ 
-    msg_table = msg;
-    msg_width = width;
-    return *this; 
-}
-
-Machine & Machine::msgQueue( atm_msg_t msg[], int width, uint8_t autoclear ) 
+Machine & Machine::msgQueue( atm_msg_t msg[], int width, uint8_t autoclear /* = 0 */ ) 
 { 
     msg_table = msg;
     msg_width = width;
