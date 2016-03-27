@@ -357,9 +357,8 @@ Machine * Factory::find( const char label[] )
     }
     return 0;        
 }
-
     
-int Factory::msgSend( const char label[], int msg, int cnt )
+int Factory::msgSend( const char label[], int msg, int cnt /* = 1 */ )
 {
     int r = 0;
     Machine * m = inventory_root;
@@ -373,12 +372,7 @@ int Factory::msgSend( const char label[], int msg, int cnt )
     return r;        
 }    
 
-int Factory::msgSend( const char label[], int msg )
-{
-    msgSend( label, msg, 1 );
-}
-
-int Factory::msgSendClass( const char label[], int msg, int cnt )
+int Factory::msgSendClass( const char label[], int msg, int cnt /* = 1 */ )
 {
     int r = 0;
     Machine * m = inventory_root;
@@ -391,11 +385,6 @@ int Factory::msgSendClass( const char label[], int msg, int cnt )
     }
     return r;        
 }    
-
-int Factory::msgSendClass( const char label[], int msg )
-{
-    msgSendClass( label, msg, 1 );
-}
 
 // .cycle() executes one factory cycle (runs all priority queues a certain number of times)
 Factory & Factory::cycle( void ) 
