@@ -108,6 +108,7 @@ Machine & Machine::begin( const state_t* tbl, int width )
     state_width = ATM_ON_EXIT + width + 2;
     prio = ATM_DEFAULT_PRIO;
     if ( !inst_label ) inst_label = class_label;
+    flags &= ~ATM_SLEEP_FLAG;
     return *this; 
 }
 
