@@ -7,9 +7,8 @@ New features/fixes:
 - previous machine variable added
 - Machine::trigger() method
 - Tiny machines
-- Att_* tiny machines for all bundled machines except Atm_teensywwave
+- Att_* tiny machines for all bundled machines except Atm_teensywave
 - msgPeek() now returns number of messages (for data sending)
-- made Factory::add() process one cycle for the added machine 
 - obj.onSwitch( atm_serial_debug::onSwitch ) for all bundled machines!
 - Atm_timer: added interval_seconds(), now supports timers up to 137 years
 - Atm_command fixes: either \r or \n works for EOL, matches whole commands only
@@ -17,17 +16,17 @@ New features/fixes:
 - Added sleep() method to sleep/wake up machines
 - Atm_led: repeat(0) makes led not blink
 - Atm_led: added chain() method
-- Automatic cycle() on Factory::add moved to trigger()
+- Automatic cycle() added when machine is in an invalid state on a trigger() call
 - Added Atm_wait: Simple waiting state machine
 - TinyMachine no longer supports microsecond timers
-- Machine have the sleep bit set on declaration which is cleared on begin() call
+- Machines have the sleep bit set on declaration which is cleared on begin() call
 
 Breaking changes:
 - trigger machine variable changed to last_trigger
 - dropped toggle, runtime_*, msgMap, runtime_millis(), runtime_micros()
-- ON_ENTER is now fired after each state( new_state ) call
-- factory.add() now runs the added machine exactly one cycle to initialize it
+- ON_ENTER action is now fired after each state( new_state ) call
 - machine.msgPeek() returns number of messages instead of just 0 or 1
 - Dropped numeric version of onSwitch()
 - Atm_timer added extra 'int cnt' argument to callback
-- atm_timer_micros() & atm_timer_millis(): dropped begin() add this argument to expired()
+- atm_timer_micros() & atm_timer_millis(): dropped begin() added 'this' argument to expired()
+

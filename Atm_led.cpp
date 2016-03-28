@@ -25,7 +25,7 @@ Atm_led & Atm_led::begin( int attached_pin )
 Atm_led & Atm_led::chain( Machine * n, Machine * p /* default 0 */, uint8_t event /* default EVT_BLINK */) 
 {
     chain_next = n;
-    chain_previous = p;    
+    chain_previous = p == 0 ? n : p;    
     chain_event = event;
     flags &= ~ATM_USR1_FLAG;
 }
@@ -85,13 +85,14 @@ void Atm_led::action( int id )
 			digitalWrite( pin, LOW );
 			return;
         case ACT_CHAIN :            
-            if ( chain_previous && ( flags & ATM_USR1_FLAG ) > 0 ) {
-              chain_previous->trigger( chain_event );
-            } else {
-              if ( chain_next )
+            if ( chain_next ) {
+              if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+                chain_previous->trigger( chain_event );
+              } else {
                 chain_next->trigger( chain_event );
-            }              
-            flags ^= ATM_USR1_FLAG;
+              }              
+              flags ^= ATM_USR1_FLAG;
+            }  
             return;
 	}
 }
@@ -130,7 +131,7 @@ Att_led & Att_led::begin( int attached_pin )
 Att_led & Att_led::chain( TinyMachine * n, TinyMachine * p /* default 0 */, uint8_t event /* default EVT_BLINK */) 
 {
     chain_next = n;
-    chain_previous = p;    
+    chain_previous = p == 0 ? n : p;    
     chain_event = event;
     flags &= ~ATM_USR1_FLAG;
 }
@@ -184,13 +185,14 @@ void Att_led::action( int id )
 			digitalWrite( pin, LOW );
 			return;
         case ACT_CHAIN :            
-            if ( chain_previous && ( flags & ATM_USR1_FLAG ) > 0 ) {
-              chain_previous->trigger( EVT_BLINK );
-            } else {
-              if ( chain_next )
-                chain_next->trigger( EVT_BLINK );
-            }              
-            flags ^= ATM_USR1_FLAG;
+            if ( chain_next ) {
+              if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+                chain_previous->trigger( chain_event );
+              } else {
+                chain_next->trigger( chain_event );
+              }              
+              flags ^= ATM_USR1_FLAG;
+            }  
             return;
 	}
 }
