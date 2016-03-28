@@ -269,6 +269,7 @@ TinyMachine & TinyMachine::begin( const tiny_state_t* tbl, int width )
 {
     state_table = tbl;
     state_width = ATM_ON_EXIT + width + 2;
+    flags &= ~ATM_SLEEP_FLAG;
     return *this;
 }
 
