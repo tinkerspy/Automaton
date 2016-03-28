@@ -2,17 +2,25 @@
 Version 0.2.0 (in development)
 =============
 
-New features:
+New features/fixes:
 - autoclear option msgQueue added
 - previous machine variable added
 - Machine::trigger() method
 - Tiny machines
-- Tiny factory
-- Att_* tiny machines for all bundled machines
+- Att_* tiny machines for all bundled machines except Atm_teensywwave
 - msgPeek() now returns number of messages (for data sending)
 - made Factory::add() process one cycle for the added machine 
 - obj.onSwitch( atm_serial_debug::onSwitch ) for all bundled machines!
 - Atm_timer: added interval_seconds(), now supports timers up to 137 years
+- Atm_command fixes: either \r or \n works for EOL, matches whole commands only
+- Atm_led: blink cycle now includes the trailing pause
+- Added sleep() method to sleep/wake up machines
+- Atm_led: repeat(0) makes led not blink
+- Atm_led: added chain() method
+- Automatic cycle() on Factory::add moved to trigger()
+- Added Atm_wait: Simple waiting state machine
+- TinyMachine no longer supports microsecond timers
+- Machine have the sleep bit set on declaration which is cleared on begin() call
 
 Breaking changes:
 - trigger machine variable changed to last_trigger
@@ -22,4 +30,4 @@ Breaking changes:
 - machine.msgPeek() returns number of messages instead of just 0 or 1
 - Dropped numeric version of onSwitch()
 - Atm_timer added extra 'int cnt' argument to callback
-
+- atm_timer_micros() & atm_timer_millis(): dropped begin() add this argument to expired()
