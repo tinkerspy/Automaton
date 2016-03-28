@@ -62,7 +62,6 @@ class atm_serial_debug {
     Serial.print( runtime );
     Serial.println( " ms)" );
   }
-
 };
 
 class atm_timer_millis 
@@ -96,11 +95,10 @@ class BaseMachine
         uint8_t flags = 0;
  
         uint8_t asleep( void );
-        BaseMachine & sleep( void );
+        BaseMachine & sleep( uint8_t v = 1 );
         virtual int event( int id ) = 0; // Pure virtual methods -> make this an abstract class
         virtual void action( int id ) = 0;
 };
-
 
 class Machine: public BaseMachine
 {
@@ -130,7 +128,6 @@ class Machine: public BaseMachine
   
         Machine & begin( const state_t tbl[], int width );
         Machine & msgQueue( atm_msg_t msg[], int width, uint8_t autoclear = 0);
-
         const char * map_symbol( int id, const char map[] );
         uint8_t pinChange( uint8_t pin );
         int msgRead( uint8_t id_msg, int cnt = 1, int clear = 0 ); 

@@ -96,9 +96,10 @@ uint8_t BaseMachine::asleep()
     return ( flags & ATM_SLEEP_FLAG ) > 0;
 }
 
-BaseMachine & BaseMachine::sleep() 
+BaseMachine & BaseMachine::sleep( uint8_t v ) 
 {
     flags |=  ATM_SLEEP_FLAG;
+    flags = v ? flags | ATM_SLEEP_FLAG : flags & ~ATM_SLEEP_FLAG;
     return *this;     
 }
 
