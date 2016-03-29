@@ -22,7 +22,7 @@ Atm_led & Atm_led::begin( int attached_pin )
 	return *this;
 }
 
-Atm_led & Atm_led::chain( Machine * n, Machine * p /* default 0 */, uint8_t event /* default EVT_BLINK */) 
+Atm_led & Atm_led::chain( Machine * n /* = 0 */, Machine * p /* = 0 */, uint8_t event /* = EVT_BLINK */) 
 {
     chain_next = n;
     chain_previous = p == 0 ? n : p;    
@@ -129,7 +129,7 @@ Att_led & Att_led::begin( int attached_pin )
 	return *this;
 }
 
-Att_led & Att_led::chain( TinyMachine * n, TinyMachine * p /* default 0 */, uint8_t event /* default EVT_BLINK */) 
+Att_led & Att_led::chain( TinyMachine * n /* = 0 */, TinyMachine * p /* = 0 */, uint8_t event /* = EVT_BLINK */) 
 {
     chain_next = n;
     chain_previous = p == 0 ? n : p;    

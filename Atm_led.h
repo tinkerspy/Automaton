@@ -33,7 +33,7 @@ class Atm_led : public Machine {
 	Atm_led & fade( int fade ); 
 	Atm_led & repeat( int repeat ); 
     Atm_led & onSwitch( swcb_sym_t switch_callback );
-    Atm_led & chain( Machine * n, Machine * p = 0, uint8_t event = EVT_BLINK );
+    Atm_led & chain( Machine * n = 0, Machine * p = 0, uint8_t event = EVT_BLINK );
 	int event( int id );
 	void action( int id );
 };
@@ -66,7 +66,7 @@ class Att_led : public TinyMachine {
 	Att_led & fade( int fade ); 
 	Att_led & repeat( int repeat ); 
     Att_led & onSwitch( swcb_sym_t switch_callback );
-    Att_led & chain( TinyMachine * n, TinyMachine * p = 0, uint8_t event = EVT_BLINK );
+    Att_led & chain( TinyMachine * n = 0, TinyMachine * p = 0, uint8_t event = EVT_BLINK );
 	int event( int id );
 	void action( int id );
 };
