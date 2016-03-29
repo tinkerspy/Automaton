@@ -172,7 +172,7 @@ class Factory
         Machine * find( const char label[] );
         int msgSend( const char label[], int msg, int cnt = 1 );
         int msgSendClass( const char label[], int msg, int cnt = 1 );
-        Factory & cycle( void );
+        Factory & cycle( uint32_t time = 0 ); 
   private:
         int8_t recalibrate = 1;
         Machine * inventory_root;

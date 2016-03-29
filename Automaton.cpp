@@ -390,13 +390,16 @@ int Factory::msgSendClass( const char label[], int msg, int cnt /* = 1 */ )
 }    
 
 // .cycle() executes one factory cycle (runs all priority queues a certain number of times)
-Factory & Factory::cycle( void ) 
+Factory & Factory::cycle( uint32_t time /* = 0 */ ) 
 {
+    uint32_t cycle_start = millis();
     if ( recalibrate ) calibrate();
-    run( 1 ); run( 2 );	run( 1 ); run( 2 );
-    run( 1 ); run( 3 );	run( 1 ); run( 4 );
-    run( 1 ); run( 2 );	run( 1 ); run( 3 );
-    run( 1 ); run( 2 );	run( 1 ); run( 0 );
+    do {
+        run( 1 ); run( 2 );	run( 1 ); run( 2 );
+        run( 1 ); run( 3 );	run( 1 ); run( 4 );
+        run( 1 ); run( 2 );	run( 1 ); run( 3 );
+        run( 1 ); run( 2 );	run( 1 ); run( 0 );
+    } while ( millis() - cycle_start < time );
     return  *this;
 }
 
