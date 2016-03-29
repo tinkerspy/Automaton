@@ -156,6 +156,7 @@ class TinyMachine: public BaseMachine
         tiny_state_t state( void );
         TinyMachine & cycle( uint32_t time = 0 );
         int trigger( int evt );
+         TinyMachine * inventory_next;
     protected:
         TinyMachine & begin( const tiny_state_t tbl[], int width );
         const tiny_state_t* state_table;
@@ -181,5 +182,12 @@ class Factory
         void run( int q );
 };
 
+class TinyFactory 
+{
+  public:
+        TinyFactory & add( TinyMachine & machine );
+        TinyMachine * inventory_root;
+        TinyFactory & cycle( uint32_t time = 0 );
+};
 
 #endif

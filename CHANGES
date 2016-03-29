@@ -20,8 +20,8 @@ New features/fixes:
 - Added Atm_wait: Simple waiting state machine
 - TinyMachine no longer supports microsecond timers
 - Machines have the sleep bit set on declaration which is cleared on begin() call
-- Factory::cycle now takes a time argument (ms) after which it will stop running (0 never)
-- Machine::cycle now takes a time argument (ms) after which it will stop running (0 never)
+- Factory::cycle now takes a time argument (ms) after which it will stop running (0 default: after 1 cycle)
+- Machine::cycle now takes a time argument (ms) after which it will stop running (0 default: after 1 cycle)
 
 Breaking changes:
 - trigger machine variable changed to last_trigger

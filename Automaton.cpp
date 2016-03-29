@@ -155,8 +155,8 @@ int Machine::msgPeek( uint8_t id_msg )
 
 int Machine::msgClear( uint8_t id_msg ) // Destructive read (clears queue for this type)
 {
-  flags &= ~ATM_SLEEP_FLAG;
   if ( id_msg < msg_width && msg_table[id_msg] > 0 ) {
+    flags &= ~ATM_SLEEP_FLAG;
     msg_table[id_msg] = 0;
     return 1;
   }  
@@ -175,9 +175,10 @@ Machine & Machine::msgClear()
 
 Machine & Machine::msgWrite( uint8_t id_msg, int cnt /* = 1 */ ) 
 {
-  flags &= ~ATM_SLEEP_FLAG;
-  if ( id_msg < msg_width ) 
+  if ( id_msg < msg_width ) {
+    flags &= ~ATM_SLEEP_FLAG;
     msg_table[id_msg] += cnt;
+  }
   return *this;
 }
 
@@ -278,7 +279,7 @@ TinyMachine & TinyMachine::begin( const tiny_state_t* tbl, int width )
 }
 
 // .cycle() Executes one cycle of a state machine
-TinyMachine & TinyMachine::cycle( uint32_t time )
+TinyMachine & TinyMachine::cycle( uint32_t time /* = 0 */ )
 {
     uint32_t cycle_start = millis();
     do {
@@ -408,4 +409,32 @@ Factory & Factory::cycle( uint32_t time /* = 0 */ )
     } while ( millis() - cycle_start < time );
     return  *this;
 }
+
+// TINYFACTORY - A factory for TinyMachines
+
+// .add( machine ) Adds a state machine to the factory by prepending it to the inventory list
+TinyFactory & TinyFactory::add( TinyMachine & machine ) 
+{	
+    machine.inventory_next = inventory_root;
+    inventory_root = &machine;
+    return *this;
+}
+
+
+// .cycle() executes the factory cycle 
+TinyFactory &  TinyFactory::cycle( uint32_t time /* = 0 */ ) 
+{
+    TinyMachine * m;
+    uint32_t cycle_start = millis();
+    do {
+        m = inventory_root;
+        while ( m ) {
+            if ( ( m->flags & ATM_SLEEP_FLAG ) == 0 ) m->cycle();
+            // Move to the next machine
+            m = m->inventory_next;
+        }
+    } while( millis() - cycle_start < time );
+    return *this; 
+}
+
 
