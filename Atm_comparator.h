@@ -34,7 +34,7 @@ class Atm_comparator: public Machine {
     Atm_comparator & threshold( uint16_t * v, uint16_t size, bool catchUp=false );
     Atm_comparator & average( uint16_t * v, uint16_t size );
     int _avg();
-    Atm_comparator & bitmap( int v );
+    Atm_comparator & bitmap( uint16_t v );
     int sample();
     virtual int read_sample();
     int event( int id ); 
@@ -70,7 +70,7 @@ class Att_comparator: public TinyMachine {
     Att_comparator & threshold( uint16_t * v, uint16_t size, bool catchUp=false );
     Att_comparator & average( uint16_t * v, uint16_t size );
     int _avg();
-    Att_comparator & bitmap( int v );
+    Att_comparator & bitmap( uint16_t v );
     int sample();
     virtual int read_sample();
     int event( int id ); 

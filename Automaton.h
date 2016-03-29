@@ -130,7 +130,7 @@ class Machine: public BaseMachine
         Machine & msgQueue( atm_msg_t msg[], int width, uint8_t autoclear = 0);
         const char * map_symbol( int id, const char map[] );
         uint8_t pinChange( uint8_t pin );
-        int msgRead( uint8_t id_msg, int cnt = 1, int clear = 0 ); 
+        int msgRead( uint8_t id_msg, uint16_t cnt = 1, int clear = 0 ); 
         int msgPeek( uint8_t id_msg ); 
         
         const state_t* state_table;

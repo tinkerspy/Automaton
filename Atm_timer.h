@@ -27,8 +27,7 @@ class Atm_timer: public Machine {
 
     atm_msg_t messages[MSG_END];
 	
-    Atm_timer & begin( void );
-    Atm_timer & begin( uint32_t ms );
+    Atm_timer & begin( uint32_t ms = ATM_TIMER_OFF );
     Atm_timer & onSwitch( swcb_sym_t switch_callback );
     Atm_timer & onTimer( Machine * machine, uint8_t msg );
     Atm_timer & onTimer( timer_cb_t timer_callback ); 
@@ -61,8 +60,7 @@ class Att_timer: public TinyMachine {
     enum { EVT_DAYCNT, EVT_DAYTIMER, EVT_MSTIMER, EVT_REPCNT, EVT_OFF, EVT_ON, ELSE };
     enum { ACT_START, ACT_TRIG, ACT_WAITD };
 	
-    Att_timer & begin( void );
-    Att_timer & begin( uint32_t ms );
+    Att_timer & begin( uint32_t ms = ATM_TIMER_OFF );
     Att_timer & onTimer( Machine * machine, uint8_t msg );
     Att_timer & onTimer( timer_cb_t timer_callback ); 
     Att_timer & interval_seconds( uint32_t v );

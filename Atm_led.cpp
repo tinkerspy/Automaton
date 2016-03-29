@@ -28,6 +28,7 @@ Atm_led & Atm_led::chain( Machine * n, Machine * p /* default 0 */, uint8_t even
     chain_previous = p == 0 ? n : p;    
     chain_event = event;
     flags &= ~ATM_USR1_FLAG;
+    return *this;
 }
 
 Atm_led & Atm_led::blink( uint32_t duration ) 
@@ -134,6 +135,7 @@ Att_led & Att_led::chain( TinyMachine * n, TinyMachine * p /* default 0 */, uint
     chain_previous = p == 0 ? n : p;    
     chain_event = event;
     flags &= ~ATM_USR1_FLAG;
+    return *this;
 }
 
 Att_led & Att_led::blink( uint32_t duration ) 

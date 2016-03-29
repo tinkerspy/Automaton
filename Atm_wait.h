@@ -34,5 +34,5 @@ class Att_wait: public TinyMachine {
     void action( int id );
 };
 
-#endif^M
+#endif
 

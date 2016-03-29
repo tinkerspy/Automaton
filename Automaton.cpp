@@ -130,7 +130,7 @@ unsigned char Machine::pinChange( uint8_t pin ) {
   return 0;
 }
 
-int Machine::msgRead( uint8_t id_msg, int cnt /* = 1 */, int clear /* = 0 */ ) 
+int Machine::msgRead( uint8_t id_msg, uint16_t cnt /* = 1 */, int clear /* = 0 */ ) 
 {
   if ( msg_table[id_msg] > 0 ) {
     if ( cnt >= msg_table[id_msg] ) {
@@ -156,7 +156,7 @@ int Machine::msgPeek( uint8_t id_msg )
 int Machine::msgClear( uint8_t id_msg ) // Destructive read (clears queue for this type)
 {
   flags &= ~ATM_SLEEP_FLAG;
-  if ( msg_table[id_msg] > 0 ) {
+  if ( id_msg < msg_width && msg_table[id_msg] > 0 ) {
     msg_table[id_msg] = 0;
     return 1;
   }  
@@ -176,7 +176,8 @@ Machine & Machine::msgClear()
 Machine & Machine::msgWrite( uint8_t id_msg, int cnt /* = 1 */ ) 
 {
   flags &= ~ATM_SLEEP_FLAG;
-  msg_table[id_msg] += cnt;
+  if ( id_msg < msg_width ) 
+    msg_table[id_msg] += cnt;
   return *this;
 }
 
@@ -210,7 +211,7 @@ Machine & Machine::cycle()
                     map_symbol( last_trigger, sym_events ), millis() - state_millis, cycles ); 
             }
             if ( current > -1 )     
-		action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
+		            action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
             previous = current;
             current = next;
             next = -1;

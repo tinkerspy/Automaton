@@ -5,7 +5,7 @@
 
 #define DIVIDER 86400 // Number of seconds in a 24h day
   
-Atm_timer & Atm_timer::begin( uint32_t ms )
+Atm_timer & Atm_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */ )
 {
   const static state_t state_table[] PROGMEM = {
   /*             ON_ENTER    ON_LOOP    ON_EXIT  EVT_DAYCNT  EVT_DAYTIMER  EVT_MSTIMER  EVT_REPCNT  EVT_OFF  EVT_ON   ELSE */
@@ -23,12 +23,6 @@ Atm_timer & Atm_timer::begin( uint32_t ms )
   repeat( repeat_cnt = 1 );
   return *this;          
 }
-
-Atm_timer & Atm_timer::begin( void )
-{
-  begin( ATM_TIMER_OFF );
-}
-
 
 Atm_timer & Atm_timer::onTimer( Machine * machine, uint8_t msg ) 
 {
@@ -63,7 +57,7 @@ Atm_timer & Atm_timer::interval_millis( uint32_t v )
 
 Atm_timer & Atm_timer::interval( uint32_t v )
 {
-  interval_millis( v );
+  return interval_millis( v );
 }
 
 Atm_timer & Atm_timer::repeat( int v )
@@ -130,7 +124,7 @@ Atm_timer & Atm_timer::onSwitch( swcb_sym_t switch_callback ) {
 
 // TinyMachine version
   
-Att_timer & Att_timer::begin( uint32_t ms )
+Att_timer & Att_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */ )
 {
   const static tiny_state_t state_table[] PROGMEM = {
   /*             ON_ENTER    ON_LOOP    ON_EXIT  EVT_DAYCNT  EVT_DAYTIMER  EVT_MSTIMER  EVT_REPCNT  EVT_OFF  EVT_ON   ELSE */
@@ -146,11 +140,6 @@ Att_timer & Att_timer::begin( uint32_t ms )
   daycounter.set( days = 0 );
   repeat( repeat_cnt = 1 );
   return *this;          
-}
-
-Att_timer & Att_timer::begin( void )
-{
-  begin( ATM_TIMER_OFF );
 }
 
 Att_timer & Att_timer::onTimer( Machine * machine, uint8_t msg ) 
@@ -186,7 +175,7 @@ Att_timer & Att_timer::interval_millis( uint32_t v )
 
 Att_timer & Att_timer::interval( uint32_t v )
 {
-  interval_millis( v );
+  return interval_millis( v );
 }
 
 Att_timer & Att_timer::repeat( int v )
