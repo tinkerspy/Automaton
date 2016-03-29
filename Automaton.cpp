@@ -198,43 +198,46 @@ const char * Machine::map_symbol( int id, const char map[] )
 }
 
 // .cycle() Executes one cycle of a state machine
-Machine & Machine::cycle() 
+Machine & Machine::cycle( uint32_t time /* = 0 */ ) 
 {
-    if ( ( flags & ATM_SLEEP_FLAG ) == 0 ) {
-        cycles++;
-        if ( next != -1 ) {
-            action( ATM_ON_SWITCH );
-            if ( callback_sym ) {
-                callback_sym( inst_label, 
-                    map_symbol(      current, sym_states ), 
-                    map_symbol(         next, sym_states ), 
-                    map_symbol( last_trigger, sym_events ), millis() - state_millis, cycles ); 
+    uint32_t cycle_start = millis();
+    do {
+        if ( ( flags & ATM_SLEEP_FLAG ) == 0 ) {
+            cycles++;
+            if ( next != -1 ) {
+                action( ATM_ON_SWITCH );
+                if ( callback_sym ) {
+                    callback_sym( inst_label, 
+                        map_symbol(      current, sym_states ), 
+                        map_symbol(         next, sym_states ), 
+                        map_symbol( last_trigger, sym_events ), millis() - state_millis, cycles ); 
+                }
+                if ( current > -1 )     
+                        action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
+                previous = current;
+                current = next;
+                next = -1;
+                state_millis = millis();
+                state_micros = micros();
+                action( read_state( state_table + ( current * state_width ) + ATM_ON_ENTER ) );
+                if ( read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP ) {
+                      flags |= ATM_SLEEP_FLAG;
+                } else {
+                      flags &= ~ATM_SLEEP_FLAG;
+                }
+                cycles = 0;
             }
-            if ( current > -1 )     
-		            action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
-            previous = current;
-            current = next;
-            next = -1;
-            state_millis = millis();
-            state_micros = micros();
-            action( read_state( state_table + ( current * state_width ) + ATM_ON_ENTER ) );
-            if ( read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP ) {
-                  flags |= ATM_SLEEP_FLAG;
-            } else {
-                  flags &= ~ATM_SLEEP_FLAG;
+            state_t i = read_state( state_table + ( current * state_width ) + ATM_ON_LOOP );
+            if ( i != -1 ) { action( i ); }
+            for ( i = ATM_ON_EXIT + 1; i < state_width; i++ ) { 
+                if ( ( read_state( state_table + ( current * state_width ) + i ) != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
+                    state( read_state( state_table + ( current * state_width ) + i ) );
+                    last_trigger = i - ATM_ON_EXIT - 1;
+                    break;
+                }
             }
-            cycles = 0;
         }
-        state_t i = read_state( state_table + ( current * state_width ) + ATM_ON_LOOP );
-        if ( i != -1 ) { action( i ); }
-        for ( i = ATM_ON_EXIT + 1; i < state_width; i++ ) { 
-            if ( ( read_state( state_table + ( current * state_width ) + i ) != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
-                state( read_state( state_table + ( current * state_width ) + i ) );
-                last_trigger = i - ATM_ON_EXIT - 1;
-                return *this;
-            }
-        }
-    }
+    } while ( millis() - cycle_start < time );
     return *this;
 }
 
@@ -275,32 +278,35 @@ TinyMachine & TinyMachine::begin( const tiny_state_t* tbl, int width )
 }
 
 // .cycle() Executes one cycle of a state machine
-TinyMachine & TinyMachine::cycle()
+TinyMachine & TinyMachine::cycle( uint32_t time )
 {
-    if ( ( flags & ATM_SLEEP_FLAG ) == 0 ) {
-        if ( next != -1 ) {
-            action( ATM_ON_SWITCH );
-            if ( current > -1 )
-                action( tiny_read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
-            current = next;
-            next = -1;
-            state_millis = millis();
-            action( tiny_read_state( state_table + ( current * state_width ) + ATM_ON_ENTER ) );
-            if ( read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP ) {
-                  flags |= ATM_SLEEP_FLAG;
-            } else {
-                  flags &= ~ATM_SLEEP_FLAG;
+    uint32_t cycle_start = millis();
+    do {
+        if ( ( flags & ATM_SLEEP_FLAG ) == 0 ) {
+            if ( next != -1 ) {
+                action( ATM_ON_SWITCH );
+                if ( current > -1 )
+                    action( tiny_read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
+                current = next;
+                next = -1;
+                state_millis = millis();
+                action( tiny_read_state( state_table + ( current * state_width ) + ATM_ON_ENTER ) );
+                if ( read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP ) {
+                      flags |= ATM_SLEEP_FLAG;
+                } else {
+                      flags &= ~ATM_SLEEP_FLAG;
+                }
+            }
+            tiny_state_t i = tiny_read_state( state_table + ( current * state_width ) + ATM_ON_LOOP );
+            if ( i != -1 ) { action( i ); }
+            for ( i = ATM_ON_EXIT + 1; i < state_width; i++ ) {
+                if ( ( tiny_read_state( state_table + ( current * state_width ) + i ) != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
+                    state( tiny_read_state( state_table + ( current * state_width ) + i ) );
+                    break;
+                }
             }
         }
-        tiny_state_t i = tiny_read_state( state_table + ( current * state_width ) + ATM_ON_LOOP );
-        if ( i != -1 ) { action( i ); }
-        for ( i = ATM_ON_EXIT + 1; i < state_width; i++ ) {
-            if ( ( tiny_read_state( state_table + ( current * state_width ) + i ) != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
-                state( tiny_read_state( state_table + ( current * state_width ) + i ) );
-                return *this;
-            }
-        }
-    }
+    } while ( millis() - cycle_start < time );
     return *this;
 }
 

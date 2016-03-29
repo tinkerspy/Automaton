@@ -112,7 +112,7 @@ class Machine: public BaseMachine
         int msgClear( uint8_t id_msg ); 
         Machine & msgClear( void ); 
         Machine & msgWrite( uint8_t id_msg, int cnt = 1 ); 
-        Machine & cycle( void );
+        Machine & cycle( uint32_t time = 0 );
         virtual Machine & onSwitch( swcb_sym_t callback, const char sym_s[], const char sym_e[] );
         Machine & label( const char label[] );
 
@@ -154,7 +154,7 @@ class TinyMachine: public BaseMachine
     public:
         TinyMachine & state( tiny_state_t state);
         tiny_state_t state( void );
-        TinyMachine & cycle( void );
+        TinyMachine & cycle( uint32_t time = 0 );
         int trigger( int evt );
     protected:
         TinyMachine & begin( const tiny_state_t tbl[], int width );
