@@ -105,13 +105,17 @@ void Atm_comparator::action( int id )
       if ( v_sample >= v_previous ) {
         for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
           if ( (bitmap_diff >> i ) & 1 ) {
+            flags |= ATM_SLEEP_FLAG;
             (*callback)( v_sample, 1, i, p_threshold[i] );      
+            flags &= ~ATM_SLEEP_FLAG;
           }
         }        
       } else {
         for ( uint16_t i = p_threshold_size; i >= 0; i-- ) {
           if ( (bitmap_diff >> i ) & 1 ) {
+            flags |= ATM_SLEEP_FLAG;
             (*callback)( v_sample, 0, i, p_threshold[i] );      
+            flags &= ~ATM_SLEEP_FLAG;
           }
         }
       }
@@ -232,13 +236,17 @@ void Att_comparator::action( int id )
       if ( v_sample >= v_previous ) {
         for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
           if ( (bitmap_diff >> i ) & 1 ) {
+            flags |= ATM_SLEEP_FLAG;
             (*callback)( v_sample, 1, i, p_threshold[i] );      
+            flags &= ~ATM_SLEEP_FLAG;
           }
         }        
       } else {
         for ( uint16_t i = p_threshold_size; i >= 0; i-- ) {
           if ( (bitmap_diff >> i ) & 1 ) {
+            flags |= ATM_SLEEP_FLAG;
             (*callback)( v_sample, 0, i, p_threshold[i] );      
+            flags &= ~ATM_SLEEP_FLAG;
           }
         }
       }

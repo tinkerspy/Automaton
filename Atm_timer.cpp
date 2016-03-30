@@ -105,7 +105,9 @@ void Atm_timer::action( int id )
   	case ACT_TRIG :
       repcounter.decrement();
       if ( callback ) {
+         flags |= ATM_SLEEP_FLAG;
          (*callback)( timer_id, repeat_cnt - repcounter.value );
+         flags &= ~ATM_SLEEP_FLAG;
       }
       if ( client_machine ) {
         client_machine->msgWrite( client_msg );
@@ -219,7 +221,9 @@ void Att_timer::action( int id )
   	case ACT_TRIG :
       repcounter.decrement();
       if ( callback ) {
+         flags |= ATM_SLEEP_FLAG;          
          (*callback)( timer_id, repeat_cnt - repcounter.value );
+         flags &= ~ATM_SLEEP_FLAG;
       }
       if ( client_machine ) {
         client_machine->msgWrite( client_msg );

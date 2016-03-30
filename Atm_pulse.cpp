@@ -47,7 +47,9 @@ void Atm_pulse::action( int id )
   switch ( id ) {
   	case ACT_PULSE :
       if ( callback ) {
+         flags |= ATM_SLEEP_FLAG;
          (*callback)();
+         flags &= ~ATM_SLEEP_FLAG;
          return;
       }
       client_machine->msgWrite( client_msg );
@@ -112,7 +114,9 @@ void Att_pulse::action( int id )
   switch ( id ) {
   	case ACT_PULSE :
       if ( callback ) {
+         flags |= ATM_SLEEP_FLAG;
          (*callback)();
+         flags &= ~ATM_SLEEP_FLAG;
          return;
       }
       client_machine->msgWrite( client_msg );
