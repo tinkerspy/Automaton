@@ -156,7 +156,6 @@ int Machine::msgPeek( uint8_t id_msg )
 int Machine::msgClear( uint8_t id_msg ) // Destructive read (clears queue for this type)
 {
   if ( id_msg < msg_width && msg_table[id_msg] > 0 ) {
-    flags &= ~ATM_SLEEP_FLAG;
     msg_table[id_msg] = 0;
     return 1;
   }  
@@ -166,7 +165,6 @@ int Machine::msgClear( uint8_t id_msg ) // Destructive read (clears queue for th
 
 Machine & Machine::msgClear() 
 {
-  flags &= ~ATM_SLEEP_FLAG;
   for ( int i = 0; i < msg_width; i++ ) {
     msg_table[i] = 0;
   }  
