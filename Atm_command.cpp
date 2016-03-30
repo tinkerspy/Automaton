@@ -97,7 +97,9 @@ void Atm_command::action( int id )
       return;
     case ACT_SEND :
       _buffer[--_bufptr] = '\0';
+      flags |= ATM_SLEEP_FLAG;
       (*_callback)( lookup( 0, _commands ) );
+      flags &= ~ATM_SLEEP_FLAG;
       _lastch = '\0';      
       _bufptr = 0;
   	  return;
@@ -210,7 +212,9 @@ void Att_command::action( int id )
       return;
     case ACT_SEND :
       _buffer[--_bufptr] = '\0';
+      flags |= ATM_SLEEP_FLAG;
       (*_callback)( lookup( 0, _commands ) );
+      flags &= ~ATM_SLEEP_FLAG;
       _lastch = '\0';      
       _bufptr = 0;
   	  return;

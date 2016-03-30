@@ -131,10 +131,12 @@ int Atm_button::event( int id )
 
 void Atm_button::cb( int press, int idx ) {
 
+    flags |= ATM_SLEEP_FLAG;
     if ( callback ) 
       (*callback)( press );
     if ( callback_id ) 
       (*callback_id)( press, idx );
+    flags &= ~ATM_SLEEP_FLAG;
 }
 
 
@@ -310,10 +312,12 @@ int Att_button::event( int id )
 
 void Att_button::cb( int press, int idx ) {
 
+    flags |= ATM_SLEEP_FLAG;
     if ( callback ) 
       (*callback)( press );
     if ( callback_id ) 
       (*callback_id)( press, idx );
+    flags &= ~ATM_SLEEP_FLAG;
 }
 
 
