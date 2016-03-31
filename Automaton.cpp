@@ -426,12 +426,12 @@ TinyFactory &  TinyFactory::cycle( uint32_t time /* = 0 */ )
     uint32_t cycle_start = millis();
     do {
         m = inventory_root;
-        while ( m ) {
+        while ( m && ( millis() - cycle_start ) < time ) {
             if ( ( m->flags & ATM_SLEEP_FLAG ) == 0 ) m->cycle();
             // Move to the next machine
             m = m->inventory_next;
         }
-    } while( millis() - cycle_start < time );
+    } while ( ( millis() - cycle_start ) < time );
     return *this; 
 }
 
