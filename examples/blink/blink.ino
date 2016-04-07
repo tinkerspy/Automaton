@@ -12,7 +12,7 @@ class Blink : public Machine {
     enum { EVT_TIMER, ELSE };
     enum { ACT_ON, ACT_OFF };
 		
-    Blink & begin( int attached_pin, int blinkrate )
+    Blink & begin( int attached_pin, uint32_t blinkrate )
     {
       const static state_t state_table[] PROGMEM = {
       /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER   ELSE */
