@@ -1,4 +1,3 @@
-#include <Automaton.h>
 #include "Atm_comparator.h"
 
   

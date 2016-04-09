@@ -1,4 +1,3 @@
-#include <Automaton.h>
 #include "Atm_fade.h"
 
 Atm_fade & Atm_fade::begin( int attached_pin )

@@ -1,4 +1,3 @@
-#include <Automaton.h>
 #include "Atm_pulse.h"
 	
 Atm_pulse & Atm_pulse::begin( int attached_pin, int minimum_duration )

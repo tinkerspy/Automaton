@@ -1,4 +1,3 @@
-#include <Automaton.h>
 #include "Atm_command.h"
 	
 Atm_command & Atm_command::begin( Stream * stream, char buffer[], int size )

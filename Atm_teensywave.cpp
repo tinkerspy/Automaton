@@ -1,6 +1,4 @@
-#include <Automaton.h>
 #include "Atm_teensywave.h"
-
 
 // TODO
 // - Triangle waveform

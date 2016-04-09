@@ -1,4 +1,3 @@
-#include <Automaton.h>
 #include "Atm_button.h"
 
 // Add option for button press callback (for reading i2c buttons etc)

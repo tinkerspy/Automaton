@@ -1,4 +1,3 @@
-#include <Automaton.h>
 #include "Atm_led.h"
 
 Atm_led & Atm_led::begin( int attached_pin )
