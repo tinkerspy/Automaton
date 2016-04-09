@@ -47,8 +47,7 @@ class atm_serial_debug {
   public: 
   static void onSwitch( const char label[], const char current[], const char next[], 
         const char trigger[], uint32_t runtime, uint32_t cycles ) {
-#if !defined( ATM_DEBUG_DISABLE )            
-    Serial.print( millis() );
+    Serialx.print( millis() );
     Serial.print( " Switch " );
     Serial.print( label );
     Serial.print( " from " );
@@ -62,7 +61,6 @@ class atm_serial_debug {
     Serial.print( " cycles in " );
     Serial.print( runtime );
     Serial.println( " ms)" );
-#endif    
   }
 };
 
