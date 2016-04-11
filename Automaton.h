@@ -172,6 +172,7 @@ class Factory
         Factory & add( Machine & machine );
         Machine * find( const char label[] );
         int msgWrite( const char label[], int msg, int cnt = 1 );
+        int trigger( const char label[], int event );
         Factory & cycle( uint32_t time = 0 ); 
   private:
         int8_t recalibrate = 1;

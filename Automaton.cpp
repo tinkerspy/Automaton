@@ -396,6 +396,36 @@ int Factory::msgWrite( const char label[], int msg, int cnt /* = 1 */ )
     return r;        
 }    
 
+int Factory::trigger( const char label[], int event )
+{
+    int r = 0;
+    int l = 255;
+    Machine * m = inventory_root;
+    if ( label[strlen( label ) - 1 ] == '*' ) {
+        l = strlen( label ) - 1;
+    }
+    if ( label[0] == '.' ) {
+        l--;
+        label++;
+        while ( m ) {
+            if ( strncmp( label, m->class_label, l ) == 0 ) {
+                m->trigger( event );
+                r++;
+            }
+            m = m->inventory_next;
+        }
+    } else {
+        while ( m ) {
+            if ( strncmp( label, m->inst_label, l ) == 0 ) {
+                m->trigger( event );
+                r++;
+            }
+            m = m->inventory_next;
+        }
+    }
+    return r;        
+}    
+
 // .cycle() executes one factory cycle (runs all priority queues a certain number of times)
 Factory & Factory::cycle( uint32_t time /* = 0 */ ) 
 {
