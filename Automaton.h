@@ -171,8 +171,6 @@ class Factory
   public:
         Factory & add( Machine & machine );
         Machine * find( const char label[] );
-        int msgSend( const char label[], int msg, int cnt = 1 );
-        int msgSendClass( const char label[], int msg, int cnt = 1 );
         int msgWrite( const char label[], int msg, int cnt = 1 );
         Factory & cycle( uint32_t time = 0 ); 
   private:
