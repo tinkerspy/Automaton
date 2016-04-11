@@ -366,6 +366,31 @@ Machine * Factory::find( const char label[] )
     return 0;        
 }
     
+int Factory::msgWrite( const char label[], int msg, int cnt /* = 1 */ )
+{
+    int r = 0;
+    Machine * m = inventory_root;
+    if ( label[0] == '.' ) {
+        label++;
+        while ( m ) {
+            if ( strcmp( label, m->class_label ) == 0 ) {
+                m->msgWrite( msg, cnt );
+                r++;
+            }
+            m = m->inventory_next;
+        }
+    } else {
+        while ( m ) {
+            if ( strcmp( label, m->inst_label ) == 0 ) {
+                m->msgWrite( msg, cnt );
+                r++;
+            }
+            m = m->inventory_next;
+        }
+    }
+    return r;        
+}    
+
 int Factory::msgSend( const char label[], int msg, int cnt /* = 1 */ )
 {
     int r = 0;
