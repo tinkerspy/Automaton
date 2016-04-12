@@ -33,5 +33,6 @@ Breaking changes:
 - Dropped numeric version of onSwitch()
 - Atm_timer added extra 'int cnt' argument to callback
 - atm_timer_micros() & atm_timer_millis(): dropped begin() added 'this' argument to expired()
-- Dropped Factory::msgSend() & Factory::msgSendClass(), replaced by msgWrite( ".LED" );
+- Dropped Factory::msgSend( "LED1", msg ) replaced by msgWrite( "LED1", msg );
+- Dropped Factory::msgSendClass( "LED", msg ) replaced by msgWrite( ".LED", msg );
 
