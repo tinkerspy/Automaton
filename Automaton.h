@@ -106,7 +106,6 @@ class Machine: public BaseMachine
         Machine &state( state_t state);
         state_t state( void );
         int trigger( int evt );
-        Machine & toggle( state_t state1, state_t state2 ); 
         Machine & priority( int8_t priority );
         int8_t priority( void );
         int msgClear( uint8_t id_msg ); 
