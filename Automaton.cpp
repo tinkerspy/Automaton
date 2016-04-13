@@ -105,17 +105,6 @@ Machine & Machine::begin( const state_t* tbl, int width )
     return *this; 
 }
 
-unsigned char Machine::pinChange( uint8_t pin ) { 
-
-  unsigned char v = digitalRead( pin ) ? 1 : 0;
-  if ( (( pinstate >> pin ) & 1 ) != ( v == 1 ) ) {
-    pinstate ^= ( (uint32_t)1 << pin );
-    return 1;
-  }
-  return 0;
-}
-
-
 const char * Machine::mapSymbol( int id, const char map[] )
 { 
   int cnt = 0;

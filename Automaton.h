@@ -120,7 +120,6 @@ class Machine: public BaseMachine
   
         Machine & begin( const state_t tbl[], int width );
         const char * mapSymbol( int id, const char map[] );
-        uint8_t pinChange( uint8_t pin );
         
         const state_t* state_table;
         state_t next;
