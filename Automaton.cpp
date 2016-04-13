@@ -89,17 +89,11 @@ Machine & Machine::priority( int8_t priority )
     return *this; 
 }
 
-// .asleep() Returns true if the machine is in a sleeping state
-
-uint8_t BaseMachine::asleep() 
-{ 
-    return ( flags & ATM_SLEEP_FLAG ) > 0;
-}
-
-BaseMachine & BaseMachine::sleep( uint8_t v /* = 1 */ ) 
+uint8_t BaseMachine::sleep( int8_t v /* = 1 */ ) 
 {
-    flags = v ? flags | ATM_SLEEP_FLAG : flags & ~ATM_SLEEP_FLAG;
-    return *this;     
+    if ( v > -1 ) 
+        flags = v ? flags | ATM_SLEEP_FLAG : flags & ~ATM_SLEEP_FLAG;
+    return ( flags & ATM_SLEEP_FLAG ) > 0;
 }
 
 Machine & Machine::begin( const state_t* tbl, int width ) 

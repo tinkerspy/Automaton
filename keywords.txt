@@ -22,7 +22,7 @@ Atm_comparator	KEYWORD1
 state	KEYWORD2
 toggle	KEYWORD2
 hub	KEYWORD2
-asleep	KEYWORD2
+sleep	KEYWORD2
 runtime	KEYWORD2
 decrement	KEYWORD2
 input	KEYWORD2

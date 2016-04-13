@@ -94,8 +94,7 @@ class BaseMachine
         uint32_t state_millis;
         uint8_t flags = ATM_SLEEP_FLAG;
  
-        uint8_t asleep( void );
-        BaseMachine & sleep( uint8_t v = 1 );
+        uint8_t sleep( int8_t v = -1 );
         virtual int event( int id ) = 0; // Pure virtual methods -> make this an abstract class
         virtual void action( int id ) = 0;
 };
