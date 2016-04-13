@@ -12,7 +12,6 @@ class Atm_led : public Machine {
 	enum { IDLE, ON, START, BLINK_OFF, DONE }; 
 	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, ELSE }; 
 	enum { ACT_INIT, ACT_ON, ACT_OFF, ACT_CHAIN }; 
-    enum { MSG_ON, MSG_OFF, MSG_BLINK, MSG_END };
 		
 	Atm_led & begin( int attached_pin );
 	Atm_led & blink( uint32_t duration ); 
