@@ -158,6 +158,7 @@ class Factory
         Factory & add( Machine & machine );
         Machine * find( const char label[] );
         int trigger( const char label[], int event );
+        int state( const char label[], int state );
         Factory & cycle( uint32_t time = 0 ); 
   private:
         int8_t recalibrate = 1;
