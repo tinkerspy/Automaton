@@ -119,7 +119,7 @@ class Machine: public BaseMachine
     protected:
   
         Machine & begin( const state_t tbl[], int width );
-        const char * map_symbol( int id, const char map[] );
+        const char * mapSymbol( int id, const char map[] );
         uint8_t pinChange( uint8_t pin );
         
         const state_t* state_table;

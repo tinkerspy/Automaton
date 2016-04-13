@@ -116,7 +116,7 @@ unsigned char Machine::pinChange( uint8_t pin ) {
 }
 
 
-const char * Machine::map_symbol( int id, const char map[] )
+const char * Machine::mapSymbol( int id, const char map[] )
 { 
   int cnt = 0;
   int i = 0;
@@ -143,9 +143,9 @@ Machine & Machine::cycle( uint32_t time /* = 0 */ )
                 action( ATM_ON_SWITCH );
                 if ( callback_sym ) {
                     callback_sym( inst_label, 
-                        map_symbol(      current, sym_states ), 
-                        map_symbol(         next, sym_states ), 
-                        map_symbol( last_trigger, sym_events ), millis() - state_millis, cycles ); 
+                        mapSymbol(      current, sym_states ), 
+                        mapSymbol(         next, sym_states ), 
+                        mapSymbol( last_trigger, sym_events ), millis() - state_millis, cycles ); 
                 }
                 if ( current > -1 )     
                         action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
