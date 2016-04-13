@@ -23,7 +23,6 @@ class Atm_led : public Machine {
     Atm_led & chain( Machine * n = 0, Machine * p = 0, uint8_t event = EVT_BLINK );
     
   private:  
-    atm_msg_t messages[MSG_END];
 	short pin;
 	int repeat_count;
 	atm_timer_millis on_timer, off_timer;

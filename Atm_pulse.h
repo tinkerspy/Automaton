@@ -16,7 +16,7 @@ class Atm_pulse: public Machine {
 
     short pin;     
     Machine * client_machine;
-    uint8_t client_msg;
+    uint8_t client_event;
     void (*callback)( void ) = 0;
     int state_high, state_low;
     atm_timer_millis timer;
@@ -29,7 +29,7 @@ class Atm_pulse: public Machine {
     Atm_pulse & onSwitch( swcb_sym_t switch_callback );
     int event( int id ); 
     void action( int id ); 
-    Atm_pulse & onPulse( Machine * machine, uint8_t msg ); 
+    Atm_pulse & onPulse( Machine * machine, uint8_t event ); 
     Atm_pulse & onPulse( pulsecb_t press_callback ); 
 };
 
@@ -42,7 +42,7 @@ class Att_pulse: public TinyMachine {
 
     short pin;     
     Machine * client_machine;
-    uint8_t client_msg;
+    uint8_t client_event;
     void (*callback)( void ) = 0;
     int state_high, state_low;
     atm_timer_millis timer;
@@ -54,7 +54,7 @@ class Att_pulse: public TinyMachine {
     Att_pulse & begin( int attached_pin, int minimum_duration );
     int event( int id ); 
     void action( int id ); 
-    Att_pulse & onPulse( Machine * machine, uint8_t msg ); 
+    Att_pulse & onPulse( Machine * machine, uint8_t event ); 
     Att_pulse & onPulse( pulsecb_t press_callback ); 
 };
 

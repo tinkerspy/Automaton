@@ -41,7 +41,6 @@ Machine & Machine::state(state_t state)
     next = state; 
     last_trigger = -1; 
     flags &= ~ATM_SLEEP_FLAG;
-    if ( ( flags & ATM_MSGAC_FLAG ) > 0 ) msgClear();
     return *this; 
 }
 
@@ -106,14 +105,6 @@ Machine & Machine::begin( const state_t* tbl, int width )
     return *this; 
 }
 
-Machine & Machine::msgQueue( atm_msg_t msg[], int width, uint8_t autoclear /* = 0 */ ) 
-{ 
-    msg_table = msg;
-    msg_width = width;
-    flags = autoclear ? flags | ATM_MSGAC_FLAG : flags & ~ATM_MSGAC_FLAG;
-    return *this; 
-}
-
 unsigned char Machine::pinChange( uint8_t pin ) { 
 
   unsigned char v = digitalRead( pin ) ? 1 : 0;
@@ -124,55 +115,6 @@ unsigned char Machine::pinChange( uint8_t pin ) {
   return 0;
 }
 
-int Machine::msgRead( uint8_t id_msg, uint16_t cnt /* = 1 */, int clear /* = 0 */ ) 
-{
-  if ( msg_table[id_msg] > 0 ) {
-    if ( cnt >= msg_table[id_msg] ) {
-        msg_table[id_msg] = 0;
-    } else {      
-        msg_table[id_msg] -= cnt;
-    }    
-	if ( clear ) {
-		for ( int i = 0; i < msg_width; i++ ) {
-			msg_table[i] = 0;
-		}
-    }
-    return 1;
-  }
-  return 0;
-}
-
-int Machine::msgPeek( uint8_t id_msg ) 
-{
-  return msg_table[id_msg];
-}
-
-int Machine::msgClear( uint8_t id_msg ) // Destructive read (clears queue for this type)
-{
-  if ( id_msg < msg_width && msg_table[id_msg] > 0 ) {
-    msg_table[id_msg] = 0;
-    return 1;
-  }  
-  return 0;
-}
-
-
-Machine & Machine::msgClear() 
-{
-  for ( int i = 0; i < msg_width; i++ ) {
-    msg_table[i] = 0;
-  }  
-  return *this;
-}
-
-Machine & Machine::msgWrite( uint8_t id_msg, int cnt /* = 1 */ ) 
-{
-  if ( id_msg < msg_width ) {
-    flags &= ~ATM_SLEEP_FLAG;
-    msg_table[id_msg] += cnt;
-  }
-  return *this;
-}
 
 const char * Machine::map_symbol( int id, const char map[] )
 { 
@@ -360,36 +302,6 @@ Machine * Factory::find( const char label[] )
     return 0;        
 }
     
-int Factory::msgWrite( const char label[], int msg, int cnt /* = 1 */ )
-{
-    int r = 0;
-    int l = 255;
-    Machine * m = inventory_root;
-    if ( label[strlen( label ) - 1 ] == '*' ) {
-        l = strlen( label ) - 1;
-    }
-    if ( label[0] == '.' ) {
-        l--;
-        label++;
-        while ( m ) {
-            if ( strncmp( label, m->class_label, l ) == 0 ) {
-                m->msgWrite( msg, cnt );
-                r++;
-            }
-            m = m->inventory_next;
-        }
-    } else {
-        while ( m ) {
-            if ( strncmp( label, m->inst_label, l ) == 0 ) {
-                m->msgWrite( msg, cnt );
-                r++;
-            }
-            m = m->inventory_next;
-        }
-    }
-    return r;        
-}    
-
 int Factory::trigger( const char label[], int event )
 {
     int r = 0;

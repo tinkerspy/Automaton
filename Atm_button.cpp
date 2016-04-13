@@ -39,18 +39,18 @@ Atm_button & Atm_button::begin( int attached_pin, presscb_t press_callback )
     return *this;
 }
 
-Atm_button & Atm_button::onPress( Machine * machine, int msg ) 
+Atm_button & Atm_button::onPress( Machine * machine, int event ) 
 {
   client_machine = machine;
-  client_press = msg;
+  client_press = event;
   return *this;  
 }
 
-Atm_button & Atm_button::onPress( Machine * machine, int msg_press, int msg_release ) 
+Atm_button & Atm_button::onPress( Machine * machine, int event_press, int event_release ) 
 {
   client_machine = machine;
-  client_press = msg_press;
-  client_release = msg_release;
+  client_press = event_press;
+  client_release = event_release;
   return *this;  
 }
 
@@ -145,7 +145,7 @@ void Atm_button::action( int id )
 	case ACT_PRESS :
       cb( 1, callback_idx );
       if ( client_machine && client_press != -1 ) {
-          client_machine->msgWrite( client_press );
+          client_machine->trigger( client_press );
       }
 	  return;
 	case ACT_AUTO :
@@ -154,7 +154,7 @@ void Atm_button::action( int id )
 	case ACT_RELEASE :
       cb( 0, callback_idx );
       if ( client_machine && client_release != -1 ) {
-          client_machine->msgWrite( client_release );
+          client_machine->trigger( client_release );
       }
 	  return;
 	case ACT_LSTART :
@@ -221,18 +221,18 @@ Att_button & Att_button::begin( int attached_pin, presscb_t press_callback )
     return *this;
 }
 
-Att_button & Att_button::onPress( Machine * machine, int msg ) 
+Att_button & Att_button::onPress( Machine * machine, int event ) 
 {
   client_machine = machine;
-  client_press = msg;
+  client_press = event;
   return *this;  
 }
 
-Att_button & Att_button::onPress( Machine * machine, int msg_press, int msg_release ) 
+Att_button & Att_button::onPress( Machine * machine, int event_press, int event_release ) 
 {
   client_machine = machine;
-  client_press = msg_press;
-  client_release = msg_release;
+  client_press = event_press;
+  client_release = event_release;
   return *this;  
 }
 
@@ -326,7 +326,7 @@ void Att_button::action( int id )
 	case ACT_PRESS :
       cb( 1, callback_idx );
       if ( client_machine && client_press != -1 ) {
-          client_machine->msgWrite( client_press );
+          client_machine->trigger( client_press );
       }
 	  return;
 	case ACT_AUTO :
@@ -335,7 +335,7 @@ void Att_button::action( int id )
 	case ACT_RELEASE :
       cb( 0, callback_idx );
       if ( client_machine && client_release != -1 ) {
-          client_machine->msgWrite( client_release );
+          client_machine->trigger( client_release );
       }
 	  return;
 	case ACT_LSTART :

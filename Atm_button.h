@@ -34,8 +34,8 @@ class Atm_button : public Machine {
 	Atm_button & begin( int attached_pin, presscb_t press_callback );
 	Atm_button & begin( int attached_pin );
     Atm_button & onSwitch( swcb_sym_t switch_callback );
-    Atm_button & onPress( Machine * machine, int msg ); 
-    Atm_button & onPress( Machine * machine, int msg_press, int msg_release );
+    Atm_button & onPress( Machine * machine, int event ); 
+    Atm_button & onPress( Machine * machine, int event_press, int event_release );
     Atm_button & onPress( presscb_t press_callback );
     Atm_button & onPress( presscb_id_t press_callback, int idx );
 	Atm_button & debounce( int delay );
@@ -74,8 +74,8 @@ class Att_button : public TinyMachine {
     
 	Att_button & begin( int attached_pin, presscb_t press_callback );
 	Att_button & begin( int attached_pin );
-    Att_button & onPress( Machine * machine, int msg ); 
-    Att_button & onPress( Machine * machine, int msg_press, int msg_release );
+    Att_button & onPress( Machine * machine, int event ); 
+    Att_button & onPress( Machine * machine, int event_press, int event_release );
     Att_button & onPress( presscb_t press_callback );
     Att_button & onPress( presscb_id_t press_callback, int idx );
 	Att_button & debounce( int delay );

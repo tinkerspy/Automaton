@@ -15,10 +15,10 @@ Atm_pulse & Atm_pulse::begin( int attached_pin, int minimum_duration )
   return *this;          
 }
 
-Atm_pulse & Atm_pulse::onPulse( Machine * machine, uint8_t msg ) 
+Atm_pulse & Atm_pulse::onPulse( Machine * machine, uint8_t event ) 
 {
   client_machine = machine;
-  client_msg = msg;
+  client_event = event;
   return *this;  
 }
 
@@ -51,7 +51,7 @@ void Atm_pulse::action( int id )
          flags &= ~ATM_SLEEP_FLAG;
          return;
       }
-      client_machine->msgWrite( client_msg );
+      client_machine->trigger( client_event );
   	  return;
    }
 }
@@ -82,10 +82,10 @@ Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration )
   return *this;          
 }
 
-Att_pulse & Att_pulse::onPulse( Machine * machine, uint8_t msg ) 
+Att_pulse & Att_pulse::onPulse( Machine * machine, uint8_t event ) 
 {
   client_machine = machine;
-  client_msg = msg;
+  client_event = event;
   return *this;  
 }
 
@@ -118,7 +118,7 @@ void Att_pulse::action( int id )
          flags &= ~ATM_SLEEP_FLAG;
          return;
       }
-      client_machine->msgWrite( client_msg );
+      client_machine->trigger( client_event );
   	  return;
    }
 }

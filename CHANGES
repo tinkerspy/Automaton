@@ -13,7 +13,7 @@ New features/fixes:
 - Atm_timer: added interval_seconds(), now supports timers up to 137 years
 - Atm_command fixes: either \r or \n works for EOL, matches whole commands only
 - Atm_led: blink cycle now includes the trailing pause
-- Added sleep() method to sleep/wake up machines
+- Added sleep() method to sleep/wake up machines and request sleep status
 - Atm_led: repeat(0) makes led not blink
 - Atm_led: added chain() method
 - Automatic cycle() added when machine is in an invalid state on a trigger() call
@@ -35,4 +35,5 @@ Breaking changes:
 - atm_timer_micros() & atm_timer_millis(): dropped begin() added 'this' argument to expired()
 - Dropped Factory::msgSend( "LED1", msg ) replaced by msgWrite( "LED1", msg );
 - Dropped Factory::msgSendClass( "LED", msg ) replaced by msgWrite( ".LED", msg );
+- Dropped BaseMachine::asleep(), replaced by sleep()
 

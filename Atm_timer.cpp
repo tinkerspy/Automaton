@@ -16,7 +16,6 @@ Atm_timer & Atm_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */ )
   /* TRIGGER */  ACT_TRIG,        -1,        -1,         -1,           -1,          -1,       IDLE,    IDLE,  START, START,
   };
   Machine::begin( state_table, ELSE );
-  Machine::msgQueue( messages, MSG_END, 1 );
   daytimer.set( (uint32_t) DIVIDER * 1000 ); // Always set to one day
   mstimer.set( ms );
   daycounter.set( days = 0 );
@@ -24,10 +23,10 @@ Atm_timer & Atm_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */ )
   return *this;          
 }
 
-Atm_timer & Atm_timer::onTimer( Machine * machine, uint8_t msg ) 
+Atm_timer & Atm_timer::onTimer( Machine * machine, uint8_t event ) 
 {
   client_machine = machine;
-  client_msg = msg;
+  client_event = event;
   return *this;  
 }
 
@@ -85,10 +84,6 @@ int Atm_timer::event( int id )
       return mstimer.expired( this );        
     case EVT_DAYTIMER :
       return daytimer.expired( this );        
-    case EVT_OFF :
-      return msgRead( MSG_OFF );        
-    case EVT_ON :
-      return msgRead( MSG_ON );        
    }
    return 0;
 }
@@ -110,7 +105,7 @@ void Atm_timer::action( int id )
          flags &= ~ATM_SLEEP_FLAG;
       }
       if ( client_machine ) {
-        client_machine->msgWrite( client_msg );
+        client_machine->trigger( client_event );
       }
       return;
    }
@@ -144,10 +139,10 @@ Att_timer & Att_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */ )
   return *this;          
 }
 
-Att_timer & Att_timer::onTimer( Machine * machine, uint8_t msg ) 
+Att_timer & Att_timer::onTimer( Machine * machine, uint8_t event ) 
 {
   client_machine = machine;
-  client_msg = msg;
+  client_event = event;
   return *this;  
 }
 
@@ -226,7 +221,7 @@ void Att_timer::action( int id )
          flags &= ~ATM_SLEEP_FLAG;
       }
       if ( client_machine ) {
-        client_machine->msgWrite( client_msg );
+        client_machine->trigger( client_event );
       }
       return;
    }

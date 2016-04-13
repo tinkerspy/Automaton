@@ -11,7 +11,6 @@ Atm_led & Atm_led::begin( int attached_pin )
 	/* DONE      */        -1,        -1, ACT_CHAIN,           -1,          IDLE,          -1,     ON,    IDLE,     START,   -1, // Wait after last blink
     };
 	Machine::begin( state_table, ELSE );
-    Machine::msgQueue( messages, MSG_END, 1 );
 	pin = attached_pin; 
 	pinMode( pin, OUTPUT );
     on_timer.set( 500 );    
@@ -60,12 +59,6 @@ int Atm_led::event( int id )
 			return off_timer.expired( this );        
 		case EVT_COUNTER :
 			return counter.expired();
-        case EVT_ON :
-            return msgRead( MSG_ON );
-        case EVT_OFF :
-            return msgRead( MSG_OFF );            
-        case EVT_BLINK :
-            return msgRead( MSG_BLINK );            
 	}
 	return 0;
 }

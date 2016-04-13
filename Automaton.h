@@ -13,7 +13,6 @@ typedef int16_t state_t;
 typedef int8_t tiny_state_t;
 
 const uint8_t ATM_SLEEP_FLAG = 1;
-const uint8_t ATM_MSGAC_FLAG = 2;
 const uint8_t ATM_USR1_FLAG = 16;
 const uint8_t ATM_USR2_FLAG = 32;
 const uint8_t ATM_USR3_FLAG = 64;
@@ -23,8 +22,6 @@ const uint8_t ATM_USR4_FLAG = 128;
 #define read_state(addr) (state_t)pgm_read_word_near(addr)
 
 typedef void (*swcb_sym_t)( const char label[], const char current[], const char next[], const char trigger[], uint32_t runtime, uint32_t cycles );
-
-typedef uint16_t atm_msg_t;
 
 const int8_t ATM_NO_OF_QUEUES = 5; // queues 0, 1, 2, 3, 4
 const int8_t ATM_DEFAULT_PRIO = 1;
@@ -107,9 +104,6 @@ class Machine: public BaseMachine
         int trigger( int evt );
         Machine & priority( int8_t priority );
         int8_t priority( void );
-        int msgClear( uint8_t id_msg ); 
-        Machine & msgClear( void ); 
-        Machine & msgWrite( uint8_t id_msg, int cnt = 1 ); 
         Machine & cycle( uint32_t time = 0 );
         virtual Machine & onSwitch( swcb_sym_t callback, const char sym_s[], const char sym_e[] );
         Machine & label( const char label[] );
@@ -125,11 +119,8 @@ class Machine: public BaseMachine
     protected:
   
         Machine & begin( const state_t tbl[], int width );
-        Machine & msgQueue( atm_msg_t msg[], int width, uint8_t autoclear = 0);
         const char * map_symbol( int id, const char map[] );
         uint8_t pinChange( uint8_t pin );
-        int msgRead( uint8_t id_msg, uint16_t cnt = 1, int clear = 0 ); 
-        int msgPeek( uint8_t id_msg ); 
         
         const state_t* state_table;
         state_t next;
@@ -142,8 +133,6 @@ class Machine: public BaseMachine
         uint8_t state_width;
         swcb_sym_t callback_sym;
         uint32_t cycles;
-        atm_msg_t * msg_table;
-        int msg_width;
 };
 
 
@@ -169,7 +158,6 @@ class Factory
   public:
         Factory & add( Machine & machine );
         Machine * find( const char label[] );
-        int msgWrite( const char label[], int msg, int cnt = 1 );
         int trigger( const char label[], int event );
         Factory & cycle( uint32_t time = 0 ); 
   private:
