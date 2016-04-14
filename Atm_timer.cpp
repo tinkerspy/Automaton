@@ -100,9 +100,9 @@ void Atm_timer::action( int id )
   	case ACT_TRIG :
       repcounter.decrement();
       if ( callback ) {
-         flags |= ATM_SLEEP_FLAG;
+         flags |= ATM_CALLBACK_FLAG;
          (*callback)( timer_id, repeat_cnt - repcounter.value );
-         flags &= ~ATM_SLEEP_FLAG;
+         flags &= ~ATM_CALLBACK_FLAG;
       }
       if ( client_machine ) {
         client_machine->trigger( client_event );
@@ -111,9 +111,9 @@ void Atm_timer::action( int id )
    }
 }
 
-Atm_timer & Atm_timer::onSwitch( swcb_sym_t switch_callback ) {
+Atm_timer & Atm_timer::trace( Stream * stream, swcb_sym_t switch_callback ) {
 
-  Machine::onSwitch( switch_callback, 
+  Machine::trace( stream, switch_callback, 
     "IDLE\0START\0WAITD\0WAITMS\0TRIGGER",
     "EVT_DAYCNT\0EVT_DAYTIMER\0EVT_MSTIMER\0EVT_REPCNT\0EVT_OFF\0EVT_ON\0ELSE" );    
   return *this;
@@ -216,9 +216,9 @@ void Att_timer::action( int id )
   	case ACT_TRIG :
       repcounter.decrement();
       if ( callback ) {
-         flags |= ATM_SLEEP_FLAG;          
+         flags |= ATM_CALLBACK_FLAG;          
          (*callback)( timer_id, repeat_cnt - repcounter.value );
-         flags &= ~ATM_SLEEP_FLAG;
+         flags &= ~ATM_CALLBACK_FLAG;
       }
       if ( client_machine ) {
         client_machine->trigger( client_event );

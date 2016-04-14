@@ -46,9 +46,9 @@ void Atm_pulse::action( int id )
   switch ( id ) {
   	case ACT_PULSE :
       if ( callback ) {
-         flags |= ATM_SLEEP_FLAG;
+         flags |= ATM_CALLBACK_FLAG;
          (*callback)();
-         flags &= ~ATM_SLEEP_FLAG;
+         flags &= ~ATM_CALLBACK_FLAG;
          return;
       }
       client_machine->trigger( client_event );
@@ -56,9 +56,9 @@ void Atm_pulse::action( int id )
    }
 }
 
-Atm_pulse & Atm_pulse::onSwitch( swcb_sym_t switch_callback ) {
+Atm_pulse & Atm_pulse::trace( Stream * stream, swcb_sym_t switch_callback ) {
 
-  Machine::onSwitch( switch_callback, 
+  Machine::trace( stream, switch_callback, 
    "IDLE\0WAIT\0PULSE",
     "EVT_TIMER\0EVT_HIGH\0EVT_LOW\0ELSE" );
   return *this;
@@ -113,9 +113,9 @@ void Att_pulse::action( int id )
   switch ( id ) {
   	case ACT_PULSE :
       if ( callback ) {
-         flags |= ATM_SLEEP_FLAG;
+         flags |= ATM_CALLBACK_FLAG;
          (*callback)();
-         flags &= ~ATM_SLEEP_FLAG;
+         flags &= ~ATM_CALLBACK_FLAG;
          return;
       }
       client_machine->trigger( client_event );

@@ -26,7 +26,7 @@ class Atm_pulse: public Machine {
     enum { ACT_PULSE };
 	
     Atm_pulse & begin( int attached_pin, int minimum_duration );
-    Atm_pulse & onSwitch( swcb_sym_t switch_callback );
+    Atm_pulse & trace( Stream * stream, swcb_sym_t switch_callback );
     int event( int id ); 
     void action( int id ); 
     Atm_pulse & onPulse( Machine * machine, uint8_t event ); 

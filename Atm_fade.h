@@ -25,7 +25,7 @@ class Atm_fade : public Machine {
 		atm_counter counter_fade, counter_repeat;
 		
 		Atm_fade & begin( int attached_pin );
-        Atm_fade & onSwitch( swcb_sym_t switch_callback );
+        Atm_fade & trace( Stream * stream, swcb_sym_t switch_callback );
 		Atm_fade & blink( uint32_t duration ); 
 		Atm_fade & pause( uint32_t duration ); 
 		Atm_fade & fade( int fade ); 

@@ -13,6 +13,7 @@ typedef int16_t state_t;
 typedef int8_t tiny_state_t;
 
 const uint8_t ATM_SLEEP_FLAG = 1;
+const uint8_t ATM_CALLBACK_FLAG = 2;
 const uint8_t ATM_USR1_FLAG = 16;
 const uint8_t ATM_USR2_FLAG = 32;
 const uint8_t ATM_USR3_FLAG = 64;
@@ -21,7 +22,7 @@ const uint8_t ATM_USR4_FLAG = 128;
 #define tiny_read_state(addr) (tiny_state_t)pgm_read_byte_near(addr)
 #define read_state(addr) (state_t)pgm_read_word_near(addr)
 
-typedef void (*swcb_sym_t)( const char label[], const char current[], const char next[], const char trigger[], uint32_t runtime, uint32_t cycles );
+typedef void (*swcb_sym_t)( Stream * stream, const char label[], const char current[], const char next[], const char trigger[], uint32_t runtime, uint32_t cycles );
 
 const int8_t ATM_NO_OF_QUEUES = 5; // queues 0, 1, 2, 3, 4
 const int8_t ATM_DEFAULT_PRIO = 1;
@@ -42,22 +43,22 @@ class BaseMachine;
 
 class atm_serial_debug {
   public: 
-  static void onSwitch( const char label[], const char current[], const char next[], 
+  static void trace( Stream * stream, const char label[], const char current[], const char next[], 
         const char trigger[], uint32_t runtime, uint32_t cycles ) {
-    Serial.print( millis() );
-    Serial.print( " Switch " );
-    Serial.print( label );
-    Serial.print( " from " );
-    Serial.print( current );
-    Serial.print( " to " );
-    Serial.print( next );
-    Serial.print( " on " );
-    Serial.print( trigger );
-    Serial.print( " (" );
-    Serial.print( cycles );
-    Serial.print( " cycles in " );
-    Serial.print( runtime );
-    Serial.println( " ms)" );
+    stream->print( millis() );
+    stream->print( " Switch " );
+    stream->print( label );
+    stream->print( " from " );
+    stream->print( current );
+    stream->print( " to " );
+    stream->print( next );
+    stream->print( " on " );
+    stream->print( trigger );
+    stream->print( " (" );
+    stream->print( cycles );
+    stream->print( " cycles in " );
+    stream->print( runtime );
+    stream->println( " ms)" );
   }
 };
 
@@ -105,7 +106,7 @@ class Machine: public BaseMachine
         Machine & priority( int8_t priority );
         int8_t priority( void );
         Machine & cycle( uint32_t time = 0 );
-        virtual Machine & onSwitch( swcb_sym_t callback, const char sym_s[], const char sym_e[] );
+        virtual Machine & trace( Stream * stream, swcb_sym_t callback, const char sym_s[], const char sym_e[] );
         Machine & label( const char label[] );
 
         int8_t prio;
@@ -130,7 +131,8 @@ class Machine: public BaseMachine
         const char* sym_states;
         const char* sym_events;
         uint8_t state_width;
-        swcb_sym_t callback_sym;
+        swcb_sym_t callback_trace;
+        Stream * stream_trace;
         uint32_t cycles;
 };
 

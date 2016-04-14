@@ -104,17 +104,17 @@ void Atm_comparator::action( int id )
       if ( v_sample >= v_previous ) {
         for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
           if ( (bitmap_diff >> i ) & 1 ) {
-            flags |= ATM_SLEEP_FLAG;
+            flags |= ATM_CALLBACK_FLAG;
             (*callback)( v_sample, 1, i, p_threshold[i] );      
-            flags &= ~ATM_SLEEP_FLAG;
+            flags &= ~ATM_CALLBACK_FLAG;
           }
         }        
       } else {
         for ( uint16_t i = p_threshold_size; i >= 0; i-- ) {
           if ( (bitmap_diff >> i ) & 1 ) {
-            flags |= ATM_SLEEP_FLAG;
+            flags |= ATM_CALLBACK_FLAG;
             (*callback)( v_sample, 0, i, p_threshold[i] );      
-            flags &= ~ATM_SLEEP_FLAG;
+            flags &= ~ATM_CALLBACK_FLAG;
           }
         }
       }
@@ -122,9 +122,9 @@ void Atm_comparator::action( int id )
    }
 }
 
-Atm_comparator & Atm_comparator::onSwitch( swcb_sym_t switch_callback ) {
+Atm_comparator & Atm_comparator::trace( Stream * stream, swcb_sym_t switch_callback ) {
 
-  Machine::onSwitch( switch_callback, 
+  Machine::trace( stream, switch_callback, 
     "IDLE\0SAMPLE\0SEND",
     "EVT_TRIGGER\0EVT_TIMER\0ELSE" );
   return *this;
@@ -235,17 +235,17 @@ void Att_comparator::action( int id )
       if ( v_sample >= v_previous ) {
         for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
           if ( (bitmap_diff >> i ) & 1 ) {
-            flags |= ATM_SLEEP_FLAG;
+            flags |= ATM_CALLBACK_FLAG;
             (*callback)( v_sample, 1, i, p_threshold[i] );      
-            flags &= ~ATM_SLEEP_FLAG;
+            flags &= ~ATM_CALLBACK_FLAG;
           }
         }        
       } else {
         for ( uint16_t i = p_threshold_size; i >= 0; i-- ) {
           if ( (bitmap_diff >> i ) & 1 ) {
-            flags |= ATM_SLEEP_FLAG;
+            flags |= ATM_CALLBACK_FLAG;
             (*callback)( v_sample, 0, i, p_threshold[i] );      
-            flags &= ~ATM_SLEEP_FLAG;
+            flags &= ~ATM_CALLBACK_FLAG;
           }
         }
       }

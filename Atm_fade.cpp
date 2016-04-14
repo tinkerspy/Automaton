@@ -95,9 +95,9 @@ void Atm_fade::action( int id )
   }
 }
 
-Atm_fade & Atm_fade::onSwitch( swcb_sym_t switch_callback ) {
+Atm_fade & Atm_fade::trace( Stream * stream, swcb_sym_t switch_callback ) {
 
-  Machine::onSwitch( switch_callback, 
+  Machine::trace( stream, switch_callback, 
     "IDLE\0ON\0START\0STARTU\0UP\0STARTD\0DOWN\0REPEAT",
     "EVT_CNT_FADE\0EVT_TM_FADE\0EVT_TM_ON\0EVT_TM_OFF\0EVT_CNT_RPT\0EVT_ON\0EVT_OFF\0EVT_BLINK\0ELSE" );
   return *this;

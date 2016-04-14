@@ -130,12 +130,12 @@ int Atm_button::event( int id )
 
 void Atm_button::cb( int press, int idx ) {
 
-    flags |= ATM_SLEEP_FLAG;
+    flags |= ATM_CALLBACK_FLAG;
     if ( callback ) 
       (*callback)( press );
     if ( callback_id ) 
       (*callback_id)( press, idx );
-    flags &= ~ATM_SLEEP_FLAG;
+    flags &= ~ATM_CALLBACK_FLAG;
 }
 
 
@@ -173,9 +173,9 @@ void Atm_button::action( int id )
   }
 }
 
-Atm_button & Atm_button::onSwitch( swcb_sym_t switch_callback ) {
+Atm_button & Atm_button::trace( Stream * stream ) {
 
-  Machine::onSwitch( switch_callback, 
+  Machine::trace( stream, atm_serial_debug::trace,
     "IDLE\0WAIT\0PRESSED\0REPEAT\0RELEASE\0LIDLE\0LWAIT\0LPRESSED\0LRELEASE\0WRELEASE\0AUTO",
     "EVT_LMODE\0EVT_TIMER\0EVT_DELAY\0EVT_REPEAT\0EVT_PRESS\0EVT_RELEASE\0EVT_COUNTER\0EVT_AUTO\0ELSE" ); 
   return *this;
@@ -311,12 +311,12 @@ int Att_button::event( int id )
 
 void Att_button::cb( int press, int idx ) {
 
-    flags |= ATM_SLEEP_FLAG;
+    flags |= ATM_CALLBACK_FLAG;
     if ( callback ) 
       (*callback)( press );
     if ( callback_id ) 
       (*callback_id)( press, idx );
-    flags &= ~ATM_SLEEP_FLAG;
+    flags &= ~ATM_CALLBACK_FLAG;
 }
 
 

@@ -96,18 +96,18 @@ void Atm_command::action( int id )
       return;
     case ACT_SEND :
       _buffer[--_bufptr] = '\0';
-      flags |= ATM_SLEEP_FLAG;
+      flags |= ATM_CALLBACK_FLAG;
       (*_callback)( lookup( 0, _commands ) );
-      flags &= ~ATM_SLEEP_FLAG;
+      flags &= ~ATM_CALLBACK_FLAG;
       _lastch = '\0';      
       _bufptr = 0;
   	  return;
    }
 }
 
-Atm_command & Atm_command::onSwitch( swcb_sym_t switch_callback ) {
+Atm_command & Atm_command::trace( Stream * stream, swcb_sym_t switch_callback ) {
 
-  Machine::onSwitch( switch_callback, 
+  Machine::trace( stream, switch_callback, 
     "IDLE\0READCHAR\0SEND",
     "EVT_INPUT\0EVT_EOL\0ELSE" );
   return *this;
@@ -211,9 +211,9 @@ void Att_command::action( int id )
       return;
     case ACT_SEND :
       _buffer[--_bufptr] = '\0';
-      flags |= ATM_SLEEP_FLAG;
+      flags |= ATM_CALLBACK_FLAG;
       (*_callback)( lookup( 0, _commands ) );
-      flags &= ~ATM_SLEEP_FLAG;
+      flags &= ~ATM_CALLBACK_FLAG;
       _lastch = '\0';      
       _bufptr = 0;
   	  return;
