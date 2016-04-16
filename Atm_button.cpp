@@ -246,7 +246,7 @@ Att_button & Att_button::begin( int attached_pin, presscb_t press_callback )
     return *this;
 }
 
-Att_button & Att_button::onPress( Machine * machine, int event ) 
+Att_button & Att_button::onPress( TinyMachine * machine, int event ) 
 {
   client_machine = machine;
   client_press = event;
@@ -254,7 +254,7 @@ Att_button & Att_button::onPress( Machine * machine, int event )
   return *this;  
 }
 
-Att_button & Att_button::onPress( Machine * machine, int event_press, int event_release ) 
+Att_button & Att_button::onPress( TinyMachine * machine, int event_press, int event_release ) 
 {
   client_machine = machine;
   client_press = event_press;
@@ -279,7 +279,7 @@ Att_button & Att_button::onPress( presscb_id_t press_callback, int idx )
   return *this;  
 }
 
-Att_button & Att_button::onToggle( Machine * machine, int event_press, int event_release ) 
+Att_button & Att_button::onToggle( TinyMachine * machine, int event_press, int event_release ) 
 {
   client_machine = machine;
   client_press = event_press;

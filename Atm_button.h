@@ -69,17 +69,17 @@ class Att_button : public TinyMachine {
     int callback_idx;
 	int16_t longpress_max;
     int16_t _auto_press = 1;
-    Machine * client_machine;
+    TinyMachine * client_machine;
     int client_press = -1;
     int client_release = -1;
     
 	Att_button & begin( int attached_pin, presscb_t press_callback );
 	Att_button & begin( int attached_pin );
-    Att_button & onPress( Machine * machine, int event ); 
-    Att_button & onPress( Machine * machine, int event_press, int event_release );
+    Att_button & onPress( TinyMachine * machine, int event ); 
+    Att_button & onPress( TinyMachine * machine, int event_press, int event_release );
     Att_button & onPress( presscb_t press_callback );
     Att_button & onPress( presscb_id_t press_callback, int idx );
-    Att_button & onToggle( Machine * machine, int event_press, int event_release ); 
+    Att_button & onToggle( TinyMachine * machine, int event_press, int event_release ); 
 	Att_button & debounce( int delay );
 	Att_button & longPress( int max, int delay );
 	Att_button & repeat( int delay, int speed );
