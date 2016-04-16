@@ -125,7 +125,6 @@ class Machine: public BaseMachine
         state_t next;
         state_t current = -1;
         state_t last_trigger = -1;
-        state_t previous = -1;
         const char* sym_states;
         const char* sym_events;
         uint8_t state_width;

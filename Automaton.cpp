@@ -139,7 +139,6 @@ Machine & Machine::cycle( uint32_t time /* = 0 */ )
                 }
                 if ( current > -1 )     
                         action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
-                previous = current;
                 current = next;
                 next = -1;
                 state_millis = millis();
