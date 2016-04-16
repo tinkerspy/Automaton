@@ -82,7 +82,7 @@ Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration )
   return *this;          
 }
 
-Att_pulse & Att_pulse::onPulse( Machine * machine, uint8_t event ) 
+Att_pulse & Att_pulse::onPulse( TinyMachine * machine, uint8_t event ) 
 {
   client_machine = machine;
   client_event = event;

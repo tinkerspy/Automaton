@@ -41,7 +41,7 @@ class Att_pulse: public TinyMachine {
     Att_pulse( void ) : TinyMachine() { };
 
     short pin;     
-    Machine * client_machine;
+    TinyMachine * client_machine;
     uint8_t client_event;
     void (*callback)( void ) = 0;
     int state_high, state_low;
@@ -54,7 +54,7 @@ class Att_pulse: public TinyMachine {
     Att_pulse & begin( int attached_pin, int minimum_duration );
     int event( int id ); 
     void action( int id ); 
-    Att_pulse & onPulse( Machine * machine, uint8_t event ); 
+    Att_pulse & onPulse( TinyMachine * machine, uint8_t event ); 
     Att_pulse & onPulse( pulsecb_t press_callback ); 
 };
 
