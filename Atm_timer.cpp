@@ -139,7 +139,7 @@ Att_timer & Att_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */ )
   return *this;          
 }
 
-Att_timer & Att_timer::onTimer( Machine * machine, uint8_t event ) 
+Att_timer & Att_timer::onTimer( TinyMachine * machine, uint8_t event ) 
 {
   client_machine = machine;
   client_event = event;

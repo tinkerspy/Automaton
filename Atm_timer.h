@@ -48,7 +48,7 @@ class Att_timer: public TinyMachine {
     atm_counter daycounter, repcounter;
     int timer_id;
     timer_cb_t callback = 0;
-    Machine * client_machine;
+    TinyMachine * client_machine;
     uint8_t client_event;
     uint16_t days; 
     uint16_t repeat_cnt; 
@@ -58,7 +58,7 @@ class Att_timer: public TinyMachine {
     enum { ACT_START, ACT_TRIG, ACT_WAITD };
 	
     Att_timer & begin( uint32_t ms = ATM_TIMER_OFF );
-    Att_timer & onTimer( Machine * machine, uint8_t event );
+    Att_timer & onTimer( TinyMachine * machine, uint8_t event );
     Att_timer & onTimer( timer_cb_t timer_callback ); 
     Att_timer & interval_seconds( uint32_t v );
     Att_timer & interval_millis( uint32_t v );
