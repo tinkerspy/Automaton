@@ -38,6 +38,7 @@ class Atm_button : public Machine {
     Atm_button & onPress( Machine * machine, int event_press, int event_release );
     Atm_button & onPress( presscb_t press_callback );
     Atm_button & onPress( presscb_id_t press_callback, int idx );
+    Atm_button & onToggle( Machine * machine, int event_press, int event_release ); 
 	Atm_button & debounce( int delay );
 	Atm_button & longPress( int max, int delay );
 	Atm_button & repeat( int delay, int speed );
@@ -78,6 +79,7 @@ class Att_button : public TinyMachine {
     Att_button & onPress( Machine * machine, int event_press, int event_release );
     Att_button & onPress( presscb_t press_callback );
     Att_button & onPress( presscb_id_t press_callback, int idx );
+    Att_button & onToggle( Machine * machine, int event_press, int event_release ); 
 	Att_button & debounce( int delay );
 	Att_button & longPress( int max, int delay );
 	Att_button & repeat( int delay, int speed );
