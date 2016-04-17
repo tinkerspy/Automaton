@@ -34,9 +34,11 @@ void Atm_blink::action( int id )
    }
 }
 
-Atm_blink & Atm_blink::trace( swcb_sym_t switch_callback ) {
+Atm_blink & Atm_blink::trace( Stream * stream ) {
 
-  Machine::trace( switch_callback, "LED_ON\0LED_OFF", "EVT_TIMER\0ELSE" );
+  Machine::trace( stream, atm_serial_debug::trace,
+    "LED_ON\0LED_OFF", "EVT_TIMER\0ELSE" );
   return *this;
 }
+
 

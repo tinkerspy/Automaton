@@ -33,4 +33,5 @@ Breaking changes:
 - Dropped BaseMachine::asleep(), replaced by sleep()
 - Changed machine.onSwitch( atm_serial_debug::onSwitch ) to machine.trace( &Serial )
 - Changed trace method format
+- Dropped Atm_teensywav + example, depends on Teensy 3.x
 
