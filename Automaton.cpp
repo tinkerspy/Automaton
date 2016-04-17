@@ -57,7 +57,6 @@ Machine & Machine::trigger( int evt )
         if ( new_state > -1 ) {
 	      state( new_state );
           last_trigger = evt;
-          return *this; 
         }
     }
     return *this; 
@@ -187,7 +186,6 @@ TinyMachine & TinyMachine::trigger( int evt )
         int new_state = tiny_read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
         if ( new_state > -1 ) {
           state( new_state );
-          return *this; 
         }
     }
     return *this; 
