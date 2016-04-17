@@ -102,7 +102,7 @@ class Machine: public BaseMachine
     public:
         Machine &state( state_t state);
         state_t state( void );
-        int trigger( int evt );
+        Machine & trigger( int evt );
         Machine & priority( int8_t priority );
         int8_t priority( void );
         Machine & cycle( uint32_t time = 0 );
@@ -140,8 +140,8 @@ class TinyMachine: public BaseMachine
         TinyMachine & state( tiny_state_t state);
         tiny_state_t state( void );
         TinyMachine & cycle( uint32_t time = 0 );
-        int trigger( int evt );
-         TinyMachine * inventory_next;
+        TinyMachine & trigger( int evt );
+        TinyMachine * inventory_next;
     protected:
         TinyMachine & begin( const tiny_state_t tbl[], int width );
         const tiny_state_t* state_table;

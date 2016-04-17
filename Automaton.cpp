@@ -49,7 +49,7 @@ state_t Machine::state()
     return current; 
 }
 
-int Machine::trigger( int evt )
+Machine & Machine::trigger( int evt )
 {
     cycle();
     if ( current > -1 ) {
@@ -57,10 +57,10 @@ int Machine::trigger( int evt )
         if ( new_state > -1 ) {
 	      state( new_state );
           last_trigger = evt;
-          return 1;
+          return *this; 
         }
     }
-    return 0;
+    return *this; 
 }
 
 Machine & Machine::trace( Stream * stream, swcb_sym_t callback, const char sym_s[], const char sym_e[] ) 
@@ -180,17 +180,17 @@ tiny_state_t TinyMachine::state()
     return current;
 }
 
-int TinyMachine::trigger( int evt )
+TinyMachine & TinyMachine::trigger( int evt )
 {
     cycle();
     if ( current > -1 ) {
         int new_state = tiny_read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
         if ( new_state > -1 ) {
           state( new_state );
-          return 1;
+          return *this; 
         }
     }
-    return 0;
+    return *this; 
 }
 
 TinyMachine & TinyMachine::begin( const tiny_state_t* tbl, int width )
