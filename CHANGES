@@ -3,8 +3,6 @@ Version 0.2.0 (in development)
 =============
 
 New features/fixes:
-- autoclear option msgQueue added
-- previous machine variable added
 - Machine::trigger() method
 - Tiny machines
 - Att_* tiny machines for all bundled machines except Atm_teensywave
@@ -14,8 +12,7 @@ New features/fixes:
 - Added sleep() method to sleep/wake up machines and request sleep status
 - Atm_led: repeat(0) makes led not blink
 - Atm_led: added chain() method
-- Automatic cycle() added when machine is in an invalid state on a trigger() call
-- TinyMachine no longer supports microsecond timers
+- Automatic cycle() added on a trigger() call
 - Machines now have the sleep bit set on declaration which is cleared on begin() call (avoid cycling uninitialized machines)
 - Factory::cycle now takes a time argument (ms) after which it will stop running (0 default: after 1 cycle)
 - Machine::cycle now takes a time argument (ms) after which it will stop running (0 default: after 1 cycle)
@@ -34,4 +31,5 @@ Breaking changes:
 - Changed machine.onSwitch( atm_serial_debug::onSwitch ) to machine.trace( &Serial )
 - Changed trace method format
 - Dropped Atm_teensywav + example, depends on Teensy 3.x
+
 
