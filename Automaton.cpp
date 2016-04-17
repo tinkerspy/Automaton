@@ -288,9 +288,8 @@ Machine * Factory::find( const char label[] )
     return 0;        
 }
     
-int Factory::trigger( const char label[], int event )
+Factory & Factory::trigger( const char label[], int event )
 {
-    int r = 0;
     int l = 255;
     Machine * m = inventory_root;
     if ( label[strlen( label ) - 1 ] == '*' ) {
@@ -302,7 +301,6 @@ int Factory::trigger( const char label[], int event )
         while ( m ) {
             if ( strncmp( label, m->class_label, l ) == 0 ) {
                 m->trigger( event );
-                r++;
             }
             m = m->inventory_next;
         }
@@ -310,17 +308,15 @@ int Factory::trigger( const char label[], int event )
         while ( m ) {
             if ( strncmp( label, m->inst_label, l ) == 0 ) {
                 m->trigger( event );
-                r++;
             }
             m = m->inventory_next;
         }
     }
-    return r;        
+    return *this;        
 }    
 
-int Factory::state( const char label[], int state )
+Factory & Factory::state( const char label[], int state )
 {
-    int r = 0;
     int l = 255;
     Machine * m = inventory_root;
     if ( label[strlen( label ) - 1 ] == '*' ) {
@@ -332,7 +328,6 @@ int Factory::state( const char label[], int state )
         while ( m ) {
             if ( strncmp( label, m->class_label, l ) == 0 ) {
                 m->state( state );
-                r++;
             }
             m = m->inventory_next;
         }
@@ -340,12 +335,11 @@ int Factory::state( const char label[], int state )
         while ( m ) {
             if ( strncmp( label, m->inst_label, l ) == 0 ) {
                 m->state( state );
-                r++;
             }
             m = m->inventory_next;
         }
     }
-    return r;        
+    return *this;        
 }    
 
 int Factory::state( const char label[] )
