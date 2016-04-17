@@ -25,7 +25,7 @@ class Atm_timer: public Machine {
     enum { ACT_START, ACT_TRIG, ACT_WAITD };
 	
     Atm_timer & begin( uint32_t ms = ATM_TIMER_OFF );
-    Atm_timer & trace( Stream * stream, swcb_sym_t switch_callback );
+    Atm_timer & trace( Stream * stream );
     Atm_timer & onTimer( Machine * machine, uint8_t event );
     Atm_timer & onTimer( timer_cb_t timer_callback ); 
     Atm_timer & interval_seconds( uint32_t v );

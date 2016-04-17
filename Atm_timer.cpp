@@ -111,9 +111,9 @@ void Atm_timer::action( int id )
    }
 }
 
-Atm_timer & Atm_timer::trace( Stream * stream, swcb_sym_t switch_callback ) {
+Atm_timer & Atm_timer::trace( Stream * stream ) {
 
-  Machine::trace( stream, switch_callback, 
+  Machine::trace( stream, atm_serial_debug::trace,
     "IDLE\0START\0WAITD\0WAITMS\0TRIGGER",
     "EVT_DAYCNT\0EVT_DAYTIMER\0EVT_MSTIMER\0EVT_REPCNT\0EVT_OFF\0EVT_ON\0ELSE" );    
   return *this;

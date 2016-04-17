@@ -122,9 +122,9 @@ void Atm_comparator::action( int id )
    }
 }
 
-Atm_comparator & Atm_comparator::trace( Stream * stream, swcb_sym_t switch_callback ) {
+Atm_comparator & Atm_comparator::trace( Stream * stream ) {
 
-  Machine::trace( stream, switch_callback, 
+  Machine::trace( stream, atm_serial_debug::trace,
     "IDLE\0SAMPLE\0SEND",
     "EVT_TRIGGER\0EVT_TIMER\0ELSE" );
   return *this;

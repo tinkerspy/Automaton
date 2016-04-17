@@ -20,7 +20,7 @@ class Atm_teensywave: public Machine {
     enum { ACT_IDLE, ACT_START, ACT_SINE, ACT_SAW, ACT_SAWR, ACT_STARTTR, ACT_TRI, ACT_STARTSQ, ACT_SQON, ACT_SQOFF };
 			
     Atm_teensywave & begin( int attached_pin, int steps, int delay );
-    Atm_teensywave & trace( Stream * stream, swcb_sym_t switch_callback );
+    Atm_teensywave & trace( Stream * stream );
     int event( int id ); 
     void action( int id ); 
 };

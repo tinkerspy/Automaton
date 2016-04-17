@@ -105,9 +105,9 @@ void Atm_command::action( int id )
    }
 }
 
-Atm_command & Atm_command::trace( Stream * stream, swcb_sym_t switch_callback ) {
+Atm_command & Atm_command::trace( Stream * stream ) {
 
-  Machine::trace( stream, switch_callback, 
+  Machine::trace( stream, atm_serial_debug::trace,
     "IDLE\0READCHAR\0SEND",
     "EVT_INPUT\0EVT_EOL\0ELSE" );
   return *this;
