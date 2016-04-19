@@ -22,14 +22,35 @@ class Atm_button : public Machine {
 	short pin;
 	atm_timer_millis timer_debounce, timer_delay, timer_repeat, timer_auto;
 	atm_counter counter_longpress;
+
 	void (*callback)( int press ) = 0;
 	void (*callback_id)( int press, int id ) = 0;
     int callback_idx;
-	int16_t longpress_max;
-    int16_t _auto_press = 1;
     Machine * client_machine;
     int client_press = -1;
     int client_release = -1;
+    union {
+        struct { // ATM_USR2_FLAG - callback
+            void (*callback_with_id)( int press, int id, uint16_t count );
+            int callback_id_code;
+            uint16_t callback_count;
+        };
+        struct { // ATM_USR3_FLAG - machine triggers
+            Machine * client_machine_on;
+            Machine * client_machine_off;
+            state_t client_machine_event_on;
+            state_t client_machine_event_off;
+        };
+        struct { // ATM_USR4_FLAG - factory triggers
+            char client_label_on[];
+            char client_label_off[];
+            state_t client_label_event_on;
+            state_t client_label_event_off;
+            Factory * factory;
+        };
+    };
+	int16_t longpress_max;
+    int16_t _auto_press = 1;
     
 	Atm_button & begin( int attached_pin, presscb_t press_callback );
 	Atm_button & begin( int attached_pin );

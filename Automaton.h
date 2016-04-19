@@ -86,6 +86,12 @@ class atm_counter {
         uint16_t decrement( void );
 };
 
+class atm_pin { // TODO untested!
+    uint32_t pinstate;
+    public:
+        uint8_t change( uint8_t pin );
+};
+
 class BaseMachine
 {
   public:

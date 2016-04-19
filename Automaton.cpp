@@ -36,6 +36,16 @@ uint8_t atm_counter::expired()
     return value == ATM_COUNTER_OFF ? 0 : ( value > 0 ? 0 : 1 ); 
 }
 
+uint8_t atm_pin::change( uint8_t pin ) { 
+
+  unsigned char v = digitalRead( pin ) ? 1 : 0;
+  if ( (( pinstate >> pin ) & 1 ) != ( v == 1 ) ) {
+    pinstate ^= ( (uint32_t)1 << pin );
+    return 1;
+  }
+  return 0;
+}
+
 Machine & Machine::state(state_t state) 
 { 
     next = state; 
