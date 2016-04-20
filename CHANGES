@@ -18,6 +18,7 @@ New features/fixes:
 - Machine::cycle now takes a time argument (ms) after which it will stop running (0 default: after 1 cycle)
 - Added Factory::msgWrite() with class and wildcard support (replaces msgSend*)
 - Added Factory::trigger() with class and wildcard support
+- Atm_button::autoPress() second arg is now default 1
 
 Breaking changes:
 - trigger machine variable changed to last_trigger
