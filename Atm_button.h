@@ -64,7 +64,7 @@ class Atm_button : public Machine {
 	Atm_button & longPress( int max, int delay );
 	Atm_button & repeat( int delay, int speed );
 	Atm_button & repeat( void );
-    Atm_button & autoPress( int delay, int press );
+    Atm_button & autoPress( int delay, int press = 1 );
     void cb( int press, int id );
 	int event( int id );
 	void action( int id );

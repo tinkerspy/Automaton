@@ -109,7 +109,7 @@ Atm_button & Atm_button::repeat( void ) {
 	return *this;
 }
 
-Atm_button & Atm_button::autoPress( int delay, int press ) {
+Atm_button & Atm_button::autoPress( int delay, int press /* = 1 */ ) {
 	
     _auto_press = press;
 	timer_auto.set( delay );    
