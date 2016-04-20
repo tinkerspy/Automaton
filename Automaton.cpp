@@ -36,9 +36,6 @@ uint8_t atm_counter::expired()
     return value == ATM_COUNTER_OFF ? 0 : ( value > 0 ? 0 : 1 ); 
 }
 
-
-
-
 Machine & Machine::state(state_t state) 
 { 
     next = state; 
@@ -55,6 +52,7 @@ state_t Machine::state()
 
 int Machine::trigger( int evt )
 {
+    cycle();
     if ( current > -1 ) {
         int new_state = read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
         if ( new_state > -1 ) {
