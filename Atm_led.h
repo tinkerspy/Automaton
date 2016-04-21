@@ -10,7 +10,7 @@ class Atm_led : public Machine {
 	Atm_led( void ) : Machine() { class_label = "LED"; };
 
 	enum { IDLE, ON, START, BLINK_OFF, DONE }; 
-	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, ELSE }; 
+	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, EVT_TOGGLE, EVT_TOGGLE_BLINK, ELSE }; 
 	enum { ACT_INIT, ACT_ON, ACT_OFF, ACT_CHAIN }; 
 		
 	Atm_led & begin( int attached_pin );

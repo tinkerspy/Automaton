@@ -3,12 +3,12 @@
 Atm_led & Atm_led::begin( int attached_pin )
 { 
 	static const state_t state_table[] PROGMEM = {
-	/*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  ELSE */
-	/* IDLE      */  ACT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,     ON,      -1,     START,   -1, // LED off
-	/* ON        */    ACT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,     -1,    IDLE,     START,   -1, // LED on
-	/* START     */    ACT_ON,        -1,        -1,    BLINK_OFF,            -1,        IDLE,     ON,    IDLE,     START,   -1, // Start blinking
-	/* BLINK_OFF */   ACT_OFF,        -1,        -1,           -1,         START,        DONE,     ON,    IDLE,     START,   -1,
-	/* DONE      */        -1,        -1, ACT_CHAIN,           -1,          IDLE,          -1,     ON,    IDLE,     START,   -1, // Wait after last blink
+	/*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK ELSE */
+	/* IDLE      */  ACT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,     ON,      -1,     START,         ON,            START,  -1, // LED off
+	/* ON        */    ACT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,     -1,    IDLE,     START,       IDLE,             IDLE,  -1, // LED on
+	/* START     */    ACT_ON,        -1,        -1,    BLINK_OFF,            -1,        IDLE,     ON,    IDLE,     START,       IDLE,             IDLE,  -1, // Start blinking
+	/* BLINK_OFF */   ACT_OFF,        -1,        -1,           -1,         START,        DONE,     ON,    IDLE,     START,       IDLE,             IDLE,  -1,
+	/* DONE      */        -1,        -1, ACT_CHAIN,           -1,          IDLE,          -1,     ON,    IDLE,     START,       IDLE,             IDLE,  -1, // Wait after last blink
     };
 	Machine::begin( state_table, ELSE );
 	pin = attached_pin; 
