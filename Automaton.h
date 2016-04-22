@@ -106,7 +106,6 @@ class BaseMachine
 class Machine: public BaseMachine
 {
     public:
-        Machine &state( state_t state);
         state_t state( void );
         Machine & trigger( int evt );
         Machine & priority( int8_t priority );
@@ -124,6 +123,7 @@ class Machine: public BaseMachine
 
     protected:
   
+        Machine &state( state_t state);
         Machine & begin( const state_t tbl[], int width );
         const char * mapSymbol( int id, const char map[] );
         
@@ -143,12 +143,12 @@ class Machine: public BaseMachine
 class TinyMachine: public BaseMachine
 {
     public:
-        TinyMachine & state( tiny_state_t state);
         tiny_state_t state( void );
         TinyMachine & cycle( uint32_t time = 0 );
         TinyMachine & trigger( int evt );
         TinyMachine * inventory_next;
     protected:
+        TinyMachine & state( tiny_state_t state);
         TinyMachine & begin( const tiny_state_t tbl[], int width );
         const tiny_state_t* state_table;
         tiny_state_t next = 0;
@@ -163,7 +163,6 @@ class Factory
         Factory & add( Machine & machine );
         Machine * find( const char label[] );
         Factory & trigger( const char label[], int event );
-        Factory & state( const char label[], int state ); 
         int state( const char label[] ); 
         Factory & cycle( uint32_t time = 0 ); 
   private:

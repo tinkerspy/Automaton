@@ -325,33 +325,6 @@ Factory & Factory::trigger( const char label[], int event )
     return *this;        
 }    
 
-Factory & Factory::state( const char label[], int state )
-{
-    int l = 255;
-    Machine * m = inventory_root;
-    if ( label[strlen( label ) - 1 ] == '*' ) {
-        l = strlen( label ) - 1;
-    }
-    if ( label[0] == '.' ) {
-        l--;
-        label++;
-        while ( m ) {
-            if ( strncmp( label, m->class_label, l ) == 0 ) {
-                m->state( state );
-            }
-            m = m->inventory_next;
-        }
-    } else {
-        while ( m ) {
-            if ( strncmp( label, m->inst_label, l ) == 0 ) {
-                m->state( state );
-            }
-            m = m->inventory_next;
-        }
-    }
-    return *this;        
-}    
-
 int Factory::state( const char label[] )
 {
     int r = 0;
