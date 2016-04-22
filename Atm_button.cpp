@@ -173,6 +173,9 @@ void Atm_button::action( int id )
 	  return;
 	case ACT_AUTO :
       cb( _auto_press, callback_idx );
+      if ( client_machine && client_press != -1 ) {
+          client_machine->trigger( client_press );
+      }
 	  return;
 	case ACT_RELEASE :
       if ( ( flags & ATM_USR1_FLAG ) == 0 ) {

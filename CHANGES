@@ -19,6 +19,7 @@ New features/fixes:
 - Added Factory::msgWrite() with class and wildcard support (replaces msgSend*)
 - Added Factory::trigger() with class and wildcard support
 - Atm_button::autoPress() second arg is now default 1
+- Atm_led/fade: added EVT_TOGGLE & EVT_TOGGLE_BLINK events
 
 Breaking changes:
 - trigger machine variable changed to last_trigger
