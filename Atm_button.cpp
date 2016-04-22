@@ -72,15 +72,6 @@ Atm_button & Atm_button::onPress( presscb_id_t press_callback, int idx )
   return *this;  
 }
 
-Atm_button & Atm_button::onToggle( Machine * machine, int event_press, int event_release ) 
-{
-  client_machine = machine;
-  client_press = event_press;
-  client_release = event_release;
-  flags |= ATM_USR1_FLAG;
-  return *this;  
-}
-
 Atm_button & Atm_button::debounce( int delay ) {
 	
 	timer_debounce.set( delay );
@@ -279,15 +270,6 @@ Att_button & Att_button::onPress( presscb_id_t press_callback, int idx )
   callback_id = press_callback;
   callback_idx = idx;
   flags &= ~ATM_USR1_FLAG;
-  return *this;  
-}
-
-Att_button & Att_button::onToggle( TinyMachine * machine, int event_press, int event_release ) 
-{
-  client_machine = machine;
-  client_press = event_press;
-  client_release = event_release;
-  flags |= ATM_USR1_FLAG;
   return *this;  
 }
 

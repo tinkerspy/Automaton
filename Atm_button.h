@@ -35,17 +35,13 @@ class Atm_button : public Machine {
             int callback_id_code;
             uint16_t callback_count;
         };
-        struct { // ATM_USR3_FLAG - machine triggers
-            Machine * client_machine_on;
-            Machine * client_machine_off;
-            state_t client_machine_event_on;
-            state_t client_machine_event_off;
+        struct { // ATM_USR3_FLAG - machine trigger
+            Machine * _client_machine;
+            state_t client_machine_event;
         };
-        struct { // ATM_USR4_FLAG - factory triggers
-            char client_label_on[];
-            char client_label_off[];
-            state_t client_label_event_on;
-            state_t client_label_event_off;
+        struct { // ATM_USR4_FLAG - factory trigger
+            char client_label;
+            state_t client_label_event;
             Factory * factory;
         };
     };
@@ -59,7 +55,6 @@ class Atm_button : public Machine {
     Atm_button & onPress( Machine * machine, int event_press, int event_release );
     Atm_button & onPress( presscb_t press_callback );
     Atm_button & onPress( presscb_id_t press_callback, int idx );
-    Atm_button & onToggle( Machine * machine, int event_press, int event_release ); 
 	Atm_button & debounce( int delay );
 	Atm_button & longPress( int max, int delay );
 	Atm_button & repeat( int delay, int speed );
@@ -100,7 +95,6 @@ class Att_button : public TinyMachine {
     Att_button & onPress( TinyMachine * machine, int event_press, int event_release );
     Att_button & onPress( presscb_t press_callback );
     Att_button & onPress( presscb_id_t press_callback, int idx );
-    Att_button & onToggle( TinyMachine * machine, int event_press, int event_release ); 
 	Att_button & debounce( int delay );
 	Att_button & longPress( int max, int delay );
 	Att_button & repeat( int delay, int speed );
