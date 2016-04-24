@@ -59,8 +59,7 @@ void Atm_pulse::action( int id )
 Atm_pulse & Atm_pulse::trace( Stream * stream ) {
 
   Machine::trace( stream, atm_serial_debug::trace,
-   "IDLE\0WAIT\0PULSE",
-    "EVT_TIMER\0EVT_HIGH\0EVT_LOW\0ELSE" );
+    "EVT_TIMER\0EVT_HIGH\0EVT_LOW\0ELSE\0IDLE\0WAIT\0PULSE" );
   return *this;
 }
 

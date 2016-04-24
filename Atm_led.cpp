@@ -93,8 +93,7 @@ void Atm_led::action( int id )
 Atm_led & Atm_led::trace( Stream * stream ) {
 
   Machine::trace( stream, atm_serial_debug::trace, 
-    "IDLE\0ON\0START\0BLINK_OFF\0DONE",
-    "EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_BLINK\0ELSE" );
+    "EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_BLINK\0ELSE\0IDLE\0ON\0START\0BLINK_OFF\0DONE" );
   return *this;
 }
 

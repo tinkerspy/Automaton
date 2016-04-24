@@ -111,7 +111,7 @@ class Machine: public BaseMachine
         Machine & priority( int8_t priority );
         int8_t priority( void );
         Machine & cycle( uint32_t time = 0 );
-        virtual Machine & trace( Stream * stream, swcb_sym_t callback, const char sym_s[], const char sym_e[] );
+        virtual Machine & trace( Stream * stream, swcb_sym_t callback, const char symbols[] );
         Machine & label( const char label[] );
 
         int8_t prio;
@@ -132,8 +132,7 @@ class Machine: public BaseMachine
         state_t next;
         state_t current = -1;
         state_t last_trigger = -1;
-        const char* sym_states;
-        const char* sym_events;
+        const char* _symbols;
         uint8_t state_width;
         swcb_sym_t callback_trace;
         Stream * stream_trace;
