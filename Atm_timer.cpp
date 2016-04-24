@@ -113,7 +113,7 @@ void Atm_timer::action( int id )
 
 Atm_timer & Atm_timer::trace( Stream * stream ) {
 
-  Machine::trace( stream, atm_serial_debug::trace,
+  setTrace( stream, atm_serial_debug::trace,
     "EVT_DAYCNT\0EVT_DAYTIMER\0EVT_MSTIMER\0EVT_REPCNT\0EVT_OFF\0EVT_ON\0ELSE\0IDLE\0START\0WAITD\0WAITMS\0TRIGGER" );    
   return *this;
 }

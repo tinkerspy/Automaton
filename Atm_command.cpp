@@ -107,7 +107,7 @@ void Atm_command::action( int id )
 
 Atm_command & Atm_command::trace( Stream * stream ) {
 
-  Machine::trace( stream, atm_serial_debug::trace,
+  setTrace( stream, atm_serial_debug::trace,
     "EVT_INPUT\0EVT_EOL\0ELSE\0IDLE\0READCHAR\0SEND" );
   return *this;
 }

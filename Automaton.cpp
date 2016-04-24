@@ -72,7 +72,7 @@ Machine & Machine::trigger( int evt )
     return *this; 
 }
 
-Machine & Machine::trace( Stream * stream, swcb_sym_t callback, const char symbols[] ) 
+Machine & Machine::setTrace( Stream * stream, swcb_sym_t callback, const char symbols[] ) 
 {
     callback_trace = callback;
     stream_trace = stream;

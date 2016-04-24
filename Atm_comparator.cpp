@@ -124,7 +124,7 @@ void Atm_comparator::action( int id )
 
 Atm_comparator & Atm_comparator::trace( Stream * stream ) {
 
-  Machine::trace( stream, atm_serial_debug::trace,
+  setTrace( stream, atm_serial_debug::trace,
     "EVT_TRIGGER\0EVT_TIMER\0ELSE\0IDLE\0SAMPLE\0SEND" );
   return *this;
 }

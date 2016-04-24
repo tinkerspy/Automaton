@@ -36,7 +36,7 @@ void Atm_blink::action( int id )
 
 Atm_blink & Atm_blink::trace( Stream * stream ) {
 
-  Machine::trace( stream, atm_serial_debug::trace,
+  setTrace( stream, atm_serial_debug::trace,
     "EVT_TIMER\0ELSE\0LED_ON\0LED_OFF" );
   return *this;
 }
