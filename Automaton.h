@@ -120,6 +120,7 @@ class Machine: public BaseMachine
         const char * class_label;
         Machine * inventory_next;
         Machine * priority_next;
+		Factory * factory;
 
     protected:
   
