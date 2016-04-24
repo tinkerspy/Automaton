@@ -280,6 +280,7 @@ Factory & Factory::add( Machine & machine )
 {	
     machine.inventory_next = inventory_root;
     inventory_root = &machine;
+	machine.factory = this;
     recalibrate = 1;
     return *this;
 }
