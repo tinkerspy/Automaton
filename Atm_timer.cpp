@@ -41,7 +41,6 @@ Atm_timer & Atm_timer::interval_seconds( uint32_t v )
   days = v /  ( (uint32_t) DIVIDER );
   daycounter.set( days); // Determine how many days -> days => Set day counter
   mstimer.set( ( v - ( (uint32_t) days * DIVIDER ) ) * 1000 );  // And how many milliseconds left 
-  state( START );
   return *this;
 }
 
@@ -50,7 +49,6 @@ Atm_timer & Atm_timer::interval_millis( uint32_t v )
   days = 0;
   daycounter.set( days ); 
   mstimer.set( v );  
-  state( START );
   return *this;
 }
 
@@ -63,7 +61,6 @@ Atm_timer & Atm_timer::repeat( int v )
 {
   repeat_cnt = v;
   repcounter.set( v );  
-  state( START );
   return *this;
 }
 
@@ -156,7 +153,6 @@ Att_timer & Att_timer::interval_seconds( uint32_t v )
   days = v /  ( (uint32_t) DIVIDER );
   daycounter.set( days); // Determine how many days -> days => Set day counter
   mstimer.set( ( v - ( (uint32_t) days * DIVIDER ) ) * 1000 );  // And how many milliseconds left 
-  state( START );
   return *this;
 }
 
@@ -165,7 +161,6 @@ Att_timer & Att_timer::interval_millis( uint32_t v )
   days = 0;
   daycounter.set( days ); 
   mstimer.set( v );  
-  state( START );
   return *this;
 }
 
@@ -178,7 +173,6 @@ Att_timer & Att_timer::repeat( int v )
 {
   repeat_cnt = v;
   repcounter.set( v );  
-  state( START );
   return *this;
 }
 
