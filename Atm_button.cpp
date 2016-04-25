@@ -21,89 +21,70 @@ Atm_button & Atm_button::begin( int attached_pin )
 		/* AUTO     */      ACT_AUTO,      -1,           -1,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1,  IDLE,
 	};
 	Machine::begin( state_table, ELSE );
-	pin = attached_pin;
-    counter_longpress.set( 0 );	
-	timer_debounce.set( DEBOUNCE );
-	timer_delay.set( ATM_TIMER_OFF );
-	timer_repeat.set( ATM_TIMER_OFF );
-	timer_auto.set( ATM_TIMER_OFF );
-	pinMode( pin, INPUT_PULLUP );
+	_pin = attached_pin;
+    _counter_longpress.set( 0 );	
+	_timer_debounce.set( _DEBOUNCE );
+	_timer_delay.set( ATM_TIMER_OFF );
+	_timer_repeat.set( ATM_TIMER_OFF );
+	_timer_auto.set( ATM_TIMER_OFF );
+	pinMode( _pin, INPUT_PULLUP );
 	return *this;
 }
 
-Atm_button & Atm_button::begin( int attached_pin, presscb_t press_callback )
+Atm_button & Atm_button::onPress( presscb_t callback, int idx /* = 0 */ ) 
 {
-    begin( attached_pin );
-    callback = press_callback;
-    callback_idx = -1;
-    return *this;
+  _callback = callback;
+  _callback_idx = idx;
+  _callback_count = 0;
+  flags &= ~( ATM_USR2_FLAG | ATM_USR3_FLAG );
+  flags |= ATM_USR1_FLAG;
+  return *this;  
 }
 
 Atm_button & Atm_button::onPress( Machine * machine, int event ) 
 {
-  client_machine = machine;
-  client_press = event;
-  flags &= ~ATM_USR1_FLAG;
+  _client_machine = machine;
+  _client_machine_event = event;
+  flags &= ~( ATM_USR1_FLAG | ATM_USR3_FLAG );
+  flags |= ATM_USR2_FLAG;
+  Serial.println( flags );
   return *this;  
 }
 
-Atm_button & Atm_button::onPress( Machine * machine, int event_press, int event_release ) 
+Atm_button & Atm_button::onPress( const char * label, int event )
 {
-  client_machine = machine;
-  client_press = event_press;
-  client_release = event_release;
-  flags &= ~ATM_USR1_FLAG;
-  return *this;  
-}
-
-Atm_button & Atm_button::onPress( presscb_t press_callback ) 
-{
-  callback = press_callback;
-  callback_idx = -1;
-  flags &= ~ATM_USR1_FLAG;
-  return *this;  
-}
-
-Atm_button & Atm_button::onPress( presscb_id_t press_callback, int idx ) 
-{
-  callback_id = press_callback;
-  callback_idx = idx;
-  flags &= ~ATM_USR1_FLAG;
+  _client_label = label;
+  _client_label_event = event;
+  flags &= ~( ATM_USR1_FLAG | ATM_USR2_FLAG );
+  flags |= ATM_USR3_FLAG;
   return *this;  
 }
 
 Atm_button & Atm_button::debounce( int delay ) {
 	
-	timer_debounce.set( delay );
+	_timer_debounce.set( delay );
 	return *this;
 }
 
 Atm_button & Atm_button::longPress( int max, int delay ) {
 	
-	longpress_max = max;
-    counter_longpress.set( longpress_max );
-	timer_delay.set( delay );
+	_longpress_max = max;
+    _counter_longpress.set( _longpress_max );
+	_timer_delay.set( delay );
 	return *this;
 }
 
-Atm_button & Atm_button::repeat( int delay, int speed ) {
+Atm_button & Atm_button::repeat( int delay /* = 500 */ , int speed /* = 50 */ ) {
 	
-	timer_delay.set( delay );
-	timer_repeat.set( speed );	
-	return *this;
-}
-
-Atm_button & Atm_button::repeat( void ) {
-	
-	timer_delay.set( 500 );
-	timer_repeat.set( 50 );	
+	_timer_delay.set( delay );
+	_timer_repeat.set( speed );	
 	return *this;
 }
 
 Atm_button & Atm_button::autoPress( int delay, int press /* = 1 */ ) {
 	
     _auto_press = press;
-	timer_auto.set( delay );    
+	_timer_auto.set( delay );    
 	return *this;
 }
 
@@ -111,83 +92,66 @@ int Atm_button::event( int id )
 {
   switch ( id ) {
 	case EVT_LMODE :
-	  return counter_longpress.value > 0;        
+	  return _counter_longpress.value > 0;        
 	case EVT_TIMER :
-	  return timer_debounce.expired( this );
+	  return _timer_debounce.expired( this );
 	case EVT_DELAY :
-	  return timer_delay.expired( this );        
+	  return _timer_delay.expired( this );        
 	case EVT_REPEAT :
-	  return timer_repeat.expired( this );        
+	  return _timer_repeat.expired( this );        
 	case EVT_AUTO :
-	  return timer_auto.expired( this );        
+	  return _timer_auto.expired( this );        
 	case EVT_PRESS :
-	  return !digitalRead( pin );        
+	  return !digitalRead( _pin );        
 	case EVT_RELEASE :
-	  return digitalRead( pin );        
+	  return digitalRead( _pin );        
 	case EVT_COUNTER :
-	  return counter_longpress.expired();        
+	  return _counter_longpress.expired();        
   }
   return 0;
 }
 
-
 void Atm_button::cb( int press, int idx ) {
 
+    _callback_count++;
     flags |= ATM_CALLBACK_FLAG;
-    if ( callback ) 
-      (*callback)( press );
-    if ( callback_id ) 
-      (*callback_id)( press, idx );
+    if ( _callback ) 
+      (*_callback)( press, idx, _callback_count );
     flags &= ~ATM_CALLBACK_FLAG;
 }
-
 
 void Atm_button::action( int id ) 
 {
   switch ( id ) {
 	case ACT_PRESS :
-      if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
-          if ( client_machine && client_press != -1 && client_release != -1 ) {
-              if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
-                client_machine->trigger( client_release );
-              } else {
-                client_machine->trigger( client_press );                
-              }
-              flags ^= ATM_USR2_FLAG;
-          }          
-      } else {
-          cb( 1, callback_idx );
-          if ( client_machine && client_press != -1 ) {
-              client_machine->trigger( client_press );
-          }
-      }
-	  return;
 	case ACT_AUTO :
-      cb( _auto_press, callback_idx );
-      if ( client_machine && client_press != -1 ) {
-          client_machine->trigger( client_press );
+	  if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+		cb( id == ACT_AUTO ? _auto_press : 1, _callback_idx );
+      }
+      if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
+          _client_machine->trigger( _client_machine_event );                
+      }
+      if ( ( flags & ATM_USR3_FLAG ) > 0 && factory ) {
+          factory->trigger( _client_label, _client_label_event );                
       }
 	  return;
 	case ACT_RELEASE :
       if ( ( flags & ATM_USR1_FLAG ) == 0 ) {
-          cb( 0, callback_idx );
-          if ( client_machine && client_release != -1 ) {
-              client_machine->trigger( client_release );
-          }
+          cb( 0, _callback_idx );
       }
 	  return;
 	case ACT_LSTART :
-	  counter_longpress.set( longpress_max );
+	  _counter_longpress.set( _longpress_max );
 	  return;
 	case ACT_LCOUNT :
-	  counter_longpress.decrement();
-	  cb( ( longpress_max - counter_longpress.value ) * -1, callback_idx );	  
+	  _counter_longpress.decrement();
+	  cb( ( _longpress_max - _counter_longpress.value ) * -1, _callback_idx );	  
 	  return;
 	case ACT_LRELEASE :
-	  cb( longpress_max - counter_longpress.value, callback_idx );
+	  cb( _longpress_max - _counter_longpress.value, _callback_idx );
 	  return;
 	case ACT_WRELEASE :
-	  cb( 0, callback_idx );
+	  cb( 0, _callback_idx );
 	  return;
   }
 }
@@ -231,44 +195,23 @@ Att_button & Att_button::begin( int attached_pin )
 	return *this;
 }
 
-Att_button & Att_button::begin( int attached_pin, presscb_t press_callback )
+
+Att_button & Att_button::onPress( presscb_t callback, int idx /* = 0 */ ) 
 {
-    begin( attached_pin );
-    callback = press_callback;
-    callback_idx = -1;
-    return *this;
+  _callback = callback;
+  callback_idx = idx;
+  _callback_count = 0;
+  flags &= ~ATM_USR2_FLAG;
+  flags |= ATM_USR1_FLAG;
+  return *this;  
 }
 
 Att_button & Att_button::onPress( TinyMachine * machine, int event ) 
 {
-  client_machine = machine;
-  client_press = event;
+  _client_machine = machine;
+  client_machine_event = event;
   flags &= ~ATM_USR1_FLAG;
-  return *this;  
-}
-
-Att_button & Att_button::onPress( TinyMachine * machine, int event_press, int event_release ) 
-{
-  client_machine = machine;
-  client_press = event_press;
-  client_release = event_release;
-  flags &= ~ATM_USR1_FLAG;
-  return *this;  
-}
-
-Att_button & Att_button::onPress( presscb_t press_callback ) 
-{
-  callback = press_callback;
-  callback_idx = -1;
-  flags &= ~ATM_USR1_FLAG;
-  return *this;  
-}
-
-Att_button & Att_button::onPress( presscb_id_t press_callback, int idx ) 
-{
-  callback_id = press_callback;
-  callback_idx = idx;
-  flags &= ~ATM_USR1_FLAG;
+  flags |= ATM_USR2_FLAG;
   return *this;  
 }
 
@@ -286,21 +229,14 @@ Att_button & Att_button::longPress( int max, int delay ) {
 	return *this;
 }
 
-Att_button & Att_button::repeat( int delay, int speed ) {
-	
+Att_button & Att_button::repeat( int delay /* = 500 */ , int speed /* = 50 */ ) 
+{	
 	timer_delay.set( delay );
 	timer_repeat.set( speed );	
 	return *this;
 }
 
-Att_button & Att_button::repeat( void ) {
-	
-	timer_delay.set( 500 );
-	timer_repeat.set( 50 );	
-	return *this;
-}
-
-Att_button & Att_button::autoPress( int delay, int press ) {
+Att_button & Att_button::autoPress( int delay, int press /* = 1 */ ) {
 	
     _auto_press = press;
 	timer_auto.set( delay );    
@@ -330,49 +266,30 @@ int Att_button::event( int id )
   return 0;
 }
 
-
 void Att_button::cb( int press, int idx ) {
 
+    _callback_count++;
     flags |= ATM_CALLBACK_FLAG;
-    if ( callback ) 
-      (*callback)( press );
-    if ( callback_id ) 
-      (*callback_id)( press, idx );
+    if ( _callback ) 
+      (*_callback)( press, idx, _callback_count );
     flags &= ~ATM_CALLBACK_FLAG;
 }
-
-// ATM_USR1_FLAG = Toggle mode (vs Press mode)
-// ATM_USR2_FLAG = Toggle status (on vs off)
 
 void Att_button::action( int id ) 
 {
   switch ( id ) {
 	case ACT_PRESS :
-      if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
-          if ( client_machine && client_press != -1 && client_release != -1 ) {
-              if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
-                client_machine->trigger( client_release );
-              } else {
-                client_machine->trigger( client_press );                
-              }
-              flags ^= ATM_USR2_FLAG;
-          }          
-      } else {
-          cb( 1, callback_idx );
-          if ( client_machine && client_press != -1 ) {
-              client_machine->trigger( client_press );
-          }
-      }
-	  return;
 	case ACT_AUTO :
-      cb( _auto_press, callback_idx );
+	  if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+          cb( id == ACT_AUTO ? _auto_press : 1, callback_idx );
+      }
+      if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
+          _client_machine->trigger( client_machine_event );                
+      }
 	  return;
 	case ACT_RELEASE :
       if ( ( flags & ATM_USR1_FLAG ) == 0 ) {
           cb( 0, callback_idx );
-          if ( client_machine && client_release != -1 ) {
-              client_machine->trigger( client_release );
-          }
       }    
 	  return;
 	case ACT_LSTART :
