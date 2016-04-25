@@ -61,14 +61,19 @@ state_t Machine::state()
 
 Machine & Machine::trigger( int evt )
 {
-    cycle();
-    if ( current > -1 ) {
-        int new_state = read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
-        if ( new_state > -1 ) {
-	      state( new_state );
-          last_trigger = evt;
-        }
-    }
+	state_t new_state;
+	int max_cycle = 8;
+	do {
+//      Serial.println( "Wait cycle" );
+	  cycle();
+	  new_state = read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
+//	  Serial.print( "new_state=" );
+//	  Serial.println( new_state );	  
+	} while ( --max_cycle && ( new_state == -1 ) );
+	if ( new_state > -1 ) {
+	  state( new_state );
+	  last_trigger = evt;
+	}
     return *this; 
 }
 
