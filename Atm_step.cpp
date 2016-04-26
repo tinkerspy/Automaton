@@ -98,7 +98,7 @@ void Atm_step::action( int id )
 Atm_step & Atm_step::trace( Stream * stream ) {
 
   setTrace( stream, atm_serial_debug::trace,
-            "EVT_STEP\0EVT_SWEEP\0EVT_BURST\0EVT_RESET\0ELSE\0"
+            "EVT_STEP\0EVT_SWEEP\0EVT_BURST\0EVT_LINEAR\0ELSE\0"
 			"IDLE\0LINEAR\0S0\0S1\0S2\0S3\0S4\0S5\0S6\0S7\0"
 			"SWEEP\0X0\0X1\0X2\0X3\0X4\0X5\0X6\0X7\0X8\0X9\0XA\0XB\0XC\0XD\0"
 			"BURST\0U0\0U1\0U2\0U3\0U4\0U5\0U6\0U7" );
