@@ -107,7 +107,7 @@ class Machine: public BaseMachine
 {
     public:
         state_t state( void );
-        Machine & trigger( int evt );
+        Machine & trigger( int evt = 0 );
         Machine & priority( int8_t priority );
         int8_t priority( void );
         Machine & cycle( uint32_t time = 0 );
@@ -145,7 +145,7 @@ class TinyMachine: public BaseMachine
     public:
         tiny_state_t state( void );
         TinyMachine & cycle( uint32_t time = 0 );
-        TinyMachine & trigger( int evt );
+        TinyMachine & trigger( int evt = 0 );
         TinyMachine * inventory_next;
     protected:
         TinyMachine & state( tiny_state_t state);
@@ -162,7 +162,7 @@ class Factory
   public:
         Factory & add( Machine & machine );
         Machine * find( const char label[] );
-        Factory & trigger( const char label[], int event );
+        Factory & trigger( const char label[], int event = 0 );
         int state( const char label[] ); 
         Factory & cycle( uint32_t time = 0 ); 
   private:

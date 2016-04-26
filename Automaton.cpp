@@ -59,7 +59,7 @@ state_t Machine::state()
     return current; 
 }
 
-Machine & Machine::trigger( int evt )
+Machine & Machine::trigger( int evt /* = 0 */ )
 {
 	state_t new_state;
 	int max_cycle = 8;
@@ -190,7 +190,7 @@ tiny_state_t TinyMachine::state()
     return current;
 }
 
-TinyMachine & TinyMachine::trigger( int evt )
+TinyMachine & TinyMachine::trigger( int evt /* = 0 */ )
 {
 	state_t new_state;
 	int max_cycle = 8;
@@ -304,7 +304,7 @@ Machine * Factory::find( const char label[] )
     return 0;        
 }
     
-Factory & Factory::trigger( const char label[], int event )
+Factory & Factory::trigger( const char label[], int event /* = 0 */ )
 {
     int l = 255;
     Machine * m = inventory_root;

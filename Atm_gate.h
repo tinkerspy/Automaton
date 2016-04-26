@@ -20,8 +20,8 @@ class Atm_gate: public Machine {
     Atm_gate & begin( int count );
     Atm_gate & trace( Stream * stream );
     Atm_gate & onOpen( opencb_t callback, int idx = 0 );
-    Atm_gate & onOpen( Machine * machine, int event );
-    Atm_gate & onOpen( const char * label, int event );
+    Atm_gate & onOpen( Machine * machine, int event = 0 );
+    Atm_gate & onOpen( const char * label, int event = 0 );
 
   protected:
     uint8_t _gates;

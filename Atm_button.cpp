@@ -41,7 +41,7 @@ Atm_button & Atm_button::onPress( presscb_t callback, int idx /* = 0 */ )
   return *this;  
 }
 
-Atm_button & Atm_button::onPress( Machine * machine, int event ) 
+Atm_button & Atm_button::onPress( Machine * machine, int event /* = 0 */ ) 
 {
   _client_machine = machine;
   _client_machine_event = event;
@@ -50,7 +50,7 @@ Atm_button & Atm_button::onPress( Machine * machine, int event )
   return *this;  
 }
 
-Atm_button & Atm_button::onPress( const char * label, int event )
+Atm_button & Atm_button::onPress( const char * label, int event /* = 0 */ )
 {
   _client_label = label;
   _client_label_event = event;
@@ -202,7 +202,7 @@ Att_button & Att_button::onPress( presscb_t callback, int idx /* = 0 */ )
   return *this;  
 }
 
-Att_button & Att_button::onPress( TinyMachine * machine, int event ) 
+Att_button & Att_button::onPress( TinyMachine * machine, int event /* = 0 */ ) 
 {
   _client_machine = machine;
   client_machine_event = event;

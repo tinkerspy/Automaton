@@ -33,7 +33,7 @@ Atm_gate & Atm_gate::onOpen( opencb_t callback, int idx /* = 0 */ )
   return *this;
 }
 
-Atm_gate & Atm_gate::onOpen( Machine * machine, int event )
+Atm_gate & Atm_gate::onOpen( Machine * machine, int event /* = 0 */ )
 {
   _client_machine = machine;
   _client_machine_event = event;
@@ -42,7 +42,7 @@ Atm_gate & Atm_gate::onOpen( Machine * machine, int event )
   return *this;
 }
 
-Atm_gate & Atm_gate::onOpen( const char * label, int event )
+Atm_gate & Atm_gate::onOpen( const char * label, int event /* = 0 */ )
 {
   _client_label = label;
   _client_label_event = event;

@@ -20,8 +20,8 @@ class Atm_button : public Machine {
 	Atm_button & begin( int attached_pin );
     Atm_button & trace( Stream * stream );
 	Atm_button & onPress( presscb_t callback, int idx = 0 );
-    Atm_button & onPress( Machine * machine, int event ); 
-    Atm_button & onPress( const char * label, int event ); 
+    Atm_button & onPress( Machine * machine, int event = 0 ); 
+    Atm_button & onPress( const char * label, int event = 0 ); 
 	Atm_button & debounce( int delay );
 	Atm_button & longPress( int max, int delay );
 	Atm_button & repeat( int delay = 500, int speed = 50 );
@@ -85,7 +85,7 @@ class Att_button : public TinyMachine {
     
 	Att_button & begin( int attached_pin );
 	Att_button & onPress( presscb_t callback, int idx = 0 );
-    Att_button & onPress( TinyMachine * machine, int event ); 
+    Att_button & onPress( TinyMachine * machine, int event = 0 ); 
 	Att_button & debounce( int delay );
 	Att_button & longPress( int max, int delay );
 	Att_button & repeat( int delay = 500, int speed = 50 );

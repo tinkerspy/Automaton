@@ -33,7 +33,7 @@ class Atm_step: public Machine {
     bool _sweep = false;
     Step _step[8];
     enum { IDLE, START, S0, S1, S2, S3, S4, S5, S6, S7, X0, X1, X2, X3, X4, X5, X6, X7, X8, X9, XA, XB, XC, XD };
-    enum { EVT_NEXT, EVT_SWEEP, EVT_RESET, ELSE };
+    enum { EVT_STEP, EVT_SWEEP, EVT_RESET, ELSE };
     enum { ACT_S0, ACT_S1, ACT_S2, ACT_S3, ACT_S4, ACT_S5, ACT_S6, ACT_S7 };
     enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_FACTORY };
 
@@ -44,8 +44,8 @@ class Atm_step: public Machine {
     int event( int id );
     void action( int id );
     Atm_step & onStep( uint8_t idx, stepcb_t callback );
-    Atm_step & onStep( uint8_t idx, Machine * machine, state_t event );
-    Atm_step & onStep( uint8_t idx, const char * label, state_t event );
+    Atm_step & onStep( uint8_t idx, Machine * machine, state_t event = 0 );
+    Atm_step & onStep( uint8_t idx, const char * label, state_t event = 0 );
 };
 
 #endif

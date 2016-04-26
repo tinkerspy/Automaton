@@ -3,7 +3,7 @@
 Atm_step & Atm_step::begin( void )
 {
   const static state_t state_table[] PROGMEM = {
-    /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_NEXT  EVT_SWEEP  EVT_RESET  ELSE */
+    /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_STEP  EVT_SWEEP  EVT_RESET  ELSE */
     /* IDLE    */       -1,        -1,      -1,    START,        -1,        -1,   -1,
     /* START   */       -1,        -1,      -1,       -1,        X0,      IDLE,   S0,
     /* S0      */   ACT_S0,        -1,      -1,       S1,        -1,      IDLE,   -1, // Linear mode
@@ -50,7 +50,7 @@ Atm_step & Atm_step::onStep( uint8_t idx, stepcb_t callback )
   return *this;
 }
 
-Atm_step & Atm_step::onStep( uint8_t idx, Machine * machine, state_t event )
+Atm_step & Atm_step::onStep( uint8_t idx, Machine * machine, state_t event /* = 0 */ )
 {
   _step[idx]._mode = MODE_MACHINE;
   _step[idx]._client_machine = machine;
@@ -58,7 +58,7 @@ Atm_step & Atm_step::onStep( uint8_t idx, Machine * machine, state_t event )
   return *this;
 }
 
-Atm_step & Atm_step::onStep( uint8_t idx, const char * label, state_t event )
+Atm_step & Atm_step::onStep( uint8_t idx, const char * label, state_t event /* = 0 */ )
 {
   _step[idx]._mode = MODE_FACTORY;
   _step[idx]._client_label = label;
@@ -71,7 +71,7 @@ int Atm_step::event( int id )
   switch (id ) {
     case EVT_SWEEP:
       return _sweep == true;
-    case EVT_NEXT: // TODO CHANGE TO TINY_READ_STATE for Tiny Machine!!!
+    case EVT_STEP: // TODO CHANGE TO TINY_READ_STATE for Tiny Machine!!!
       state_t on_enter = read_state( state_table + ( current * state_width ) + ATM_ON_ENTER );
       return ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
   }
@@ -100,7 +100,7 @@ void Atm_step::action( int id )
 Atm_step & Atm_step::trace( Stream * stream ) {
 
   setTrace( stream, atm_serial_debug::trace,
-            "EVT_NEXT\0EVT_SWEEP\0EVT_RESET\0ELSE\0"
+            "EVT_STEP\0EVT_SWEEP\0EVT_RESET\0ELSE\0"
             "IDLE\0START\0S0\0S1\0S2\0S3\0S4\0S5\0S6\0S7\0X0\0X1\0X2\0X3\0X4\0X5\0X6\0X7\0X8\0X9\0XA\0XB\0XC\0XD" );
   return *this;
 }
