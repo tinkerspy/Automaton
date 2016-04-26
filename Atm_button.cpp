@@ -19,7 +19,7 @@ Atm_button & Atm_button::begin( int attached_pin )
 		/* LRELEASE */  ACT_LRELEASE,      -1, ACT_WRELEASE,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1, LIDLE,
 		/* WRELEASE */  ACT_LRELEASE,      -1, ACT_WRELEASE,        -1,        -1,        -1,         -1,       -1,       LIDLE,          -1,        -1,    -1,
 		/* AUTO     */      ACT_AUTO,      -1,           -1,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1,  IDLE,
-	};
+	};	
 	Machine::begin( state_table, ELSE );
 	_pin = attached_pin;
     _counter_longpress.set( 0 );	
@@ -47,7 +47,6 @@ Atm_button & Atm_button::onPress( Machine * machine, int event )
   _client_machine_event = event;
   flags &= ~( ATM_USR1_FLAG | ATM_USR3_FLAG );
   flags |= ATM_USR2_FLAG;
-  Serial.println( flags );
   return *this;  
 }
 
@@ -115,9 +114,9 @@ void Atm_button::cb( int press, int idx ) {
 
     _callback_count++;
     flags |= ATM_CALLBACK_FLAG;
-    if ( _callback ) 
+    if ( ( flags & ATM_USR1_FLAG ) > 0 ) 
       (*_callback)( press, idx, _callback_count );
-    flags &= ~ATM_CALLBACK_FLAG;
+	flags &= ~ATM_CALLBACK_FLAG;
 }
 
 void Atm_button::action( int id ) 
@@ -136,9 +135,7 @@ void Atm_button::action( int id )
       }
 	  return;
 	case ACT_RELEASE :
-      if ( ( flags & ATM_USR1_FLAG ) == 0 ) {
-          cb( 0, _callback_idx );
-      }
+      cb( 0, _callback_idx );
 	  return;
 	case ACT_LSTART :
 	  _counter_longpress.set( _longpress_max );

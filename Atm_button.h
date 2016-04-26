@@ -37,21 +37,21 @@ class Atm_button : public Machine {
 	atm_counter _counter_longpress;
 
 	// PROBLEM: when using union client machine mode crashes!
-    //union {
-     //   struct { // ATM_USR1_FLAG - callback
+    union {
+        struct { // ATM_USR1_FLAG - callback
             void (*_callback)( int press, int idx, uint16_t cnt );
             int _callback_idx;
     		uint16_t _callback_count;
-	 //   };
-     //   struct { // ATM_USR2_FLAG - machine trigger
+	    };
+        struct { // ATM_USR2_FLAG - machine trigger
             Machine * _client_machine;
             state_t _client_machine_event;
-     //   };
-     //   struct { // ATM_USR3_FLAG - factory trigger
+        };
+        struct { // ATM_USR3_FLAG - factory trigger
             const char * _client_label;
             state_t _client_label_event;
-     //   };
-    //};
+        };
+    };
 	int16_t _longpress_max;
     int16_t _auto_press = 1;
 };
