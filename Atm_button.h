@@ -35,13 +35,11 @@ class Atm_button : public Machine {
 	short _pin;
 	atm_timer_millis _timer_debounce, _timer_delay, _timer_repeat, _timer_auto;
 	atm_counter _counter_longpress;
-
-	// PROBLEM: when using union client machine mode crashes!
     union {
         struct { // ATM_USR1_FLAG - callback
             void (*_callback)( int press, int idx, uint16_t cnt );
             int _callback_idx;
-    		uint16_t _callback_count;
+    		uint16_t _press_count;
 	    };
         struct { // ATM_USR2_FLAG - machine trigger
             Machine * _client_machine;
@@ -75,7 +73,7 @@ class Att_button : public TinyMachine {
         struct { // ATM_USR1_FLAG - callback
             void (*_callback)( int press, int idx, uint16_t cnt );
             int callback_idx;
-            uint16_t _callback_count;
+            uint16_t _press_count;
         };
         struct { // ATM_USR2_FLAG - machine trigger
             TinyMachine * _client_machine;

@@ -35,7 +35,7 @@ Atm_button & Atm_button::onPress( presscb_t callback, int idx /* = 0 */ )
 {
   _callback = callback;
   _callback_idx = idx;
-  _callback_count = 0;
+  _press_count = 0;
   flags &= ~( ATM_USR2_FLAG | ATM_USR3_FLAG );
   flags |= ATM_USR1_FLAG;
   return *this;  
@@ -112,11 +112,12 @@ int Atm_button::event( int id )
 
 void Atm_button::cb( int press, int idx ) {
 
-    _callback_count++;
-    flags |= ATM_CALLBACK_FLAG;
-    if ( ( flags & ATM_USR1_FLAG ) > 0 ) 
-      (*_callback)( press, idx, _callback_count );
-	flags &= ~ATM_CALLBACK_FLAG;
+    if ( press > 0 ) _press_count++;
+    if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+      flags |= ATM_CALLBACK_FLAG;
+      (*_callback)( press, idx, _press_count );
+	  flags &= ~ATM_CALLBACK_FLAG;
+	}
 }
 
 void Atm_button::action( int id ) 
@@ -124,9 +125,7 @@ void Atm_button::action( int id )
   switch ( id ) {
 	case ACT_PRESS :
 	case ACT_AUTO :
-	  if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
-		cb( id == ACT_AUTO ? _auto_press : 1, _callback_idx );
-      }
+      cb( id == ACT_AUTO ? _auto_press : 1, _callback_idx );
       if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
           _client_machine->trigger( _client_machine_event );                
       }
@@ -197,7 +196,7 @@ Att_button & Att_button::onPress( presscb_t callback, int idx /* = 0 */ )
 {
   _callback = callback;
   callback_idx = idx;
-  _callback_count = 0;
+  _press_count = 0;
   flags &= ~ATM_USR2_FLAG;
   flags |= ATM_USR1_FLAG;
   return *this;  
@@ -265,11 +264,12 @@ int Att_button::event( int id )
 
 void Att_button::cb( int press, int idx ) {
 
-    _callback_count++;
-    flags |= ATM_CALLBACK_FLAG;
-    if ( _callback ) 
-      (*_callback)( press, idx, _callback_count );
-    flags &= ~ATM_CALLBACK_FLAG;
+    if ( press > 0 ) _press_count++;
+    if ( _callback ) {
+	  flags |= ATM_CALLBACK_FLAG;
+      (*_callback)( press, idx, _press_count );
+      flags &= ~ATM_CALLBACK_FLAG;
+	}
 }
 
 void Att_button::action( int id ) 
@@ -277,18 +277,14 @@ void Att_button::action( int id )
   switch ( id ) {
 	case ACT_PRESS :
 	case ACT_AUTO :
-	  if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
-          cb( id == ACT_AUTO ? _auto_press : 1, callback_idx );
-      }
+      cb( id == ACT_AUTO ? _auto_press : 1, callback_idx );
       if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
           _client_machine->trigger( client_machine_event );                
       }
 	  return;
 	case ACT_RELEASE :
-      if ( ( flags & ATM_USR1_FLAG ) == 0 ) {
-          cb( 0, callback_idx );
-      }    
-	  return;
+      cb( 0, callback_idx );
+ 	  return;
 	case ACT_LSTART :
 	  counter_longpress.set( longpress_max );
 	  return;
