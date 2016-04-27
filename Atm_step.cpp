@@ -13,7 +13,7 @@ Atm_step & Atm_step::begin( void )
     /* S5      */   ACT_S5,      -1,      -1,       S6,       R5,     SWEEP,     BURST,     LINEAR,    -1,
     /* S6      */   ACT_S6,      -1,      -1,       S7,       R6,     SWEEP,     BURST,     LINEAR,    -1,
     /* S7      */   ACT_S7,      -1,      -1,       S0,       R7,     SWEEP,     BURST,     LINEAR,    -1,
-    /* R0      */   ACT_S0,      -1,      -1,       S0,       R6,     SWEEP,     BURST,     LINEAR,    -1, // Linear mode R
+    /* R0      */   ACT_S0,      -1,      -1,       S0,       R7,     SWEEP,     BURST,     LINEAR,    -1, // Linear mode R
     /* R1      */   ACT_S1,      -1,      -1,       S1,       R0,     SWEEP,     BURST,     LINEAR,    -1,
     /* R2      */   ACT_S2,      -1,      -1,       S2,       R1,     SWEEP,     BURST,     LINEAR,    -1,
     /* R3      */   ACT_S3,      -1,      -1,       S3,       R2,     SWEEP,     BURST,     LINEAR,    -1,
@@ -75,10 +75,12 @@ Atm_step & Atm_step::onStep( uint8_t idx, const char * label, state_t event /* =
 
 int Atm_step::event( int id )
 {
+  state_t on_enter = read_state( state_table + ( current * state_width ) + ATM_ON_ENTER );
   switch (id ) {
     case EVT_STEP: // TODO CHANGE TO TINY_READ_STATE for Tiny Machine!!!
-      state_t on_enter = read_state( state_table + ( current * state_width ) + ATM_ON_ENTER );
-      return ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
+      return ( current < R0 || current > R7 ) && ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
+    case EVT_PREV: // TODO CHANGE TO TINY_READ_STATE for Tiny Machine!!!
+      return ( current >= R0 && current <= R7 ) && ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
   }
   return 0;
 }
