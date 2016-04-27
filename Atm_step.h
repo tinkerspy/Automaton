@@ -30,10 +30,10 @@ class Atm_step: public Machine {
     Atm_step( void ) : Machine() {
       class_label = "STP";
     };
-    enum { IDLE, LINEAR, S0, S1, S2, S3, S4, S5, S6, S7, 
+    enum { LINEAR, S0, S1, S2, S3, S4, S5, S6, S7, R0, R1, R2, R3, R4, R5, R6, R7, 
 			SWEEP, X0, X1, X2, X3, X4, X5, X6, X7, X8, X9, XA, XB, XC, XD,
 			BURST, U0, U1, U2, U3, U4, U5, U6, U7 };
-    enum { EVT_STEP, EVT_SWEEP, EVT_BURST, EVT_LINEAR, ELSE };
+    enum { EVT_STEP, EVT_PREV, EVT_SWEEP, EVT_BURST, EVT_LINEAR, ELSE };
     enum { ACT_S0, ACT_S1, ACT_S2, ACT_S3, ACT_S4, ACT_S5, ACT_S6, ACT_S7 };
     enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_FACTORY };
     Step _step[8];
