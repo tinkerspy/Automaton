@@ -3,7 +3,7 @@
 Atm_step & Atm_step::begin( void )
 {
   const static state_t state_table[] PROGMEM = { // TODO: Expand to 10!
-    /*            ON_ENTER  ON_LOOP  ON_EXIT  EVT_STEP  EVT_PREV  EVT_SWEEP  EVT_BURST  EVT_LINEAR   ELSE */
+    /*            ON_ENTER  ON_LOOP  ON_EXIT  EVT_STEP  EVT_BACK  EVT_SWEEP  EVT_BURST  EVT_LINEAR   ELSE */
     /* LINEAR  */       -1,      -1,      -1,       S0,       R7,     SWEEP,     BURST,     LINEAR,    -1,
     /* S0      */   ACT_S0,      -1,      -1,       S1,       R0,     SWEEP,     BURST,     LINEAR,    -1, // Linear mode
     /* S1      */   ACT_S1,      -1,      -1,       S2,       R1,     SWEEP,     BURST,     LINEAR,    -1,
@@ -85,7 +85,7 @@ int Atm_step::event( int id )
   switch (id ) {
     case EVT_STEP: // TODO CHANGE TO TINY_READ_STATE for Tiny Machine!!!
       return ( current < R0 || current > R7 ) && ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
-    case EVT_PREV: // TODO CHANGE TO TINY_READ_STATE for Tiny Machine!!!
+    case EVT_BACK: // TODO CHANGE TO TINY_READ_STATE for Tiny Machine!!!
       return ( current >= R0 && current <= R7 ) && ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
   }
   return 0;
@@ -113,7 +113,7 @@ void Atm_step::action( int id )
 Atm_step & Atm_step::trace( Stream & stream ) {
 
   setTrace( &stream, atm_serial_debug::trace,
-            "EVT_STEP\0EVT_PREV\0EVT_SWEEP\0EVT_BURST\0EVT_LINEAR\0ELSE\0"
+            "EVT_STEP\0EVT_BACK\0EVT_SWEEP\0EVT_BURST\0EVT_LINEAR\0ELSE\0"
 			"LINEAR\0S0\0S1\0S2\0S3\0S4\0S5\0S6\0S7\0R0\0R1\0R2\0R3\0R4\0R5\0R6\0R7\0"
 			"SWEEP\0X0\0X1\0X2\0X3\0X4\0X5\0X6\0X7\0X8\0X9\0XA\0XB\0XC\0XD\0"
 			"BURST\0U0\0U1\0U2\0U3\0U4\0U5\0U6\0U7" );
@@ -126,7 +126,7 @@ Atm_step & Atm_step::trace( Stream & stream ) {
 Att_step & Att_step::begin( void )
 {
   const static tiny_state_t state_table[] PROGMEM = { // TODO: Expand to 10!
-    /*            ON_ENTER  ON_LOOP  ON_EXIT  EVT_STEP  EVT_PREV  EVT_SWEEP  EVT_BURST  EVT_LINEAR   ELSE */
+    /*            ON_ENTER  ON_LOOP  ON_EXIT  EVT_STEP  EVT_BACK  EVT_SWEEP  EVT_BURST  EVT_LINEAR   ELSE */
     /* LINEAR  */       -1,      -1,      -1,       S0,       R7,     SWEEP,     BURST,     LINEAR,    -1,
     /* S0      */   ACT_S0,      -1,      -1,       S1,       R0,     SWEEP,     BURST,     LINEAR,    -1, // Linear mode
     /* S1      */   ACT_S1,      -1,      -1,       S2,       R1,     SWEEP,     BURST,     LINEAR,    -1,
@@ -200,7 +200,7 @@ int Att_step::event( int id )
   switch (id ) {
     case EVT_STEP: 
 	  return ( current < R0 || current > R7 ) && ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
-    case EVT_PREV: 
+    case EVT_BACK: 
       return ( current >= R0 && current <= R7 ) && ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
   }
   return 0;
@@ -208,8 +208,6 @@ int Att_step::event( int id )
 
 void Att_step::action( int id )
 {
-  Serial.print( "Step action " );
-  Serial.println( id );
   if ( id > -1 ) {
     switch ( _step[id]._mode ) {
       case MODE_CALLBACK:
