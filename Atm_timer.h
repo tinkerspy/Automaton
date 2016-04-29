@@ -25,13 +25,13 @@ class Atm_timer: public Machine {
     enum { ACT_START, ACT_TRIG, ACT_WAITD };
 	
     Atm_timer & begin( uint32_t ms = ATM_TIMER_OFF );
-    Atm_timer & trace( Stream * stream );
-    Atm_timer & onTimer( Machine * machine, uint8_t event );
+    Atm_timer & trace( Stream & stream );
+    Atm_timer & onTimer( Machine & machine, uint8_t event );
     Atm_timer & onTimer( timer_cb_t timer_callback ); 
     Atm_timer & interval_seconds( uint32_t v );
     Atm_timer & interval_millis( uint32_t v );
     Atm_timer & interval( uint32_t v );
-    Atm_timer & repeat( int v );
+    Atm_timer & repeat( uint16_t v );
     Atm_timer & id( int v );
     int event( int id ); 
     void action( int id ); 
@@ -58,12 +58,12 @@ class Att_timer: public TinyMachine {
     enum { ACT_START, ACT_TRIG, ACT_WAITD };
 	
     Att_timer & begin( uint32_t ms = ATM_TIMER_OFF );
-    Att_timer & onTimer( TinyMachine * machine, uint8_t event );
+    Att_timer & onTimer( TinyMachine & machine, uint8_t event );
     Att_timer & onTimer( timer_cb_t timer_callback ); 
     Att_timer & interval_seconds( uint32_t v );
     Att_timer & interval_millis( uint32_t v );
     Att_timer & interval( uint32_t v );
-    Att_timer & repeat( int v );
+    Att_timer & repeat( uint16_t v );
     Att_timer & id( int v );
     int event( int id ); 
     void action( int id ); 

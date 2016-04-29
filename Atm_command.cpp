@@ -1,6 +1,6 @@
 #include "Atm_command.h"
 	
-Atm_command & Atm_command::begin( Stream * stream, char buffer[], int size )
+Atm_command & Atm_command::begin( Stream & stream, char buffer[], int size )
 {
   const static state_t state_table[] PROGMEM = {
   /*                  ON_ENTER    ON_LOOP    ON_EXIT  EVT_INPUT   EVT_EOL   ELSE */
@@ -9,7 +9,7 @@ Atm_command & Atm_command::begin( Stream * stream, char buffer[], int size )
   /* SEND     */      ACT_SEND,        -1,        -1,        -1,       -1,  IDLE,
   };
   Machine::begin( state_table, ELSE );
-  _stream = stream;
+  _stream = &stream;
   _buffer = buffer;
   _bufsize = size;
   _bufptr = 0;
@@ -105,16 +105,16 @@ void Atm_command::action( int id )
    }
 }
 
-Atm_command & Atm_command::trace( Stream * stream ) {
+Atm_command & Atm_command::trace( Stream & stream ) {
 
-  setTrace( stream, atm_serial_debug::trace,
+  setTrace( &stream, atm_serial_debug::trace,
     "EVT_INPUT\0EVT_EOL\0ELSE\0IDLE\0READCHAR\0SEND" );
   return *this;
 }
 
 // TinyMachine version
 
-Att_command & Att_command::begin( Stream * stream, char buffer[], int size )
+Att_command & Att_command::begin( Stream & stream, char buffer[], int size )
 {
   const static tiny_state_t state_table[] PROGMEM = {
   /*                  ON_ENTER    ON_LOOP    ON_EXIT  EVT_INPUT   EVT_EOL   ELSE */
@@ -123,7 +123,7 @@ Att_command & Att_command::begin( Stream * stream, char buffer[], int size )
   /* SEND     */      ACT_SEND,        -1,        -1,        -1,       -1,  IDLE,
   };
   TinyMachine::begin( state_table, ELSE );
-  _stream = stream;
+  _stream = &stream;
   _buffer = buffer;
   _bufsize = size;
   _bufptr = 0;

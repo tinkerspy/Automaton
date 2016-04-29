@@ -33,5 +33,6 @@ Breaking changes:
 - Changed machine.onSwitch( atm_serial_debug::onSwitch ) to machine.trace( &Serial )
 - Changed trace method format
 - Dropped Atm_teensywav + example, depends on Teensy 3.x
+- Most methods now take references to machines instead of pointers: leave the & off
 
 

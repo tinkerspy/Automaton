@@ -33,9 +33,9 @@ Atm_gate & Atm_gate::onOpen( opencb_t callback, int idx /* = 0 */ )
   return *this;
 }
 
-Atm_gate & Atm_gate::onOpen( Machine * machine, int event /* = 0 */ )
+Atm_gate & Atm_gate::onOpen( Machine & machine, int event /* = 0 */ )
 {
-  _client_machine = machine;
+  _client_machine = &machine;
   _client_machine_event = event;
   flags &= ~( ATM_USR1_FLAG | ATM_USR3_FLAG );
   flags |= ATM_USR2_FLAG;
@@ -102,9 +102,9 @@ void Atm_gate::action( int id )
   }
 }
 
-Atm_gate & Atm_gate::trace( Stream * stream )
+Atm_gate & Atm_gate::trace( Stream & stream )
 {
-  setTrace( stream, atm_serial_debug::trace,
+  setTrace( &stream, atm_serial_debug::trace,
             "EVT_G0\0EVT_G1\0EVT_G2\0EVT_G3\0EVT_G4\0EVT_G5\0EVT_G6\0EVT_G7\0EVT_OPEN\0EVT_CLEAR\0ELSE\0"
             "IDLE\0G0\0G1\0G2\0G3\0G4\0G5\0G6\0G7\0CHECK\0OPEN\0CLEAR" );
   return *this;

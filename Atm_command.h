@@ -21,8 +21,8 @@ class Atm_command: public Machine {
     enum { EVT_INPUT, EVT_EOL, ELSE };
 	enum { ACT_READCHAR, ACT_SEND };
 	
-    Atm_command & begin( Stream * stream, char buffer[], int size );
-    Atm_command & trace( Stream * stream );
+    Atm_command & begin( Stream & stream, char buffer[], int size );
+    Atm_command & trace( Stream & stream );
     int event( int id ); 
     void action( int id ); 
     Atm_command & onCommand(void (*callback)( int idx ), const char * cmds  );
@@ -50,7 +50,7 @@ class Att_command: public TinyMachine {
     enum { EVT_INPUT, EVT_EOL, ELSE };
 	enum { ACT_READCHAR, ACT_SEND };
 	
-    Att_command & begin( Stream * stream, char buffer[], int size );
+    Att_command & begin( Stream & stream, char buffer[], int size );
     int event( int id ); 
     void action( int id ); 
     Att_command & onCommand(void (*callback)( int idx ), const char * cmds  );

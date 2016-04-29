@@ -20,13 +20,29 @@ Atm_led & Atm_led::begin( int attached_pin )
 	return *this;
 }
 
-Atm_led & Atm_led::chain( Machine * n /* = 0 */, Machine * p /* = 0 */, uint8_t event /* = EVT_BLINK */) 
+Atm_led & Atm_led::chain( Machine & n ) 
 {
-    chain_next = n;
-    chain_previous = p ? p : n;    
+    chain_next = &n;
+    chain_previous = &n;    
+    chain_event = EVT_BLINK;
+    flags &= ~ATM_USR1_FLAG;
+    return *this;
+}
+
+Atm_led & Atm_led::chain( Machine & n, Machine & p, uint8_t event /* = EVT_BLINK */) 
+{
+    chain_next = &n;
+    chain_previous = &p;    
     chain_event = event;
     flags &= ~ATM_USR1_FLAG;
     return *this;
+}
+
+Atm_led & Atm_led::blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count /* = ATM_COUNTER_OFF */ ) {
+	
+	blink( duration ); // Time in which led is fully on
+    pause( pause_duration );
+    repeat( repeat_count );
 }
 
 Atm_led & Atm_led::blink( uint32_t duration ) 
@@ -90,9 +106,9 @@ void Atm_led::action( int id )
 	}
 }
 
-Atm_led & Atm_led::trace( Stream * stream ) {
+Atm_led & Atm_led::trace( Stream & stream ) {
 
-  setTrace( stream, atm_serial_debug::trace, 
+  setTrace( &stream, atm_serial_debug::trace, 
     "EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_BLINK\0EVT_TOGGLE\0EVT_TOGGLE_BLINK\0ELSE\0IDLE\0ON\0START\0BLINK_OFF\0DONE" );
   return *this;
 }
@@ -120,10 +136,20 @@ Att_led & Att_led::begin( int attached_pin )
 	return *this;
 }
 
-Att_led & Att_led::chain( TinyMachine * n /* = 0 */, TinyMachine * p /* = 0 */, uint8_t event /* = EVT_BLINK */) 
+
+Att_led & Att_led::chain( TinyMachine & n ) 
 {
-    chain_next = n;
-    chain_previous = p ? p : n;    
+    chain_next = &n;
+    chain_previous = &n;    
+    chain_event = EVT_BLINK;
+    flags &= ~ATM_USR1_FLAG;
+    return *this;
+}
+
+Att_led & Att_led::chain( TinyMachine & n, TinyMachine & p, uint8_t event /* = EVT_BLINK */) 
+{
+    chain_next = &n;
+    chain_previous = &p;    
     chain_event = event;
     flags &= ~ATM_USR1_FLAG;
     return *this;

@@ -41,9 +41,9 @@ Atm_button & Atm_button::onPress( presscb_t callback, int idx /* = 0 */ )
   return *this;  
 }
 
-Atm_button & Atm_button::onPress( Machine * machine, int event /* = 0 */ ) 
+Atm_button & Atm_button::onPress( Machine & machine, int event /* = 0 */ ) 
 {
-  _client_machine = machine;
+  _client_machine = &machine;
   _client_machine_event = event;
   flags &= ~( ATM_USR1_FLAG | ATM_USR3_FLAG );
   flags |= ATM_USR2_FLAG;
@@ -152,9 +152,9 @@ void Atm_button::action( int id )
   }
 }
 
-Atm_button & Atm_button::trace( Stream * stream ) {
+Atm_button & Atm_button::trace( Stream & stream ) {
 
-  setTrace( stream, atm_serial_debug::trace,
+  setTrace( &stream, atm_serial_debug::trace,
     "EVT_LMODE\0EVT_TIMER\0EVT_DELAY\0EVT_REPEAT\0EVT_PRESS\0EVT_RELEASE\0EVT_COUNTER\0EVT_AUTO\0ELSE\0IDLE\0WAIT\0PRESSED\0REPEAT\0RELEASE\0LIDLE\0LWAIT\0LPRESSED\0LRELEASE\0WRELEASE\0AUTO" ); 
   return *this;
 }
@@ -202,9 +202,9 @@ Att_button & Att_button::onPress( presscb_t callback, int idx /* = 0 */ )
   return *this;  
 }
 
-Att_button & Att_button::onPress( TinyMachine * machine, int event /* = 0 */ ) 
+Att_button & Att_button::onPress( TinyMachine & machine, int event /* = 0 */ ) 
 {
-  _client_machine = machine;
+  _client_machine = &machine;
   client_machine_event = event;
   flags &= ~ATM_USR1_FLAG;
   flags |= ATM_USR2_FLAG;

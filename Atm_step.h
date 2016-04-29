@@ -39,11 +39,12 @@ class Atm_step: public Machine {
     Step _step[8];
 
     Atm_step & begin( void );
-    Atm_step & trace( Stream * stream );
+    Atm_step & trace( Stream & stream );
     int event( int id );
     void action( int id );
+    Atm_step & onStep( uint8_t idx );
     Atm_step & onStep( uint8_t idx, stepcb_t callback );
-    Atm_step & onStep( uint8_t idx, Machine * machine, state_t event = 0 );
+    Atm_step & onStep( uint8_t idx, Machine & machine, state_t event = 0 );
     Atm_step & onStep( uint8_t idx, const char * label, state_t event = 0 );
 };
 

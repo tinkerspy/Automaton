@@ -50,6 +50,12 @@ Atm_step & Atm_step::begin( void )
   return *this;
 }
 
+Atm_step & Atm_step::onStep( uint8_t idx )
+{
+  _step[idx]._mode = MODE_NULL;
+  return *this;
+}
+
 Atm_step & Atm_step::onStep( uint8_t idx, stepcb_t callback )
 {
   _step[idx]._mode = MODE_CALLBACK;
@@ -57,10 +63,10 @@ Atm_step & Atm_step::onStep( uint8_t idx, stepcb_t callback )
   return *this;
 }
 
-Atm_step & Atm_step::onStep( uint8_t idx, Machine * machine, state_t event /* = 0 */ )
+Atm_step & Atm_step::onStep( uint8_t idx, Machine & machine, state_t event /* = 0 */ )
 {
   _step[idx]._mode = MODE_MACHINE;
-  _step[idx]._client_machine = machine;
+  _step[idx]._client_machine = &machine;
   _step[idx]._client_machine_event = event;
   return *this;
 }
@@ -104,9 +110,9 @@ void Atm_step::action( int id )
   }
 }
 
-Atm_step & Atm_step::trace( Stream * stream ) {
+Atm_step & Atm_step::trace( Stream & stream ) {
 
-  setTrace( stream, atm_serial_debug::trace,
+  setTrace( &stream, atm_serial_debug::trace,
             "EVT_STEP\0EVT_PREV\0EVT_SWEEP\0EVT_BURST\0EVT_LINEAR\0ELSE\0"
 			"LINEAR\0S0\0S1\0S2\0S3\0S4\0S5\0S6\0S7\0R0\0R1\0R2\0R3\0R4\0R5\0R6\0R7\0"
 			"SWEEP\0X0\0X1\0X2\0X3\0X4\0X5\0X6\0X7\0X8\0X9\0XA\0XB\0XC\0XD\0"

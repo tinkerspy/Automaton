@@ -23,9 +23,9 @@ Atm_timer & Atm_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */ )
   return *this;          
 }
 
-Atm_timer & Atm_timer::onTimer( Machine * machine, uint8_t event ) 
+Atm_timer & Atm_timer::onTimer( Machine & machine, uint8_t event ) 
 {
-  client_machine = machine;
+  client_machine = &machine;
   client_event = event;
   return *this;  
 }
@@ -57,7 +57,7 @@ Atm_timer & Atm_timer::interval( uint32_t v )
   return interval_millis( v );
 }
 
-Atm_timer & Atm_timer::repeat( int v )
+Atm_timer & Atm_timer::repeat( uint16_t v )
 {
   repeat_cnt = v;
   repcounter.set( v );  
@@ -108,9 +108,9 @@ void Atm_timer::action( int id )
    }
 }
 
-Atm_timer & Atm_timer::trace( Stream * stream ) {
+Atm_timer & Atm_timer::trace( Stream & stream ) {
 
-  setTrace( stream, atm_serial_debug::trace,
+  setTrace( &stream, atm_serial_debug::trace,
     "EVT_DAYCNT\0EVT_DAYTIMER\0EVT_MSTIMER\0EVT_REPCNT\0EVT_OFF\0EVT_ON\0ELSE\0IDLE\0START\0WAITD\0WAITMS\0TRIGGER" );    
   return *this;
 }
@@ -135,9 +135,9 @@ Att_timer & Att_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */ )
   return *this;          
 }
 
-Att_timer & Att_timer::onTimer( TinyMachine * machine, uint8_t event ) 
+Att_timer & Att_timer::onTimer( TinyMachine & machine, uint8_t event ) 
 {
-  client_machine = machine;
+  client_machine = &machine;
   client_event = event;
   return *this;  
 }
@@ -169,7 +169,7 @@ Att_timer & Att_timer::interval( uint32_t v )
   return interval_millis( v );
 }
 
-Att_timer & Att_timer::repeat( int v )
+Att_timer & Att_timer::repeat( uint16_t v )
 {
   repeat_cnt = v;
   repcounter.set( v );  

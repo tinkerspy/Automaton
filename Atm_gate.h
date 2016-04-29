@@ -18,9 +18,9 @@ class Atm_gate: public Machine {
     enum { ACT_G0, ACT_G1, ACT_G2, ACT_G3, ACT_G4, ACT_G5, ACT_G6, ACT_G7, ACT_CLEAR, ACT_OPEN };
 
     Atm_gate & begin( int count );
-    Atm_gate & trace( Stream * stream );
+    Atm_gate & trace( Stream & stream );
     Atm_gate & onOpen( opencb_t callback, int idx = 0 );
-    Atm_gate & onOpen( Machine * machine, int event = 0 );
+    Atm_gate & onOpen( Machine & machine, int event = 0 );
     Atm_gate & onOpen( const char * label, int event = 0 );
 
   protected:

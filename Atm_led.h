@@ -14,12 +14,14 @@ class Atm_led : public Machine {
 	enum { ACT_INIT, ACT_ON, ACT_OFF, ACT_CHAIN }; 
 		
 	Atm_led & begin( int attached_pin );
-	Atm_led & blink( uint32_t duration ); 
+	Atm_led & blink( uint32_t duration );
+    Atm_led & blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );	
 	Atm_led & pause( uint32_t duration ); 
 	Atm_led & fade( int fade ); 
 	Atm_led & repeat( int repeat ); 
-    Atm_led & trace( Stream * stream );
-    Atm_led & chain( Machine * n = 0, Machine * p = 0, uint8_t event = EVT_BLINK );
+    Atm_led & trace( Stream & stream );
+    Atm_led & chain( Machine & n );
+    Atm_led & chain( Machine & n, Machine & p, uint8_t event = EVT_BLINK );
     
   private:  
 	short pin;
@@ -49,7 +51,8 @@ class Att_led : public TinyMachine {
 	Att_led & pause( uint32_t duration ); 
 	Att_led & fade( int fade ); 
 	Att_led & repeat( int repeat ); 
-    Att_led & chain( TinyMachine * n = 0, TinyMachine * p = 0, uint8_t event = EVT_BLINK );
+    Att_led & chain( TinyMachine & n );
+    Att_led & chain( TinyMachine & n, TinyMachine & p, uint8_t event = EVT_BLINK );
   
   private:
 	short pin;

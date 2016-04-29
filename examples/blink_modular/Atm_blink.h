@@ -17,7 +17,7 @@ class Atm_blink: public Machine {
     enum { ACT_ON, ACT_OFF };
 	
     Atm_blink & begin( int attached_pin, uint32_t blinkrate );
-    Atm_blink & trace( Stream * stream );
+    Atm_blink & trace( Stream & stream );
     int event( int id ); 
     void action( int id ); 
 };
