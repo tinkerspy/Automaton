@@ -83,9 +83,9 @@ int Atm_step::event( int id )
 {
   state_t on_enter = read_state( state_table + ( current * state_width ) + ATM_ON_ENTER );
   switch (id ) {
-    case EVT_STEP: // TODO CHANGE TO TINY_READ_STATE for Tiny Machine!!!
-      return ( current < R0 || current > R7 ) && ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
-    case EVT_BACK: // TODO CHANGE TO TINY_READ_STATE for Tiny Machine!!!
+    case EVT_STEP: 
+      return ( current  < R0 || current  > R7 ) && ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
+    case EVT_BACK: 
       return ( current >= R0 && current <= R7 ) && ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
   }
   return 0;
@@ -199,7 +199,7 @@ int Att_step::event( int id )
   state_t on_enter = tiny_read_state( state_table + ( current * state_width ) + ATM_ON_ENTER );
   switch (id ) {
     case EVT_STEP: 
-	  return ( current < R0 || current > R7 ) && ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
+	  return ( current  < R0 || current  > R7 ) && ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
     case EVT_BACK: 
       return ( current >= R0 && current <= R7 ) && ( on_enter > -1 ) && ( _step[on_enter]._mode == 0 );
   }
