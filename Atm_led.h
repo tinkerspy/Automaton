@@ -43,18 +43,19 @@ class Att_led : public TinyMachine {
 	Att_led( void ) : TinyMachine() { };
 
 	enum { IDLE, ON, START, BLINK_OFF, DONE }; 
-	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, ELSE }; 
+	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, EVT_TOGGLE, EVT_TOGGLE_BLINK, ELSE }; 
 	enum { ACT_INIT, ACT_ON, ACT_OFF, ACT_CHAIN }; 
 		
 	Att_led & begin( int attached_pin );
-	Att_led & blink( uint32_t duration ); 
+	Att_led & blink( uint32_t duration );
+    Att_led & blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );	
 	Att_led & pause( uint32_t duration ); 
 	Att_led & fade( int fade ); 
 	Att_led & repeat( int repeat ); 
     Att_led & chain( TinyMachine & n, uint8_t event = EVT_BLINK );
     Att_led & chain( TinyMachine & n, TinyMachine & p, uint8_t event = EVT_BLINK );
-  
-  private:
+    
+  private:  
 	short pin;
 	int repeat_count;
 	atm_timer_millis on_timer, off_timer;
@@ -62,8 +63,10 @@ class Att_led : public TinyMachine {
     TinyMachine * chain_next;
     TinyMachine * chain_previous;
     uint8_t chain_event;
+
 	int event( int id );
 	void action( int id );
 };
+
 
 #endif

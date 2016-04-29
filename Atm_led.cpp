@@ -116,15 +116,16 @@ Atm_led & Atm_led::trace( Stream & stream ) {
 
 // TinyMachine version
 
+
 Att_led & Att_led::begin( int attached_pin )
 { 
 	static const tiny_state_t state_table[] PROGMEM = {
-	/*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  ELSE */
-	/* IDLE      */  ACT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,     ON,      -1,     START,   -1, // LED off
-	/* ON        */    ACT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,     -1,    IDLE,     START,   -1, // LED on
-	/* START     */    ACT_ON,        -1,        -1,    BLINK_OFF,            -1,        IDLE,     ON,    IDLE,     START,   -1, // Start blinking
-	/* BLINK_OFF */   ACT_OFF,        -1,        -1,           -1,         START,        DONE,     ON,    IDLE,     START,   -1,
-	/* DONE      */        -1,        -1, ACT_CHAIN,           -1,          IDLE,          -1,     ON,    IDLE,     START,   -1, // Wait after last blink
+	/*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK ELSE */
+	/* IDLE      */  ACT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,     ON,      -1,     START,         ON,            START,  -1, // LED off
+	/* ON        */    ACT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,     -1,    IDLE,     START,       IDLE,             IDLE,  -1, // LED on
+	/* START     */    ACT_ON,        -1,        -1,    BLINK_OFF,            -1,        IDLE,     ON,    IDLE,     START,       IDLE,             IDLE,  -1, // Start blinking
+	/* BLINK_OFF */   ACT_OFF,        -1,        -1,           -1,         START,        DONE,     ON,    IDLE,     START,       IDLE,             IDLE,  -1,
+	/* DONE      */        -1,        -1, ACT_CHAIN,           -1,          IDLE,          -1,     ON,    IDLE,     START,       IDLE,             IDLE,  -1, // Wait after last blink
     };
 	TinyMachine::begin( state_table, ELSE );
 	pin = attached_pin; 
@@ -135,7 +136,6 @@ Att_led & Att_led::begin( int attached_pin )
 	counter.set( repeat_count );
 	return *this;
 }
-
 
 Att_led & Att_led::chain( TinyMachine & n, uint8_t event /* = EVT_BLINK */ ) 
 {
@@ -153,6 +153,13 @@ Att_led & Att_led::chain( TinyMachine & n, TinyMachine & p, uint8_t event /* = E
     chain_event = event;
     flags &= ~ATM_USR1_FLAG;
     return *this;
+}
+
+Att_led & Att_led::blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count /* = ATM_COUNTER_OFF */ ) {
+	
+	blink( duration ); // Time in which led is fully on
+    pause( pause_duration );
+    repeat( repeat_count );
 }
 
 Att_led & Att_led::blink( uint32_t duration ) 
@@ -215,3 +222,5 @@ void Att_led::action( int id )
             return;
 	}
 }
+
+

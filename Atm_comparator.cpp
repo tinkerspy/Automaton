@@ -1,7 +1,7 @@
 #include "Atm_comparator.h"
 
   
-Atm_comparator & Atm_comparator::begin( int attached_pin, int samplerate, triggercb_t cb )
+Atm_comparator & Atm_comparator::begin( int attached_pin, int samplerate, triggercb_t cb /* = 0 */ )
 {
   const static state_t state_table[] PROGMEM = {
   /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_TRIGGER EVT_TIMER   ELSE */
@@ -16,6 +16,42 @@ Atm_comparator & Atm_comparator::begin( int attached_pin, int samplerate, trigge
   bitmap_previous = 0;
   callback = cb;
   return *this;          
+}
+
+Atm_comparator & Atm_comparator::onUp( Machine & machine, int event /* = 0 */ )
+{
+  _up_machine = &machine;
+  _up_machine_event = event;
+  flags &= ~ATM_USR2_FLAG;
+  flags |= ATM_USR1_FLAG;
+  return *this;
+}
+
+Atm_comparator & Atm_comparator::onUp( const char * label, int event /* = 0 */ )
+{
+  _down_label = label;
+  _down_label_event = event;
+  flags &= ~ATM_USR1_FLAG;
+  flags |= ATM_USR2_FLAG;
+  return *this;
+}
+
+Atm_comparator & Atm_comparator::onDown( Machine & machine, int event /* = 0 */ )
+{
+  _down_machine = &machine;
+  _down_machine_event = event;
+  flags &= ~ATM_USR4_FLAG;
+  flags |= ATM_USR3_FLAG;
+  return *this;
+}
+
+Atm_comparator & Atm_comparator::onDown( const char * label, int event /* = 0 */ )
+{
+  _down_label = label;
+  _down_label_event = event;
+  flags &= ~ATM_USR3_FLAG;
+  flags |= ATM_USR4_FLAG;
+  return *this;
 }
 
 int Atm_comparator::read_sample() 
@@ -41,15 +77,15 @@ int Atm_comparator::sample()
   return avg_buf_size > 0 ? _avg() : read_sample();
 }
 
-Atm_comparator &  Atm_comparator::threshold( uint16_t * v, uint16_t size, bool catchUp ) 
+Atm_comparator &  Atm_comparator::threshold( uint16_t * v, uint16_t size, bool catchUp /* = false */ ) 
 {
    p_threshold = v;
    p_threshold_size = size;
-   if ( catchUp == false ){
-      v_sample = sample();
-      bitmap( v_sample );
-      v_previous = v_sample;
-      bitmap_previous = bitmap_sample;
+   if ( !catchUp ) {
+     v_sample = sample();
+     bitmap( v_sample );
+     v_previous = v_sample;
+     bitmap_previous = bitmap_sample;
    }
    return *this;
 }
@@ -67,10 +103,10 @@ Atm_comparator &  Atm_comparator::average( uint16_t * v, uint16_t size )
    return *this;
 }
 
-Atm_comparator & Atm_comparator::bitmap( uint16_t v ) 
+Atm_comparator & Atm_comparator::bitmap( int v ) 
 {
    bitmap_sample = 0;
-   for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
+   for ( int i = 0; i < p_threshold_size; i++ ) {
      if ( v >= p_threshold[i] ) bitmap_sample |= ( 1 << i );
    }
    bitmap_diff = bitmap_sample ^ bitmap_previous;
@@ -102,36 +138,54 @@ void Atm_comparator::action( int id )
   	  return;
   	case ACT_SEND :
       if ( v_sample >= v_previous ) {
-        for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
+        for ( int i = 0; i < p_threshold_size; i++ ) {
           if ( (bitmap_diff >> i ) & 1 ) {
-            flags |= ATM_CALLBACK_FLAG;
-            (*callback)( v_sample, 1, i, p_threshold[i] );      
-            flags &= ~ATM_CALLBACK_FLAG;
+			if ( callback ) {
+              flags |= ATM_CALLBACK_FLAG;		
+              (*callback)( v_sample, 1, i, p_threshold[i] );
+              flags &= ~ATM_CALLBACK_FLAG;		
+            }
+            if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+				_up_machine->trigger( _up_machine_event );
+			}		
+            if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
+				factory->trigger( _up_label, _up_label_event );
+			}		
           }
         }        
       } else {
-        for ( uint16_t i = p_threshold_size; i >= 0; i-- ) {
+        for ( int i = p_threshold_size; i >= 0; i-- ) {
           if ( (bitmap_diff >> i ) & 1 ) {
-            flags |= ATM_CALLBACK_FLAG;
-            (*callback)( v_sample, 0, i, p_threshold[i] );      
-            flags &= ~ATM_CALLBACK_FLAG;
+			if ( callback ) {
+              flags |= ATM_CALLBACK_FLAG;		
+              (*callback)( v_sample, 0, i, p_threshold[i] ); 
+              flags &= ~ATM_CALLBACK_FLAG;		
+		    }			  
+            if ( ( flags & ATM_USR3_FLAG ) > 0 ) {
+				_down_machine->trigger( _down_machine_event );
+			}		
+            if ( ( flags & ATM_USR4_FLAG ) > 0 ) {
+				factory->trigger( _down_label, _down_label_event );
+			}		
           }
         }
-      }
-  	  return;
+      } 	
+      return;
    }
 }
 
-Atm_comparator & Atm_comparator::trace( Stream * stream ) {
+Atm_comparator & Atm_comparator::trace( Stream & stream )
+{
+  setTrace( &stream, atm_serial_debug::trace,
+    "EVT_TRIGGER\0EVT_TIMER\0ELSE\0"
+    "IDLE\0SAMPLE\0SEND" );
 
-  setTrace( stream, atm_serial_debug::trace,
-    "EVT_TRIGGER\0EVT_TIMER\0ELSE\0IDLE\0SAMPLE\0SEND" );
   return *this;
 }
 
-// TinyMachine version
+// Tiny Machine version
   
-Att_comparator & Att_comparator::begin( int attached_pin, int samplerate, triggercb_t cb )
+Att_comparator & Att_comparator::begin( int attached_pin, int samplerate, triggercb_t cb /* = 0 */ )
 {
   const static tiny_state_t state_table[] PROGMEM = {
   /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_TRIGGER EVT_TIMER   ELSE */
@@ -146,6 +200,24 @@ Att_comparator & Att_comparator::begin( int attached_pin, int samplerate, trigge
   bitmap_previous = 0;
   callback = cb;
   return *this;          
+}
+
+Att_comparator & Att_comparator::onUp( TinyMachine & machine, int event /* = 0 */ )
+{
+  _up_machine = &machine;
+  _up_machine_event = event;
+  flags &= ~ATM_USR2_FLAG;
+  flags |= ATM_USR1_FLAG;
+  return *this;
+}
+
+Att_comparator & Att_comparator::onDown( TinyMachine & machine, int event /* = 0 */ )
+{
+  _down_machine = &machine;
+  _down_machine_event = event;
+  flags &= ~ATM_USR4_FLAG;
+  flags |= ATM_USR3_FLAG;
+  return *this;
 }
 
 int Att_comparator::read_sample() 
@@ -171,15 +243,15 @@ int Att_comparator::sample()
   return avg_buf_size > 0 ? _avg() : read_sample();
 }
 
-Att_comparator &  Att_comparator::threshold( uint16_t * v, uint16_t size, bool catchUp ) 
+Att_comparator &  Att_comparator::threshold( uint16_t * v, uint16_t size, bool catchUp /* = false */ ) 
 {
    p_threshold = v;
    p_threshold_size = size;
-   if ( catchUp == false ){
-      v_sample = sample();
-      bitmap( v_sample );
-      v_previous = v_sample;
-      bitmap_previous = bitmap_sample;
+   if ( !catchUp ) {
+     v_sample = sample();
+     bitmap( v_sample );
+     v_previous = v_sample;
+     bitmap_previous = bitmap_sample;
    }
    return *this;
 }
@@ -197,10 +269,10 @@ Att_comparator &  Att_comparator::average( uint16_t * v, uint16_t size )
    return *this;
 }
 
-Att_comparator & Att_comparator::bitmap( uint16_t v ) 
+Att_comparator & Att_comparator::bitmap( int v ) 
 {
    bitmap_sample = 0;
-   for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
+   for ( int i = 0; i < p_threshold_size; i++ ) {
      if ( v >= p_threshold[i] ) bitmap_sample |= ( 1 << i );
    }
    bitmap_diff = bitmap_sample ^ bitmap_previous;
@@ -232,26 +304,33 @@ void Att_comparator::action( int id )
   	  return;
   	case ACT_SEND :
       if ( v_sample >= v_previous ) {
-        for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
+        for ( int i = 0; i < p_threshold_size; i++ ) {
           if ( (bitmap_diff >> i ) & 1 ) {
-            flags |= ATM_CALLBACK_FLAG;
-            (*callback)( v_sample, 1, i, p_threshold[i] );      
-            flags &= ~ATM_CALLBACK_FLAG;
+			if ( callback ) {
+              flags |= ATM_CALLBACK_FLAG;		
+              (*callback)( v_sample, 1, i, p_threshold[i] );
+              flags &= ~ATM_CALLBACK_FLAG;		
+            }
+            if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+				_up_machine->trigger( _up_machine_event );
+			}		
           }
         }        
       } else {
-        for ( uint16_t i = p_threshold_size; i >= 0; i-- ) {
+        for ( int i = p_threshold_size; i >= 0; i-- ) {
           if ( (bitmap_diff >> i ) & 1 ) {
-            flags |= ATM_CALLBACK_FLAG;
-            (*callback)( v_sample, 0, i, p_threshold[i] );      
-            flags &= ~ATM_CALLBACK_FLAG;
+			if ( callback ) {
+              flags |= ATM_CALLBACK_FLAG;		
+              (*callback)( v_sample, 0, i, p_threshold[i] ); 
+              flags &= ~ATM_CALLBACK_FLAG;		
+		    }			  
+            if ( ( flags & ATM_USR3_FLAG ) > 0 ) {
+				_down_machine->trigger( _down_machine_event );
+			}		
           }
         }
-      }
-  	  return;
+      } 	
+      return;
    }
 }
-
-
-
 
