@@ -70,6 +70,7 @@ Machine & Machine::trigger( int evt /* = 0 */ )
 	if ( new_state > -1 ) {
 	  state( new_state );
 	  last_trigger = evt;
+	  cycle();
 	}
     return *this; 
 }
@@ -200,6 +201,7 @@ TinyMachine & TinyMachine::trigger( int evt /* = 0 */ )
 	} while ( --max_cycle && ( new_state == -1 ) );
 	if ( new_state > -1 ) {
 	  state( new_state );
+	  cycle();
 	}
     return *this; 
 }
