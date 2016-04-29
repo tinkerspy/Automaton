@@ -20,7 +20,7 @@ class Atm_led : public Machine {
 	Atm_led & fade( int fade ); 
 	Atm_led & repeat( int repeat ); 
     Atm_led & trace( Stream & stream );
-    Atm_led & chain( Machine & n );
+    Atm_led & chain( Machine & n, uint8_t event = EVT_BLINK );
     Atm_led & chain( Machine & n, Machine & p, uint8_t event = EVT_BLINK );
     
   private:  
@@ -51,7 +51,7 @@ class Att_led : public TinyMachine {
 	Att_led & pause( uint32_t duration ); 
 	Att_led & fade( int fade ); 
 	Att_led & repeat( int repeat ); 
-    Att_led & chain( TinyMachine & n );
+    Att_led & chain( TinyMachine & n, uint8_t event = EVT_BLINK );
     Att_led & chain( TinyMachine & n, TinyMachine & p, uint8_t event = EVT_BLINK );
   
   private:

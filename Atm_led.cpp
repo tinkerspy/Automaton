@@ -20,11 +20,11 @@ Atm_led & Atm_led::begin( int attached_pin )
 	return *this;
 }
 
-Atm_led & Atm_led::chain( Machine & n ) 
+Atm_led & Atm_led::chain( Machine & n, uint8_t event /* = EVT_BLINK */ ) 
 {
     chain_next = &n;
     chain_previous = &n;    
-    chain_event = EVT_BLINK;
+    chain_event = event;
     flags &= ~ATM_USR1_FLAG;
     return *this;
 }
@@ -137,11 +137,11 @@ Att_led & Att_led::begin( int attached_pin )
 }
 
 
-Att_led & Att_led::chain( TinyMachine & n ) 
+Att_led & Att_led::chain( TinyMachine & n, uint8_t event /* = EVT_BLINK */ ) 
 {
     chain_next = &n;
     chain_previous = &n;    
-    chain_event = EVT_BLINK;
+    chain_event = event;
     flags &= ~ATM_USR1_FLAG;
     return *this;
 }
