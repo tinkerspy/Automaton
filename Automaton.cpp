@@ -68,8 +68,8 @@ Machine & Machine::trigger( int evt /* = 0 */ )
 	  new_state = read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
 	} while ( --max_cycle && ( new_state == -1 ) );
 	if ( new_state > -1 ) {
-	  state( new_state );
-	  last_trigger = evt;
+      flags &= ~ATM_SLEEP_FLAG;
+      next_trigger = evt;
 	  cycle();
 	}
     return *this; 
@@ -166,9 +166,11 @@ Machine & Machine::cycle( uint32_t time /* = 0 */ )
             state_t i = read_state( state_table + ( current * state_width ) + ATM_ON_LOOP );
             if ( i != -1 ) { action( i ); }
             for ( i = ATM_ON_EXIT + 1; i < state_width; i++ ) { 
-                if ( ( read_state( state_table + ( current * state_width ) + i ) != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
-                    state( read_state( state_table + ( current * state_width ) + i ) );
+                state_t next_state = read_state( state_table + ( current * state_width ) + i );
+                if ( ( next_state != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) || next_trigger == i - ATM_ON_EXIT - 1 ) ) {
+                    state( next_state );
                     last_trigger = i - ATM_ON_EXIT - 1;
+                    next_trigger = -1;
                     break;
                 }
             }
@@ -202,7 +204,8 @@ TinyMachine & TinyMachine::trigger( int evt /* = 0 */ )
 	  new_state = read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
 	} while ( --max_cycle && ( new_state == -1 ) );
 	if ( new_state > -1 ) {
-	  state( new_state );
+      flags &= ~ATM_SLEEP_FLAG;
+      next_trigger = evt;
 	  cycle();
 	}
     return *this; 
@@ -242,8 +245,10 @@ TinyMachine & TinyMachine::cycle( uint32_t time /* = 0 */ )
             tiny_state_t i = tiny_read_state( state_table + ( current * state_width ) + ATM_ON_LOOP );
             if ( i != -1 ) { action( i ); }
             for ( i = ATM_ON_EXIT + 1; i < state_width; i++ ) {
-                if ( ( tiny_read_state( state_table + ( current * state_width ) + i ) != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
-                    state( tiny_read_state( state_table + ( current * state_width ) + i ) );
+                state_t next_state = tiny_read_state( state_table + ( current * state_width ) + i  || next_trigger == i - ATM_ON_EXIT - 1 );
+                if ( ( next_state != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
+                    state( next_state );
+                    next_trigger = -1;
                     break;
                 }
             }
