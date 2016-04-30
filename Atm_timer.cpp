@@ -97,9 +97,7 @@ void Atm_timer::action( int id )
   	case ACT_TRIG :
       repcounter.decrement();
       if ( callback ) {
-         flags |= ATM_CALLBACK_FLAG;
          (*callback)( timer_id, repeat_cnt - repcounter.value );
-         flags &= ~ATM_CALLBACK_FLAG;
       }
       if ( client_machine ) {
         client_machine->trigger( client_event );
@@ -209,9 +207,7 @@ void Att_timer::action( int id )
   	case ACT_TRIG :
       repcounter.decrement();
       if ( callback ) {
-         flags |= ATM_CALLBACK_FLAG;          
          (*callback)( timer_id, repeat_cnt - repcounter.value );
-         flags &= ~ATM_CALLBACK_FLAG;
       }
       if ( client_machine ) {
         client_machine->trigger( client_event );

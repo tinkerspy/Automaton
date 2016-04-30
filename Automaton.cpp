@@ -138,10 +138,11 @@ Machine & Machine::cycle( uint32_t time /* = 0 */ )
 {
     uint32_t cycle_start = millis();
     do {
-        if ( ( flags & ( ATM_SLEEP_FLAG | ATM_CALLBACK_FLAG ) ) == 0 ) {
+        if ( ( flags & ( ATM_SLEEP_FLAG | ATM_CYCLE_FLAG ) ) == 0 ) {
             cycles++;
+            flags |= ATM_CYCLE_FLAG;
             if ( next != -1 ) {
-                action( ATM_ON_SWITCH );
+                action( ATM_ON_SWITCH );                
                 if ( callback_trace ) {
                     callback_trace( stream_trace, inst_label, 
                         mapSymbol( current == -1 ? current : current + state_width - ATM_ON_EXIT - 1, _symbols ), 
@@ -171,6 +172,7 @@ Machine & Machine::cycle( uint32_t time /* = 0 */ )
                     break;
                 }
             }
+            flags &= ~ATM_CYCLE_FLAG;
         }
     } while ( millis() - cycle_start < time );
     return *this;
@@ -221,7 +223,8 @@ TinyMachine & TinyMachine::cycle( uint32_t time /* = 0 */ )
 {
     uint32_t cycle_start = millis();
     do {
-        if ( ( flags & ( ATM_SLEEP_FLAG | ATM_CALLBACK_FLAG ) ) == 0 ) {
+        if ( ( flags & ( ATM_SLEEP_FLAG | ATM_CYCLE_FLAG ) ) == 0 ) {
+			flags |= ATM_CYCLE_FLAG;
             if ( next != -1 ) {
                 action( ATM_ON_SWITCH );
                 if ( current > -1 )
@@ -244,6 +247,7 @@ TinyMachine & TinyMachine::cycle( uint32_t time /* = 0 */ )
                     break;
                 }
             }
+            flags &= ~ATM_CYCLE_FLAG;
         }
     } while ( millis() - cycle_start < time );
     return *this;
@@ -275,7 +279,7 @@ void Factory::run( int q )
 {
     Machine * m = priority_root[ q ];
     while ( m ) {
-        if ( q > 0 && ( m->flags & ( ATM_SLEEP_FLAG | ATM_CALLBACK_FLAG ) ) == 0 ) m->cycle();
+        if ( q > 0 && ( m->flags & ( ATM_SLEEP_FLAG | ATM_CYCLE_FLAG ) ) == 0 ) m->cycle();
         // Request a recalibrate if the prio field doesn't match the current queue
         if ( m->prio != q ) recalibrate = 1;
         // Move to the next machine
@@ -394,7 +398,7 @@ TinyFactory &  TinyFactory::cycle( uint32_t time /* = 0 */ )
     do {
         m = inventory_root;
         while ( m ) {
-            if ( ( m->flags & ( ATM_SLEEP_FLAG | ATM_CALLBACK_FLAG ) ) == 0 ) m->cycle();
+            if ( ( m->flags & ( ATM_SLEEP_FLAG | ATM_CYCLE_FLAG ) ) == 0 ) m->cycle();
             // Move to the next machine
             m = m->inventory_next;
             //if ( time > 0 && ( millis() - cycle_start ) < time ) break;

@@ -141,9 +141,7 @@ void Atm_comparator::action( int id )
         for ( int i = 0; i < p_threshold_size; i++ ) {
           if ( (bitmap_diff >> i ) & 1 ) {
 			if ( callback ) {
-              flags |= ATM_CALLBACK_FLAG;		
               (*callback)( v_sample, 1, i, p_threshold[i] );
-              flags &= ~ATM_CALLBACK_FLAG;		
             }
             if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
 				_up_machine->trigger( _up_machine_event );
@@ -157,9 +155,7 @@ void Atm_comparator::action( int id )
         for ( int i = p_threshold_size; i >= 0; i-- ) {
           if ( (bitmap_diff >> i ) & 1 ) {
 			if ( callback ) {
-              flags |= ATM_CALLBACK_FLAG;		
               (*callback)( v_sample, 0, i, p_threshold[i] ); 
-              flags &= ~ATM_CALLBACK_FLAG;		
 		    }			  
             if ( ( flags & ATM_USR3_FLAG ) > 0 ) {
 				_down_machine->trigger( _down_machine_event );
@@ -307,9 +303,7 @@ void Att_comparator::action( int id )
         for ( int i = 0; i < p_threshold_size; i++ ) {
           if ( (bitmap_diff >> i ) & 1 ) {
 			if ( callback ) {
-              flags |= ATM_CALLBACK_FLAG;		
               (*callback)( v_sample, 1, i, p_threshold[i] );
-              flags &= ~ATM_CALLBACK_FLAG;		
             }
             if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
 				_up_machine->trigger( _up_machine_event );
@@ -320,9 +314,7 @@ void Att_comparator::action( int id )
         for ( int i = p_threshold_size; i >= 0; i-- ) {
           if ( (bitmap_diff >> i ) & 1 ) {
 			if ( callback ) {
-              flags |= ATM_CALLBACK_FLAG;		
               (*callback)( v_sample, 0, i, p_threshold[i] ); 
-              flags &= ~ATM_CALLBACK_FLAG;		
 		    }			  
             if ( ( flags & ATM_USR3_FLAG ) > 0 ) {
 				_down_machine->trigger( _down_machine_event );

@@ -96,9 +96,7 @@ void Atm_step::action( int id )
   if ( id > -1 ) {
     switch ( _step[id]._mode ) {
       case MODE_CALLBACK:
-        flags |= ATM_CALLBACK_FLAG;
         (*_step[id]._callback)( id );
-        flags &= ~ATM_CALLBACK_FLAG;
         return;
       case MODE_MACHINE:
         _step[id]._client_machine->trigger( _step[id]._client_machine_event );
@@ -211,9 +209,7 @@ void Att_step::action( int id )
   if ( id > -1 ) {
     switch ( _step[id]._mode ) {
       case MODE_CALLBACK:
-        flags |= ATM_CALLBACK_FLAG;
         (*_step[id]._callback)( id );
-        flags &= ~ATM_CALLBACK_FLAG;
         return;
       case MODE_MACHINE:
         _step[id]._client_machine->trigger( _step[id]._client_machine_event );

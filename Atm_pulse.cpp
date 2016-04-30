@@ -46,9 +46,7 @@ void Atm_pulse::action( int id )
   switch ( id ) {
   	case ACT_PULSE :
       if ( callback ) {
-         flags |= ATM_CALLBACK_FLAG;
          (*callback)();
-         flags &= ~ATM_CALLBACK_FLAG;
          return;
       }
       client_machine->trigger( client_event );
@@ -112,9 +110,7 @@ void Att_pulse::action( int id )
   switch ( id ) {
   	case ACT_PULSE :
       if ( callback ) {
-         flags |= ATM_CALLBACK_FLAG;
          (*callback)();
-         flags &= ~ATM_CALLBACK_FLAG;
          return;
       }
       client_machine->trigger( client_event );

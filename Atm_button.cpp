@@ -114,9 +114,7 @@ void Atm_button::cb( int press, int idx ) {
 
     if ( press > 0 ) _press_count++;
     if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
-      flags |= ATM_CALLBACK_FLAG;
       (*_callback)( press, idx, _press_count );
-	  flags &= ~ATM_CALLBACK_FLAG;
 	}
 }
 
@@ -266,9 +264,7 @@ void Att_button::cb( int press, int idx ) {
 
     if ( press > 0 ) _press_count++;
     if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
-	  flags |= ATM_CALLBACK_FLAG;
       (*_callback)( press, idx, _press_count );
-      flags &= ~ATM_CALLBACK_FLAG;
 	}
 }
 

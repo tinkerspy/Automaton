@@ -88,9 +88,7 @@ void Atm_gate::action( int id )
     case ACT_OPEN:
       if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
         _callback_count++;
-        flags |= ATM_CALLBACK_FLAG;
         (*_callback)( _callback_idx, _callback_count );
-        flags &= ~ATM_CALLBACK_FLAG;
       }
       if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
         _client_machine->trigger( _client_machine_event );
