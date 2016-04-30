@@ -70,7 +70,8 @@ Machine & Machine::trigger( int evt /* = 0 */ )
 	if ( new_state > -1 ) {
       flags &= ~ATM_SLEEP_FLAG;
       next_trigger = evt;
-	  cycle();
+	  cycle(); // Pick up the trigger
+      cycle(); // Process the state change
 	}
     return *this; 
 }
@@ -206,7 +207,8 @@ TinyMachine & TinyMachine::trigger( int evt /* = 0 */ )
 	if ( new_state > -1 ) {
       flags &= ~ATM_SLEEP_FLAG;
       next_trigger = evt;
-	  cycle();
+	  cycle(); // Pick up the trigger
+      cycle(); // Process the state change
 	}
     return *this; 
 }
