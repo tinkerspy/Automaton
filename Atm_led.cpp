@@ -83,6 +83,7 @@ void Atm_led::action( int id )
 	switch ( id ) {
 		case ACT_INIT :
 			counter.set( repeat_count );
+			digitalWrite( pin, LOW );
 			return;
 		case ACT_ON :
 			digitalWrite( pin, HIGH );

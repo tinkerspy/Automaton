@@ -66,7 +66,7 @@ Machine & Machine::trigger( int evt /* = 0 */ )
 	do {
 	  cycle();
 	  new_state = read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
-	} while ( --max_cycle && ( new_state == -1 ) );
+	} while ( --max_cycle && ( new_state == -1 ) && ( next_trigger != -1 ) );
 	if ( new_state > -1 ) {
       flags &= ~ATM_SLEEP_FLAG;
       next_trigger = evt;
@@ -201,8 +201,8 @@ TinyMachine & TinyMachine::trigger( int evt /* = 0 */ )
 	int max_cycle = 8;
 	do {
 	  cycle();
-	  new_state = read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
-	} while ( --max_cycle && ( new_state == -1 ) );
+	  new_state = tiny_read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
+	} while ( --max_cycle && ( new_state == -1 ) && ( next_trigger != -1 ) );
 	if ( new_state > -1 ) {
       flags &= ~ATM_SLEEP_FLAG;
       next_trigger = evt;
