@@ -12,17 +12,17 @@ Atm_led led1, led2;
 Atm_button btn;
 Factory factory;
 
-void cb( int press ) {
+void cb( int press, int idx, uint16_t cnt ) {
 
 }
 
 void setup() {
   Serial.begin( 9600 );
-  led1.begin( led1Pin ).blink( 200 ).state( led1.START );
-  led2.begin( led2Pin ).blink( 300 ).state( led2.START );
-  led1.onSwitch( atm_serial_debug::onSwitch ).label( "LED1" );
-  led2.onSwitch( atm_serial_debug::onSwitch ).label( "LED2" );
-  btn.begin( buttonPin, cb ).onSwitch( atm_serial_debug::onSwitch );
+  led1.begin( led1Pin ).blink( 200 ).trigger( led1.EVT_BLINK );
+  led2.begin( led2Pin ).blink( 300 ).trigger( led1.EVT_BLINK );
+  led1.trace( Serial ).label( "LED1" );
+  led2.trace( Serial ).label( "LED2" );
+  btn.begin( buttonPin ).onPress( cb ).trace( Serial );
   factory.add( led1).add( led2 ).add( btn );  
 }
 
