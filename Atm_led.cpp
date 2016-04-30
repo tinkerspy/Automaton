@@ -93,8 +93,7 @@ void Atm_led::action( int id )
 			return;
         case ACT_CHAIN :            
             if ( chain_next ) {
-		      Serial.println( "chaining" );
-              if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+	          if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
                 chain_previous->trigger( chain_event );
               } else {
                 chain_next->trigger( chain_event );
