@@ -18,8 +18,8 @@ const int longerwaitTime = 1000;
 void setup() {
   
   // Define two leds (patterns) and add them to the factory
-  factory.add(  dot.begin( 3 ).blink(  dotTime, waitTime, 3 ) );
-  factory.add( dash.begin( 3 ).blink( dashTime, waitTime, 3 ) );
+  factory.add(  dot.begin( pin ).blink(  dotTime, waitTime, 3 ) );
+  factory.add( dash.begin( pin ).blink( dashTime, waitTime, 3 ) );
   
   // Define a timer and add it to the factory
   factory.add( stepTimer.begin( 1700 ).repeat( ATM_COUNTER_OFF ) );
