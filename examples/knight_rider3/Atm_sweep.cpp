@@ -64,7 +64,7 @@ void Atm_sweep::action( int id )
 Atm_sweep & Atm_sweep::trace( Stream & stream ) {
 
   Machine::setTrace( &stream, atm_serial_debug::trace,
-       "EVT_TIMER\0EVT_START\0EVT_STOP\0ELSE"
+       "EVT_TIMER\0EVT_START\0EVT_STOP\0ELSE\0"
        "IDLE\0U0\0U1\0U2\0U3\0U4\0U5\0D4\0D3\0D2\0D1\0D0" );
   return *this;
 }
