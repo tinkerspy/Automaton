@@ -1,48 +1,34 @@
 #include <Automaton.h>
 #include <Atm_led.h>
-#include <Atm_fade.h>
 #include <Atm_button.h>
 
 // Start by creating a bunch of state machines
 
-//Atm_led led1, led2, led3; // Two Atm_led machines
-Atm_fade led1, led2,led3; // An Atm_fade machine
-Atm_button btn; // An Atm_button machine
+Atm_led led1, led2, led3; // Three Automaton led machines
+Atm_button btn; // An Automaton button machine
 Factory factory; // And finally a factory to house them in
-
-// This function is called by the Atm_button machine whenever a button press or release is detected
-
-void btn_change( int press ) 
-{
-  if ( press ) {
-    led1.toggle( led1.IDLE, led1.START );
-    led2.toggle( led2.IDLE, led2.START );
-    led3.toggle( led3.IDLE, led3.START );
-  }
-}
-
-// Configure the machines, add them to the factory and set the initial state of the LEDs to on
 
 void setup() 
 {
-  //Serial.begin(9600);delay(1000);Serial.println( "start" );
-  // Initialize the machines
-  led1.begin( 3 ).blink( 20 ).fade( 5 ).state( led1.START );
-  led2.begin( 4 ).blink( 10 ).pause( 1000 ).fade( 5 ).state( led2.START );
-  led3.begin( 5 ).blink( 10 ).pause( 200 ).fade( 5 ).state( led3.START );
-  btn.begin( 11, btn_change );
+  // Initialize the led machines at different rates
+  led1.begin( 3 ).blink( 20 );
+  led2.begin( 4 ).blink( 10 ).pause( 1000 );
+  led3.begin( 5 ).blink( 10 ).pause( 200 );
+
+  // Set up a button to send a trigger to all machines in the .LED class
+  btn.begin( 8 ).onPress( ".LED", Atm_led::EVT_TOGGLE_BLINK );
   
   // Add the initialized machines to the factory
-  factory.add( led1 );
-  factory.add( led2 );
-  factory.add( led3 );
-  factory.add( btn );
+  factory.add( led1 ).add( led2 ).add( led3 ).add( btn );
+
+  // Start the blinking
+  factory.trigger( ".LED", Atm_led::EVT_BLINK );
 }
 
 // Run the factory from the Arduino loop()
+// Press the button to toggle the leds on and off
 
 void loop() 
 {
   factory.cycle();
 }
-
