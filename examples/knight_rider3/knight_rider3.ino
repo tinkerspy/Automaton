@@ -8,8 +8,8 @@ Factory factory;
 
 void setup() {
   factory
-    .add( sweep.begin( 4, 5, 6, 7, 8, 9 ).speed( 50 ) );
-    .add( button.begin( 2 ).onPress( sweep, sweep.EVT_TOGGLE ) )
+    .add( sweep.begin( 4, 5, 6, 7, 8, 9 ).speed( 50 ) )
+    .add( button.begin( 2 ).onPress( sweep, sweep.EVT_TOGGLE ) );
 }
 
 void loop() {
