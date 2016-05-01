@@ -6,7 +6,7 @@ Atm_led led[3];
 Atm_timer timer[3];
 Factory factory;
 
-const int pin = 3;
+const int pin = 4;
 const int dotTime = 100;
 const int dashTime = 300;
 const int waitTime = 200;
