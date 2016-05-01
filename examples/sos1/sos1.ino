@@ -11,7 +11,7 @@ const int longwaitTime = 500;
 const int longerwaitTime = 1000;
 
 void setup() {
-  led.begin( 3 );
+  led.begin( pin );
 }
 
 void loop() {
