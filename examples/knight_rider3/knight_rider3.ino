@@ -7,9 +7,10 @@ Atm_button button;
 Factory factory;
 
 void setup() {
-  factory
-    .add( sweep.begin( 4, 5, 6, 7, 8, 9 ).speed( 50 ) )
-    .add( button.begin( 2 ).onPress( sweep, sweep.EVT_TOGGLE ) );
+  // Create a sweep machine and add it to the factory
+  factory.add( sweep.begin( 4, 5, 6, 7, 8, 9 ).speed( 50 ) );
+  // Create a button machine link it to the sweep machine and add it to the factory
+  factory.add( button.begin( 2 ).onPress( sweep, sweep.EVT_TOGGLE ) );
 }
 
 void loop() {
