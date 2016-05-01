@@ -3,7 +3,7 @@
 #include <Atm_step.h>
 #include <Atm_comparator.h>
 
-// six leds on 3, 4, 5, 10, 11, 12 and a pot on A5
+// six leds on 4, 5, 6, 7, 8, 9 and a pot on A5
 
 Atm_comparator cmp;
 Atm_led led[6];
