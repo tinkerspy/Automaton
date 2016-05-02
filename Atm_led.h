@@ -53,7 +53,7 @@ class Att_led : public TinyMachine {
 	Att_led & fade( int fade ); 
 	Att_led & repeat( int repeat ); 
     Att_led & onFinish( TinyMachine & n, uint8_t event = EVT_BLINK );
-    Att_led & OnFinish( TinyMachine & n, TinyMachine & p, uint8_t event = EVT_BLINK );
+    Att_led & onFinish( TinyMachine & n, TinyMachine & p, uint8_t event = EVT_BLINK );
     
   private:  
 	short pin;
