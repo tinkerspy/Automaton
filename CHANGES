@@ -11,7 +11,7 @@ New features/fixes:
 - Atm_led: blink cycle now includes the trailing pause
 - Added sleep() method to sleep/wake up machines and request sleep status
 - Atm_led: repeat(0) makes led not blink
-- Atm_led: added chain() method (chain to self doesn't work)
+- Atm_led: added onFinish() method 
 - Automatic cycle() added on a trigger() call
 - Machines now have the sleep bit set on declaration which is cleared on begin() call (avoid cycling uninitialized machines)
 - Factory::cycle now takes a time argument (ms) after which it will stop running (0 default: after 1 cycle)
