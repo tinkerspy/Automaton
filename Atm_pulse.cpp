@@ -49,7 +49,8 @@ void Atm_pulse::action( int id )
          (*callback)();
          return;
       }
-      client_machine->trigger( client_event );
+      if ( client_machine ) 
+          client_machine->trigger( client_event );
   	  return;
    }
 }
@@ -113,7 +114,8 @@ void Att_pulse::action( int id )
          (*callback)();
          return;
       }
-      client_machine->trigger( client_event );
+      if ( client_machine ) 
+          client_machine->trigger( client_event );
   	  return;
    }
 }
