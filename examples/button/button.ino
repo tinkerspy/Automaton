@@ -11,12 +11,12 @@ Factory factory; // And finally a factory to house them in
 void setup() 
 {
   // Initialize the led machines at different rates
-  led1.begin( 3 ).blink( 20 );
-  led2.begin( 4 ).blink( 10 ).pause( 1000 );
-  led3.begin( 5 ).blink( 10 ).pause( 200 );
+  led1.begin( 4 ).blink( 20 );
+  led2.begin( 5 ).blink( 10 ).pause( 1000 );
+  led3.begin( 6 ).blink( 10 ).pause( 200 );
 
   // Set up a button to send a trigger to all machines in the .LED class
-  btn.begin( 8 ).onPress( ".LED", Atm_led::EVT_TOGGLE_BLINK );
+  btn.begin( 2 ).onPress( ".LED", Atm_led::EVT_TOGGLE_BLINK );
   
   // Add the initialized machines to the factory
   factory.add( led1 ).add( led2 ).add( led3 ).add( btn );

@@ -51,7 +51,7 @@ Blink led;
 
 void setup()
 {
-  led.begin( 3, 200 );
+  led.begin( 4, 200 );
 }
 
 void loop()
