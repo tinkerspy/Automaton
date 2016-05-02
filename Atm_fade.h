@@ -26,6 +26,7 @@ class Atm_fade : public Machine {
 		
 		Atm_fade & begin( int attached_pin );
         Atm_fade & trace( Stream & stream );
+        Atm_fade & blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );
 		Atm_fade & blink( uint32_t duration ); 
 		Atm_fade & pause( uint32_t duration ); 
 		Atm_fade & fade( int fade ); 
@@ -57,6 +58,7 @@ class Att_fade : public TinyMachine {
 		atm_timer_millis timer_fade, timer_on, timer_off;
 		atm_counter counter_fade, counter_repeat;
 		
+        Att_fade & blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );
 		Att_fade & begin( int attached_pin );
 		Att_fade & blink( uint32_t duration ); 
 		Att_fade & pause( uint32_t duration ); 

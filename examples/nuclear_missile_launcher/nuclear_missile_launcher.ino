@@ -29,7 +29,8 @@ void setup() {
   button1.begin( pinButton1 ).onPress( burst1, burst1.EVT_STEP );
   button2.begin( pinButton2 ).onPress( burst2, burst2.EVT_STEP );
 
-  // Create two burst machines
+  // Create two step machines and put them in burst mode
+  // On receipt of a EVT_STEP trigger: fires all steps at once
   burst1.begin()
     .onStep( 0,        gate,        gate.EVT_G0  )
     .onStep( 1, reset_timer, reset_timer.EVT_ON  )
@@ -41,10 +42,11 @@ void setup() {
     .onStep( 2,   countdown,   countdown.EVT_OFF )
     .trigger( burst2.EVT_BURST );
 
-  // Create the gate machine: two inputs & one output
+  // Create the gate machine with two inputs 
+  // When both inputs are triggered, the gate opens and starts the countdown
   gate.begin( 2 ).onOpen( countdown, countdown.EVT_BLINK );
 
-  // Create the reset timer
+  // Create the reset timer to clear the gate some time after a button press
   reset_timer.begin( buttonIntervalMax ).onTimer( gate, gate.EVT_CLEAR );
 
   // Create the countdown LED (10 times 1 flash per second), chained to the ignition 

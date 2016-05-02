@@ -25,6 +25,13 @@ Atm_fade & Atm_fade::begin( int attached_pin )
 	return *this;
 }
 
+Atm_fade & Atm_fade::blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count /* = ATM_COUNTER_OFF */ ) {
+	
+	blink( duration ); // Time in which led is fully on
+    pause( pause_duration );
+    repeat( repeat_count );
+}
+
 Atm_fade & Atm_fade::blink( uint32_t duration ) 
 {
 	timer_on.set( duration ); // Plateau between slopes (in which led is fully on)
@@ -127,6 +134,13 @@ Att_fade & Att_fade::begin( int attached_pin )
 	counter_repeat.set( ATM_COUNTER_OFF );
 	repeat_count = ATM_COUNTER_OFF;
 	return *this;
+}
+
+Att_fade & Att_fade::blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count /* = ATM_COUNTER_OFF */ ) {
+	
+	blink( duration ); // Time in which led is fully on
+    pause( pause_duration );
+    repeat( repeat_count );
 }
 
 Att_fade & Att_fade::blink( uint32_t duration ) 
