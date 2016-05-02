@@ -13,7 +13,7 @@ class Atm_led : public Machine {
 	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, EVT_TOGGLE, EVT_TOGGLE_BLINK, ELSE }; 
 	enum { ACT_INIT, ACT_ON, ACT_OFF, ACT_CHAIN }; 
 		
-	Atm_led & begin( int attached_pin );
+	Atm_led & begin( int attached_pin, bool activeLow = false );
 	Atm_led & blink( uint32_t duration );
     Atm_led & blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );	
 	Atm_led & pause( uint32_t duration ); 
@@ -25,6 +25,7 @@ class Atm_led : public Machine {
     
   private:  
 	short pin;
+    bool _activeLow;
 	int repeat_count;
 	atm_timer_millis on_timer, off_timer;
 	atm_counter counter;
@@ -46,7 +47,7 @@ class Att_led : public TinyMachine {
 	enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, EVT_TOGGLE, EVT_TOGGLE_BLINK, ELSE }; 
 	enum { ACT_INIT, ACT_ON, ACT_OFF, ACT_CHAIN }; 
 		
-	Att_led & begin( int attached_pin );
+	Att_led & begin( int attached_pin, bool activeLow = false  );
 	Att_led & blink( uint32_t duration );
     Att_led & blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );	
 	Att_led & pause( uint32_t duration ); 
@@ -57,6 +58,7 @@ class Att_led : public TinyMachine {
     
   private:  
 	short pin;
+    bool _activeLow;
 	int repeat_count;
 	atm_timer_millis on_timer, off_timer;
 	atm_counter counter;

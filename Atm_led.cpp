@@ -1,6 +1,6 @@
 #include "Atm_led.h"
 
-Atm_led & Atm_led::begin( int attached_pin ) 
+Atm_led & Atm_led::begin( int attached_pin, bool activeLow ) 
 { 
 	static const state_t state_table[] PROGMEM = {
 	/*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK ELSE */
@@ -13,8 +13,9 @@ Atm_led & Atm_led::begin( int attached_pin )
     };
 	Machine::begin( state_table, ELSE );
 	pin = attached_pin; 
+    _activeLow = activeLow;
 	pinMode( pin, OUTPUT );
-    digitalWrite( pin, LOW );
+    digitalWrite( pin, _activeLow ? HIGH : LOW );
     on_timer.set( 500 );    
     off_timer.set( 500 );    
 	repeat_count = ATM_COUNTER_OFF;
@@ -86,11 +87,11 @@ void Atm_led::action( int id )
 			counter.set( repeat_count );
 			return;
 		case ACT_ON :
-			digitalWrite( pin, HIGH );
+			digitalWrite( pin, _activeLow ? LOW : HIGH );
 			return;
 		case ACT_OFF :
 			counter.decrement();
-			digitalWrite( pin, LOW );
+			digitalWrite( pin, _activeLow ? HIGH : LOW );
 			return;
         case ACT_CHAIN :            
             if ( chain_next ) {
@@ -115,7 +116,7 @@ Atm_led & Atm_led::trace( Stream & stream ) {
 
 // TinyMachine version
 
-Att_led & Att_led::begin( int attached_pin ) 
+Att_led & Att_led::begin( int attached_pin, bool activeLow ) 
 { 
 	static const tiny_state_t state_table[] PROGMEM = {
 	/*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK ELSE */
@@ -128,8 +129,9 @@ Att_led & Att_led::begin( int attached_pin )
     };
 	TinyMachine::begin( state_table, ELSE );
 	pin = attached_pin; 
+    _activeLow = activeLow;
 	pinMode( pin, OUTPUT );
-    digitalWrite( pin, LOW );
+    digitalWrite( pin, _activeLow ? HIGH : LOW );
     on_timer.set( 500 );    
     off_timer.set( 500 );    
 	repeat_count = ATM_COUNTER_OFF;
@@ -201,11 +203,11 @@ void Att_led::action( int id )
 			counter.set( repeat_count );
 			return;
 		case ACT_ON :
-			digitalWrite( pin, HIGH );
+            digitalWrite( pin, _activeLow ? LOW : HIGH );
 			return;
 		case ACT_OFF :
 			counter.decrement();
-			digitalWrite( pin, LOW );
+            digitalWrite( pin, _activeLow ? HIGH : LOW );
 			return;
         case ACT_CHAIN :            
             if ( chain_next ) {
