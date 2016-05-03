@@ -181,6 +181,7 @@ Machine & Machine::cycle( uint32_t time /* = 0 */ )
     return *this;
 }
 
+
 // TINY MACHINE
 
 
@@ -246,9 +247,9 @@ TinyMachine & TinyMachine::cycle( uint32_t time /* = 0 */ )
             }
             tiny_state_t i = tiny_read_state( state_table + ( current * state_width ) + ATM_ON_LOOP );
             if ( i != -1 ) { action( i ); }
-            for ( i = ATM_ON_EXIT + 1; i < state_width; i++ ) {
+            for ( i = ATM_ON_EXIT + 1; i < state_width; i++ ) { 
                 state_t next_state = tiny_read_state( state_table + ( current * state_width ) + i );
-                if ( ( next_state != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
+                if ( ( next_state != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) || next_trigger == i - ATM_ON_EXIT - 1 ) ) {
                     state( next_state );
                     next_trigger = -1;
                     break;

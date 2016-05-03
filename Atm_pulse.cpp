@@ -96,8 +96,6 @@ Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration )
   pin = attached_pin; 
   timer.set( minimum_duration );
   pinMode( pin, INPUT );
-  Serial.print( "Next" );  
-  Serial.println( next );  
   return *this;          
 }
 
@@ -136,14 +134,6 @@ int Att_pulse::event( int id )
 void Att_pulse::action( int id ) 
 {
   switch ( id ) {
-    case ATM_ON_SWITCH :
-      Serial.print( current );
-      Serial.print( " -> " );
-      Serial.print( next );
-      Serial.print( " (" );
-      Serial.print( next_trigger );
-      Serial.println( ")" );
-      return ;
     case ACT_PULSE :
       if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
         _callback_count++;
