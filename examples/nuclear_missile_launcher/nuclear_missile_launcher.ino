@@ -32,14 +32,14 @@ void setup() {
   // Create two step machines and put them in burst mode
   // On receipt of a EVT_STEP trigger: fires all steps at once
   burst1.begin()
-    .onStep( 0,        gate,        gate.EVT_G0  )
+    .onStep( 0,   countdown,   countdown.EVT_OFF ) 
     .onStep( 1, reset_timer, reset_timer.EVT_ON  )
-    .onStep( 2,   countdown,   countdown.EVT_OFF )
+    .onStep( 2,        gate,        gate.EVT_G0  )
     .trigger( burst1.EVT_BURST );
   burst2.begin()
-    .onStep( 0,        gate,        gate.EVT_G1  )
+    .onStep( 0,   countdown,   countdown.EVT_OFF )
     .onStep( 1, reset_timer, reset_timer.EVT_ON  )
-    .onStep( 2,   countdown,   countdown.EVT_OFF )
+    .onStep( 2,        gate,        gate.EVT_G1  )
     .trigger( burst2.EVT_BURST );
 
   // Create the gate machine with two inputs 
@@ -69,4 +69,3 @@ void loop() {
   // Run the factory
   factory.cycle();
 }
-
