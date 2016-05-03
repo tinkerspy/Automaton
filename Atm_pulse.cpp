@@ -15,17 +15,32 @@ Atm_pulse & Atm_pulse::begin( int attached_pin, int minimum_duration )
   return *this;          
 }
 
-Atm_pulse & Atm_pulse::onPulse( Machine * machine, uint8_t event ) 
+Atm_pulse & Atm_pulse::onPulse( pulsecb_t callback, int idx /* = 0 */ )
 {
-  client_machine = machine;
-  client_event = event;
-  return *this;  
+  _callback = callback;
+  _callback_idx = idx;
+  _callback_count = 0;
+  flags &= ~( ATM_USR2_FLAG | ATM_USR3_FLAG );
+  flags |= ATM_USR1_FLAG;
+  return *this;
 }
 
-Atm_pulse & Atm_pulse::onPulse( pulsecb_t pulse_callback ) 
+Atm_pulse & Atm_pulse::onPulse( Machine & machine, int event /* = 0 */ )
 {
-  callback = pulse_callback;
-  return *this;  
+  _client_machine = &machine;
+  _client_machine_event = event;
+  flags &= ~( ATM_USR1_FLAG | ATM_USR3_FLAG );
+  flags |= ATM_USR2_FLAG;
+  return *this;
+}
+
+Atm_pulse & Atm_pulse::onPulse( const char * label, int event /* = 0 */ )
+{
+  _client_label = label;
+  _client_label_event = event;
+  flags &= ~( ATM_USR1_FLAG | ATM_USR2_FLAG );
+  flags |= ATM_USR3_FLAG;
+  return *this;
 }
 
 int Atm_pulse::event( int id ) 
@@ -45,12 +60,16 @@ void Atm_pulse::action( int id )
 {
   switch ( id ) {
   	case ACT_PULSE :
-      if ( callback ) {
-         (*callback)();
-         return;
+      if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+        _callback_count++;
+        (*_callback)( _callback_idx, _callback_count );
       }
-      if ( client_machine ) 
-          client_machine->trigger( client_event );
+      if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
+        _client_machine->trigger( _client_machine_event );
+      }
+      if ( ( flags & ATM_USR3_FLAG ) > 0 && factory ) {
+        factory->trigger( _client_label, _client_label_event );
+      }
   	  return;
    }
 }
@@ -64,7 +83,7 @@ Atm_pulse & Atm_pulse::trace( Stream & stream ) {
 
 
 // TinyMachine version
-	
+
 Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration )
 {
   const static tiny_state_t state_table[] PROGMEM = {
@@ -76,21 +95,29 @@ Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration )
   TinyMachine::begin( state_table, ELSE );
   pin = attached_pin; 
   timer.set( minimum_duration );
-  pinMode( pin, INPUT ); 
+  pinMode( pin, INPUT );
+  Serial.print( "Next" );  
+  Serial.println( next );  
   return *this;          
 }
 
-Att_pulse & Att_pulse::onPulse( TinyMachine * machine, uint8_t event ) 
+Att_pulse & Att_pulse::onPulse( pulsecb_t callback, int idx /* = 0 */ )
 {
-  client_machine = machine;
-  client_event = event;
-  return *this;  
+  _callback = callback;
+  _callback_idx = idx;
+  _callback_count = 0;
+  flags &= ~( ATM_USR2_FLAG | ATM_USR3_FLAG );
+  flags |= ATM_USR1_FLAG;
+  return *this;
 }
 
-Att_pulse & Att_pulse::onPulse( pulsecb_t pulse_callback ) 
+Att_pulse & Att_pulse::onPulse( TinyMachine & machine, int event /* = 0 */ )
 {
-  callback = pulse_callback;
-  return *this;  
+  _client_machine = &machine;
+  _client_machine_event = event;
+  flags &= ~( ATM_USR1_FLAG | ATM_USR3_FLAG );
+  flags |= ATM_USR2_FLAG;
+  return *this;
 }
 
 int Att_pulse::event( int id ) 
@@ -109,14 +136,22 @@ int Att_pulse::event( int id )
 void Att_pulse::action( int id ) 
 {
   switch ( id ) {
-  	case ACT_PULSE :
-      if ( callback ) {
-         (*callback)();
-         return;
+    case ATM_ON_SWITCH :
+      Serial.print( current );
+      Serial.print( " -> " );
+      Serial.print( next );
+      Serial.print( " (" );
+      Serial.print( next_trigger );
+      Serial.println( ")" );
+      return ;
+    case ACT_PULSE :
+      if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+        _callback_count++;
+        (*_callback)( _callback_idx, _callback_count );
       }
-      if ( client_machine ) 
-          client_machine->trigger( client_event );
+      if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
+        _client_machine->trigger( _client_machine_event );
+      }
   	  return;
    }
 }
-

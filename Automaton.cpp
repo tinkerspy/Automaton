@@ -238,7 +238,7 @@ TinyMachine & TinyMachine::cycle( uint32_t time /* = 0 */ )
                 next = -1;
                 state_millis = millis();
                 action( tiny_read_state( state_table + ( current * state_width ) + ATM_ON_ENTER ) );
-                if ( read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP ) {
+                if ( tiny_read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) == ATM_SLEEP ) {
                       flags |= ATM_SLEEP_FLAG;
                 } else {
                       flags &= ~ATM_SLEEP_FLAG;
@@ -247,7 +247,7 @@ TinyMachine & TinyMachine::cycle( uint32_t time /* = 0 */ )
             tiny_state_t i = tiny_read_state( state_table + ( current * state_width ) + ATM_ON_LOOP );
             if ( i != -1 ) { action( i ); }
             for ( i = ATM_ON_EXIT + 1; i < state_width; i++ ) {
-                state_t next_state = tiny_read_state( state_table + ( current * state_width ) + i  || next_trigger == i - ATM_ON_EXIT - 1 );
+                state_t next_state = tiny_read_state( state_table + ( current * state_width ) + i );
                 if ( ( next_state != -1 ) && ( i == state_width - 1 || event( i - ATM_ON_EXIT - 1 ) ) ) {
                     state( next_state );
                     next_trigger = -1;
