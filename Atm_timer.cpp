@@ -23,17 +23,31 @@ Atm_timer & Atm_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */ )
   return *this;          
 }
 
-Atm_timer & Atm_timer::onTimer( Machine & machine, uint8_t event ) 
+Atm_timer & Atm_timer::onTimer( timer_cb_t callback, int idx /* = 0 */ )
 {
-  client_machine = &machine;
-  client_event = event;
-  return *this;  
+  _callback = callback;
+  _callback_idx = idx;
+  flags &= ~( ATM_USR2_FLAG | ATM_USR3_FLAG );
+  flags |= ATM_USR1_FLAG;
+  return *this;
 }
 
-Atm_timer & Atm_timer::onTimer( timer_cb_t timer_callback ) 
+Atm_timer & Atm_timer::onTimer( Machine & machine, int event /* = 0 */ )
 {
-  callback = timer_callback;
-  return *this;  
+  _client_machine = &machine;
+  _client_machine_event = event;
+  flags &= ~( ATM_USR1_FLAG | ATM_USR3_FLAG );
+  flags |= ATM_USR2_FLAG;
+  return *this;
+}
+
+Atm_timer & Atm_timer::onTimer( const char * label, int event /* = 0 */ )
+{
+  _client_label = label;
+  _client_label_event = event;
+  flags &= ~( ATM_USR1_FLAG | ATM_USR2_FLAG );
+  flags |= ATM_USR3_FLAG;
+  return *this;
 }
 
 Atm_timer & Atm_timer::interval_seconds( uint32_t v )
@@ -64,12 +78,6 @@ Atm_timer & Atm_timer::repeat( uint16_t v )
   return *this;
 }
 
-Atm_timer & Atm_timer::id( int v )
-{
-  timer_id = v;  
-  return *this;
-}
-
 int Atm_timer::event( int id ) 
 {
   switch ( id ) {
@@ -96,11 +104,14 @@ void Atm_timer::action( int id )
       return;
   	case ACT_TRIG :
       repcounter.decrement();
-      if ( callback ) {
-         (*callback)( timer_id, repeat_cnt - repcounter.value );
+      if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+        (*_callback)( _callback_idx, repeat_cnt - repcounter.value  );
       }
-      if ( client_machine ) {
-        client_machine->trigger( client_event );
+      if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
+        _client_machine->trigger( _client_machine_event );
+      }
+      if ( ( flags & ATM_USR3_FLAG ) > 0 && factory ) {
+        factory->trigger( _client_label, _client_label_event );
       }
       return;
    }
@@ -133,17 +144,22 @@ Att_timer & Att_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */ )
   return *this;          
 }
 
-Att_timer & Att_timer::onTimer( TinyMachine & machine, uint8_t event ) 
+Att_timer & Att_timer::onTimer( timer_cb_t callback, int idx /* = 0 */ )
 {
-  client_machine = &machine;
-  client_event = event;
-  return *this;  
+  _callback = callback;
+  _callback_idx = idx;
+  flags &= ~( ATM_USR2_FLAG | ATM_USR3_FLAG );
+  flags |= ATM_USR1_FLAG;
+  return *this;
 }
 
-Att_timer & Att_timer::onTimer( timer_cb_t timer_callback ) 
+Att_timer & Att_timer::onTimer( TinyMachine & machine, int event /* = 0 */ )
 {
-  callback = timer_callback;
-  return *this;  
+  _client_machine = &machine;
+  _client_machine_event = event;
+  flags &= ~( ATM_USR1_FLAG | ATM_USR3_FLAG );
+  flags |= ATM_USR2_FLAG;
+  return *this;
 }
 
 Att_timer & Att_timer::interval_seconds( uint32_t v )
@@ -174,12 +190,6 @@ Att_timer & Att_timer::repeat( uint16_t v )
   return *this;
 }
 
-Att_timer & Att_timer::id( int v )
-{
-  timer_id = v;  
-  return *this;
-}
-
 int Att_timer::event( int id ) 
 {
   switch ( id ) {
@@ -206,11 +216,11 @@ void Att_timer::action( int id )
       return;
   	case ACT_TRIG :
       repcounter.decrement();
-      if ( callback ) {
-         (*callback)( timer_id, repeat_cnt - repcounter.value );
+      if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+        (*_callback)( _callback_idx, repeat_cnt - repcounter.value  );
       }
-      if ( client_machine ) {
-        client_machine->trigger( client_event );
+      if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
+        _client_machine->trigger( _client_machine_event );
       }
       return;
    }
