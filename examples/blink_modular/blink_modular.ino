@@ -5,7 +5,8 @@ Atm_blink led;
 
 void setup()
 {
-  led.begin( 3, 200 );
+  led.begin( 4, 200 );        // Setup a blink machine
+  led.trigger( led.EVT_ON );  // Turn it on
 }
 
 void loop()

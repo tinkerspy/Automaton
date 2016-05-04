@@ -162,6 +162,7 @@ class Factory
 {
   public:
         Factory & add( Machine & machine );
+        Factory & add( TinyMachine & machine );
         Machine * find( const char label[] );
         Factory & trigger( const char label[], int event = 0 );
         int state( const char label[] ); 
@@ -170,16 +171,11 @@ class Factory
         int8_t recalibrate = 1;
         Machine * inventory_root;
         Machine * priority_root[ATM_NO_OF_QUEUES];
+        TinyMachine * tiny_root;
         void calibrate( void );
         void run( int q );
+        void runTiny( void );
 };
 
-class TinyFactory 
-{
-  public:
-        TinyFactory & add( TinyMachine & machine );
-        TinyMachine * inventory_root;
-        TinyFactory & cycle( uint32_t time = 0 );
-};
 
 #endif

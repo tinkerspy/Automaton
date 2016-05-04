@@ -299,6 +299,18 @@ void Factory::run( int q )
     }
 }
 
+void Factory::runTiny() 
+{
+    TinyMachine * m;
+    m = tiny_root;
+    while ( m ) {
+        if ( ( m->flags & ( ATM_SLEEP_FLAG | ATM_CYCLE_FLAG ) ) == 0 ) m->cycle();
+        // Move to the next machine
+        m = m->inventory_next;
+        //if ( time > 0 && ( millis() - cycle_start ) < time ) break;
+    }
+}
+
 // .add( machine ) Adds a state machine to the factory by prepending it to the inventory list
 Factory & Factory::add( Machine & machine ) 
 {	
@@ -306,6 +318,14 @@ Factory & Factory::add( Machine & machine )
     inventory_root = &machine;
 	machine.factory = this;
     recalibrate = 1;
+    return *this;
+}
+
+// .add( machine ) Adds a state machine to the factory by prepending it to the inventory list
+Factory & Factory::add( TinyMachine & machine ) 
+{	
+    machine.inventory_next = tiny_root;
+    tiny_root = &machine;
     return *this;
 }
 
@@ -383,40 +403,13 @@ Factory & Factory::cycle( uint32_t time /* = 0 */ )
     uint32_t cycle_start = millis();
     if ( recalibrate ) calibrate();
     do {
+        runTiny();
         run( 1 ); run( 2 );	run( 1 ); run( 2 );
         run( 1 ); run( 3 );	run( 1 ); run( 4 );
         run( 1 ); run( 2 );	run( 1 ); run( 3 );
         run( 1 ); run( 2 );	run( 1 ); run( 0 );
     } while ( millis() - cycle_start < time );
     return  *this;
-}
-
-// TINYFACTORY - A factory for TinyMachines
-
-// .add( machine ) Adds a state machine to the factory by prepending it to the inventory list
-TinyFactory & TinyFactory::add( TinyMachine & machine ) 
-{	
-    machine.inventory_next = inventory_root;
-    inventory_root = &machine;
-    return *this;
-}
-
-
-// .cycle() executes the factory cycle 
-TinyFactory &  TinyFactory::cycle( uint32_t time /* = 0 */ ) 
-{
-    TinyMachine * m;
-    uint32_t cycle_start = millis();
-    do {
-        m = inventory_root;
-        while ( m ) {
-            if ( ( m->flags & ( ATM_SLEEP_FLAG | ATM_CYCLE_FLAG ) ) == 0 ) m->cycle();
-            // Move to the next machine
-            m = m->inventory_next;
-            //if ( time > 0 && ( millis() - cycle_start ) < time ) break;
-        }
-    } while ( ( millis() - cycle_start ) < time );
-    return *this; 
 }
 
 

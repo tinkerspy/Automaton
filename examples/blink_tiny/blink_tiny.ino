@@ -3,38 +3,41 @@
 class Blink : public TinyMachine {
 
   public:
-    Blink( void ) : TinyMachine() { };
+    Blink( void ) : TinyMachine() {
+    };
 
-    short pin;     
+    short pin;
     atm_timer_millis timer;
 
-    enum { LED_ON, LED_OFF };
-    enum { EVT_TIMER, ELSE };
-    enum { ACT_ON, ACT_OFF };
-		
+    enum { IDLE, LED_ON, LED_OFF }; // STATES
+    enum { EVT_TIMER, EVT_ON, EVT_OFF, ELSE };  //EVENTS
+    enum { ACT_ON, ACT_OFF }; // ACTIONS
+
     Blink & begin( int attached_pin, uint32_t blinkrate )
     {
       const static tiny_state_t state_table[] PROGMEM = {
-      /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER   ELSE */
-      /* LED_ON  */   ACT_ON,        -1,      -1,   LED_OFF,    -1,
-      /* LED_OFF */  ACT_OFF,        -1,      -1,    LED_ON,    -1 };
+        /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER  EVT_ON  EVT_OFF  ELSE */
+        /* IDLE    */  ACT_OFF,        -1,      -1,        -1, LED_ON,      -1,   -1,
+        /* LED_ON  */   ACT_ON,        -1,      -1,   LED_OFF,     -1,    IDLE,   -1,
+        /* LED_OFF */  ACT_OFF,        -1,      -1,    LED_ON,     -1,    IDLE,   -1,
+      };
       TinyMachine::begin( state_table, ELSE );
-      pin = attached_pin; 
-      timer.set( blinkrate ); 
-      pinMode( pin, OUTPUT ); 
-      return *this;          
+      pin = attached_pin;
+      timer.set( blinkrate );
+      pinMode( pin, OUTPUT );
+      return *this;
     }
 
-    int event( int id ) 
+    int event( int id )
     {
       switch ( id ) {
         case EVT_TIMER :
-          return timer.expired( this );        
-       }
-       return 0;
+          return timer.expired( this );
+      }
+      return 0;
     }
-	
-    void action( int id ) 
+
+    void action( int id )
     {
       switch ( id ) {
         case ACT_ON :
@@ -43,7 +46,7 @@ class Blink : public TinyMachine {
         case ACT_OFF :
           digitalWrite( pin, LOW );
           return;
-       }
+      }
     }
 };
 
@@ -51,11 +54,11 @@ Blink led;
 
 void setup()
 {
-  led.begin( 3, 200 );
+  led.begin( 4, 200 );        // Setup a blink machine
+  led.trigger( led.EVT_ON );  // Turn it on
 }
 
 void loop()
 {
   led.cycle();
 }
-
