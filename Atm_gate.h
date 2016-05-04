@@ -14,7 +14,7 @@ class Atm_gate: public Machine {
     };
 
     enum { IDLE, G0, G1, G2, G3, G4, G5, G6, G7, CHECK, OPEN, CLEAR };
-    enum { EVT_G0, EVT_G1, EVT_G2, EVT_G3, EVT_G4, EVT_G5, EVT_G6, EVT_G7, EVT_OPEN, EVT_CLEAR, ELSE };
+    enum { EVT_G0, EVT_G1, EVT_G2, EVT_G3, EVT_G4, EVT_G5, EVT_G6, EVT_G7, EVT_OPEN, EVT_RESET, ELSE };
     enum { ACT_G0, ACT_G1, ACT_G2, ACT_G3, ACT_G4, ACT_G5, ACT_G6, ACT_G7, ACT_CLEAR, ACT_OPEN };
 
     Atm_gate & begin( int numberOfInputs );
@@ -64,7 +64,7 @@ class Att_gate: public TinyMachine {
     };
 
     enum { IDLE, G0, G1, G2, G3, G4, G5, G6, G7, CHECK, OPEN, CLEAR };
-    enum { EVT_G0, EVT_G1, EVT_G2, EVT_G3, EVT_G4, EVT_G5, EVT_G6, EVT_G7, EVT_OPEN, EVT_CLEAR, ELSE };
+    enum { EVT_G0, EVT_G1, EVT_G2, EVT_G3, EVT_G4, EVT_G5, EVT_G6, EVT_G7, EVT_OPEN, EVT_RESET, ELSE };
     enum { ACT_G0, ACT_G1, ACT_G2, ACT_G3, ACT_G4, ACT_G5, ACT_G6, ACT_G7, ACT_CLEAR, ACT_OPEN };
 
     Att_gate & begin( int numberOfInputs );

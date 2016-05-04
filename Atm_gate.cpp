@@ -3,7 +3,7 @@
 Atm_gate & Atm_gate::begin( int numberOfInputs )
 {
   const static state_t state_table[] PROGMEM = {
-    /*             ON_ENTER    ON_LOOP  ON_EXIT  EVT_G0 EVT_G1 EVT_G2 EVT_G3 EVT_G4 EVT_G5 EVT_G6 EVT_G7 EVT_OPEN  EVT_CLEAR   ELSE */
+    /*             ON_ENTER    ON_LOOP  ON_EXIT  EVT_G0 EVT_G1 EVT_G2 EVT_G3 EVT_G4 EVT_G5 EVT_G6 EVT_G7 EVT_OPEN  EVT_RESET   ELSE */
     /* IDLE    */        -1,        -1,      -1,     G0,    G1,    G2,    G3,    G4,    G5,    G6,    G7,    OPEN,     CLEAR,    -1,
     /* G0      */    ACT_G0,        -1,      -1,     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,      -1,        -1, CHECK,
     /* G1      */    ACT_G1,        -1,      -1,     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,      -1,        -1, CHECK,
@@ -115,7 +115,7 @@ void Atm_gate::action( int id )
 Atm_gate & Atm_gate::trace( Stream & stream )
 {
   setTrace( &stream, atm_serial_debug::trace,
-            "EVT_G0\0EVT_G1\0EVT_G2\0EVT_G3\0EVT_G4\0EVT_G5\0EVT_G6\0EVT_G7\0EVT_OPEN\0EVT_CLEAR\0ELSE\0"
+            "EVT_G0\0EVT_G1\0EVT_G2\0EVT_G3\0EVT_G4\0EVT_G5\0EVT_G6\0EVT_G7\0EVT_OPEN\0EVT_RESET\0ELSE\0"
             "IDLE\0G0\0G1\0G2\0G3\0G4\0G5\0G6\0G7\0CHECK\0OPEN\0CLEAR" );
   return *this;
 }
@@ -126,7 +126,7 @@ Atm_gate & Atm_gate::trace( Stream & stream )
 Att_gate & Att_gate::begin( int numberOfInputs )
 {
   const static tiny_state_t state_table[] PROGMEM = {
-    /*             ON_ENTER    ON_LOOP  ON_EXIT  EVT_G0 EVT_G1 EVT_G2 EVT_G3 EVT_G4 EVT_G5 EVT_G6 EVT_G7 EVT_OPEN  EVT_CLEAR   ELSE */
+    /*             ON_ENTER    ON_LOOP  ON_EXIT  EVT_G0 EVT_G1 EVT_G2 EVT_G3 EVT_G4 EVT_G5 EVT_G6 EVT_G7 EVT_OPEN  EVT_RESET   ELSE */
     /* IDLE    */        -1,        -1,      -1,     G0,    G1,    G2,    G3,    G4,    G5,    G6,    G7,    OPEN,     CLEAR,    -1,
     /* G0      */    ACT_G0,        -1,      -1,     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,      -1,        -1, CHECK,
     /* G1      */    ACT_G1,        -1,      -1,     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,      -1,        -1, CHECK,
