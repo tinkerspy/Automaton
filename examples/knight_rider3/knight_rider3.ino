@@ -1,5 +1,4 @@
 #include <Automaton.h>
-#include <Atm_button.h>
 #include "Atm_sweep.h"
 
 Atm_sweep sweep;

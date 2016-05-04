@@ -1,7 +1,4 @@
 #include <Automaton.h>
-#include <Atm_led.h>
-#include <Atm_step.h>
-#include <Atm_comparator.h>
 
 // six leds on 4, 5, 6, 7, 8, 9 and a pot on A5
 

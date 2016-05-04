@@ -1,6 +1,4 @@
 #include <Automaton.h>
-#include <Atm_led.h>
-#include <Atm_button.h>
 
 // This example demonstrates running state machines logging their state changes to the serial port
 

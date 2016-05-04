@@ -1,9 +1,4 @@
 #include <Automaton.h>
-#include <Atm_button.h>
-#include <Atm_led.h>
-#include <Atm_timer.h>
-#include <Atm_gate.h>
-#include <Atm_step.h>
 
 // Safe controller for a Nuclear Missile Launcher
 

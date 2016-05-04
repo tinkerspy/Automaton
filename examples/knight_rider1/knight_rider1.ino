@@ -1,5 +1,4 @@
 #include <Automaton.h>
-#include <Atm_led.h>
 
 Atm_led led1, led2, led3, led4, led5, led6;
 Factory factory;

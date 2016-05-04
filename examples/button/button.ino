@@ -1,6 +1,4 @@
 #include <Automaton.h>
-#include <Atm_led.h>
-#include <Atm_button.h>
 
 // Start by creating a bunch of state machines
 

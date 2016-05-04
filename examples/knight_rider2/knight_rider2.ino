@@ -1,8 +1,4 @@
 #include <Automaton.h>
-#include <Atm_button.h>
-#include <Atm_led.h>
-#include <Atm_timer.h>
-#include <Atm_step.h>
 
 Atm_led led[6];
 Atm_timer timer;

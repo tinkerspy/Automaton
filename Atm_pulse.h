@@ -31,6 +31,10 @@ class Atm_pulse: public Machine {
         const char * _client_label;
         state_t _client_label_event;
       };
+      struct { // ATM_USR2_FLAG - Tiny machine trigger
+        TinyMachine * _client_tmachine;
+        state_t _client_tmachine_event;
+      };
     };
 
     enum { IDLE, WAIT, PULSE };
@@ -43,6 +47,7 @@ class Atm_pulse: public Machine {
     void action( int id ); 
     Atm_pulse & onPulse( pulsecb_t callback, int idx = 0 );
     Atm_pulse & onPulse( Machine & machine, int event = 0 );
+    Atm_pulse & onPulse( TinyMachine & machine, int event = 0 );
     Atm_pulse & onPulse( const char * label, int event = 0 );
 };
 
@@ -63,12 +68,16 @@ class Att_pulse: public TinyMachine {
         uint16_t _callback_count;
       };
       struct { // ATM_USR2_FLAG - machine trigger
-        TinyMachine * _client_machine;
+        Machine * _client_machine;
         state_t _client_machine_event;
       };
       struct { // ATM_USR3_FLAG - factory trigger
         const char * _client_label;
         state_t _client_label_event;
+      };
+      struct { // ATM_USR4_FLAG - Tiny machine trigger
+        TinyMachine * _client_tmachine;
+        state_t _client_tmachine_event;
       };
     };
 
@@ -81,6 +90,7 @@ class Att_pulse: public TinyMachine {
     int event( int id ); 
     void action( int id ); 
     Att_pulse & onPulse( pulsecb_t callback, int idx = 0 );
+    Att_pulse & onPulse( Machine & machine, int event = 0 );
     Att_pulse & onPulse( TinyMachine & machine, int event = 0 );
 };
 

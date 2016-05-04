@@ -1,5 +1,4 @@
 #include <Automaton.h>
-#include <Atm_led.h>
 
 Atm_led led;
 

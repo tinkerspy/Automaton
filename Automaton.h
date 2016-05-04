@@ -42,6 +42,7 @@ class Factory;
 class Machine;
 class BaseMachine;
 
+
 class atm_serial_debug {
   public: 
   static void trace( Stream * stream, const char label[], const char current[], const char next[], 
@@ -177,6 +178,18 @@ class Factory
         void run( int q );
         void runTiny( void );
 };
+
+
+
+#include <Atm_button.h>
+#include <Atm_command.h>
+#include <Atm_comparator.h>
+#include <Atm_fade.h>
+#include <Atm_gate.h>
+#include <Atm_led.h>
+#include <Atm_pulse.h>
+#include <Atm_step.h>
+#include <Atm_timer.h>
 
 
 #endif
