@@ -81,8 +81,12 @@ class Att_button : public TinyMachine {
             uint16_t _press_count;
         };
         struct { // ATM_USR2_FLAG - machine trigger
-            TinyMachine * _client_machine;
-            state_t client_machine_event;
+            Machine * _client_machine;
+            state_t _client_machine_event;
+        };
+        struct { // ATM_USR4_FLAG - Tiny machine trigger
+            TinyMachine * _client_tmachine;
+            state_t _client_tmachine_event;
         };
     };
 	int16_t longpress_max;
@@ -90,6 +94,7 @@ class Att_button : public TinyMachine {
     
 	Att_button & begin( int attached_pin );
 	Att_button & onPress( presscb_t callback, int idx = 0 );
+    Att_button & onPress( Machine & machine, int event = 0 ); 
     Att_button & onPress( TinyMachine & machine, int event = 0 ); 
 	Att_button & debounce( int delay );
 	Att_button & longPress( int max, int delay );

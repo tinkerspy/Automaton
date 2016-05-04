@@ -207,17 +207,26 @@ Att_button & Att_button::onPress( presscb_t callback, int idx /* = 0 */ )
   _callback = callback;
   callback_idx = idx;
   _press_count = 0;
-  flags &= ~ATM_USR2_FLAG;
+  flags &= ~ATM_USR_FLAGS;
   flags |= ATM_USR1_FLAG;
+  return *this;  
+}
+
+Att_button & Att_button::onPress( Machine & machine, int event /* = 0 */ ) 
+{
+  _client_machine = &machine;
+  _client_machine_event = event;
+  flags &= ~ATM_USR_FLAGS;
+  flags |= ATM_USR2_FLAG;
   return *this;  
 }
 
 Att_button & Att_button::onPress( TinyMachine & machine, int event /* = 0 */ ) 
 {
-  _client_machine = &machine;
-  client_machine_event = event;
-  flags &= ~ATM_USR1_FLAG;
-  flags |= ATM_USR2_FLAG;
+  _client_tmachine = &machine;
+  _client_tmachine_event = event;
+  flags &= ~ATM_USR_FLAGS;
+  flags |= ATM_USR4_FLAG;
   return *this;  
 }
 
@@ -287,7 +296,10 @@ void Att_button::action( int id )
 	case ACT_AUTO :
       cb( id == ACT_AUTO ? _auto_press : 1, callback_idx );
       if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
-          _client_machine->trigger( client_machine_event );                
+          _client_machine->trigger( _client_machine_event );                
+      }
+      if ( ( flags & ATM_USR4_FLAG ) > 0 ) {
+          _client_tmachine->trigger( _client_tmachine_event );                
       }
 	  return;
 	case ACT_RELEASE :
