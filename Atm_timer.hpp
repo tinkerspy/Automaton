@@ -38,7 +38,7 @@ class Atm_timer: public Machine {
     enum { EVT_DAYCNT, EVT_DAYTIMER, EVT_MSTIMER, EVT_REPCNT, EVT_OFF, EVT_ON, ELSE };
     enum { ACT_START, ACT_TRIG, ACT_WAITD };
 	
-    Atm_timer & begin( uint32_t ms = ATM_TIMER_OFF );
+    Atm_timer & begin( uint32_t ms = 0 );
     Atm_timer & trace( Stream & stream );
     Atm_timer & onTimer( timer_cb_t callback, int idx = 0 );
     Atm_timer & onTimer( Machine & machine, int event = 0 );
@@ -86,7 +86,7 @@ class Att_timer: public TinyMachine {
     enum { EVT_DAYCNT, EVT_DAYTIMER, EVT_MSTIMER, EVT_REPCNT, EVT_OFF, EVT_ON, ELSE };
     enum { ACT_START, ACT_TRIG, ACT_WAITD };
 	
-    Att_timer & begin( uint32_t ms = ATM_TIMER_OFF );
+    Att_timer & begin( uint32_t ms = 0 );
     Att_timer & trace( Stream & stream );
     Att_timer & onTimer( timer_cb_t callback, int idx = 0 );
     Att_timer & onTimer( Machine & machine, int event = 0 );
