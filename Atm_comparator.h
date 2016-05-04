@@ -21,10 +21,15 @@ class Atm_comparator: public Machine {
     uint16_t avg_buf_size;
     uint16_t avg_buf_head;
     uint32_t avg_buf_total;
+    uint8_t _upmode, _downmode;
     union {
       struct {
        Machine * _up_machine;
        state_t _up_machine_event;
+      };
+      struct {
+       TinyMachine * _up_tmachine;
+       state_t _up_tmachine_event;
       };
       struct {
         const char * _up_label;
@@ -37,6 +42,10 @@ class Atm_comparator: public Machine {
        state_t _down_machine_event;
       };
       struct {
+       TinyMachine * _down_tmachine;
+       state_t _down_tmachine_event;
+      };
+      struct {
         const char * _down_label;
         state_t _down_label_event;
       };
@@ -47,13 +56,16 @@ class Atm_comparator: public Machine {
     enum { IDLE, SAMPLE, SEND } STATES;
     enum { EVT_TRIGGER, EVT_TIMER, ELSE } EVENTS;
     enum { ACT_SAMPLE, ACT_SEND } ACTIONS;
+    enum { MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY };
 	
     Atm_comparator & begin( int attached_pin, int blinkrate, triggercb_t callback = 0 );
     Atm_comparator & threshold( uint16_t * v, uint16_t size, bool catchUp = false );
     Atm_comparator & average( uint16_t * v, uint16_t size );
     Atm_comparator & onUp( Machine & machine, int event = 0 );
+    Atm_comparator & onUp( TinyMachine & machine, int event = 0 );
     Atm_comparator & onUp( const char * label, int event = 0 );
     Atm_comparator & onDown( Machine & machine, int event = 0 );
+    Atm_comparator & onDown( TinyMachine & machine, int event = 0 );
     Atm_comparator & onDown( const char * label, int event = 0 );
     int _avg();
     Atm_comparator & bitmap( uint16_t v );
@@ -81,10 +93,15 @@ class Att_comparator: public TinyMachine {
     uint16_t avg_buf_size;
     uint16_t avg_buf_head;
     uint32_t avg_buf_total;
+    uint8_t _upmode, _downmode;
     union {
       struct {
-       TinyMachine * _up_machine;
+       Machine * _up_machine;
        state_t _up_machine_event;
+      };
+      struct {
+       TinyMachine * _up_tmachine;
+       state_t _up_tmachine_event;
       };
       struct {
         const char * _up_label;
@@ -93,8 +110,12 @@ class Att_comparator: public TinyMachine {
 	};
     union {
       struct {
-       TinyMachine * _down_machine;
+       Machine * _down_machine;
        state_t _down_machine_event;
+      };
+      struct {
+       TinyMachine * _down_tmachine;
+       state_t _down_tmachine_event;
       };
       struct {
         const char * _down_label;
@@ -107,10 +128,13 @@ class Att_comparator: public TinyMachine {
     enum { IDLE, SAMPLE, SEND } STATES;
     enum { EVT_TRIGGER, EVT_TIMER, ELSE } EVENTS;
     enum { ACT_SAMPLE, ACT_SEND } ACTIONS;
+    enum { MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY };
 	
     Att_comparator & begin( int attached_pin, int blinkrate, triggercb_t callback = 0 );
     Att_comparator & threshold( uint16_t * v, uint16_t size, bool catchUp = false );
     Att_comparator & average( uint16_t * v, uint16_t size );
+    Att_comparator & onUp( Machine & machine, int event = 0 );
+    Att_comparator & onDown( Machine & machine, int event = 0 );
     Att_comparator & onUp( TinyMachine & machine, int event = 0 );
     Att_comparator & onDown( TinyMachine & machine, int event = 0 );
     int _avg();

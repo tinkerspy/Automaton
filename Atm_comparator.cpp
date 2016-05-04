@@ -20,37 +20,49 @@ Atm_comparator & Atm_comparator::begin( int attached_pin, int samplerate, trigge
 
 Atm_comparator & Atm_comparator::onUp( Machine & machine, int event /* = 0 */ )
 {
+  _upmode = MODE_MACHINE;
   _up_machine = &machine;
   _up_machine_event = event;
-  flags &= ~ATM_USR2_FLAG;
-  flags |= ATM_USR1_FLAG;
+  return *this;
+}
+
+Atm_comparator & Atm_comparator::onUp( TinyMachine & machine, int event /* = 0 */ )
+{
+  _upmode = MODE_TMACHINE;
+  _up_tmachine = &machine;
+  _up_tmachine_event = event;
   return *this;
 }
 
 Atm_comparator & Atm_comparator::onUp( const char * label, int event /* = 0 */ )
 {
-  _down_label = label;
-  _down_label_event = event;
-  flags &= ~ATM_USR1_FLAG;
-  flags |= ATM_USR2_FLAG;
+  _upmode = MODE_FACTORY;
+  _up_label = label;
+  _up_label_event = event;
   return *this;
 }
 
 Atm_comparator & Atm_comparator::onDown( Machine & machine, int event /* = 0 */ )
 {
+  _upmode = MODE_MACHINE;
   _down_machine = &machine;
   _down_machine_event = event;
-  flags &= ~ATM_USR4_FLAG;
-  flags |= ATM_USR3_FLAG;
+  return *this;
+}
+
+Atm_comparator & Atm_comparator::onDown( TinyMachine & machine, int event /* = 0 */ )
+{
+  _upmode = MODE_TMACHINE;
+  _down_tmachine = &machine;
+  _down_tmachine_event = event;
   return *this;
 }
 
 Atm_comparator & Atm_comparator::onDown( const char * label, int event /* = 0 */ )
 {
+  _upmode = MODE_FACTORY;
   _down_label = label;
   _down_label_event = event;
-  flags &= ~ATM_USR3_FLAG;
-  flags |= ATM_USR4_FLAG;
   return *this;
 }
 
@@ -143,10 +155,13 @@ void Atm_comparator::action( int id )
 			if ( callback ) {
               (*callback)( v_sample, 1, i, p_threshold[i] );
             }
-            if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+            if ( _upmode == MODE_MACHINE ) {
 				_up_machine->trigger( _up_machine_event );
 			}		
-            if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
+            if ( _upmode == MODE_TMACHINE ) {
+				_up_tmachine->trigger( _up_tmachine_event );
+			}		
+            if ( _upmode == MODE_FACTORY ) {
 				factory->trigger( _up_label, _up_label_event );
 			}		
           }
@@ -157,10 +172,13 @@ void Atm_comparator::action( int id )
 			if ( callback ) {
               (*callback)( v_sample, 0, i, p_threshold[i] ); 
 		    }			  
-            if ( ( flags & ATM_USR3_FLAG ) > 0 ) {
+            if ( _downmode == MODE_MACHINE ) {
 				_down_machine->trigger( _down_machine_event );
 			}		
-            if ( ( flags & ATM_USR4_FLAG ) > 0 ) {
+            if ( _downmode == MODE_TMACHINE ) {
+				_down_tmachine->trigger( _down_tmachine_event );
+			}		
+            if ( _downmode == MODE_FACTORY ) {
 				factory->trigger( _down_label, _down_label_event );
 			}		
           }
@@ -198,21 +216,35 @@ Att_comparator & Att_comparator::begin( int attached_pin, int samplerate, trigge
   return *this;          
 }
 
-Att_comparator & Att_comparator::onUp( TinyMachine & machine, int event /* = 0 */ )
+Att_comparator & Att_comparator::onUp( Machine & machine, int event /* = 0 */ )
 {
+  _upmode = MODE_MACHINE;
   _up_machine = &machine;
   _up_machine_event = event;
-  flags &= ~ATM_USR2_FLAG;
-  flags |= ATM_USR1_FLAG;
+  return *this;
+}
+
+Att_comparator & Att_comparator::onUp( TinyMachine & machine, int event /* = 0 */ )
+{
+  _upmode = MODE_TMACHINE;
+  _up_tmachine = &machine;
+  _up_tmachine_event = event;
+  return *this;
+}
+
+Att_comparator & Att_comparator::onDown( Machine & machine, int event /* = 0 */ )
+{
+  _downmode = MODE_MACHINE;
+  _down_machine = &machine;
+  _down_machine_event = event;
   return *this;
 }
 
 Att_comparator & Att_comparator::onDown( TinyMachine & machine, int event /* = 0 */ )
 {
-  _down_machine = &machine;
-  _down_machine_event = event;
-  flags &= ~ATM_USR4_FLAG;
-  flags |= ATM_USR3_FLAG;
+  _downmode = MODE_TMACHINE;
+  _down_tmachine = &machine;
+  _down_tmachine_event = event;
   return *this;
 }
 
@@ -305,8 +337,11 @@ void Att_comparator::action( int id )
 			if ( callback ) {
               (*callback)( v_sample, 1, i, p_threshold[i] );
             }
-            if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
+            if ( _upmode == MODE_MACHINE ) {
 				_up_machine->trigger( _up_machine_event );
+			}		
+            if ( _upmode == MODE_TMACHINE ) {
+				_up_tmachine->trigger( _up_tmachine_event );
 			}		
           }
         }        
@@ -315,9 +350,12 @@ void Att_comparator::action( int id )
           if ( (bitmap_diff >> i ) & 1 ) {
 			if ( callback ) {
               (*callback)( v_sample, 0, i, p_threshold[i] ); 
-		    }			  
-            if ( ( flags & ATM_USR3_FLAG ) > 0 ) {
+		    }
+            if ( _downmode == MODE_MACHINE ) {
 				_down_machine->trigger( _down_machine_event );
+			}		
+            if ( _downmode == MODE_TMACHINE ) {
+				_down_tmachine->trigger( _down_tmachine_event );
 			}		
           }
         }

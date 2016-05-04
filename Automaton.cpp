@@ -404,10 +404,10 @@ Factory & Factory::cycle( uint32_t time /* = 0 */ )
     if ( recalibrate ) calibrate();
     do {
         runTiny();
-        run( 1 ); run( 2 );	run( 1 ); run( 2 );
-        run( 1 ); run( 3 );	run( 1 ); run( 4 );
-        run( 1 ); run( 2 );	run( 1 ); run( 3 );
-        run( 1 ); run( 2 );	run( 1 ); run( 0 );
+        run( 1 ); run( 2 );	run( 1 ); run( 2 ); runTiny();
+        run( 1 ); run( 3 );	run( 1 ); run( 4 ); runTiny();
+        run( 1 ); run( 2 );	run( 1 ); run( 3 ); runTiny();
+        run( 1 ); run( 2 );	run( 1 ); run( 0 ); runTiny();
     } while ( millis() - cycle_start < time );
     return  *this;
 }
