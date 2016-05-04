@@ -28,6 +28,10 @@ class Atm_timer: public Machine {
         const char * _client_label;
         state_t _client_label_event;
       };
+      struct { // ATM_USR4_FLAG - Tiny machine trigger
+        TinyMachine * _client_tmachine;
+        state_t _client_tmachine_event;
+      };
     };
     
     enum { IDLE, START, WAITD, WAITMS, TRIGGER };
@@ -38,6 +42,7 @@ class Atm_timer: public Machine {
     Atm_timer & trace( Stream & stream );
     Atm_timer & onTimer( timer_cb_t callback, int idx = 0 );
     Atm_timer & onTimer( Machine & machine, int event = 0 );
+    Atm_timer & onTimer( TinyMachine & machine, int event = 0 );
     Atm_timer & onTimer( const char * label, int event = 0 );
     Atm_timer & interval_seconds( uint32_t v );
     Atm_timer & interval_millis( uint32_t v );
@@ -64,8 +69,16 @@ class Att_timer: public TinyMachine {
         int _callback_idx;
       };
       struct { // ATM_USR2_FLAG - machine trigger
-        TinyMachine * _client_machine;
+        Machine * _client_machine;
         state_t _client_machine_event;
+      };
+      struct { // ATM_USR3_FLAG - factory trigger
+        const char * _client_label;
+        state_t _client_label_event;
+      };
+      struct { // ATM_USR4_FLAG - Tiny machine trigger
+        TinyMachine * _client_tmachine;
+        state_t _client_tmachine_event;
       };
     };
     
@@ -76,6 +89,7 @@ class Att_timer: public TinyMachine {
     Att_timer & begin( uint32_t ms = ATM_TIMER_OFF );
     Att_timer & trace( Stream & stream );
     Att_timer & onTimer( timer_cb_t callback, int idx = 0 );
+    Att_timer & onTimer( Machine & machine, int event = 0 );
     Att_timer & onTimer( TinyMachine & machine, int event = 0 );
     Att_timer & interval_seconds( uint32_t v );
     Att_timer & interval_millis( uint32_t v );
