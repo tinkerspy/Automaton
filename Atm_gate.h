@@ -17,7 +17,7 @@ class Atm_gate: public Machine {
     enum { EVT_G0, EVT_G1, EVT_G2, EVT_G3, EVT_G4, EVT_G5, EVT_G6, EVT_G7, EVT_OPEN, EVT_CLEAR, ELSE };
     enum { ACT_G0, ACT_G1, ACT_G2, ACT_G3, ACT_G4, ACT_G5, ACT_G6, ACT_G7, ACT_CLEAR, ACT_OPEN };
 
-    Atm_gate & begin( int count );
+    Atm_gate & begin( int numberOfInputs );
     Atm_gate & trace( Stream & stream );
     Atm_gate & onOpen( opencb_t callback, int idx = 0 );
     Atm_gate & onOpen( Machine & machine, int event = 0 );
@@ -67,7 +67,7 @@ class Att_gate: public TinyMachine {
     enum { EVT_G0, EVT_G1, EVT_G2, EVT_G3, EVT_G4, EVT_G5, EVT_G6, EVT_G7, EVT_OPEN, EVT_CLEAR, ELSE };
     enum { ACT_G0, ACT_G1, ACT_G2, ACT_G3, ACT_G4, ACT_G5, ACT_G6, ACT_G7, ACT_CLEAR, ACT_OPEN };
 
-    Att_gate & begin( int count );
+    Att_gate & begin( int numberOfInputs );
     Att_gate & trace( Stream & stream );
     Att_gate & onOpen( opencb_t callback, int idx = 0 );
     Att_gate & onOpen( TinyMachine & machine, int event = 0 );

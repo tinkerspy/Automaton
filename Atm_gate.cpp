@@ -1,6 +1,6 @@
 #include "Atm_gate.h"
 
-Atm_gate & Atm_gate::begin( int numberOfGates )
+Atm_gate & Atm_gate::begin( int numberOfInputs )
 {
   const static state_t state_table[] PROGMEM = {
     /*             ON_ENTER    ON_LOOP  ON_EXIT  EVT_G0 EVT_G1 EVT_G2 EVT_G3 EVT_G4 EVT_G5 EVT_G6 EVT_G7 EVT_OPEN  EVT_CLEAR   ELSE */
@@ -18,7 +18,7 @@ Atm_gate & Atm_gate::begin( int numberOfGates )
     /* CLEAR   */ ACT_CLEAR,        -1,      -1,     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,      -1,        -1,  IDLE,
   };
   Machine::begin( state_table, ELSE );
-  _gate_count = numberOfGates;
+  _gate_count = numberOfInputs;
   gates_init( _gate_count );
   return *this;
 }
@@ -123,7 +123,7 @@ Atm_gate & Atm_gate::trace( Stream & stream )
 // Tiny Machine version
 
 
-Att_gate & Att_gate::begin( int numberOfGates )
+Att_gate & Att_gate::begin( int numberOfInputs )
 {
   const static tiny_state_t state_table[] PROGMEM = {
     /*             ON_ENTER    ON_LOOP  ON_EXIT  EVT_G0 EVT_G1 EVT_G2 EVT_G3 EVT_G4 EVT_G5 EVT_G6 EVT_G7 EVT_OPEN  EVT_CLEAR   ELSE */
@@ -141,7 +141,7 @@ Att_gate & Att_gate::begin( int numberOfGates )
     /* CLEAR   */ ACT_CLEAR,        -1,      -1,     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,      -1,        -1,  IDLE,
   };
   TinyMachine::begin( state_table, ELSE );
-  _gate_count = numberOfGates;
+  _gate_count = numberOfInputs;
   gates_init( _gate_count );
   return *this;
 }
