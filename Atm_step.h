@@ -21,6 +21,10 @@ class Step {
         const char * _client_label;
         state_t _client_label_event;
       };
+      struct { // ATM_USR4_FLAG - Tiny machine trigger
+        TinyMachine * _client_tmachine;
+        state_t _client_tmachine_event;
+      };
     };
 };
 
@@ -35,7 +39,7 @@ class Atm_step: public Machine {
 			BURST, U0, U1, U2, U3, U4, U5, U6, U7 };
     enum { EVT_STEP, EVT_BACK, EVT_SWEEP, EVT_BURST, EVT_LINEAR, ELSE };
     enum { ACT_S0, ACT_S1, ACT_S2, ACT_S3, ACT_S4, ACT_S5, ACT_S6, ACT_S7 };
-    enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_FACTORY };
+    enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_FACTORY, MODE_TMACHINE };
     Step _step[8];
 
     Atm_step & begin( void );
@@ -45,6 +49,7 @@ class Atm_step: public Machine {
     Atm_step & onStep( uint8_t idx );
     Atm_step & onStep( uint8_t idx, stepcb_t callback );
     Atm_step & onStep( uint8_t idx, Machine & machine, state_t event = 0 );
+    Atm_step & onStep( uint8_t idx, TinyMachine & machine, state_t event = 0 );
     Atm_step & onStep( uint8_t idx, const char * label, state_t event = 0 );
 };
 
@@ -56,12 +61,16 @@ class TinyStep {
         void (*_callback)( int idx );
       };
       struct { // ATM_USR2_FLAG - machine trigger
-        TinyMachine * _client_machine;
+        Machine * _client_machine;
         state_t _client_machine_event;
       };
       struct { // ATM_USR3_FLAG - factory trigger
         const char * _client_label;
         state_t _client_label_event;
+      };
+      struct { // ATM_USR4_FLAG - Tiny machine trigger
+        TinyMachine * _client_tmachine;
+        state_t _client_tmachine_event;
       };
     };
 };
@@ -75,7 +84,7 @@ class Att_step: public TinyMachine {
 			BURST, U0, U1, U2, U3, U4, U5, U6, U7 };
     enum { EVT_STEP, EVT_BACK, EVT_SWEEP, EVT_BURST, EVT_LINEAR, ELSE };
     enum { ACT_S0, ACT_S1, ACT_S2, ACT_S3, ACT_S4, ACT_S5, ACT_S6, ACT_S7 };
-    enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_FACTORY };
+    enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_FACTORY, MODE_TMACHINE };
     TinyStep _step[8];
 
     Att_step & begin( void );
@@ -83,6 +92,7 @@ class Att_step: public TinyMachine {
     void action( int id );
     Att_step & onStep( uint8_t idx );
     Att_step & onStep( uint8_t idx, stepcb_t callback );
+    Att_step & onStep( uint8_t idx, Machine & machine, state_t event = 0 );
     Att_step & onStep( uint8_t idx, TinyMachine & machine, state_t event = 0 );
 };
 

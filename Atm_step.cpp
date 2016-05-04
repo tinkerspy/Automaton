@@ -79,6 +79,14 @@ Atm_step & Atm_step::onStep( uint8_t idx, const char * label, state_t event /* =
   return *this;
 }
 
+Atm_step & Atm_step::onStep( uint8_t idx, TinyMachine & machine, state_t event /* = 0 */ )
+{
+  _step[idx]._mode = MODE_TMACHINE;
+  _step[idx]._client_tmachine = &machine;
+  _step[idx]._client_tmachine_event = event;
+  return *this;
+}
+
 int Atm_step::event( int id )
 {
   state_t on_enter = read_state( state_table + ( current * state_width ) + ATM_ON_ENTER );
@@ -103,6 +111,9 @@ void Atm_step::action( int id )
         return;
       case MODE_FACTORY:
         factory->trigger( _step[id]._client_label, _step[id]._client_label_event );
+        return;
+      case MODE_TMACHINE:
+        _step[id]._client_tmachine->trigger( _step[id]._client_tmachine_event );
         return;
     }
   }
@@ -184,11 +195,19 @@ Att_step & Att_step::onStep( uint8_t idx, stepcb_t callback )
   return *this;
 }
 
-Att_step & Att_step::onStep( uint8_t idx, TinyMachine & machine, state_t event /* = 0 */ )
+Att_step & Att_step::onStep( uint8_t idx, Machine & machine, state_t event /* = 0 */ )
 {
   _step[idx]._mode = MODE_MACHINE;
   _step[idx]._client_machine = &machine;
   _step[idx]._client_machine_event = event;
+  return *this;
+}
+
+Att_step & Att_step::onStep( uint8_t idx, TinyMachine & machine, state_t event /* = 0 */ )
+{
+  _step[idx]._mode = MODE_TMACHINE;
+  _step[idx]._client_tmachine = &machine;
+  _step[idx]._client_tmachine_event = event;
   return *this;
 }
 
@@ -213,6 +232,9 @@ void Att_step::action( int id )
         return;
       case MODE_MACHINE:
         _step[id]._client_machine->trigger( _step[id]._client_machine_event );
+        return;
+      case MODE_TMACHINE:
+        _step[id]._client_tmachine->trigger( _step[id]._client_tmachine_event );
         return;
     }
   }

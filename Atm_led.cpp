@@ -32,10 +32,27 @@ Atm_led & Atm_led::onFinish( Machine & n, uint8_t event /* = EVT_BLINK */ )
 
 Atm_led & Atm_led::onFinish( Machine & n, Machine & p, uint8_t event /* = EVT_BLINK */) 
 {
-    chain_next = &n;
-    chain_previous = &p;    
-    chain_event = event;
-    flags &= ~ATM_USR1_FLAG;
+    machine_next = &n;
+    machine_previous = &p;    
+    machine_event = event;
+    flags &= ~ATM_USR_FLAGS;
+    flags |= ATM_USR2_FLAG;
+    return *this;
+}
+
+Atm_led & Atm_led::onFinish( TinyMachine & n, uint8_t event /* = EVT_BLINK */ ) 
+{
+	onFinish( n, n, event );
+    return *this;
+}
+
+Atm_led & Atm_led::onFinish( TinyMachine & n, TinyMachine & p, uint8_t event /* = EVT_BLINK */) 
+{
+    tmachine_next = &n;
+    tmachine_previous = &p;    
+    machine_event = event;
+    flags &= ~ATM_USR_FLAGS;
+    flags |= ATM_USR4_FLAG;
     return *this;
 }
 
@@ -81,6 +98,26 @@ int Atm_led::event( int id )
 	return 0;
 }
 
+void Atm_led::chain_next( void ) {
+    
+    if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
+        machine_next->trigger( machine_event );
+    }
+    if ( ( flags & ATM_USR4_FLAG ) > 0 ) {
+        tmachine_next->trigger( machine_event );
+    }
+}
+
+void Atm_led::chain_previous( void ) {
+    
+    if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
+        machine_previous->trigger( machine_event );
+    }
+    if ( ( flags & ATM_USR4_FLAG ) > 0 ) {
+        tmachine_previous->trigger( machine_event );
+    }
+}
+
 void Atm_led::action( int id ) 
 {
 	switch ( id ) {
@@ -95,11 +132,11 @@ void Atm_led::action( int id )
 			digitalWrite( pin, _activeLow ? HIGH : LOW );
 			return;
         case ACT_CHAIN :            
-            if ( chain_next ) {
+            if ( ( flags & ( ATM_USR2_FLAG | ATM_USR4_FLAG ) ) > 0 ) {
 	          if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
-                chain_previous->trigger( chain_event );
+                chain_previous();
               } else {
-                chain_next->trigger( chain_event );
+                chain_next();
               }              
               flags ^= ATM_USR1_FLAG;
             }  
@@ -141,6 +178,22 @@ Att_led & Att_led::begin( int attached_pin, bool activeLow )
 	return *this;
 }
 
+Att_led & Att_led::onFinish( Machine & n, uint8_t event /* = EVT_BLINK */ ) 
+{
+	onFinish( n, n, event );
+    return *this;
+}
+
+Att_led & Att_led::onFinish( Machine & n, Machine & p, uint8_t event /* = EVT_BLINK */) 
+{
+    machine_next = &n;
+    machine_previous = &p;    
+    machine_event = event;
+    flags &= ~ATM_USR_FLAGS;
+    flags |= ATM_USR2_FLAG;
+    return *this;
+}
+
 Att_led & Att_led::onFinish( TinyMachine & n, uint8_t event /* = EVT_BLINK */ ) 
 {
 	onFinish( n, n, event );
@@ -149,10 +202,11 @@ Att_led & Att_led::onFinish( TinyMachine & n, uint8_t event /* = EVT_BLINK */ )
 
 Att_led & Att_led::onFinish( TinyMachine & n, TinyMachine & p, uint8_t event /* = EVT_BLINK */) 
 {
-    chain_next = &n;
-    chain_previous = &p;    
-    chain_event = event;
-    flags &= ~ATM_USR1_FLAG;
+    tmachine_next = &n;
+    tmachine_previous = &p;    
+    machine_event = event;
+    flags &= ~ATM_USR_FLAGS;
+    flags |= ATM_USR4_FLAG;
     return *this;
 }
 
@@ -185,6 +239,26 @@ Att_led & Att_led::repeat( int repeat )
 	return *this;
 }
 
+void Att_led::chain_next( void ) {
+    
+    if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
+        machine_next->trigger( machine_event );
+    }
+    if ( ( flags & ATM_USR4_FLAG ) > 0 ) {
+        tmachine_next->trigger( machine_event );
+    }
+}
+
+void Att_led::chain_previous( void ) {
+    
+    if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
+        machine_previous->trigger( machine_event );
+    }
+    if ( ( flags & ATM_USR4_FLAG ) > 0 ) {
+        tmachine_previous->trigger( machine_event );
+    }
+}
+
 int Att_led::event( int id ) 
 {
 	switch ( id ) {
@@ -212,11 +286,11 @@ void Att_led::action( int id )
             digitalWrite( pin, _activeLow ? HIGH : LOW );
 			return;
         case ACT_CHAIN :            
-            if ( chain_next ) {
+            if ( ( flags & ( ATM_USR2_FLAG | ATM_USR4_FLAG ) ) > 0 ) {
 	          if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
-                chain_previous->trigger( chain_event );
+                chain_previous();
               } else {
-                chain_next->trigger( chain_event );
+                chain_next();
               }              
               flags ^= ATM_USR1_FLAG;
             }  

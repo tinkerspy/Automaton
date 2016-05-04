@@ -21,6 +21,7 @@ class Atm_gate: public Machine {
     Atm_gate & trace( Stream & stream );
     Atm_gate & onOpen( opencb_t callback, int idx = 0 );
     Atm_gate & onOpen( Machine & machine, int event = 0 );
+    Atm_gate & onOpen( TinyMachine & machine, int event = 0 );
     Atm_gate & onOpen( const char * label, int event = 0 );
 
   protected:
@@ -40,6 +41,10 @@ class Atm_gate: public Machine {
       struct { // ATM_USR3_FLAG - factory trigger
         const char * _client_label;
         state_t _client_label_event;
+      };
+      struct { // ATM_USR4_FLAG - Tiny machine trigger
+        TinyMachine * _client_tmachine;
+        state_t _client_tmachine_event;
       };
     };
 
@@ -66,6 +71,7 @@ class Att_gate: public TinyMachine {
     Att_gate & trace( Stream & stream );
     Att_gate & onOpen( opencb_t callback, int idx = 0 );
     Att_gate & onOpen( TinyMachine & machine, int event = 0 );
+    Att_gate & onOpen( Machine & machine, int event = 0 );
 
   protected:
     uint8_t _gates;
@@ -78,8 +84,12 @@ class Att_gate: public TinyMachine {
         uint16_t _callback_count;
       };
       struct { // ATM_USR2_FLAG - machine trigger
-        TinyMachine * _client_machine;
+        Machine * _client_machine;
         state_t _client_machine_event;
+      };
+      struct { // ATM_USR4_FLAG - Tiny machine trigger
+        TinyMachine * _client_tmachine;
+        state_t _client_tmachine_event;
       };
     };
 

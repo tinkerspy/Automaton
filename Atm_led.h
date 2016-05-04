@@ -22,6 +22,8 @@ class Atm_led : public Machine {
     Atm_led & trace( Stream & stream );
     Atm_led & onFinish( Machine & n, uint8_t event = EVT_BLINK );
     Atm_led & onFinish( Machine & n, Machine & p, uint8_t event = EVT_BLINK );
+    Atm_led & onFinish( TinyMachine & n, uint8_t event = EVT_BLINK );
+    Atm_led & onFinish( TinyMachine & n, TinyMachine & p, uint8_t event = EVT_BLINK );
     
   private:  
 	short pin;
@@ -29,12 +31,22 @@ class Atm_led : public Machine {
 	int repeat_count;
 	atm_timer_millis on_timer, off_timer;
 	atm_counter counter;
-    Machine * chain_next;
-    Machine * chain_previous;
-    uint8_t chain_event;
+    union {
+        struct {
+            Machine * machine_next;
+            Machine * machine_previous;
+        };
+        struct {
+            TinyMachine * tmachine_next;
+            TinyMachine * tmachine_previous;
+        };
+    };
+    uint8_t machine_event;
 
 	int event( int id );
 	void action( int id );
+    void chain_next( void );
+    void chain_previous( void );
 };
 
 
@@ -53,6 +65,8 @@ class Att_led : public TinyMachine {
 	Att_led & pause( uint32_t duration ); 
 	Att_led & fade( int fade ); 
 	Att_led & repeat( int repeat ); 
+    Att_led & onFinish( Machine & n, uint8_t event = EVT_BLINK );
+    Att_led & onFinish( Machine & n, Machine & p, uint8_t event = EVT_BLINK );
     Att_led & onFinish( TinyMachine & n, uint8_t event = EVT_BLINK );
     Att_led & onFinish( TinyMachine & n, TinyMachine & p, uint8_t event = EVT_BLINK );
     
@@ -62,12 +76,22 @@ class Att_led : public TinyMachine {
 	int repeat_count;
 	atm_timer_millis on_timer, off_timer;
 	atm_counter counter;
-    TinyMachine * chain_next;
-    TinyMachine * chain_previous;
-    uint8_t chain_event;
+    union {
+        struct {
+            Machine * machine_next;
+            Machine * machine_previous;
+        };
+        struct {
+            TinyMachine * tmachine_next;
+            TinyMachine * tmachine_previous;
+        };
+    };
+    uint8_t machine_event;
 
 	int event( int id );
 	void action( int id );
+    void chain_next( void );
+    void chain_previous( void );
 };
 
 

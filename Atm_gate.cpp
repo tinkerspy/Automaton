@@ -28,7 +28,7 @@ Atm_gate & Atm_gate::onOpen( opencb_t callback, int idx /* = 0 */ )
   _callback = callback;
   _callback_idx = idx;
   _callback_count = 0;
-  flags &= ~( ATM_USR2_FLAG | ATM_USR3_FLAG );
+  flags &= ~ATM_USR_FLAGS;
   flags |= ATM_USR1_FLAG;
   return *this;
 }
@@ -37,7 +37,7 @@ Atm_gate & Atm_gate::onOpen( Machine & machine, int event /* = 0 */ )
 {
   _client_machine = &machine;
   _client_machine_event = event;
-  flags &= ~( ATM_USR1_FLAG | ATM_USR3_FLAG );
+  flags &= ~ATM_USR_FLAGS;
   flags |= ATM_USR2_FLAG;
   return *this;
 }
@@ -46,8 +46,17 @@ Atm_gate & Atm_gate::onOpen( const char * label, int event /* = 0 */ )
 {
   _client_label = label;
   _client_label_event = event;
-  flags &= ~( ATM_USR1_FLAG | ATM_USR2_FLAG );
+  flags &= ~ATM_USR_FLAGS;
   flags |= ATM_USR3_FLAG;
+  return *this;
+}
+
+Atm_gate & Atm_gate::onOpen( TinyMachine & machine, int event /* = 0 */ )
+{
+  _client_tmachine = &machine;
+  _client_tmachine_event = event;
+  flags &= ~ATM_USR_FLAGS;
+  flags |= ATM_USR4_FLAG;
   return *this;
 }
 
@@ -96,6 +105,9 @@ void Atm_gate::action( int id )
       if ( ( flags & ATM_USR3_FLAG ) > 0 && factory ) {
         factory->trigger( _client_label, _client_label_event );
       }
+      if ( ( flags & ATM_USR4_FLAG ) > 0 ) {
+        _client_tmachine->trigger( _client_tmachine_event );
+      }
       return;
   }
 }
@@ -139,17 +151,26 @@ Att_gate & Att_gate::onOpen( opencb_t callback, int idx /* = 0 */ )
   _callback = callback;
   _callback_idx = idx;
   _callback_count = 0;
-  flags &= ~( ATM_USR2_FLAG | ATM_USR3_FLAG );
+  flags &= ~ATM_USR_FLAGS;
   flags |= ATM_USR1_FLAG;
+  return *this;
+}
+
+Att_gate & Att_gate::onOpen( Machine & machine, int event /* = 0 */ )
+{
+  _client_machine = &machine;
+  _client_machine_event = event;
+  flags &= ~ATM_USR_FLAGS;
+  flags |= ATM_USR2_FLAG;
   return *this;
 }
 
 Att_gate & Att_gate::onOpen( TinyMachine & machine, int event /* = 0 */ )
 {
-  _client_machine = &machine;
-  _client_machine_event = event;
-  flags &= ~( ATM_USR1_FLAG | ATM_USR3_FLAG );
-  flags |= ATM_USR2_FLAG;
+  _client_tmachine = &machine;
+  _client_tmachine_event = event;
+  flags &= ~ATM_USR_FLAGS;
+  flags |= ATM_USR4_FLAG;
   return *this;
 }
 
@@ -194,6 +215,9 @@ void Att_gate::action( int id )
       }
       if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
         _client_machine->trigger( _client_machine_event );
+      }
+      if ( ( flags & ATM_USR4_FLAG ) > 0 ) {
+        _client_tmachine->trigger( _client_tmachine_event );
       }
       return;
   }
