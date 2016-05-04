@@ -12,12 +12,13 @@
 typedef int16_t state_t; 
 typedef int8_t tiny_state_t;
 
-const uint8_t ATM_SLEEP_FLAG = 1;
-const uint8_t ATM_CYCLE_FLAG = 2;
-const uint8_t ATM_USR1_FLAG  = 16;
-const uint8_t ATM_USR2_FLAG  = 32;
-const uint8_t ATM_USR3_FLAG  = 64;
-const uint8_t ATM_USR4_FLAG  = 128;
+const uint8_t ATM_SLEEP_FLAG = B00000001;
+const uint8_t ATM_CYCLE_FLAG = B00000010;
+const uint8_t ATM_USR1_FLAG  = B00010000;
+const uint8_t ATM_USR2_FLAG  = B00100000;
+const uint8_t ATM_USR3_FLAG  = B01000000;
+const uint8_t ATM_USR4_FLAG  = B10000000;
+const uint8_t ATM_USR_FLAGS  = B11110000;
 
 #define tiny_read_state(addr) (tiny_state_t)pgm_read_byte_near(addr)
 #define read_state(addr) (state_t)pgm_read_word_near(addr)

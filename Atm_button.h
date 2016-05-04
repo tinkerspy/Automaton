@@ -21,6 +21,7 @@ class Atm_button : public Machine {
     Atm_button & trace( Stream & stream );
 	Atm_button & onPress( presscb_t callback, int idx = 0 );
     Atm_button & onPress( Machine & machine, int event = 0 ); 
+    Atm_button & onPress( TinyMachine & machine, int event = 0 ); 
     Atm_button & onPress( const char * label, int event = 0 ); 
 	Atm_button & debounce( int delay );
 	Atm_button & longPress( int max, int delay );
@@ -48,6 +49,10 @@ class Atm_button : public Machine {
         struct { // ATM_USR3_FLAG - factory trigger
             const char * _client_label;
             state_t _client_label_event;
+        };
+        struct { // ATM_USR4_FLAG - Tiny machine trigger
+            TinyMachine * _client_tmachine;
+            state_t _client_tmachine_event;
         };
     };
 	int16_t _longpress_max;
