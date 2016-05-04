@@ -19,19 +19,16 @@ void loop() {
   led.blink( dotTime, waitTime, 3 ).trigger( Atm_led::EVT_BLINK );
   
   // Loop until the blinking has finished
-  while ( led.state() ) 
-    led.cycle();
+  while ( led.cycle().state() ); 
     
   // Cycle idly for a while
   led.cycle( longwaitTime );
        
   led.blink( dashTime, waitTime, 3 ).trigger( Atm_led::EVT_BLINK );
-  while ( led.state() ) 
-    led.cycle();
+  while ( led.cycle().state() );
   led.cycle( longwaitTime );  
    
   led.blink( dotTime, waitTime, 3 ).trigger( Atm_led::EVT_BLINK );
-  while ( led.state() ) 
-    led.cycle();
+  while ( led.cycle().state() );
   led.cycle( longerwaitTime );   
 }
