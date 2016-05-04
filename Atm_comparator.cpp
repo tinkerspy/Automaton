@@ -103,10 +103,10 @@ Atm_comparator &  Atm_comparator::average( uint16_t * v, uint16_t size )
    return *this;
 }
 
-Atm_comparator & Atm_comparator::bitmap( int v ) 
+Atm_comparator & Atm_comparator::bitmap( uint16_t v ) 
 {
    bitmap_sample = 0;
-   for ( int i = 0; i < p_threshold_size; i++ ) {
+   for ( uint8_t i = 0; i < p_threshold_size; i++ ) {
      if ( v >= p_threshold[i] ) bitmap_sample |= ( 1 << i );
    }
    bitmap_diff = bitmap_sample ^ bitmap_previous;
@@ -138,7 +138,7 @@ void Atm_comparator::action( int id )
   	  return;
   	case ACT_SEND :
       if ( v_sample >= v_previous ) {
-        for ( int i = 0; i < p_threshold_size; i++ ) {
+        for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
           if ( (bitmap_diff >> i ) & 1 ) {
 			if ( callback ) {
               (*callback)( v_sample, 1, i, p_threshold[i] );
@@ -265,10 +265,10 @@ Att_comparator &  Att_comparator::average( uint16_t * v, uint16_t size )
    return *this;
 }
 
-Att_comparator & Att_comparator::bitmap( int v ) 
+Att_comparator & Att_comparator::bitmap( uint16_t v ) 
 {
    bitmap_sample = 0;
-   for ( int i = 0; i < p_threshold_size; i++ ) {
+   for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
      if ( v >= p_threshold[i] ) bitmap_sample |= ( 1 << i );
    }
    bitmap_diff = bitmap_sample ^ bitmap_previous;
@@ -300,7 +300,7 @@ void Att_comparator::action( int id )
   	  return;
   	case ACT_SEND :
       if ( v_sample >= v_previous ) {
-        for ( int i = 0; i < p_threshold_size; i++ ) {
+        for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
           if ( (bitmap_diff >> i ) & 1 ) {
 			if ( callback ) {
               (*callback)( v_sample, 1, i, p_threshold[i] );

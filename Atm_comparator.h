@@ -56,7 +56,7 @@ class Atm_comparator: public Machine {
     Atm_comparator & onDown( Machine & machine, int event = 0 );
     Atm_comparator & onDown( const char * label, int event = 0 );
     int _avg();
-    Atm_comparator & bitmap( int v );
+    Atm_comparator & bitmap( uint16_t v );
     int sample();
     virtual int read_sample();
     int event( int id ); 
@@ -114,7 +114,7 @@ class Att_comparator: public TinyMachine {
     Att_comparator & onUp( TinyMachine & machine, int event = 0 );
     Att_comparator & onDown( TinyMachine & machine, int event = 0 );
     int _avg();
-    Att_comparator & bitmap( int v );
+    Att_comparator & bitmap( uint16_t v );
     int sample();
     virtual int read_sample();
     int event( int id ); 
