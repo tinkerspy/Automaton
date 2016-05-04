@@ -30,6 +30,7 @@ Atm_fade & Atm_fade::blink( uint32_t duration, uint32_t pause_duration, uint16_t
 	blink( duration ); // Time in which led is fully on
     pause( pause_duration );
     repeat( repeat_count );
+	return *this;
 }
 
 Atm_fade & Atm_fade::blink( uint32_t duration ) 
@@ -141,6 +142,7 @@ Att_fade & Att_fade::blink( uint32_t duration, uint32_t pause_duration, uint16_t
 	blink( duration ); // Time in which led is fully on
     pause( pause_duration );
     repeat( repeat_count );
+	return *this;
 }
 
 Att_fade & Att_fade::blink( uint32_t duration ) 

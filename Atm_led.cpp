@@ -44,6 +44,7 @@ Atm_led & Atm_led::blink( uint32_t duration, uint32_t pause_duration, uint16_t r
 	blink( duration ); // Time in which led is fully on
     pause( pause_duration );
     repeat( repeat_count );
+	return *this;
 }
 
 Atm_led & Atm_led::blink( uint32_t duration ) 
@@ -160,6 +161,7 @@ Att_led & Att_led::blink( uint32_t duration, uint32_t pause_duration, uint16_t r
 	blink( duration ); // Time in which led is fully on
     pause( pause_duration );
     repeat( repeat_count );
+	return *this;
 }
 
 Att_led & Att_led::blink( uint32_t duration ) 
