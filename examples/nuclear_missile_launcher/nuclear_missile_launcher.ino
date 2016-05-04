@@ -54,7 +54,7 @@ void setup() {
 
   // Add all machines to the  factory
   factory
-    .add( button1 ).add(button2 )
+    .add( button1 ).add( button2 )
     .add( burst1 ).add( burst2 )
     .add( gate ).add( reset_timer )
     .add( countdown ).add( ignition );
