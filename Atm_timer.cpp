@@ -1,4 +1,4 @@
-#include "Atm_timer.h"
+#include "Atm_timer.hpp"
 
 // Timer class that handles intervals from 1 millisecond up to 136 years
 // Combined with repeat( 65534 ) that makes a maximum of 8.9 million years

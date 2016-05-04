@@ -1,4 +1,4 @@
-#include "Atm_pulse.h"
+#include "Atm_pulse.hpp"
 	
 Atm_pulse & Atm_pulse::begin( int attached_pin, int minimum_duration )
 {

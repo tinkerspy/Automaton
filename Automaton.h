@@ -181,15 +181,15 @@ class Factory
 
 
 
-#include <Atm_button.h>
-#include <Atm_command.h>
-#include <Atm_comparator.h>
-#include <Atm_fade.h>
-#include <Atm_gate.h>
-#include <Atm_led.h>
-#include <Atm_pulse.h>
-#include <Atm_step.h>
-#include <Atm_timer.h>
+#include <Atm_button.hpp>
+#include <Atm_command.hpp>
+#include <Atm_comparator.hpp>
+#include <Atm_fade.hpp>
+#include <Atm_gate.hpp>
+#include <Atm_led.hpp>
+#include <Atm_pulse.hpp>
+#include <Atm_step.hpp>
+#include <Atm_timer.hpp>
 
 
 #endif

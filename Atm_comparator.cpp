@@ -1,4 +1,4 @@
-#include "Atm_comparator.h"
+#include "Atm_comparator.hpp"
 
   
 Atm_comparator & Atm_comparator::begin( int attached_pin, int samplerate, triggercb_t cb /* = 0 */ )

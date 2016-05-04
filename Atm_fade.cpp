@@ -1,4 +1,4 @@
-#include "Atm_fade.h"
+#include "Atm_fade.hpp"
 
 Atm_fade & Atm_fade::begin( int attached_pin )
 {  

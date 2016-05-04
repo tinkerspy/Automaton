@@ -1,4 +1,4 @@
-#include "Atm_gate.h"
+#include "Atm_gate.hpp"
 
 Atm_gate & Atm_gate::begin( int numberOfInputs )
 {

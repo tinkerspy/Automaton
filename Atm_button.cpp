@@ -1,4 +1,4 @@
-#include "Atm_button.h"
+#include "Atm_button.hpp"
 
 // Add option for button press callback (for reading i2c buttons etc)
 
