@@ -42,7 +42,7 @@ class Atm_pulse: public Machine {
     enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };
     enum { ACT_PULSE };
 	
-    Atm_pulse & begin( int attached_pin, int minimum_duration, bool activeLow = false, bool pullUp = false );
+    Atm_pulse & begin( int attached_pin, int minimum_duration = 20, bool activeLow = false, bool pullUp = false );
     Atm_pulse & trace( Stream & stream );
     int event( int id ); 
     void action( int id ); 
@@ -87,7 +87,7 @@ class Att_pulse: public TinyMachine {
     enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };
     enum { ACT_PULSE };
 	
-    Att_pulse & begin( int attached_pin, int minimum_duration, bool activeLow = false, bool pullUp = false );
+    Att_pulse & begin( int attached_pin, int minimum_duration = 20, bool activeLow = false, bool pullUp = false );
     Att_pulse & trace( Stream & stream );
     int event( int id ); 
     void action( int id ); 

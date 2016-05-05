@@ -1,6 +1,6 @@
 #include "Atm_pulse.hpp"
 	
-Atm_pulse & Atm_pulse::begin( int attached_pin, int minimum_duration, bool activeLow /* = false */, bool pullUp /* = false */ )
+Atm_pulse & Atm_pulse::begin( int attached_pin, int minimum_duration /* = 20 */, bool activeLow /* = false */, bool pullUp /* = false */ )
 {
   const static state_t state_table[] PROGMEM = {
   /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER   EVT_HIGH  EVT_LOW   ELSE */
@@ -99,7 +99,7 @@ Atm_pulse & Atm_pulse::trace( Stream & stream ) {
 
 
 	
-Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration, bool activeLow /* = false */, bool pullUp /* = false */ )
+Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration /* = 20 */, bool activeLow /* = false */, bool pullUp /* = false */ )
 {
   const static tiny_state_t state_table[] PROGMEM = {
   /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER   EVT_HIGH  EVT_LOW   ELSE */
