@@ -1,6 +1,6 @@
 #include "Atm_pulse.hpp"
 	
-Atm_pulse & Atm_pulse::begin( int attached_pin, int minimum_duration )
+Atm_pulse & Atm_pulse::begin( int attached_pin, int minimum_duration, bool activeLow /* = false */, bool pullUp /* = false */ )
 {
   const static state_t state_table[] PROGMEM = {
   /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER   EVT_HIGH  EVT_LOW   ELSE */
@@ -10,8 +10,9 @@ Atm_pulse & Atm_pulse::begin( int attached_pin, int minimum_duration )
   };
   Machine::begin( state_table, ELSE );
   pin = attached_pin; 
+  _activeLow = activeLow;
   timer.set( minimum_duration );
-  pinMode( pin, INPUT ); 
+  pinMode( pin, pullUp ? INPUT_PULLUP : INPUT ); 
   return *this;          
 }
 
@@ -58,9 +59,9 @@ int Atm_pulse::event( int id )
   	case EVT_TIMER :
   	  return timer.expired( this );
     case EVT_HIGH :
-      return digitalRead( pin );
+      return ( !digitalRead( pin ) != !_activeLow );
     case EVT_LOW :
-      return !digitalRead( pin );
+      return !( !digitalRead( pin ) != !_activeLow );
    }
    return 0;
 }
@@ -96,7 +97,9 @@ Atm_pulse & Atm_pulse::trace( Stream & stream ) {
 
 // TinyMachine version
 
-Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration )
+
+	
+Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration, bool activeLow /* = false */, bool pullUp /* = false */ )
 {
   const static tiny_state_t state_table[] PROGMEM = {
   /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER   EVT_HIGH  EVT_LOW   ELSE */
@@ -106,8 +109,9 @@ Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration )
   };
   TinyMachine::begin( state_table, ELSE );
   pin = attached_pin; 
+  _activeLow = activeLow;
   timer.set( minimum_duration );
-  pinMode( pin, INPUT );
+  pinMode( pin, pullUp ? INPUT_PULLUP : INPUT ); 
   return *this;          
 }
 
@@ -145,9 +149,9 @@ int Att_pulse::event( int id )
   	case EVT_TIMER :
   	  return timer.expired( this );
     case EVT_HIGH :
-      return digitalRead( pin );
+      return ( !digitalRead( pin ) != !_activeLow );
     case EVT_LOW :
-      return !digitalRead( pin );
+      return !( !digitalRead( pin ) != !_activeLow );
    }
    return 0;
 }
@@ -155,7 +159,7 @@ int Att_pulse::event( int id )
 void Att_pulse::action( int id ) 
 {
   switch ( id ) {
-    case ACT_PULSE :
+  	case ACT_PULSE :
       if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
         _callback_count++;
         (*_callback)( _callback_idx, _callback_count );

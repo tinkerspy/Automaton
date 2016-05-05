@@ -1,9 +1,9 @@
 #include <Automaton.h>
 
-class Blink : public TinyMachine {
+class Att_blink : public TinyMachine {
 
   public:
-    Blink( void ) : TinyMachine() {
+    Att_blink( void ) : TinyMachine() {
     };
 
     short pin;
@@ -13,7 +13,7 @@ class Blink : public TinyMachine {
     enum { EVT_TIMER, EVT_ON, EVT_OFF, ELSE };  //EVENTS
     enum { ACT_ON, ACT_OFF }; // ACTIONS
 
-    Blink & begin( int attached_pin, uint32_t blinkrate )
+    Att_blink & begin( int attached_pin, uint32_t blinkrate )
     {
       const static tiny_state_t state_table[] PROGMEM = {
         /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER  EVT_ON  EVT_OFF  ELSE */
@@ -50,7 +50,7 @@ class Blink : public TinyMachine {
     }
 };
 
-Blink led;
+Att_blink led;
 
 void setup()
 {

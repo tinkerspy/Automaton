@@ -1,9 +1,9 @@
 #include <Automaton.h>
 
-class Blink : public Machine {
+class Atm_blink : public Machine {
 
   public:
-    Blink( void ) : Machine() {
+    Atm_blink( void ) : Machine() {
       class_label = "BLNK";
     };
 
@@ -14,7 +14,7 @@ class Blink : public Machine {
     enum { EVT_TIMER, EVT_ON, EVT_OFF, ELSE }; // EVENTS
     enum { ACT_ON, ACT_OFF }; // ACTIONS
 
-    Blink & begin( int attached_pin, uint32_t blinkrate )
+    Atm_blink & begin( int attached_pin, uint32_t blinkrate )
     {
       const static state_t state_table[] PROGMEM = {
         /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER  EVT_ON  EVT_OFF  ELSE */
@@ -51,7 +51,7 @@ class Blink : public Machine {
     }
 };
 
-Blink led;
+Atm_blink led;
 
 void setup()
 {

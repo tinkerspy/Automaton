@@ -17,6 +17,7 @@ class Atm_pulse: public Machine {
     short pin;     
     int state_high, state_low;
     atm_timer_millis timer;
+    bool _activeLow;
     union {
       struct { // ATM_USR1_FLAG - callback
         void (*_callback)( int idx, uint16_t cnt );
@@ -41,7 +42,7 @@ class Atm_pulse: public Machine {
     enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };
     enum { ACT_PULSE };
 	
-    Atm_pulse & begin( int attached_pin, int minimum_duration );
+    Atm_pulse & begin( int attached_pin, int minimum_duration, bool activeLow = false, bool pullUp = false );
     Atm_pulse & trace( Stream & stream );
     int event( int id ); 
     void action( int id ); 
@@ -56,11 +57,12 @@ class Atm_pulse: public Machine {
 class Att_pulse: public TinyMachine {
 
   public:
-    Att_pulse( void ) : TinyMachine() { };
+    Att_pulse( void ) : TinyMachine() {};
 
     short pin;     
     int state_high, state_low;
     atm_timer_millis timer;
+    bool _activeLow;
     union {
       struct { // ATM_USR1_FLAG - callback
         void (*_callback)( int idx, uint16_t cnt );
@@ -75,7 +77,7 @@ class Att_pulse: public TinyMachine {
         const char * _client_label;
         state_t _client_label_event;
       };
-      struct { // ATM_USR4_FLAG - Tiny machine trigger
+      struct { // ATM_USR2_FLAG - Tiny machine trigger
         TinyMachine * _client_tmachine;
         state_t _client_tmachine_event;
       };
@@ -85,7 +87,7 @@ class Att_pulse: public TinyMachine {
     enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };
     enum { ACT_PULSE };
 	
-    Att_pulse & begin( int attached_pin, int minimum_duration );
+    Att_pulse & begin( int attached_pin, int minimum_duration, bool activeLow = false, bool pullUp = false );
     Att_pulse & trace( Stream & stream );
     int event( int id ); 
     void action( int id ); 
@@ -93,7 +95,6 @@ class Att_pulse: public TinyMachine {
     Att_pulse & onPulse( Machine & machine, int event = 0 );
     Att_pulse & onPulse( TinyMachine & machine, int event = 0 );
 };
-
 
 
 
