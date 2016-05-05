@@ -59,7 +59,7 @@ int Atm_pulse::event( int id )
   	case EVT_TIMER :
   	  return timer.expired( this );
     case EVT_HIGH :
-      return ( !digitalRead( pin ) != !_activeLow );
+      return ( !digitalRead( pin ) != !_activeLow ); // XOR
     case EVT_LOW :
       return !( !digitalRead( pin ) != !_activeLow );
    }
@@ -96,7 +96,6 @@ Atm_pulse & Atm_pulse::trace( Stream & stream ) {
 
 
 // TinyMachine version
-
 
 	
 Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration /* = 20 */, bool activeLow /* = false */, bool pullUp /* = false */ )
@@ -149,7 +148,7 @@ int Att_pulse::event( int id )
   	case EVT_TIMER :
   	  return timer.expired( this );
     case EVT_HIGH :
-      return ( !digitalRead( pin ) != !_activeLow );
+      return ( !digitalRead( pin ) != !_activeLow ); // XOR
     case EVT_LOW :
       return !( !digitalRead( pin ) != !_activeLow );
    }
