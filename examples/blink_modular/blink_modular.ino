@@ -1,5 +1,5 @@
 #include <Automaton.h>
-#include "Atm_blink.h"
+#include "Atm_blink.hpp"
 
 Atm_blink led;
 

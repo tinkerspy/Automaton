@@ -233,7 +233,7 @@ TinyMachine & TinyMachine::cycle( uint32_t time /* = 0 */ )
 {
     uint32_t cycle_start = millis();
     do {
-        if ( ( flags & ( ATM_SLEEP_FLAG | ATM_CYCLE_FLAG ) ) == 0 ) {
+        if ( ( flags & ( ATM_SLEEP_FLAG | ATM_CYCLE_FLAG ) ) == 0 ) { 
 			flags |= ATM_CYCLE_FLAG;
             if ( next != -1 ) {
                 action( ATM_ON_SWITCH );
@@ -398,7 +398,7 @@ int Factory::state( const char label[] )
 }    
 
 // .cycle() executes one factory cycle (runs all priority queues a certain number of times)
-Factory & Factory::cycle( uint32_t time /* = 0 */ ) 
+Factory & Factory::cycle( uint32_t time /* = 0 */ ) // Is it safe to allow recursion here???
 {
     uint32_t cycle_start = millis();
     if ( recalibrate ) calibrate();

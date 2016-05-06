@@ -190,6 +190,8 @@ class Factory
 #include <Atm_pulse.hpp>
 #include <Atm_step.hpp>
 #include <Atm_timer.hpp>
+#include <Atm_bit.hpp>
+#include <Atm_condition.hpp>
 
 
 #endif
