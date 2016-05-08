@@ -108,7 +108,7 @@ Atm_condition & Atm_condition::OR( TinyMachine & machine, char relOp /* = '>' */
 }
 
 Atm_condition & Atm_condition::OP( char logOp, Machine & machine, char relOp = '>', state_t match = 0 ) {
-  for ( uint8_t i = 0; i < ATM_CONDITION_OP_MAX; i++ ) { // Fix me off-by-one, should be <!!!
+  for ( uint8_t i = 0; i < ATM_CONDITION_OP_MAX; i++ ) { 
     if ( _op[i]._mode == MODE_NULL ) { // Pick the first free slot
       _op[i]._mode = MODE_MACHINE;
       _op[i]._logop = logOp;
