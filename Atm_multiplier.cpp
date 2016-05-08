@@ -13,7 +13,7 @@ Atm_multiplier & Atm_multiplier::begin()
 
 Atm_multiplier & Atm_multiplier::onInput( multicb_t callback )
 {
-  for ( uint8_t idx = 0; idx < _max_comms; idx++ ) {
+  for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _comm[idx]._mode == MODE_NULL ) {
       _comm[idx]._mode = MODE_CALLBACK;
       _comm[idx]._callback = callback;
@@ -25,7 +25,7 @@ Atm_multiplier & Atm_multiplier::onInput( multicb_t callback )
 
 Atm_multiplier & Atm_multiplier::onInput( Machine & machine, state_t event /* = 0 */ )
 {
-  for ( uint8_t idx = 0; idx < _max_comms; idx++ ) {
+  for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _comm[idx]._mode == MODE_NULL ) {
       _comm[idx]._mode = MODE_MACHINE;
       _comm[idx]._client_machine = &machine;
@@ -38,7 +38,7 @@ Atm_multiplier & Atm_multiplier::onInput( Machine & machine, state_t event /* = 
 
 Atm_multiplier & Atm_multiplier::onInput( const char * label, state_t event /* = 0 */ )
 {
-  for ( uint8_t idx = 0; idx < _max_comms; idx++ ) {
+  for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _comm[idx]._mode == MODE_NULL ) {
       _comm[idx]._mode = MODE_FACTORY;
       _comm[idx]._client_label = label;
@@ -51,7 +51,7 @@ Atm_multiplier & Atm_multiplier::onInput( const char * label, state_t event /* =
 
 Atm_multiplier & Atm_multiplier::onInput( TinyMachine & machine, state_t event /* = 0 */ )
 {
-  for ( uint8_t idx = 0; idx < _max_comms; idx++ ) {
+  for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _comm[idx]._mode == MODE_NULL ) {    
       _comm[idx]._mode = MODE_TMACHINE;
       _comm[idx]._client_tmachine = &machine;
@@ -89,7 +89,7 @@ void Atm_multiplier::action( int id )
 {
   switch ( id ) {
     case ACT_SEND :
-      for ( uint8_t idx = 0; idx < _max_comms; idx++ ) {
+      for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
         if ( _comm[idx]._mode != MODE_NULL ) {
           comm( _comm[idx] );
         }

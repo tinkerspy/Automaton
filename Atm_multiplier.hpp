@@ -6,6 +6,8 @@
 
 typedef void (*multicb_t)( void );
 
+int const ATM_MULTIPLIER_COMMS_MAX = 4;
+
 class Atm_Multiplier_Comm {
   public:
     uint8_t _mode = 0;
@@ -33,8 +35,7 @@ class Atm_multiplier: public Machine {
   public:
     Atm_multiplier( void ) : Machine() { class_label = "MUL"; };
 
-    const static short _max_comms = 4;
-    Atm_Multiplier_Comm _comm[_max_comms];
+    Atm_Multiplier_Comm _comm[ATM_MULTIPLIER_COMMS_MAX];
 
     enum { IDLE, SEND }; // STATES
     enum { EVT_INPUT, ELSE }; // EVENTS
