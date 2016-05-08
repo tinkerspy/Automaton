@@ -6,7 +6,7 @@
 
 typedef void (*bitcb_t)( int idx );
 
-class AtmBitComm {
+class Atm_Bit_Comm {
   public:
     uint8_t _mode = 0;
     union {
@@ -35,7 +35,7 @@ class Atm_bit: public Machine {
     Atm_bit( void ) : Machine() { class_label = "BIT"; };
 
     state_t _last_state;
-    AtmBitComm _comm[4];
+    Atm_Bit_Comm _comm[4];
 
     enum { OFF, ON }; // STATES
     enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE }; // EVENTS
@@ -55,8 +55,39 @@ class Atm_bit: public Machine {
     Atm_bit & trace( Stream & stream );
     int event( int id ); 
     void action( int id ); 
-    void comm( AtmBitComm & c, state_t st );
+    void comm( Atm_Bit_Comm & c, state_t st );
 };
+
+// Tiny Machine version
+
+
+class Att_bit: public TinyMachine {
+
+  public:
+    Att_bit( void ) : TinyMachine() {};
+
+    state_t _last_state;
+    Atm_Bit_Comm _comm[4];
+
+    enum { OFF, ON }; // STATES
+    enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE }; // EVENTS
+    enum { ACT_ON, ACT_OFF, ACT_INPUT }; // ACTIONS
+    enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY };
+  
+    Att_bit & begin( bool default_state = false );
+    Att_bit & onFlip( bool st, bitcb_t callback );
+    Att_bit & onFlip( bool st, Machine & machine, state_t event /* = 0 */ );
+    Att_bit & onFlip( bool st, TinyMachine & machine, state_t event /* = 0 */ );
+    Att_bit & onInput( bool st, bitcb_t callback );
+    Att_bit & onInput( bool st, Machine & machine, state_t event /* = 0 */ );
+    Att_bit & onInput( bool st, TinyMachine & machine, state_t event /* = 0 */ );
+
+    Att_bit & trace( Stream & stream );
+    int event( int id ); 
+    void action( int id ); 
+    void comm( Atm_Bit_Comm & c, state_t st );
+};
+
 
 #endif
 
