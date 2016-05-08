@@ -137,28 +137,23 @@ Atm_condition & Atm_condition::OP( char logOp, TinyMachine & machine, char relOp
 
 bool Atm_condition::eval_one( uint8_t idx ) {
 
+  state_t match_state, machine_state;  
   if ( _op[idx]._mode == MODE_MACHINE ) {
-    state_t machine_state = _op[idx]._client_machine->state();
-    switch ( _op[idx]._relop ) {
-      case '=' : return machine_state == _op[idx]._client_machine_event;
-      case '!' : return machine_state != _op[idx]._client_machine_event;
-      case '<' : return machine_state <  _op[idx]._client_machine_event;
-      case '>' : return machine_state >  _op[idx]._client_machine_event;
-      case '-' : return machine_state <= _op[idx]._client_machine_event;
-      case '+' : return machine_state >= _op[idx]._client_machine_event;      
-    }       
+    machine_state = _op[idx]._client_machine->state();
+    match_state = _op[idx]._client_machine_event;
   }
   if ( _op[idx]._mode == MODE_TMACHINE ) {
-    state_t machine_state = _op[idx]._client_tmachine->state();
-    switch ( _op[idx]._relop ) {
-      case '=' : return machine_state == _op[idx]._client_tmachine_event;
-      case '!' : return machine_state != _op[idx]._client_tmachine_event;
-      case '<' : return machine_state <  _op[idx]._client_tmachine_event;
-      case '>' : return machine_state >  _op[idx]._client_tmachine_event;
-      case '-' : return machine_state <= _op[idx]._client_tmachine_event;
-      case '+' : return machine_state >= _op[idx]._client_tmachine_event;      
-    }       
+    machine_state = _op[idx]._client_tmachine->state();
+    match_state = _op[idx]._client_tmachine_event;
   }
+  switch ( _op[idx]._relop ) {
+    case '=' : return machine_state == match_state;
+    case '!' : return machine_state != match_state;
+    case '<' : return machine_state <  match_state;
+    case '>' : return machine_state >  match_state;
+    case '-' : return machine_state <= match_state;
+    case '+' : return machine_state >= match_state;      
+  }       
   return false;
 }
 
