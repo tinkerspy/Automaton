@@ -3,10 +3,10 @@
 Atm_pulse & Atm_pulse::begin( int attached_pin, int minimum_duration /* = 20 */, bool activeLow /* = false */, bool pullUp /* = false */ )
 {
   const static state_t state_table[] PROGMEM = {
-  /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER   EVT_HIGH  EVT_LOW   ELSE */
-  /* IDLE    */         -1,        -1,      -1,        -1,      WAIT,      -1,    -1,
-  /* WAIT    */         -1,        -1,      -1,     PULSE,        -1,    IDLE,    -1,
-  /* PULSE   */  ACT_PULSE,        -1,      -1,        -1,        -1,    IDLE,    -1,
+  /*              ON_ENTER    ON_LOOP      ON_EXIT  EVT_TIMER   EVT_HIGH  EVT_LOW   ELSE */
+  /* IDLE    */         -1,        -1,          -1,        -1,      WAIT,      -1,    -1,
+  /* WAIT    */         -1,        -1,          -1,     PULSE,        -1,    IDLE,    -1,
+  /* PULSE   */  ACT_PULSE,        -1, ACT_RELEASE,        -1,        -1,    IDLE,    -1,
   };
   Machine::begin( state_table, ELSE );
   pin = attached_pin; 
@@ -18,38 +18,67 @@ Atm_pulse & Atm_pulse::begin( int attached_pin, int minimum_duration /* = 20 */,
 
 Atm_pulse & Atm_pulse::onPulse( pulsecb_t callback, int idx /* = 0 */ )
 {
-  _callback = callback;
-  _callback_idx = idx;
-  _callback_count = 0;
-  flags &= ~ATM_USR_FLAGS;
-  flags |= ATM_USR1_FLAG;
+  _onpulse._mode = MODE_CALLBACK;  
+  _onpulse._callback = callback;
+  _onpulse._callback_idx = idx;
+  _onpulse._callback_count = 0;
   return *this;
 }
 
 Atm_pulse & Atm_pulse::onPulse( Machine & machine, int event /* = 0 */ )
 {
-  _client_machine = &machine;
-  _client_machine_event = event;
-  flags &= ~ATM_USR_FLAGS;
-  flags |= ATM_USR2_FLAG;
+  _onpulse._mode = MODE_MACHINE;  
+  _onpulse._client_machine = &machine;
+  _onpulse._client_machine_event = event;
   return *this;
 }
 
 Atm_pulse & Atm_pulse::onPulse( const char * label, int event /* = 0 */ )
 {
-  _client_label = label;
-  _client_label_event = event;
-  flags &= ~ATM_USR_FLAGS;
-  flags |= ATM_USR3_FLAG;
+  _onpulse._mode = MODE_FACTORY;  
+  _onpulse._client_label = label;
+  _onpulse._client_label_event = event;
   return *this;
 }
 
 Atm_pulse & Atm_pulse::onPulse( TinyMachine & machine, int event /* = 0 */ )
 {
-  _client_tmachine = &machine;
-  _client_tmachine_event = event;
-  flags &= ~ATM_USR_FLAGS;
-  flags |= ATM_USR4_FLAG;
+  _onpulse._mode = MODE_TMACHINE;    
+  _onpulse._client_tmachine = &machine;
+  _onpulse._client_tmachine_event = event;
+  return *this;
+}
+
+Atm_pulse & Atm_pulse::onRelease( pulsecb_t callback, int idx /* = 0 */ )
+{
+  _onrelease._mode = MODE_CALLBACK;  
+  _onrelease._callback = callback;
+  _onrelease._callback_idx = idx;
+  _onrelease._callback_count = 0;
+  return *this;
+}
+
+Atm_pulse & Atm_pulse::onRelease( Machine & machine, int event /* = 0 */ )
+{
+  _onrelease._mode = MODE_MACHINE;
+  _onrelease._client_machine = &machine;
+  _onrelease._client_machine_event = event;
+  return *this;
+}
+
+Atm_pulse & Atm_pulse::onRelease( const char * label, int event /* = 0 */ )
+{
+  _onrelease._mode = MODE_FACTORY;
+  _onrelease._client_label = label;
+  _onrelease._client_label_event = event;
+  return *this;
+}
+
+Atm_pulse & Atm_pulse::onRelease( TinyMachine & machine, int event /* = 0 */ )
+{
+  _onrelease._mode = MODE_TMACHINE;
+  _onrelease._client_tmachine = &machine;
+  _onrelease._client_tmachine_event = event;
   return *this;
 }
 
@@ -70,18 +99,33 @@ void Atm_pulse::action( int id )
 {
   switch ( id ) {
   	case ACT_PULSE :
-      if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
-        _callback_count++;
-        (*_callback)( _callback_idx, _callback_count );
+      if ( _onpulse._mode == MODE_CALLBACK ) {
+        _onpulse._callback_count++;
+        (*_onpulse._callback)( _onpulse._callback_idx, _onpulse._callback_count );
       }
-      if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
-        _client_machine->trigger( _client_machine_event );
+      if ( _onpulse._mode == MODE_MACHINE ) {
+        _onpulse._client_machine->trigger( _onpulse._client_machine_event );
       }
-      if ( ( flags & ATM_USR3_FLAG ) > 0 && factory ) {
-        factory->trigger( _client_label, _client_label_event );
+      if ( _onpulse._mode == MODE_FACTORY && factory ) {
+        factory->trigger( _onpulse._client_label, _onpulse._client_label_event );
       }
-      if ( ( flags & ATM_USR4_FLAG ) > 0 ) {
-        _client_tmachine->trigger( _client_tmachine_event );
+      if ( _onpulse._mode == MODE_TMACHINE ) {
+        _onpulse._client_tmachine->trigger( _onpulse._client_tmachine_event );
+      }
+  	  return;
+  	case ACT_RELEASE :
+      if ( _onrelease._mode == MODE_CALLBACK ) {
+        _onrelease._callback_count++;
+        (*_onrelease._callback)( _onrelease._callback_idx, _onrelease._callback_count );
+      }
+      if ( _onrelease._mode == MODE_MACHINE ) {
+        _onrelease._client_machine->trigger( _onrelease._client_machine_event );
+      }
+      if ( _onrelease._mode == MODE_FACTORY && factory ) {
+        factory->trigger( _onrelease._client_label, _onrelease._client_label_event );
+      }
+      if ( _onrelease._mode == MODE_TMACHINE ) {
+        _onrelease._client_tmachine->trigger( _onrelease._client_tmachine_event );
       }
   	  return;
    }
@@ -97,14 +141,15 @@ Atm_pulse & Atm_pulse::trace( Stream & stream ) {
 
 // TinyMachine version
 
+
 	
 Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration /* = 20 */, bool activeLow /* = false */, bool pullUp /* = false */ )
 {
   const static tiny_state_t state_table[] PROGMEM = {
-  /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER   EVT_HIGH  EVT_LOW   ELSE */
-  /* IDLE    */         -1,        -1,      -1,        -1,      WAIT,      -1,    -1,
-  /* WAIT    */         -1,        -1,      -1,     PULSE,        -1,    IDLE,    -1,
-  /* PULSE   */  ACT_PULSE,        -1,      -1,        -1,        -1,    IDLE,    -1,
+  /*              ON_ENTER    ON_LOOP      ON_EXIT  EVT_TIMER   EVT_HIGH  EVT_LOW   ELSE */
+  /* IDLE    */         -1,        -1,          -1,        -1,      WAIT,      -1,    -1,
+  /* WAIT    */         -1,        -1,          -1,     PULSE,        -1,    IDLE,    -1,
+  /* PULSE   */  ACT_PULSE,        -1, ACT_RELEASE,        -1,        -1,    IDLE,    -1,
   };
   TinyMachine::begin( state_table, ELSE );
   pin = attached_pin; 
@@ -116,29 +161,51 @@ Att_pulse & Att_pulse::begin( int attached_pin, int minimum_duration /* = 20 */,
 
 Att_pulse & Att_pulse::onPulse( pulsecb_t callback, int idx /* = 0 */ )
 {
-  _callback = callback;
-  _callback_idx = idx;
-  _callback_count = 0;
-  flags &= ~ATM_USR_FLAGS;
-  flags |= ATM_USR1_FLAG;
+  _onpulse._mode = MODE_CALLBACK;  
+  _onpulse._callback = callback;
+  _onpulse._callback_idx = idx;
+  _onpulse._callback_count = 0;
   return *this;
 }
 
 Att_pulse & Att_pulse::onPulse( Machine & machine, int event /* = 0 */ )
 {
-  _client_machine = &machine;
-  _client_machine_event = event;
-  flags &= ~ATM_USR_FLAGS;
-  flags |= ATM_USR2_FLAG;
+  _onpulse._mode = MODE_MACHINE;  
+  _onpulse._client_machine = &machine;
+  _onpulse._client_machine_event = event;
   return *this;
 }
 
 Att_pulse & Att_pulse::onPulse( TinyMachine & machine, int event /* = 0 */ )
 {
-  _client_tmachine = &machine;
-  _client_tmachine_event = event;
-  flags &= ~ATM_USR_FLAGS;
-  flags |= ATM_USR4_FLAG;
+  _onpulse._mode = MODE_TMACHINE;    
+  _onpulse._client_tmachine = &machine;
+  _onpulse._client_tmachine_event = event;
+  return *this;
+}
+
+Att_pulse & Att_pulse::onRelease( pulsecb_t callback, int idx /* = 0 */ )
+{
+  _onrelease._mode = MODE_CALLBACK;  
+  _onrelease._callback = callback;
+  _onrelease._callback_idx = idx;
+  _onrelease._callback_count = 0;
+  return *this;
+}
+
+Att_pulse & Att_pulse::onRelease( Machine & machine, int event /* = 0 */ )
+{
+  _onrelease._mode = MODE_MACHINE;
+  _onrelease._client_machine = &machine;
+  _onrelease._client_machine_event = event;
+  return *this;
+}
+
+Att_pulse & Att_pulse::onRelease( TinyMachine & machine, int event /* = 0 */ )
+{
+  _onrelease._mode = MODE_TMACHINE;
+  _onrelease._client_tmachine = &machine;
+  _onrelease._client_tmachine_event = event;
   return *this;
 }
 
@@ -159,15 +226,27 @@ void Att_pulse::action( int id )
 {
   switch ( id ) {
   	case ACT_PULSE :
-      if ( ( flags & ATM_USR1_FLAG ) > 0 ) {
-        _callback_count++;
-        (*_callback)( _callback_idx, _callback_count );
+      if ( _onpulse._mode == MODE_CALLBACK ) {
+        _onpulse._callback_count++;
+        (*_onpulse._callback)( _onpulse._callback_idx, _onpulse._callback_count );
       }
-      if ( ( flags & ATM_USR2_FLAG ) > 0 ) {
-        _client_machine->trigger( _client_machine_event );
+      if ( _onpulse._mode == MODE_MACHINE ) {
+        _onpulse._client_machine->trigger( _onpulse._client_machine_event );
       }
-      if ( ( flags & ATM_USR4_FLAG ) > 0 ) {
-        _client_tmachine->trigger( _client_tmachine_event );
+      if ( _onpulse._mode == MODE_TMACHINE ) {
+        _onpulse._client_tmachine->trigger( _onpulse._client_tmachine_event );
+      }
+  	  return;
+  	case ACT_RELEASE :
+      if ( _onrelease._mode == MODE_CALLBACK ) {
+        _onrelease._callback_count++;
+        (*_onrelease._callback)( _onrelease._callback_idx, _onrelease._callback_count );
+      }
+      if ( _onrelease._mode == MODE_MACHINE ) {
+        _onrelease._client_machine->trigger( _onrelease._client_machine_event );
+      }
+      if ( _onrelease._mode == MODE_TMACHINE ) {
+        _onrelease._client_tmachine->trigger( _onrelease._client_tmachine_event );
       }
   	  return;
    }
