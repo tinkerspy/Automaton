@@ -73,5 +73,48 @@ class Atm_condition: public Machine {
 
 };
 
+// Tiny Machine version
+
+class Att_condition: public TinyMachine {
+
+  public:
+    Att_condition( void ) : TinyMachine() {};
+
+    state_t _last_state;
+    Atm_Condition_Comm _comm[4];
+    Atm_Condition_Comm _op[ATM_CONDITION_OP_MAX];
+
+    enum { OFF, ON }; // STATES
+    enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE }; // EVENTS
+    enum { ACT_ON, ACT_OFF, ACT_INPUT }; // ACTIONS
+    enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY };
+  
+    Att_condition & begin( bool default_state = false );
+    Att_condition & onFlip( bool st, condcb_t callback );
+    Att_condition & onFlip( bool st, Machine & machine, state_t event = 0);
+    Att_condition & onFlip( bool st, TinyMachine & machine, state_t event = 0 );
+    Att_condition & onInput( bool st, condcb_t callback );
+    Att_condition & onInput( bool st, Machine & machine, state_t event = 0 );
+    Att_condition & onInput( bool st, TinyMachine & machine, state_t event = 0 );
+    Att_condition & IF(      Machine & machine, char relOp = '>', state_t match = 0 );
+    Att_condition & IF(  TinyMachine & machine, char relOp = '>', state_t match = 0 );
+    Att_condition & AND(     Machine & machine, char relOp = '>', state_t match = 0 );
+    Att_condition & AND( TinyMachine & machine, char relOp = '>', state_t match = 0 );
+    Att_condition & OR(      Machine & machine, char relOp = '>', state_t match = 0 );
+    Att_condition & OR(  TinyMachine & machine, char relOp = '>', state_t match = 0 );
+
+    Att_condition & trace( Stream & stream );
+  private:
+    int event( int id ); 
+    void action( int id ); 
+    void comm( Atm_Condition_Comm & c, state_t st );
+    Att_condition & OP( char logOp, Machine & machine, char relOp, state_t match );
+    Att_condition & OP( char logOp, TinyMachine & machine, char relOp, state_t match );
+    bool eval_one( uint8_t idx );
+    bool eval();
+
+};
+
+
 #endif
 

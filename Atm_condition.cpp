@@ -223,5 +223,203 @@ Atm_condition & Atm_condition::trace( Stream & stream ) {
   return *this;
 }
 
+// Tiny Machine version
+
+Att_condition & Att_condition::begin( bool default_state /* = false */ ) {
+  const static tiny_state_t state_table[] PROGMEM = {
+    /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON  EVT_OFF  EVT_TOGGLE EVT_INPUT ELSE */
+    /* OFF     */    ACT_OFF,        -1,      -1,     ON,      -1,         ON,      OFF,  -1,
+    /* ON      */     ACT_ON,        -1,      -1,     -1,     OFF,        OFF,       ON,  -1,
+  };
+  TinyMachine::begin( state_table, ELSE );
+  _last_state = -1;
+  state( default_state ? ON : OFF );
+//  cycle();   Causes the condition to become true momentarily
+  return *this;          
+}
+
+Att_condition & Att_condition::onFlip( bool st, stepcb_t callback )
+{
+  short idx = st ? 0 : 1;
+  _comm[idx]._mode = MODE_CALLBACK;
+  _comm[idx]._callback = callback;
+  return *this;
+}
+
+Att_condition & Att_condition::onFlip( bool st, Machine & machine, state_t event /* = 0 */ )
+{
+  short idx = st ? 0 : 1;
+  _comm[idx]._mode = MODE_MACHINE;
+  _comm[idx]._client_machine = &machine;
+  _comm[idx]._client_machine_event = event;
+  return *this;
+}
+
+Att_condition & Att_condition::onFlip( bool st, TinyMachine & machine, state_t event /* = 0 */ )
+{
+  short idx = st ? 0 : 1;
+  _comm[idx]._mode = MODE_TMACHINE;
+  _comm[idx]._client_tmachine = &machine;
+  _comm[idx]._client_tmachine_event = event;
+  return *this;
+}
+
+Att_condition & Att_condition::onInput( bool st, stepcb_t callback )
+{
+  short idx = st ? 2 : 3;
+  _comm[idx]._mode = MODE_CALLBACK;
+  _comm[idx]._callback = callback;
+  return *this;
+}
+
+Att_condition & Att_condition::onInput( bool st, Machine & machine, state_t event /* = 0 */ )
+{
+  short idx = st ? 2 : 3;
+  _comm[idx]._mode = MODE_MACHINE;
+  _comm[idx]._client_machine = &machine;
+  _comm[idx]._client_machine_event = event;
+  return *this;
+}
+
+Att_condition & Att_condition::onInput( bool st, TinyMachine & machine, state_t event /* = 0 */ )
+{
+  short idx = st ? 2 : 3;
+  _comm[idx]._mode = MODE_TMACHINE;
+  _comm[idx]._client_tmachine = &machine;
+  _comm[idx]._client_tmachine_event = event;
+  return *this;
+}
+
+Att_condition & Att_condition::IF( Machine & machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( '?', machine, relOp, match );
+}
+
+Att_condition & Att_condition::IF( TinyMachine & machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( '?', machine, relOp, match );
+}
+
+Att_condition & Att_condition::AND( Machine & machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( '&', machine, relOp, match );
+}
+
+Att_condition & Att_condition::AND( TinyMachine & machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( '&', machine, relOp, match );
+}
+
+Att_condition & Att_condition::OR( Machine & machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( '|', machine, relOp, match );
+}
+
+Att_condition & Att_condition::OR( TinyMachine & machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( '|', machine, relOp, match );
+}
+
+Att_condition & Att_condition::OP( char logOp, Machine & machine, char relOp = '>', state_t match = 0 ) {
+  for ( uint8_t i = 0; i < ATM_CONDITION_OP_MAX; i++ ) { 
+    if ( _op[i]._mode == MODE_NULL ) { // Pick the first free slot
+      _op[i]._mode = MODE_MACHINE;
+      _op[i]._logop = logOp;
+      _op[i]._relop = relOp;
+      _op[i]._client_machine = &machine;
+      _op[i]._client_machine_event = match;
+      break;
+    }
+  }
+  return *this;
+}
+
+Att_condition & Att_condition::OP( char logOp, TinyMachine & machine, char relOp, state_t match  ) {
+  for ( uint8_t i = 0; i < ATM_CONDITION_OP_MAX; i++ ) {
+    if ( _op[i]._mode == MODE_NULL ) { // Pick the first free slot
+      _op[i]._mode = MODE_TMACHINE;
+      _op[i]._logop = logOp;
+      _op[i]._relop = relOp;
+      _op[i]._client_tmachine = &machine;
+      _op[i]._client_tmachine_event = match;
+      break;
+    }
+  }
+  return *this;
+}
+
+bool Att_condition::eval_one( uint8_t idx ) {
+
+  state_t match_state, machine_state;  
+  if ( _op[idx]._mode == MODE_MACHINE ) {
+    machine_state = _op[idx]._client_machine->state();
+    match_state = _op[idx]._client_machine_event;
+  }
+  if ( _op[idx]._mode == MODE_TMACHINE ) {
+    machine_state = _op[idx]._client_tmachine->state();
+    match_state = _op[idx]._client_tmachine_event;
+  }
+  switch ( _op[idx]._relop ) {
+    case '=' : return machine_state == match_state;
+    case '!' : return machine_state != match_state;
+    case '<' : return machine_state <  match_state;
+    case '>' : return machine_state >  match_state;
+    case '-' : return machine_state <= match_state;
+    case '+' : return machine_state >= match_state;      
+  }       
+  return false;
+}
+
+bool Att_condition::eval() {
+
+  bool r = eval_one( 0 );
+  for ( uint8_t i = 1; i < ATM_CONDITION_OP_MAX; i++ ) {
+    if ( _op[i]._mode ) {
+      switch ( _op[i]._logop ) {
+        case '&' : 
+          r = r && eval_one( i );
+          break;
+        case '|' : 
+          r = r || eval_one( i );
+          break;
+      }
+    }   
+  }
+  return r;
+}
+
+int Att_condition::event( int id ) {
+   switch (id ) {
+     case EVT_ON :
+       return eval();
+     case EVT_OFF :
+       return !eval();
+   }
+   return 0;
+}
+
+void Att_condition::comm( Atm_Condition_Comm & c, state_t st ) {
+
+  switch ( c._mode ) {
+    case MODE_CALLBACK :
+      (*c._callback)( st );
+      return;
+    case MODE_MACHINE :
+      c._client_machine->trigger( c._client_machine_event );
+      return;
+    case MODE_TMACHINE :
+      c._client_tmachine->trigger( c._client_tmachine_event );
+      return;
+  }
+}
+
+void Att_condition::action( int id ) {
+  switch ( id ) {
+    case ACT_OFF :
+        comm( _comm[ _last_state == current ? 3 : 1 ], current );
+      _last_state = current;
+      return;
+    case ACT_ON :
+      if ( _last_state != -1 )
+      comm( _comm[ _last_state == current ? 2 : 0 ], current );
+      _last_state = current;
+      return;
+   }
+}
+
 
 
