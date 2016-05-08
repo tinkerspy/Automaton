@@ -192,6 +192,7 @@ class Factory
 #include <Atm_timer.hpp>
 #include <Atm_bit.hpp>
 #include <Atm_condition.hpp>
+#include <Atm_multiplier.hpp>
 
 
 #endif
