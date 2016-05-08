@@ -6,6 +6,8 @@
 
 typedef void (*condcb_t)( int idx );
 
+int const ATM_CONDITION_OP_MAX = 4;
+
 class Atm_Condition_Comm {
   public:
     uint8_t _mode = 0;
@@ -29,7 +31,6 @@ class Atm_Condition_Comm {
     };
 };
 
-
 class Atm_condition: public Machine {
 
   public:
@@ -37,7 +38,7 @@ class Atm_condition: public Machine {
 
     state_t _last_state;
     Atm_Condition_Comm _comm[4];
-    Atm_Condition_Comm _op[4];
+    Atm_Condition_Comm _op[ATM_CONDITION_OP_MAX];
 
     enum { OFF, ON }; // STATES
     enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE }; // EVENTS

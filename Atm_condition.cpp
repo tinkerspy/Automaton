@@ -108,7 +108,7 @@ Atm_condition & Atm_condition::OR( TinyMachine & machine, char relOp /* = '>' */
 }
 
 Atm_condition & Atm_condition::OP( char logOp, Machine & machine, char relOp = '>', state_t match = 0 ) {
-  for ( uint8_t i = 0; i <= 4; i++ ) { // Fix me off-by-one, should be <!!!
+  for ( uint8_t i = 0; i < ATM_CONDITION_OP_MAX; i++ ) { // Fix me off-by-one, should be <!!!
     if ( _op[i]._mode == MODE_NULL ) { // Pick the first free slot
       _op[i]._mode = MODE_MACHINE;
       _op[i]._logop = logOp;
@@ -122,7 +122,7 @@ Atm_condition & Atm_condition::OP( char logOp, Machine & machine, char relOp = '
 }
 
 Atm_condition & Atm_condition::OP( char logOp, TinyMachine & machine, char relOp, state_t match  ) {
-  for ( uint8_t i = 0; i <= 4; i++ ) {
+  for ( uint8_t i = 0; i < ATM_CONDITION_OP_MAX; i++ ) {
     if ( _op[i]._mode == MODE_NULL ) { // Pick the first free slot
       _op[i]._mode = MODE_TMACHINE;
       _op[i]._logop = logOp;
@@ -165,7 +165,7 @@ bool Atm_condition::eval_one( uint8_t idx ) {
 bool Atm_condition::eval() {
 
   bool r = eval_one( 0 );
-  for ( uint8_t i = 1; i <= 4; i++ ) {
+  for ( uint8_t i = 1; i < ATM_CONDITION_OP_MAX; i++ ) {
     if ( _op[i]._mode ) {
       switch ( _op[i]._logop ) {
         case '&' : 
