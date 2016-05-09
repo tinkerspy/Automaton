@@ -29,12 +29,19 @@ class Atm_condition: public Machine {
     Atm_condition & onInput( bool st, Machine & machine, state_t event = 0 );
     Atm_condition & onInput( bool st, const char * label, state_t event = 0 );
     Atm_condition & onInput( bool st, TinyMachine & machine, state_t event = 0 );
+    
     Atm_condition & IF(      Machine & machine, char relOp = '>', state_t match = 0 );
     Atm_condition & IF(  TinyMachine & machine, char relOp = '>', state_t match = 0 );
+    Atm_condition & IF(     const char * label, char relOp = '>', state_t match = 0 );
+    Atm_condition & IF(      atm_cb_t callback, char relOp = '>', state_t match = 0 );
     Atm_condition & AND(     Machine & machine, char relOp = '>', state_t match = 0 );
     Atm_condition & AND( TinyMachine & machine, char relOp = '>', state_t match = 0 );
+    Atm_condition & AND(    const char * label, char relOp = '>', state_t match = 0 );
+    Atm_condition & AND(     atm_cb_t callback, char relOp = '>', state_t match = 0 );
     Atm_condition & OR(      Machine & machine, char relOp = '>', state_t match = 0 );
     Atm_condition & OR(  TinyMachine & machine, char relOp = '>', state_t match = 0 );
+    Atm_condition & OR(     const char * label, char relOp = '>', state_t match = 0 );
+    Atm_condition & OR(      atm_cb_t callback, char relOp = '>', state_t match = 0 );
     Atm_condition & trace( Stream & stream );
     
   private:
@@ -43,8 +50,10 @@ class Atm_condition: public Machine {
     void action( int id ); 
     Atm_condition & OP( char logOp, Machine & machine, char relOp, state_t match );
     Atm_condition & OP( char logOp, TinyMachine & machine, char relOp, state_t match );
+    Atm_condition & OP( char logOp, const char * label, char relOp, state_t match );
+    Atm_condition & OP( char logOp, atm_cb_t callback, char relOp, state_t match  );
     bool eval_one( uint8_t idx );
-    bool eval();
+    bool eval_all();
 
 };
 
