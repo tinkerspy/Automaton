@@ -5,6 +5,8 @@
 
 #include "Automaton.h"
 
+void atm_connector::push( Factory * f ) {} // Dummy
+
 void atm_timer_millis::set( uint32_t v ) {
     value = v;
 }

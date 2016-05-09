@@ -40,6 +40,7 @@ const uint16_t ATM_COUNTER_OFF = 0xffff; // This counter value never expires
 
 class Factory;
 class Machine;
+class TinyMachine;
 class BaseMachine;
 
 
@@ -92,6 +93,31 @@ class atm_pin { // TODO untested!
     uint32_t pinstate;
     public:
         uint8_t change( uint8_t pin );
+};
+
+class atm_connector {
+  public:
+    uint8_t mode; // bitmapped destination_type(3), logical_op(2), relational_op(3)
+    union {
+      struct { 
+        void (*callback)( void ); // +2 = 3
+        int16_t idx;              // +2 = 5 bytes
+      };
+      struct { 
+        union {
+          Machine * machine;
+          TinyMachine * tmachine;
+          const char * label;
+        };
+        uint16_t event;
+      };
+    };
+    void set( Machine * m, int16_t event );
+    void set( TinyMachine * tm, int16_t event );
+    void set( const char * l, int16_t event );
+    void set( void * cb, int16_t idx ); // How to typecast!!!??? (or use a union or class?)
+    void push( Factory * f = 0 );
+    uint16_t pull( Factory * f = 0 );
 };
 
 class BaseMachine
@@ -158,7 +184,6 @@ class TinyMachine: public BaseMachine
         tiny_state_t current = -1;
         uint8_t state_width;
 };
-
 
 class Factory 
 {
