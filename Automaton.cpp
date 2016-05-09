@@ -5,15 +5,15 @@
 
 #include "Automaton.h"
 
-bool atm_connector::push( Factory * f, bool noCallback /* = false */ ) { 
+bool atm_connector::push( Factory * f /* = 0 */, bool noCallback /* = false */ ) { 
   switch ( mode_flags & B00000111 ) {
     case MODE_CALLBACK :
       if ( noCallback ) {
         return false;
       } else {
         (*callback)( callback_idx );
-        return true;
       }
+      return true;
     case MODE_MACHINE :
       machine->trigger( event );
       return true;
@@ -27,11 +27,7 @@ bool atm_connector::push( Factory * f, bool noCallback /* = false */ ) {
   return true; 
 } 
 
-bool atm_connector::push( bool noCallback /* = false */ ) { 
-  return push( 0, noCallback ); 
-} 
-
-int16_t atm_connector::pull( Factory * f, bool def_value /* = false */ ) { 
+int16_t atm_connector::pull( Factory * f /* = 0 */, bool def_value /* = false */ ) { 
   switch ( mode_flags & B00000111 ) {
     case MODE_CALLBACK :
       return (*callback)( callback_idx );
@@ -45,51 +41,39 @@ int16_t atm_connector::pull( Factory * f, bool def_value /* = false */ ) {
   return def_value; 
 } 
 
-int16_t atm_connector::pull( bool def_value /* = false */ ) { 
-  return pull( 0, def_value ); 
-} 
-
-uint8_t atm_connector::logOp( int8_t op /* = -1 */ ) {
-  if ( op != -1 ) {
-      mode_flags &= B11100111;
-      mode_flags |= ( op << 3 );
-  }      
+int8_t atm_connector::logOp( void ) {
   return ( mode_flags & B00011000 ) >> 3;
 }
 
-uint8_t atm_connector::relOp( int8_t op /* = -1 */ ) {
-  if ( op != -1 ) {
-      mode_flags &= B00011111;
-      mode_flags |= ( op << 5 );
-  }      
+int8_t atm_connector::relOp( void ) {
   return ( mode_flags & B11100000 ) >> 5;
 }
 
-void atm_connector::set( atm_cb_t cb, int16_t idx ) {
-    mode_flags = MODE_CALLBACK;
+void atm_connector::set( atm_cb_t cb, int16_t idx, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
+    mode_flags = MODE_CALLBACK | ( logOp << 3 ) | ( relOp << 5 );
     callback = cb;
     callback_idx = idx;
 }
 
-void atm_connector::set( Machine * m, int16_t evt ) {
-    mode_flags = MODE_MACHINE;
+void atm_connector::set( Machine * m, int16_t evt, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
+    mode_flags = MODE_MACHINE | ( logOp << 3 ) | ( relOp << 5 );
     machine = m;
     event = evt;
 }
 
-void atm_connector::set( TinyMachine * tm, int16_t evt ) {
-    mode_flags = MODE_TMACHINE;
+void atm_connector::set( TinyMachine * tm, int16_t evt, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
+    mode_flags = MODE_TMACHINE | ( logOp << 3 ) | ( relOp << 5 );
     tmachine = tm;
     event = evt;
 }
 
-void atm_connector::set( const char * l, int16_t evt ) {
-    mode_flags = MODE_FACTORY;
+void atm_connector::set( const char * l, int16_t evt, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
+    mode_flags = MODE_FACTORY | ( logOp << 3 ) | ( relOp << 5 );
     label = l;
     event = evt;
 }
 
-uint8_t atm_connector::mode( void ) {
+int8_t atm_connector::mode( void ) {
     return mode_flags & B00000111;
 }
 

@@ -100,8 +100,8 @@ typedef bool (*atm_cb_t)( int16_t idx );
 class atm_connector {
   public:
     enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY }; // bits 0, 1, 2
-    enum { LOG_AND, LOG_OR, LOG_XOR }; // bits 3, 4
-    enum { REL_NULL, REL_EQ, REL_NEQ, REL_LT, REL_GT, REL_LTE, REL_GTE }; // bits 5, 6, 7
+    enum { LOG_AND, LOG_OR, LOG_XOR }; // bits 3, 4 MOVE to condition
+    enum { REL_NULL, REL_EQ, REL_NEQ, REL_LT, REL_GT, REL_LTE, REL_GTE }; // bits 5, 6, 7 Move condition
     uint8_t mode_flags; 
     union {
       struct { 
@@ -117,17 +117,15 @@ class atm_connector {
         uint16_t event;
       };
     };
-    void set( Machine * m, int16_t evt );
-    void set( TinyMachine * tm, int16_t evt );
-    void set( const char * l, int16_t evt );
-    void set( atm_cb_t cb, int16_t idx ); 
-    bool push( Factory * f, bool noCallback = false ); // returns false (only) if callback is set!
-    bool push( bool noCallback = false ); 
-    int16_t pull( Factory * f, bool def_value = false );
-    int16_t pull( bool def_value = false );
-    uint8_t logOp( int8_t op = -1 );
-    uint8_t relOp( int8_t op = -1 );
-    uint8_t mode( void );
+    void set( Machine * m, int16_t evt, int8_t logOp = 0, int8_t relOp = 0 );
+    void set( TinyMachine * tm, int16_t evt, int8_t logOp = 0, int8_t relOp = 0 );
+    void set( const char * l, int16_t evt, int8_t logOp = 0, int8_t relOp = 0 );
+    void set( atm_cb_t cb, int16_t idx, int8_t logOp = 0, int8_t relOp = 0 ); 
+    bool push( Factory * f = 0, bool noCallback = false ); // returns false (only) if callback is set!
+    int16_t pull( Factory * f = 0, bool def_value = false );
+    int8_t logOp( void );
+    int8_t relOp( void );
+    int8_t mode( void );
 };
 
 class BaseMachine
