@@ -137,7 +137,8 @@ Atm_condition & Atm_condition::OP( char logOp, TinyMachine & machine, char relOp
 
 bool Atm_condition::eval_one( uint8_t idx ) {
 
-  state_t match_state, machine_state;  
+  state_t match_state = 0;
+  state_t machine_state = 0;  
   if ( _op[idx]._mode == MODE_MACHINE ) {
     machine_state = _op[idx]._client_machine->state();
     match_state = _op[idx]._client_machine_event;
@@ -344,7 +345,8 @@ Att_condition & Att_condition::OP( char logOp, TinyMachine & machine, char relOp
 
 bool Att_condition::eval_one( uint8_t idx ) {
 
-  state_t match_state, machine_state;  
+  state_t match_state = 0;
+  state_t machine_state = 0;  
   if ( _op[idx]._mode == MODE_MACHINE ) {
     machine_state = _op[idx]._client_machine->state();
     match_state = _op[idx]._client_machine_event;

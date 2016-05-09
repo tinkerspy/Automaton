@@ -95,13 +95,18 @@ class atm_pin { // TODO untested!
         uint8_t change( uint8_t pin );
 };
 
+typedef bool (*atm_cb_t)( int16_t idx );
+
 class atm_connector {
   public:
-    uint8_t mode; // bitmapped destination_type(3), logical_op(2), relational_op(3)
+    enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY }; // bits 0, 1, 2
+    enum { LOG_AND, LOG_OR, LOG_XOR }; // bits 3, 4
+    enum { REL_NULL, REL_EQ, REL_NEQ, REL_LT, REL_GT, REL_LTE, REL_GTE }; // bits 5, 6, 7
+    uint8_t mode_flags; 
     union {
       struct { 
-        void (*callback)( void ); // +2 = 3
-        int16_t idx;              // +2 = 5 bytes
+        atm_cb_t callback;
+        int16_t callback_idx;                       // +2 = 5 bytes per object
       };
       struct { 
         union {
@@ -112,12 +117,17 @@ class atm_connector {
         uint16_t event;
       };
     };
-    void set( Machine * m, int16_t event );
-    void set( TinyMachine * tm, int16_t event );
-    void set( const char * l, int16_t event );
-    void set( void * cb, int16_t idx ); // How to typecast!!!??? (or use a union or class?)
-    void push( Factory * f = 0 );
-    uint16_t pull( Factory * f = 0 );
+    void set( Machine * m, int16_t evt );
+    void set( TinyMachine * tm, int16_t evt );
+    void set( const char * l, int16_t evt );
+    void set( atm_cb_t cb, int16_t idx ); 
+    bool push( Factory * f, bool noCallback = false ); // returns false (only) if callback is set!
+    bool push( bool noCallback = false ); 
+    int16_t pull( Factory * f, bool def_value = false );
+    int16_t pull( bool def_value = false );
+    uint8_t logOp( int8_t op = -1 );
+    uint8_t relOp( int8_t op = -1 );
+    uint8_t mode( void );
 };
 
 class BaseMachine
