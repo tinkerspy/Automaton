@@ -6,7 +6,7 @@
 
 typedef void ( *multicb_t )( void );
 
-int const ATM_MULTIPLIER_COMMS_MAX = 4;
+#define ATM_MULTIPLIER_COMMS_MAX 4
 
 class Atm_Multiplier_Comm {
  public:

@@ -105,13 +105,13 @@ void Att_button::action( int id ) {
     case ACT_PRESS:
     case ACT_AUTO:
       if ( !_onpress.push( FACTORY, true ) ) {
-        ( *(atm_button_onpress_cb_t)_onpress.callback )( 1, _onpress.callback_idx );
+        ( *(atm_button_onpress_cb_t)_onpress.callback )( _onpress.callback_idx, 1 );
       }
       return;
     case ACT_RELEASE:
     case ACT_WRELEASE:
       if ( _onpress.mode() == _onpress.MODE_CALLBACK ) {
-        ( *(atm_button_onpress_cb_t)_onpress.callback )( 0, _onpress.callback_idx );
+        ( *(atm_button_onpress_cb_t)_onpress.callback )( _onpress.callback_idx, 0 );
       }
       return;
     case ACT_LSTART:
@@ -120,12 +120,12 @@ void Att_button::action( int id ) {
     case ACT_LCOUNT:
       _counter_longpress.decrement();
       if ( _onpress.mode() == _onpress.MODE_CALLBACK ) {
-        ( *(atm_button_onpress_cb_t)_onpress.callback )( ( _longpress_max - _counter_longpress.value ) * -1, _onpress.callback_idx );
+        ( *(atm_button_onpress_cb_t)_onpress.callback )( _onpress.callback_idx, ( _longpress_max - _counter_longpress.value ) * -1 );
       }
       return;
     case ACT_LRELEASE:
       if ( _onpress.mode() == _onpress.MODE_CALLBACK ) {
-        ( *(atm_button_onpress_cb_t)_onpress.callback )( ( _longpress_max - _counter_longpress.value ), _onpress.callback_idx );
+        ( *(atm_button_onpress_cb_t)_onpress.callback )( _onpress.callback_idx, ( _longpress_max - _counter_longpress.value ) );
       }
       return;
   }

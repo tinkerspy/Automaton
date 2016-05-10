@@ -14,8 +14,7 @@
 #define STATE_TYPE state_t
 #endif
 
-
-typedef void ( *atm_button_onpress_cb_t )( int press, int idx );
+typedef void ( *atm_button_onpress_cb_t )( int idx, int press );
 
 class Att_button : public MACHINE {
  public:

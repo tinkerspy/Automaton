@@ -1,6 +1,6 @@
-#include "Atm_command.hpp"
+#include "Att_command.hpp"
 
-Atm_command& Atm_command::begin( Stream& stream, char buffer[], int size ) {
+Att_command& Att_command::begin( Stream& stream, char buffer[], int size ) {
   // clang-format off
   const static STATE_TYPE state_table[] PROGMEM = {
     /*                  ON_ENTER    ON_LOOP    ON_EXIT  EVT_INPUT   EVT_EOL   ELSE */
@@ -19,22 +19,22 @@ Atm_command& Atm_command::begin( Stream& stream, char buffer[], int size ) {
   return *this;
 }
 
-Atm_command& Atm_command::onCommand( atm_command_oncommand_cb_t callback, int16_t idx /* = 0 */ ) {
+Att_command& Att_command::onCommand( atm_command_oncommand_cb_t callback, int16_t idx /* = 0 */ ) {
   _oncommand.set( (atm_cb_t)callback, idx );
   return *this;
 }
 
-Atm_command& Atm_command::list( const char* cmds ) {
+Att_command& Att_command::list( const char* cmds ) {
   _commands = cmds;
   return *this;
 }
 
-Atm_command& Atm_command::separator( const char sep[] ) {
+Att_command& Att_command::separator( const char sep[] ) {
   _separator = sep;
   return *this;
 }
 
-char* Atm_command::arg( int id ) {
+char* Att_command::arg( int id ) {
   int cnt = 0;
   int i;
   if ( id == 0 ) return _buffer;
@@ -49,7 +49,7 @@ char* Atm_command::arg( int id ) {
   return &_buffer[i];
 }
 
-int Atm_command::lookup( int id, const char* cmdlist ) {
+int Att_command::lookup( int id, const char* cmdlist ) {
   int cnt = 0;
   char* arg = this->arg( id );
   char* a = arg;
@@ -67,7 +67,7 @@ int Atm_command::lookup( int id, const char* cmdlist ) {
   return -1;
 }
 
-int Atm_command::event( int id ) {
+int Att_command::event( int id ) {
   switch ( id ) {
     case EVT_INPUT:
       return _stream->available();
@@ -77,7 +77,7 @@ int Atm_command::event( int id ) {
   return 0;
 }
 
-void Atm_command::action( int id ) {
+void Att_command::action( int id ) {
   switch ( id ) {
     case ACT_READCHAR:
       if ( _stream->available() ) {
@@ -103,7 +103,7 @@ void Atm_command::action( int id ) {
 }
 
 #ifndef TINYMACHINE
-Atm_command& Atm_command::trace( Stream& stream ) {
+Att_command& Att_command::trace( Stream& stream ) {
   setTrace( &stream, atm_serial_debug::trace, "EVT_INPUT\0EVT_EOL\0ELSE\0IDLE\0READCHAR\0SEND" );
   return *this;
 }

@@ -3,8 +3,7 @@
   Published under the MIT License (MIT), Copyright (c) 2015, J.P. van der Landen
 */
 
-#ifndef Automaton_h
-#define Automaton_h
+#pragma once
 
 #include "Arduino.h"
 
@@ -208,6 +207,7 @@ class Factory {
 #include <Atm_button.hpp>
 #include <Att_button.hpp>
 #include <Atm_command.hpp>
+#include <Att_command.hpp>
 #include <Atm_comparator.hpp>
 #include <Atm_fade.hpp>
 #include <Atm_gate.hpp>
@@ -221,5 +221,3 @@ class Factory {
 #include <Atm_condition.hpp>
 #include <Att_condition.hpp>
 #include <Atm_multiplier.hpp>
-
-#endif
