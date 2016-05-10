@@ -56,29 +56,53 @@ Atm_condition& Atm_condition::onInput( bool st, TinyMachine& machine, state_t ev
   return *this;
 }
 
-Atm_condition& Atm_condition::IF( Machine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) { return OP( atm_connector::LOG_AND, machine, relOp, match ); }
+Atm_condition& Atm_condition::IF( Machine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_AND, machine, relOp, match );
+}
 
-Atm_condition& Atm_condition::IF( TinyMachine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) { return OP( atm_connector::LOG_AND, machine, relOp, match ); }
+Atm_condition& Atm_condition::IF( TinyMachine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_AND, machine, relOp, match );
+}
 
-Atm_condition& Atm_condition::IF( const char* label, char relOp /* = '>' */, state_t match /* = 0 */ ) { return OP( atm_connector::LOG_AND, label, relOp, match ); }
+Atm_condition& Atm_condition::IF( const char* label, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_AND, label, relOp, match );
+}
 
-Atm_condition& Atm_condition::IF( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) { return OP( atm_connector::LOG_AND, callback, relOp, match ); }
+Atm_condition& Atm_condition::IF( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_AND, callback, relOp, match );
+}
 
-Atm_condition& Atm_condition::AND( Machine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) { return OP( atm_connector::LOG_AND, machine, relOp, match ); }
+Atm_condition& Atm_condition::AND( Machine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_AND, machine, relOp, match );
+}
 
-Atm_condition& Atm_condition::AND( TinyMachine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) { return OP( atm_connector::LOG_AND, machine, relOp, match ); }
+Atm_condition& Atm_condition::AND( TinyMachine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_AND, machine, relOp, match );
+}
 
-Atm_condition& Atm_condition::AND( const char* label, char relOp /* = '>' */, state_t match /* = 0 */ ) { return OP( atm_connector::LOG_AND, label, relOp, match ); }
+Atm_condition& Atm_condition::AND( const char* label, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_AND, label, relOp, match );
+}
 
-Atm_condition& Atm_condition::AND( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) { return OP( atm_connector::LOG_AND, callback, relOp, match ); }
+Atm_condition& Atm_condition::AND( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_AND, callback, relOp, match );
+}
 
-Atm_condition& Atm_condition::OR( Machine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) { return OP( atm_connector::LOG_OR, machine, relOp, match ); }
+Atm_condition& Atm_condition::OR( Machine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_OR, machine, relOp, match );
+}
 
-Atm_condition& Atm_condition::OR( TinyMachine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) { return OP( atm_connector::LOG_OR, machine, relOp, match ); }
+Atm_condition& Atm_condition::OR( TinyMachine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_OR, machine, relOp, match );
+}
 
-Atm_condition& Atm_condition::OR( const char* label, char relOp /* = '>' */, state_t match /* = 0 */ ) { return OP( atm_connector::LOG_OR, label, relOp, match ); }
+Atm_condition& Atm_condition::OR( const char* label, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_OR, label, relOp, match );
+}
 
-Atm_condition& Atm_condition::OR( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) { return OP( atm_connector::LOG_OR, callback, relOp, match ); }
+Atm_condition& Atm_condition::OR( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_OR, callback, relOp, match );
+}
 
 Atm_condition& Atm_condition::OP( char logOp, Machine& machine, char relOp, state_t match ) {
   for ( uint8_t i = 0; i < ATM_CONDITION_OPERAND_MAX; i++ ) {

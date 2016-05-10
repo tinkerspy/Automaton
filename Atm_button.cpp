@@ -162,20 +162,21 @@ Atm_button& Atm_button::trace( Stream& stream ) {
 // ATT_BUTTON
 
 Att_button& Att_button::begin( int attached_pin ) {
-  const static tiny_state_t state_table[] PROGMEM = {/* Standard Mode: press/repeat */
-                                                     /*                  ON_ENTER  ON_LOOP       ON_EXIT  EVT_LMODE  EVT_TIMER  EVT_DELAY  EVT_REPEAT EVT_PRESS  EVT_RELEASE  EVT_COUNTER   EVT_AUTO  ELSE */
-                                                     /* IDLE     */ -1,           -1, -1,           LIDLE, -1,       -1,       -1,     WAIT,  -1,       -1,       AUTO, -1,
-                                                     /* WAIT     */ -1,           -1, -1,           -1,    PRESSED,  -1,       -1,     -1,    IDLE,     -1,       -1,   -1,
-                                                     /* PRESSED  */ ACT_PRESS,    -1, -1,           -1,    -1,       REPEAT,   -1,     -1,    RELEASE,  -1,       -1,   -1,
-                                                     /* REPEAT   */ ACT_PRESS,    -1, -1,           -1,    -1,       -1,       REPEAT, -1,    RELEASE,  -1,       -1,   -1,
-                                                     /* RELEASE  */ ACT_RELEASE,  -1, -1,           -1,    -1,       -1,       -1,     -1,    -1,       -1,       -1,   IDLE,
-                                                     /* Long Press Mode: press/long press */
-                                                     /* LIDLE    */ -1,           -1, -1,           -1,    -1,       -1,       -1,     LWAIT, -1,       -1,       -1,   -1,
-                                                     /* LWAIT    */ ACT_LSTART,   -1, -1,           -1,    LPRESSED, -1,       -1,     -1,    LIDLE,    -1,       -1,   -1,
-                                                     /* LPRESSED */ ACT_LCOUNT,   -1, -1,           -1,    -1,       LPRESSED, -1,     -1,    LRELEASE, WRELEASE, -1,   -1,
-                                                     /* LRELEASE */ ACT_LRELEASE, -1, ACT_WRELEASE, -1,    -1,       -1,       -1,     -1,    -1,       -1,       -1,   LIDLE,
-                                                     /* WRELEASE */ ACT_LRELEASE, -1, ACT_WRELEASE, -1,    -1,       -1,       -1,     -1,    LIDLE,    -1,       -1,   -1,
-                                                     /* AUTO     */ ACT_AUTO,     -1, -1,           -1,    -1,       -1,       -1,     -1,    -1,       -1,       -1,   IDLE,
+  const static tiny_state_t state_table[] PROGMEM = {
+      /* Standard Mode: press/repeat */
+      /*                  ON_ENTER  ON_LOOP       ON_EXIT  EVT_LMODE  EVT_TIMER  EVT_DELAY  EVT_REPEAT EVT_PRESS  EVT_RELEASE  EVT_COUNTER   EVT_AUTO  ELSE */
+      /* IDLE     */ -1, -1, -1, LIDLE, -1, -1, -1, WAIT, -1, -1, AUTO, -1,
+      /* WAIT     */ -1, -1, -1, -1, PRESSED, -1, -1, -1, IDLE, -1, -1, -1,
+      /* PRESSED  */ ACT_PRESS, -1, -1, -1, -1, REPEAT, -1, -1, RELEASE, -1, -1, -1,
+      /* REPEAT   */ ACT_PRESS, -1, -1, -1, -1, -1, REPEAT, -1, RELEASE, -1, -1, -1,
+      /* RELEASE  */ ACT_RELEASE, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, IDLE,
+      /* Long Press Mode: press/long press */
+      /* LIDLE    */ -1, -1, -1, -1, -1, -1, -1, LWAIT, -1, -1, -1, -1,
+      /* LWAIT    */ ACT_LSTART, -1, -1, -1, LPRESSED, -1, -1, -1, LIDLE, -1, -1, -1,
+      /* LPRESSED */ ACT_LCOUNT, -1, -1, -1, -1, LPRESSED, -1, -1, LRELEASE, WRELEASE, -1, -1,
+      /* LRELEASE */ ACT_LRELEASE, -1, ACT_WRELEASE, -1, -1, -1, -1, -1, -1, -1, -1, LIDLE,
+      /* WRELEASE */ ACT_LRELEASE, -1, ACT_WRELEASE, -1, -1, -1, -1, -1, LIDLE, -1, -1, -1,
+      /* AUTO     */ ACT_AUTO, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, IDLE,
   };
   TinyMachine::begin( state_table, ELSE );
   pin = attached_pin;

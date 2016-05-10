@@ -179,7 +179,8 @@ Machine& Machine::cycle( uint32_t time /* = 0 */ ) {
       if ( next != -1 ) {
         action( ATM_ON_SWITCH );
         if ( callback_trace ) {
-          callback_trace( stream_trace, inst_label, mapSymbol( current == -1 ? current : current + state_width - ATM_ON_EXIT - 1, _symbols ), mapSymbol( next == -1 ? next : next + state_width - ATM_ON_EXIT - 1, _symbols ), mapSymbol( last_trigger, _symbols ),
+          callback_trace( stream_trace, inst_label, mapSymbol( current == -1 ? current : current + state_width - ATM_ON_EXIT - 1, _symbols ),
+                          mapSymbol( next == -1 ? next : next + state_width - ATM_ON_EXIT - 1, _symbols ), mapSymbol( last_trigger, _symbols ),
                           millis() - state_millis, cycles );
         }
         if ( current > -1 ) action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );

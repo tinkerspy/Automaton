@@ -126,12 +126,13 @@ Atm_timer& Atm_timer::trace( Stream& stream ) {
 // TinyMachine version
 
 Att_timer& Att_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */ ) {
-  const static tiny_state_t state_table[] PROGMEM = {/*             ON_ENTER    ON_LOOP    ON_EXIT  EVT_DAYCNT  EVT_DAYTIMER  EVT_MSTIMER  EVT_REPCNT  EVT_OFF  EVT_ON   ELSE */
-                                                     /* IDLE    */ -1,        ATM_SLEEP, -1,        -1,     -1,    -1,      -1,   -1,   START, -1,
-                                                     /* START   */ ACT_START, -1,        -1,        -1,     -1,    -1,      -1,   -1,   WAITD, WAITD,
-                                                     /* WAITD   */ -1,        -1,        ACT_WAITD, WAITMS, WAITD, -1,      -1,   IDLE, START, -1,
-                                                     /* WAITMS  */ -1,        -1,        -1,        -1,     -1,    TRIGGER, -1,   IDLE, START, -1,
-                                                     /* TRIGGER */ ACT_TRIG,  -1,        -1,        -1,     -1,    -1,      IDLE, IDLE, START, START,
+  const static tiny_state_t state_table[] PROGMEM = {
+      /*             ON_ENTER    ON_LOOP    ON_EXIT  EVT_DAYCNT  EVT_DAYTIMER  EVT_MSTIMER  EVT_REPCNT  EVT_OFF  EVT_ON   ELSE */
+      /* IDLE    */ -1, ATM_SLEEP, -1, -1, -1, -1, -1, -1, START, -1,
+      /* START   */ ACT_START, -1, -1, -1, -1, -1, -1, -1, WAITD, WAITD,
+      /* WAITD   */ -1, -1, ACT_WAITD, WAITMS, WAITD, -1, -1, IDLE, START, -1,
+      /* WAITMS  */ -1, -1, -1, -1, -1, TRIGGER, -1, IDLE, START, -1,
+      /* TRIGGER */ ACT_TRIG, -1, -1, -1, -1, -1, IDLE, IDLE, START, START,
   };
   TinyMachine::begin( state_table, ELSE );
   daytimer.set( (uint32_t)DIVIDER * 1000 );  // Always set to one day
