@@ -146,11 +146,6 @@ Machine & Machine::trigger( int evt /* = 0 */ )
 	  cycle(); // Pick up the trigger
       flags &= ~ATM_SLEEP_FLAG;
       cycle(); // Process the state change
-      /* Necessary??? (Also for Tiny) 
-      if ( read_state( state_table + ( current * state_width ) + ATM_ON_LOOP ) ) {
-        flags |= ATM_SLEEP_FLAG;  
-      }
-      */
 	}
     return *this; 
 }

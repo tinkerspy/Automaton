@@ -104,7 +104,7 @@ Atm_condition & Atm_condition::OR( atm_cb_t callback, char relOp /* = '>' */, st
 
 Atm_condition & Atm_condition::OP( char logOp, Machine & machine, char relOp, state_t match ) {
   for ( uint8_t i = 0; i < ATM_CONDITION_OPERAND_MAX; i++ ) { 
-    if ( _operand[i].mode() == MODE_NULL ) { // Pick the first free slot
+    if ( _operand[i].mode() == atm_connector::MODE_NULL ) { // Pick the first free slot
       _operand[i].set( &machine, match, logOp, (int)(strchr( relOps, relOp ) - relOps) );
       break;
     }
@@ -114,7 +114,7 @@ Atm_condition & Atm_condition::OP( char logOp, Machine & machine, char relOp, st
 
 Atm_condition & Atm_condition::OP( char logOp, TinyMachine & machine, char relOp, state_t match  ) {
   for ( uint8_t i = 0; i < ATM_CONDITION_OPERAND_MAX; i++ ) {
-    if ( _operand[i].mode() == MODE_NULL ) { // Pick the first free slot
+    if ( _operand[i].mode() == atm_connector::MODE_NULL ) { // Pick the first free slot
       _operand[i].set( &machine, match, logOp, (int)(strchr( relOps, relOp ) - relOps) );
       break;
     }
@@ -124,7 +124,7 @@ Atm_condition & Atm_condition::OP( char logOp, TinyMachine & machine, char relOp
 
 Atm_condition & Atm_condition::OP( char logOp, const char * label, char relOp, state_t match ) {
   for ( uint8_t i = 0; i < ATM_CONDITION_OPERAND_MAX; i++ ) { 
-    if ( _operand[i].mode() == MODE_NULL ) { // Pick the first free slot
+    if ( _operand[i].mode() == atm_connector::MODE_NULL ) { // Pick the first free slot
       _operand[i].set( label, match, logOp, (int)(strchr( relOps, relOp ) - relOps) );
       break;
     }
@@ -134,7 +134,7 @@ Atm_condition & Atm_condition::OP( char logOp, const char * label, char relOp, s
 
 Atm_condition & Atm_condition::OP( char logOp, atm_cb_t callback, char relOp, state_t match  ) {
   for ( uint8_t i = 0; i < ATM_CONDITION_OPERAND_MAX; i++ ) {
-    if ( _operand[i].mode() == MODE_NULL ) { // Pick the first free slot
+    if ( _operand[i].mode() == atm_connector::MODE_NULL ) { // Pick the first free slot
       _operand[i].set( callback, match, logOp, (int)(strchr( relOps, relOp ) - relOps) );
       break;
     }
