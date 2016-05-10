@@ -53,7 +53,6 @@ Atm_led& Atm_led::onFinish(TinyMachine& n, TinyMachine& p, uint8_t event /* = EV
 }
 
 Atm_led& Atm_led::blink(uint32_t duration, uint32_t pause_duration, uint16_t repeat_count /* = ATM_COUNTER_OFF */) {
-
   blink(duration);  // Time in which led is fully on
   pause(pause_duration);
   repeat(repeat_count);
@@ -91,7 +90,6 @@ int Atm_led::event(int id) {
 }
 
 void Atm_led::chain_next(void) {
-
   if ((flags & ATM_USR2_FLAG) > 0) {
     machine_next->trigger(machine_event);
   }
@@ -101,7 +99,6 @@ void Atm_led::chain_next(void) {
 }
 
 void Atm_led::chain_previous(void) {
-
   if ((flags & ATM_USR2_FLAG) > 0) {
     machine_previous->trigger(machine_event);
   }
@@ -136,7 +133,6 @@ void Atm_led::action(int id) {
 }
 
 Atm_led& Atm_led::trace(Stream& stream) {
-
   setTrace(&stream, atm_serial_debug::trace,
            "EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_BLINK\0EVT_TOGGLE\0EVT_TOGGLE_BLINK\0ELSE\0"
            "IDLE\0ON\0START\0BLINK_OFF\0DONE\0OFF");
@@ -198,7 +194,6 @@ Att_led& Att_led::onFinish(TinyMachine& n, TinyMachine& p, uint8_t event /* = EV
 }
 
 Att_led& Att_led::blink(uint32_t duration, uint32_t pause_duration, uint16_t repeat_count /* = ATM_COUNTER_OFF */) {
-
   blink(duration);  // Time in which led is fully on
   pause(pause_duration);
   repeat(repeat_count);
@@ -224,7 +219,6 @@ Att_led& Att_led::repeat(int repeat) {
 }
 
 void Att_led::chain_next(void) {
-
   if ((flags & ATM_USR2_FLAG) > 0) {
     machine_next->trigger(machine_event);
   }
@@ -234,7 +228,6 @@ void Att_led::chain_next(void) {
 }
 
 void Att_led::chain_previous(void) {
-
   if ((flags & ATM_USR2_FLAG) > 0) {
     machine_previous->trigger(machine_event);
   }
