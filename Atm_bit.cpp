@@ -30,10 +30,12 @@ Atm_bit& Atm_bit::onFlip( bool st, Machine& machine, int16_t evt /* = 0 */ ) {
   return *this;
 }
 
+#ifndef TINYMACHINE
 Atm_bit& Atm_bit::onFlip( bool st, const char* label, int16_t event /* = 0 */ ) {
   _connection[st ? 0 : 1].set( label, event );
   return *this;
 }
+#endif
 
 Atm_bit& Atm_bit::onFlip( bool st, TinyMachine& machine, int16_t event /* = 0 */ ) {
   _connection[st ? 0 : 1].set( &machine, event );
@@ -50,10 +52,12 @@ Atm_bit& Atm_bit::onInput( bool st, Machine& machine, state_t event /* = 0 */ ) 
   return *this;
 }
 
+#ifndef TINYMACHINE
 Atm_bit& Atm_bit::onInput( bool st, const char* label, state_t event /* = 0 */ ) {
   _connection[st ? 2 : 3].set( label, event );
   return *this;
 }
+#endif
 
 Atm_bit& Atm_bit::onInput( bool st, TinyMachine& machine, state_t event /* = 0 */ ) {
   _connection[st ? 2 : 3].set( &machine, event );

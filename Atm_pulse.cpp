@@ -32,10 +32,12 @@ Atm_pulse& Atm_pulse::onPulse( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
+#ifndef TINYMACHINE
 Atm_pulse& Atm_pulse::onPulse( const char* label, int event /* = 0 */ ) {
   _onpulse.set( label, event );
   return *this;
 }
+#endif
 
 Atm_pulse& Atm_pulse::onPulse( TinyMachine& machine, int event /* = 0 */ ) {
   _onpulse.set( &machine, event );
@@ -52,10 +54,12 @@ Atm_pulse& Atm_pulse::onRelease( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
+#ifndef TINYMACHINE
 Atm_pulse& Atm_pulse::onRelease( const char* label, int event /* = 0 */ ) {
   _onrelease.set( label, event );
   return *this;
 }
+#endif
 
 Atm_pulse& Atm_pulse::onRelease( TinyMachine& machine, int event /* = 0 */ ) {
   _onrelease.set( &machine, event );

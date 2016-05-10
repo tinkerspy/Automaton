@@ -47,9 +47,7 @@ class Atm_condition : public MACHINE {
   Atm_condition& OR( TinyMachine& machine, char relOp = '>', state_t match = 0 );
   Atm_condition& OR( const char* label, char relOp = '>', state_t match = 0 );
   Atm_condition& OR( atm_cb_t callback, char relOp = '>', state_t match = 0 );
-#ifndef TINYMACHINE      
   Atm_condition& trace( Stream& stream );
-#endif  
 
  private:
   const static char relOps[];

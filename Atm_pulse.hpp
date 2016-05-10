@@ -40,9 +40,7 @@ class Atm_pulse : public MACHINE {
   Atm_pulse& onRelease( Machine& machine, int event = 0 );
   Atm_pulse& onRelease( TinyMachine& machine, int event = 0 );
   Atm_pulse& onRelease( const char* label, int event = 0 );
-#ifndef TINYMACHINE
   Atm_pulse& trace( Stream& stream );
-#endif
 };
 
 #endif

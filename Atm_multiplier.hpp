@@ -56,29 +56,4 @@ class Atm_multiplier : public Machine {
   void comm( Atm_Multiplier_Comm& c );
 };
 
-// Tiny Machine version
-
-class Att_multiplier : public TinyMachine {
- public:
-  Att_multiplier( void ) : TinyMachine(){};
-
-  Atm_Multiplier_Comm _comm[ATM_MULTIPLIER_COMMS_MAX];
-
-  enum { IDLE, SEND };       // STATES
-  enum { EVT_INPUT, ELSE };  // EVENTS
-  enum { ACT_SEND };         // ACTIONS
-  enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY };
-
-  Att_multiplier& begin();
-  Att_multiplier& trace( Stream& stream );
-  Att_multiplier& onInput( multicb_t callback );
-  Att_multiplier& onInput( Machine& machine, state_t event = 0 );
-  Att_multiplier& onInput( TinyMachine& machine, state_t event = 0 );
-
- private:
-  int event( int id );
-  void action( int id );
-  void comm( Atm_Multiplier_Comm& c );
-};
-
 #endif

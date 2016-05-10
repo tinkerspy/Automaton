@@ -30,10 +30,12 @@ Att_bit& Att_bit::onFlip( bool st, Machine& machine, int16_t evt /* = 0 */ ) {
   return *this;
 }
 
+#ifndef TINYMACHINE
 Att_bit& Att_bit::onFlip( bool st, const char* label, int16_t event /* = 0 */ ) {
   _connection[st ? 0 : 1].set( label, event );
   return *this;
 }
+#endif
 
 Att_bit& Att_bit::onFlip( bool st, TinyMachine& machine, int16_t event /* = 0 */ ) {
   _connection[st ? 0 : 1].set( &machine, event );
@@ -50,10 +52,12 @@ Att_bit& Att_bit::onInput( bool st, Machine& machine, state_t event /* = 0 */ ) 
   return *this;
 }
 
+#ifndef TINYMACHINE
 Att_bit& Att_bit::onInput( bool st, const char* label, state_t event /* = 0 */ ) {
   _connection[st ? 2 : 3].set( label, event );
   return *this;
 }
+#endif
 
 Att_bit& Att_bit::onInput( bool st, TinyMachine& machine, state_t event /* = 0 */ ) {
   _connection[st ? 2 : 3].set( &machine, event );

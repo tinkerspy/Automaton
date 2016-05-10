@@ -32,10 +32,12 @@ Att_pulse& Att_pulse::onPulse( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
+#ifndef TINYMACHINE
 Att_pulse& Att_pulse::onPulse( const char* label, int event /* = 0 */ ) {
   _onpulse.set( label, event );
   return *this;
 }
+#endif
 
 Att_pulse& Att_pulse::onPulse( TinyMachine& machine, int event /* = 0 */ ) {
   _onpulse.set( &machine, event );
@@ -52,10 +54,12 @@ Att_pulse& Att_pulse::onRelease( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
+#ifndef TINYMACHINE
 Att_pulse& Att_pulse::onRelease( const char* label, int event /* = 0 */ ) {
   _onrelease.set( label, event );
   return *this;
 }
+#endif
 
 Att_pulse& Att_pulse::onRelease( TinyMachine& machine, int event /* = 0 */ ) {
   _onrelease.set( &machine, event );

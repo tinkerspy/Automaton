@@ -32,9 +32,7 @@ class Atm_bit : public MACHINE {
   Atm_bit& onInput( bool st, Machine& machine, state_t event = 0 );
   Atm_bit& onInput( bool st, const char* label, state_t event = 0 );
   Atm_bit& onInput( bool st, TinyMachine& machine, state_t event = 0 );
-#ifndef TINYMACHINE      
   Atm_bit& trace( Stream& stream );
-#endif    
   int event( int id );
   void action( int id );
 };

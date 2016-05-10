@@ -31,10 +31,12 @@ Atm_condition& Atm_condition::onFlip( bool st, Machine& machine, int16_t evt /* 
   return *this;
 }
 
+#ifndef TINYMACHINE
 Atm_condition& Atm_condition::onFlip( bool st, const char* label, int16_t event /* = 0 */ ) {
   _connection[st ? 0 : 1].set( label, event );
   return *this;
 }
+#endif
 
 Atm_condition& Atm_condition::onFlip( bool st, TinyMachine& machine, int16_t event /* = 0 */ ) {
   _connection[st ? 0 : 1].set( &machine, event );
@@ -51,10 +53,12 @@ Atm_condition& Atm_condition::onInput( bool st, Machine& machine, state_t event 
   return *this;
 }
 
+#ifndef TINYMACHINE
 Atm_condition& Atm_condition::onInput( bool st, const char* label, state_t event /* = 0 */ ) {
   _connection[st ? 2 : 3].set( label, event );
   return *this;
 }
+#endif
 
 Atm_condition& Atm_condition::onInput( bool st, TinyMachine& machine, state_t event /* = 0 */ ) {
   _connection[st ? 2 : 3].set( &machine, event );
@@ -69,9 +73,11 @@ Atm_condition& Atm_condition::IF( TinyMachine& machine, char relOp /* = '>' */, 
   return OP( atm_connector::LOG_AND, machine, relOp, match );
 }
 
+#ifndef TINYMACHINE
 Atm_condition& Atm_condition::IF( const char* label, char relOp /* = '>' */, state_t match /* = 0 */ ) {
   return OP( atm_connector::LOG_AND, label, relOp, match );
 }
+#endif
 
 Atm_condition& Atm_condition::IF( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) {
   return OP( atm_connector::LOG_AND, callback, relOp, match );
@@ -85,9 +91,11 @@ Atm_condition& Atm_condition::AND( TinyMachine& machine, char relOp /* = '>' */,
   return OP( atm_connector::LOG_AND, machine, relOp, match );
 }
 
+#ifndef TINYMACHINE
 Atm_condition& Atm_condition::AND( const char* label, char relOp /* = '>' */, state_t match /* = 0 */ ) {
   return OP( atm_connector::LOG_AND, label, relOp, match );
 }
+#endif
 
 Atm_condition& Atm_condition::AND( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) {
   return OP( atm_connector::LOG_AND, callback, relOp, match );
@@ -101,9 +109,11 @@ Atm_condition& Atm_condition::OR( TinyMachine& machine, char relOp /* = '>' */, 
   return OP( atm_connector::LOG_OR, machine, relOp, match );
 }
 
+#ifndef TINYMACHINE
 Atm_condition& Atm_condition::OR( const char* label, char relOp /* = '>' */, state_t match /* = 0 */ ) {
   return OP( atm_connector::LOG_OR, label, relOp, match );
 }
+#endif
 
 Atm_condition& Atm_condition::OR( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) {
   return OP( atm_connector::LOG_OR, callback, relOp, match );
@@ -129,6 +139,7 @@ Atm_condition& Atm_condition::OP( char logOp, TinyMachine& machine, char relOp, 
   return *this;
 }
 
+#ifndef TINYMACHINE
 Atm_condition& Atm_condition::OP( char logOp, const char* label, char relOp, state_t match ) {
   for ( uint8_t i = 0; i < ATM_CONDITION_OPERAND_MAX; i++ ) {
     if ( _operand[i].mode() == atm_connector::MODE_NULL ) {  // Pick the first free slot
@@ -138,6 +149,7 @@ Atm_condition& Atm_condition::OP( char logOp, const char* label, char relOp, sta
   }
   return *this;
 }
+#endif
 
 Atm_condition& Atm_condition::OP( char logOp, atm_cb_t callback, char relOp, state_t match ) {
   for ( uint8_t i = 0; i < ATM_CONDITION_OPERAND_MAX; i++ ) {
