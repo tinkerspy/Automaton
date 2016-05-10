@@ -1,8 +1,8 @@
-#include "Atm_button.hpp"
+#include "Att_button.hpp"
 
 // Add option for button press callback (for reading i2c buttons etc)
 
-Atm_button& Atm_button::begin( int attached_pin ) {
+Att_button& Att_button::begin( int attached_pin ) {
   // clang-format off
   const static STATE_TYPE state_table[] PROGMEM = {
     /* Standard Mode: press/repeat */
@@ -32,53 +32,53 @@ Atm_button& Atm_button::begin( int attached_pin ) {
   return *this;
 }
 
-Atm_button& Atm_button::onPress( atm_button_onpress_cb_t callback, int idx /* = 0 */ ) {
+Att_button& Att_button::onPress( atm_button_onpress_cb_t callback, int idx /* = 0 */ ) {
   _onpress.set( (atm_cb_t)callback, idx );
   return *this;
 }
 
-Atm_button& Atm_button::onPress( Machine& machine, int event /* = 0 */ ) {
+Att_button& Att_button::onPress( Machine& machine, int event /* = 0 */ ) {
   _onpress.set( &machine, event );
   return *this;
 }
 
 #ifndef TINYMACHINE
-Atm_button& Atm_button::onPress( const char* label, int event /* = 0 */ ) {
+Att_button& Att_button::onPress( const char* label, int event /* = 0 */ ) {
   _onpress.set( label, event );
   return *this;
 }
 #endif
 
-Atm_button& Atm_button::onPress( TinyMachine& machine, int event /* = 0 */ ) {
+Att_button& Att_button::onPress( TinyMachine& machine, int event /* = 0 */ ) {
   _onpress.set( &machine, event );
   return *this;
 }
 
-Atm_button& Atm_button::debounce( int delay ) {
+Att_button& Att_button::debounce( int delay ) {
   _timer_debounce.set( delay );
   return *this;
 }
 
-Atm_button& Atm_button::longPress( int max, int delay ) {
+Att_button& Att_button::longPress( int max, int delay ) {
   _longpress_max = max;
   _counter_longpress.set( _longpress_max );
   _timer_delay.set( delay );
   return *this;
 }
 
-Atm_button& Atm_button::repeat( int delay /* = 500 */, int speed /* = 50 */ ) {
+Att_button& Att_button::repeat( int delay /* = 500 */, int speed /* = 50 */ ) {
   _timer_delay.set( delay );
   _timer_repeat.set( speed );
   return *this;
 }
 
-Atm_button& Atm_button::autoPress( int delay, int press /* = 1 */ ) {
+Att_button& Att_button::autoPress( int delay, int press /* = 1 */ ) {
   _auto_press = press;
   _timer_auto.set( delay );
   return *this;
 }
 
-int Atm_button::event( int id ) {
+int Att_button::event( int id ) {
   switch ( id ) {
     case EVT_LMODE:
       return _counter_longpress.value > 0;
@@ -100,7 +100,7 @@ int Atm_button::event( int id ) {
   return 0;
 }
 
-void Atm_button::action( int id ) {
+void Att_button::action( int id ) {
   switch ( id ) {
     case ACT_PRESS:
     case ACT_AUTO:
@@ -132,7 +132,7 @@ void Atm_button::action( int id ) {
 }
 
 #ifndef TINYMACHINE
-Atm_button& Atm_button::trace( Stream& stream ) {
+Att_button& Att_button::trace( Stream& stream ) {
   setTrace( &stream, atm_serial_debug::trace,
             "EVT_LMODE\0EVT_TIMER\0EVT_DELAY\0EVT_REPEAT\0EVT_PRESS\0EVT_RELEASE\0EVT_COUNTER\0EVT_"
             "AUTO\0ELSE\0IDLE\0WAIT\0PRESSED\0REPEAT\0RELEASE\0LIDLE\0LWAIT\0LPRESSED\0LRELEASE\0WRELEASE\0AUTO" );
