@@ -4,10 +4,15 @@
 
 #include <Automaton.h>
 
-class Atm_bit : public Machine {
+#define MACHINE Machine
+#undef TINYMACHINE
+
+class Atm_bit : public MACHINE {
  public:
-  Atm_bit( void ) : Machine() {
+  Atm_bit( void ) : MACHINE() {
+#ifndef TINYMACHINE      
     class_label = "BIT";
+#endif    
   };
 
   state_t _last_state;
@@ -27,12 +32,11 @@ class Atm_bit : public Machine {
   Atm_bit& onInput( bool st, Machine& machine, state_t event = 0 );
   Atm_bit& onInput( bool st, const char* label, state_t event = 0 );
   Atm_bit& onInput( bool st, TinyMachine& machine, state_t event = 0 );
-
+#ifndef TINYMACHINE      
   Atm_bit& trace( Stream& stream );
+#endif    
   int event( int id );
   void action( int id );
 };
-
-// Tiny Machine version
 
 #endif

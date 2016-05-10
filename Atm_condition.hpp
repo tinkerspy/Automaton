@@ -4,12 +4,17 @@
 
 #include <Automaton.h>
 
+#define MACHINE Machine
+#undef TINYMACHINE
+
 int const ATM_CONDITION_OPERAND_MAX = 4;
 
-class Atm_condition : public Machine {
+class Atm_condition : public MACHINE {
  public:
-  Atm_condition( void ) : Machine() {
+  Atm_condition( void ) : MACHINE() {
+#ifndef TINYMACHINE      
     class_label = "CON";
+#endif
   };
 
   state_t _last_state;
@@ -42,7 +47,9 @@ class Atm_condition : public Machine {
   Atm_condition& OR( TinyMachine& machine, char relOp = '>', state_t match = 0 );
   Atm_condition& OR( const char* label, char relOp = '>', state_t match = 0 );
   Atm_condition& OR( atm_cb_t callback, char relOp = '>', state_t match = 0 );
+#ifndef TINYMACHINE      
   Atm_condition& trace( Stream& stream );
+#endif  
 
  private:
   const static char relOps[];
@@ -57,7 +64,5 @@ class Atm_condition : public Machine {
   bool eval_one( uint8_t idx );
   bool eval_all();
 };
-
-// Tiny Machine version
 
 #endif

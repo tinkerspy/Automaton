@@ -3,3 +3,4 @@
 *.dox
 .development
 .clang-format
+tools/

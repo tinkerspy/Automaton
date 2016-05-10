@@ -1,14 +1,19 @@
 #include "Atm_condition.hpp"
 
+#define FACTORY factory
+#define STATE_TYPE state_t
+#define MACHINE Machine
+#undef TINYMACHINE
+
 Atm_condition& Atm_condition::begin( bool default_state /* = false */ ) {
   // clang-format off
-  const static state_t state_table[] PROGMEM = {
+  const static STATE_TYPE state_table[] PROGMEM = {
     /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON  EVT_OFF  EVT_TOGGLE EVT_INPUT ELSE */
     /* OFF     */    ACT_OFF,        -1,      -1,     ON,      -1,         ON,      OFF,  -1,
     /* ON      */     ACT_ON,        -1,      -1,     -1,     OFF,        OFF,       ON,  -1,
   };
   // clang-format on
-  Machine::begin( state_table, ELSE );
+  MACHINE::begin( state_table, ELSE );
   _last_state = -1;
   state( default_state ? ON : OFF );
   return *this;
@@ -202,9 +207,10 @@ void Atm_condition::action( int id ) {
   }
 }
 
+#ifndef TINYMACHINE      
 Atm_condition& Atm_condition::trace( Stream& stream ) {
   Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_ON\0EVT_OFF\0EVT_TOGGLE\0EVT_INPUT\0ELSE\0OFF\0ON" );
   return *this;
 }
+#endif
 
-// Tiny Machine version
