@@ -212,6 +212,9 @@ class Factory {
 #include <Atm_fade.hpp>
 #include <Atm_gate.hpp>
 #include <Atm_led.hpp>
+#include <Att_led.hpp>
+#include <Atm_multiplier.hpp>
+#include <Att_multiplier.hpp>
 #include <Atm_pulse.hpp>
 #include <Att_pulse.hpp>
 #include <Atm_step.hpp>
@@ -220,4 +223,3 @@ class Factory {
 #include <Att_bit.hpp>
 #include <Atm_condition.hpp>
 #include <Att_condition.hpp>
-#include <Atm_multiplier.hpp>

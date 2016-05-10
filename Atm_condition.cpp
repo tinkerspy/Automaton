@@ -17,46 +17,46 @@ Atm_condition& Atm_condition::begin( bool default_state /* = false */ ) {
 const char Atm_condition::relOps[] = "0=!<>-+";
 
 Atm_condition& Atm_condition::onFlip( bool st, atm_cb_t callback, int16_t idx /* = 0 */ ) {
-  _connection[st ? 0 : 1].set( callback, idx );
+  _connector[st ? 0 : 1].set( callback, idx );
   return *this;
 }
 
 Atm_condition& Atm_condition::onFlip( bool st, Machine& machine, int16_t evt /* = 0 */ ) {
-  _connection[st ? 0 : 1].set( &machine, evt );
+  _connector[st ? 0 : 1].set( &machine, evt );
   return *this;
 }
 
 #ifndef TINYMACHINE
 Atm_condition& Atm_condition::onFlip( bool st, const char* label, int16_t event /* = 0 */ ) {
-  _connection[st ? 0 : 1].set( label, event );
+  _connector[st ? 0 : 1].set( label, event );
   return *this;
 }
 #endif
 
 Atm_condition& Atm_condition::onFlip( bool st, TinyMachine& machine, int16_t event /* = 0 */ ) {
-  _connection[st ? 0 : 1].set( &machine, event );
+  _connector[st ? 0 : 1].set( &machine, event );
   return *this;
 }
 
 Atm_condition& Atm_condition::onInput( bool st, atm_cb_t callback, int16_t idx /* = 0 */ ) {
-  _connection[st ? 2 : 3].set( callback, idx );
+  _connector[st ? 2 : 3].set( callback, idx );
   return *this;
 }
 
 Atm_condition& Atm_condition::onInput( bool st, Machine& machine, state_t event /* = 0 */ ) {
-  _connection[st ? 2 : 3].set( &machine, event );
+  _connector[st ? 2 : 3].set( &machine, event );
   return *this;
 }
 
 #ifndef TINYMACHINE
 Atm_condition& Atm_condition::onInput( bool st, const char* label, state_t event /* = 0 */ ) {
-  _connection[st ? 2 : 3].set( label, event );
+  _connector[st ? 2 : 3].set( label, event );
   return *this;
 }
 #endif
 
 Atm_condition& Atm_condition::onInput( bool st, TinyMachine& machine, state_t event /* = 0 */ ) {
-  _connection[st ? 2 : 3].set( &machine, event );
+  _connector[st ? 2 : 3].set( &machine, event );
   return *this;
 }
 
@@ -204,11 +204,11 @@ int Atm_condition::event( int id ) {
 void Atm_condition::action( int id ) {
   switch ( id ) {
     case ACT_OFF:
-      _connection[_last_state == current ? 3 : 1].push( FACTORY );
+      _connector[_last_state == current ? 3 : 1].push( FACTORY );
       _last_state = current;
       return;
     case ACT_ON:
-      if ( _last_state != -1 ) _connection[_last_state == current ? 2 : 0].push( FACTORY );
+      if ( _last_state != -1 ) _connector[_last_state == current ? 2 : 0].push( FACTORY );
       _last_state = current;
       return;
   }

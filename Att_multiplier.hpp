@@ -2,7 +2,7 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
+#define TINYMACHINE
 
 #ifdef TINYMACHINE
 #define MACHINE TinyMachine
@@ -16,9 +16,9 @@
 
 #define ATM_MULTIPLIER_COMMS_MAX 4
 
-class Atm_multiplier : public MACHINE {
+class Att_multiplier : public MACHINE {
  public:
-  Atm_multiplier( void ) : MACHINE() {
+  Att_multiplier( void ) : MACHINE() {
 #ifndef TINYMACHINE      
     class_label = "MUL";
 #endif    
@@ -30,12 +30,12 @@ class Atm_multiplier : public MACHINE {
   enum { EVT_INPUT, ELSE };  // EVENTS
   enum { ACT_SEND };         // ACTIONS
 
-  Atm_multiplier& begin();
-  Atm_multiplier& trace( Stream& stream );
-  Atm_multiplier& onInput( atm_cb_t callback, int16_t idx = 0 );
-  Atm_multiplier& onInput( Machine& machine, state_t event = 0 );
-  Atm_multiplier& onInput( const char* label, state_t event = 0 );
-  Atm_multiplier& onInput( TinyMachine& machine, state_t event = 0 );
+  Att_multiplier& begin();
+  Att_multiplier& trace( Stream& stream );
+  Att_multiplier& onInput( atm_cb_t callback, int16_t idx = 0 );
+  Att_multiplier& onInput( Machine& machine, state_t event = 0 );
+  Att_multiplier& onInput( const char* label, state_t event = 0 );
+  Att_multiplier& onInput( TinyMachine& machine, state_t event = 0 );
 
  private:
   int event( int id );

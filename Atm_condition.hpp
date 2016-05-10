@@ -25,7 +25,7 @@ class Atm_condition : public MACHINE {
   };
 
   state_t _last_state;
-  atm_connector _connection[4];
+  atm_connector _connector[4];
   atm_connector _operand[ATM_CONDITION_OPERAND_MAX];
 
   enum { OFF, ON };                                       // STATES

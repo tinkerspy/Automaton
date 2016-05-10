@@ -1,6 +1,6 @@
-#include "Atm_multiplier.hpp"
+#include "Att_multiplier.hpp"
 
-Atm_multiplier& Atm_multiplier::begin() {
+Att_multiplier& Att_multiplier::begin() {
   // clang-format off
   const static STATE_TYPE state_table[] PROGMEM = {
     /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_INPUT  ELSE */
@@ -12,7 +12,7 @@ Atm_multiplier& Atm_multiplier::begin() {
   return *this;
 }
 
-Atm_multiplier& Atm_multiplier::onInput( atm_cb_t callback, int16_t idx ) {
+Att_multiplier& Att_multiplier::onInput( atm_cb_t callback, int16_t idx ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _connector[idx].mode() == atm_connector::MODE_NULL ) {
       _connector[idx].set( callback, idx );
@@ -22,7 +22,7 @@ Atm_multiplier& Atm_multiplier::onInput( atm_cb_t callback, int16_t idx ) {
   return *this;
 }
 
-Atm_multiplier& Atm_multiplier::onInput( Machine& machine, state_t event /* = 0 */ ) {
+Att_multiplier& Att_multiplier::onInput( Machine& machine, state_t event /* = 0 */ ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _connector[idx].mode() == atm_connector::MODE_NULL ) {
       _connector[idx].set( &machine, event );
@@ -33,7 +33,7 @@ Atm_multiplier& Atm_multiplier::onInput( Machine& machine, state_t event /* = 0 
 }
 
 #ifndef TINYMACHINE
-Atm_multiplier& Atm_multiplier::onInput( const char* label, state_t event /* = 0 */ ) {
+Att_multiplier& Att_multiplier::onInput( const char* label, state_t event /* = 0 */ ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _connector[idx].mode() == atm_connector::MODE_NULL ) {
       _connector[idx].set( label, event );
@@ -44,7 +44,7 @@ Atm_multiplier& Atm_multiplier::onInput( const char* label, state_t event /* = 0
 }
 #endif
 
-Atm_multiplier& Atm_multiplier::onInput( TinyMachine& machine, state_t event /* = 0 */ ) {
+Att_multiplier& Att_multiplier::onInput( TinyMachine& machine, state_t event /* = 0 */ ) {
   for ( uint8_t i = 0; i < ATM_MULTIPLIER_COMMS_MAX; i++ ) {
     if ( _connector[i].mode() == atm_connector::MODE_NULL ) {
       _connector[i].set( &machine, event );
@@ -54,11 +54,11 @@ Atm_multiplier& Atm_multiplier::onInput( TinyMachine& machine, state_t event /* 
   return *this;
 }
 
-int Atm_multiplier::event( int id ) {
+int Att_multiplier::event( int id ) {
   return 0;
 }
 
-void Atm_multiplier::action( int id ) {
+void Att_multiplier::action( int id ) {
   switch ( id ) {
     case ACT_SEND:
       for ( uint8_t i = 0; i < ATM_MULTIPLIER_COMMS_MAX; i++ ) {
@@ -71,7 +71,7 @@ void Atm_multiplier::action( int id ) {
 }
 
 #ifndef TINYMACHINE
-Atm_multiplier& Atm_multiplier::trace( Stream& stream ) {
+Att_multiplier& Att_multiplier::trace( Stream& stream ) {
   Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_INPUT\0ELSE\0IDLE\0SEND" );
   return *this;
 }

@@ -2,7 +2,7 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
+#define TINYMACHINE
 
 #ifdef TINYMACHINE
 #define MACHINE TinyMachine
@@ -14,9 +14,9 @@
 #define STATE_TYPE state_t
 #endif
 
-class Atm_led : public MACHINE {
+class Att_led : public MACHINE {
  public:
-  Atm_led( void ) : MACHINE() {
+  Att_led( void ) : MACHINE() {
 #ifndef TINYMACHINE      
     class_label = "LED";
 #endif    
@@ -26,17 +26,17 @@ class Atm_led : public MACHINE {
   enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, EVT_TOGGLE, EVT_TOGGLE_BLINK, ELSE };
   enum { ACT_INIT, ACT_ON, ACT_OFF, ACT_CHAIN };
 
-  Atm_led& begin( int attached_pin, bool activeLow = false );
-  Atm_led& blink( uint32_t duration );
-  Atm_led& blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );
-  Atm_led& pause( uint32_t duration );
-  Atm_led& fade( int fade );
-  Atm_led& repeat( int repeat );
-  Atm_led& trace( Stream& stream );
-  Atm_led& onFinish( Machine& machine, int16_t event = 0 );
-  Atm_led& onFinish( TinyMachine& machine, int16_t event = 0 );
-  Atm_led& onFinish( atm_cb_t callback, int16_t idx = 0 );
-  Atm_led& onFinish( const char* label, int16_t event = 0 );
+  Att_led& begin( int attached_pin, bool activeLow = false );
+  Att_led& blink( uint32_t duration );
+  Att_led& blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );
+  Att_led& pause( uint32_t duration );
+  Att_led& fade( int fade );
+  Att_led& repeat( int repeat );
+  Att_led& trace( Stream& stream );
+  Att_led& onFinish( Machine& machine, int16_t event = 0 );
+  Att_led& onFinish( TinyMachine& machine, int16_t event = 0 );
+  Att_led& onFinish( atm_cb_t callback, int16_t idx = 0 );
+  Att_led& onFinish( const char* label, int16_t event = 0 );
 
   
  private:
