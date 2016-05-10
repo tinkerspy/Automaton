@@ -70,7 +70,9 @@ Atm_led& Atm_led::pause( uint32_t duration ) {
   return *this;
 }
 
-Atm_led& Atm_led::fade( int fade ) { return *this; }  // Dummy for method compatibility with Atm_fade
+Atm_led& Atm_led::fade( int fade ) {
+  return *this;
+}  // Dummy for method compatibility with Atm_fade
 
 Atm_led& Atm_led::repeat( int repeat ) {
   repeat_count = repeat >= 0 ? repeat : ATM_COUNTER_OFF;
@@ -213,7 +215,9 @@ Att_led& Att_led::pause( uint32_t duration ) {
   return *this;
 }
 
-Att_led& Att_led::fade( int fade ) { return *this; }  // Dummy for method compatibility with Att_fade
+Att_led& Att_led::fade( int fade ) {
+  return *this;
+}  // Dummy for method compatibility with Att_fade
 
 Att_led& Att_led::repeat( int repeat ) {
   repeat_count = repeat >= 0 ? repeat : ATM_COUNTER_OFF;

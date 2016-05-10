@@ -30,7 +30,9 @@ class Step {
 
 class Atm_step : public Machine {
  public:
-  Atm_step( void ) : Machine() { class_label = "STP"; };
+  Atm_step( void ) : Machine() {
+    class_label = "STP";
+  };
   enum {
     LINEAR,
     S0,

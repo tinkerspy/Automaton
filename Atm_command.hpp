@@ -6,7 +6,9 @@
 
 class Atm_command : public Machine {
  public:
-  Atm_command( void ) : Machine() { class_label = "CMD"; };
+  Atm_command( void ) : Machine() {
+    class_label = "CMD";
+  };
 
   void ( *_callback )( int idx ) = 0;
   Stream* _stream;

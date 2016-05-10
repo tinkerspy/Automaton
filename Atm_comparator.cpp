@@ -60,7 +60,9 @@ Atm_comparator& Atm_comparator::onDown( const char* label, int event /* = 0 */ )
   return *this;
 }
 
-int Atm_comparator::read_sample() { return analogRead( pin ); }
+int Atm_comparator::read_sample() {
+  return analogRead( pin );
+}
 
 int Atm_comparator::_avg() {
   uint16_t v = read_sample();
@@ -74,7 +76,9 @@ int Atm_comparator::_avg() {
   return avg_buf_total / avg_buf_size;
 }
 
-int Atm_comparator::sample() { return avg_buf_size > 0 ? _avg() : read_sample(); }
+int Atm_comparator::sample() {
+  return avg_buf_size > 0 ? _avg() : read_sample();
+}
 
 Atm_comparator& Atm_comparator::threshold( uint16_t* v, uint16_t size, bool catchUp /* = false */ ) {
   p_threshold = v;
@@ -223,7 +227,9 @@ Att_comparator& Att_comparator::onDown( TinyMachine& machine, int event /* = 0 *
   return *this;
 }
 
-int Att_comparator::read_sample() { return analogRead( pin ); }
+int Att_comparator::read_sample() {
+  return analogRead( pin );
+}
 
 int Att_comparator::_avg() {
   uint16_t v = read_sample();
@@ -237,7 +243,9 @@ int Att_comparator::_avg() {
   return avg_buf_total / avg_buf_size;
 }
 
-int Att_comparator::sample() { return avg_buf_size > 0 ? _avg() : read_sample(); }
+int Att_comparator::sample() {
+  return avg_buf_size > 0 ? _avg() : read_sample();
+}
 
 Att_comparator& Att_comparator::threshold( uint16_t* v, uint16_t size, bool catchUp /* = false */ ) {
   p_threshold = v;

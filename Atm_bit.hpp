@@ -6,7 +6,9 @@
 
 class Atm_bit : public Machine {
  public:
-  Atm_bit( void ) : Machine() { class_label = "BIT"; };
+  Atm_bit( void ) : Machine() {
+    class_label = "BIT";
+  };
 
   state_t _last_state;
   atm_connector _connection[4];

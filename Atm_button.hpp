@@ -8,7 +8,9 @@ typedef void ( *presscb_t )( int press, int idx, uint16_t cnt );
 
 class Atm_button : public Machine {
  public:
-  Atm_button( void ) : Machine() { class_label = "BTN"; };
+  Atm_button( void ) : Machine() {
+    class_label = "BTN";
+  };
 
   enum { IDLE, WAIT, PRESSED, REPEAT, RELEASE, LIDLE, LWAIT, LPRESSED, LRELEASE, WRELEASE, AUTO };
   enum { EVT_LMODE, EVT_TIMER, EVT_DELAY, EVT_REPEAT, EVT_PRESS, EVT_RELEASE, EVT_COUNTER, EVT_AUTO, ELSE };

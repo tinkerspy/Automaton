@@ -35,7 +35,9 @@ class Atm_Pulse_Comm {
 
 class Atm_pulse : public Machine {
  public:
-  Atm_pulse( void ) : Machine() { class_label = "PULSE"; };
+  Atm_pulse( void ) : Machine() {
+    class_label = "PULSE";
+  };
 
   short pin;
   int state_high, state_low;

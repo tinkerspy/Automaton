@@ -8,7 +8,9 @@ typedef void ( *timer_cb_t )( int, uint16_t );
 
 class Atm_timer : public Machine {
  public:
-  Atm_timer( void ) : Machine() { class_label = "TMR"; };
+  Atm_timer( void ) : Machine() {
+    class_label = "TMR";
+  };
 
   atm_timer_millis daytimer, mstimer;
   atm_counter daycounter, repcounter;

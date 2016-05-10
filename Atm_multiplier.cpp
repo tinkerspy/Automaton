@@ -76,7 +76,9 @@ void Atm_multiplier::comm( Atm_Multiplier_Comm& c ) {
   }
 }
 
-int Atm_multiplier::event( int id ) { return 0; }
+int Atm_multiplier::event( int id ) {
+  return 0;
+}
 
 void Atm_multiplier::action( int id ) {
   switch ( id ) {
@@ -155,7 +157,9 @@ void Att_multiplier::comm( Atm_Multiplier_Comm& c ) {
   }
 }
 
-int Att_multiplier::event( int id ) { return 0; }
+int Att_multiplier::event( int id ) {
+  return 0;
+}
 
 void Att_multiplier::action( int id ) {
   switch ( id ) {

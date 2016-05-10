@@ -8,7 +8,9 @@ int const ATM_CONDITION_OPERAND_MAX = 4;
 
 class Atm_condition : public Machine {
  public:
-  Atm_condition( void ) : Machine() { class_label = "CON"; };
+  Atm_condition( void ) : Machine() {
+    class_label = "CON";
+  };
 
   state_t _last_state;
   atm_connector _connection[4];

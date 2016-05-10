@@ -8,7 +8,9 @@ typedef void ( *opencb_t )( int idx, uint16_t cnt );
 
 class Atm_gate : public Machine {
  public:
-  Atm_gate( void ) : Machine() { class_label = "GT"; };
+  Atm_gate( void ) : Machine() {
+    class_label = "GT";
+  };
 
   enum { IDLE, G0, G1, G2, G3, G4, G5, G6, G7, CHECK, OPEN, CLEAR };
   enum { EVT_G0, EVT_G1, EVT_G2, EVT_G3, EVT_G4, EVT_G5, EVT_G6, EVT_G7, EVT_OPEN, EVT_RESET, ELSE };

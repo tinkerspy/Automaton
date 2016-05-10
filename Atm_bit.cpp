@@ -55,7 +55,9 @@ Atm_bit& Atm_bit::onInput( bool st, TinyMachine& machine, state_t event /* = 0 *
   return *this;
 }
 
-int Atm_bit::event( int id ) { return 0; }
+int Atm_bit::event( int id ) {
+  return 0;
+}
 
 void Atm_bit::action( int id ) {
   switch ( id ) {

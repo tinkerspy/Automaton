@@ -108,14 +108,14 @@ Atm_fade& Atm_fade::trace( Stream& stream ) {
 Att_fade& Att_fade::begin( int attached_pin ) {
   const static tiny_state_t state_table[] PROGMEM = {
       /*               ON_ENTER    ON_LOOP       ON_EXIT  EVT_CNT_FADE EVT_TM_FADE   EVT_TM_ON  EVT_TM_OFF   EVT_CNT_RPT  EVT_ON EVT_OFF EVT_BLINK    ELSE  */
-      /* IDLE   */ ACT_OFF, ATM_SLEEP, -1, -1, -1, -1, -1, -1, ON, -1, START, -1,   // LED off
-      /* ON     */ ACT_ON, ATM_SLEEP, -1, -1, -1, -1, -1, -1, -1, IDLE, START, -1,  // LED on
-      /* START  */ ACT_OFF, -1, -1, -1, -1, -1, -1, -1, ON, -1, -1, STARTU,         // Start fading
-      /* STARTU */ ACT_START, -1, -1, -1, -1, -1, UP, -1, ON, -1, -1, -1,
-      /* UP     */ ACT_UP, -1, -1, STARTD, UP, -1, -1, -1, ON, -1, -1, -1,
-      /* STARTD */ ACT_START, -1, -1, -1, -1, DOWN, -1, -1, ON, -1, -1, -1,
-      /* DOWN   */ ACT_DOWN, -1, -1, REPEAT, DOWN, -1, -1, -1, ON, -1, -1, -1,
-      /* REPEAT */ ACT_REPEAT, -1, -1, -1, -1, -1, -1, IDLE, ON, IDLE, -1, STARTU,
+      /* IDLE   */ ACT_OFF,    ATM_SLEEP, -1, -1,     -1,   -1,   -1, -1,   ON, -1,   START, -1,      // LED off
+      /* ON     */ ACT_ON,     ATM_SLEEP, -1, -1,     -1,   -1,   -1, -1,   -1, IDLE, START, -1,      // LED on
+      /* START  */ ACT_OFF,    -1,        -1, -1,     -1,   -1,   -1, -1,   ON, -1,   -1,    STARTU,  // Start fading
+      /* STARTU */ ACT_START,  -1,        -1, -1,     -1,   -1,   UP, -1,   ON, -1,   -1,    -1,
+      /* UP     */ ACT_UP,     -1,        -1, STARTD, UP,   -1,   -1, -1,   ON, -1,   -1,    -1,
+      /* STARTD */ ACT_START,  -1,        -1, -1,     -1,   DOWN, -1, -1,   ON, -1,   -1,    -1,
+      /* DOWN   */ ACT_DOWN,   -1,        -1, REPEAT, DOWN, -1,   -1, -1,   ON, -1,   -1,    -1,
+      /* REPEAT */ ACT_REPEAT, -1,        -1, -1,     -1,   -1,   -1, IDLE, ON, IDLE, -1,    STARTU,
   };
   TinyMachine::begin( state_table, ELSE );
   pin = attached_pin;

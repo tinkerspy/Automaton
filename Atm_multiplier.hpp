@@ -32,7 +32,9 @@ class Atm_Multiplier_Comm {
 
 class Atm_multiplier : public Machine {
  public:
-  Atm_multiplier( void ) : Machine() { class_label = "MUL"; };
+  Atm_multiplier( void ) : Machine() {
+    class_label = "MUL";
+  };
 
   Atm_Multiplier_Comm _comm[ATM_MULTIPLIER_COMMS_MAX];
 

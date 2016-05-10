@@ -7,7 +7,9 @@ typedef void ( *triggercb_t )( int v, int up, int idx_threshold, int v_threshold
 
 class Atm_comparator : public Machine {
  public:
-  Atm_comparator( void ) : Machine() { class_label = "CMP"; };
+  Atm_comparator( void ) : Machine() {
+    class_label = "CMP";
+  };
 
   short pin;
   atm_timer_millis timer;

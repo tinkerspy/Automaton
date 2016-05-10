@@ -70,7 +70,9 @@ Atm_timer& Atm_timer::interval_millis( uint32_t v ) {
   return *this;
 }
 
-Atm_timer& Atm_timer::interval( uint32_t v ) { return interval_millis( v ); }
+Atm_timer& Atm_timer::interval( uint32_t v ) {
+  return interval_millis( v );
+}
 
 Atm_timer& Atm_timer::repeat( uint16_t v ) {
   repeat_cnt = v;
@@ -128,11 +130,11 @@ Atm_timer& Atm_timer::trace( Stream& stream ) {
 Att_timer& Att_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */ ) {
   const static tiny_state_t state_table[] PROGMEM = {
       /*             ON_ENTER    ON_LOOP    ON_EXIT  EVT_DAYCNT  EVT_DAYTIMER  EVT_MSTIMER  EVT_REPCNT  EVT_OFF  EVT_ON   ELSE */
-      /* IDLE    */ -1, ATM_SLEEP, -1, -1, -1, -1, -1, -1, START, -1,
-      /* START   */ ACT_START, -1, -1, -1, -1, -1, -1, -1, WAITD, WAITD,
-      /* WAITD   */ -1, -1, ACT_WAITD, WAITMS, WAITD, -1, -1, IDLE, START, -1,
-      /* WAITMS  */ -1, -1, -1, -1, -1, TRIGGER, -1, IDLE, START, -1,
-      /* TRIGGER */ ACT_TRIG, -1, -1, -1, -1, -1, IDLE, IDLE, START, START,
+      /* IDLE    */ -1,        ATM_SLEEP, -1,        -1,     -1,    -1,      -1,   -1,   START, -1,
+      /* START   */ ACT_START, -1,        -1,        -1,     -1,    -1,      -1,   -1,   WAITD, WAITD,
+      /* WAITD   */ -1,        -1,        ACT_WAITD, WAITMS, WAITD, -1,      -1,   IDLE, START, -1,
+      /* WAITMS  */ -1,        -1,        -1,        -1,     -1,    TRIGGER, -1,   IDLE, START, -1,
+      /* TRIGGER */ ACT_TRIG,  -1,        -1,        -1,     -1,    -1,      IDLE, IDLE, START, START,
   };
   TinyMachine::begin( state_table, ELSE );
   daytimer.set( (uint32_t)DIVIDER * 1000 );  // Always set to one day
@@ -180,7 +182,9 @@ Att_timer& Att_timer::interval_millis( uint32_t v ) {
   return *this;
 }
 
-Att_timer& Att_timer::interval( uint32_t v ) { return interval_millis( v ); }
+Att_timer& Att_timer::interval( uint32_t v ) {
+  return interval_millis( v );
+}
 
 Att_timer& Att_timer::repeat( uint16_t v ) {
   repeat_cnt = v;

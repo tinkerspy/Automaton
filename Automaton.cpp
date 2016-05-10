@@ -41,9 +41,13 @@ int16_t atm_connector::pull( Factory* f /* = 0 */, bool def_value /* = false */ 
   return def_value;
 }
 
-int8_t atm_connector::logOp( void ) { return ( mode_flags & B00011000 ) >> 3; }
+int8_t atm_connector::logOp( void ) {
+  return ( mode_flags & B00011000 ) >> 3;
+}
 
-int8_t atm_connector::relOp( void ) { return ( mode_flags & B11100000 ) >> 5; }
+int8_t atm_connector::relOp( void ) {
+  return ( mode_flags & B11100000 ) >> 5;
+}
 
 void atm_connector::set( atm_cb_t cb, int16_t idx, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
   mode_flags = MODE_CALLBACK | ( logOp << 3 ) | ( relOp << 5 );
@@ -69,21 +73,37 @@ void atm_connector::set( const char* l, int16_t evt, int8_t logOp /* = 0 */, int
   event = evt;
 }
 
-int8_t atm_connector::mode( void ) { return mode_flags & B00000111; }
+int8_t atm_connector::mode( void ) {
+  return mode_flags & B00000111;
+}
 
-void atm_timer_millis::set( uint32_t v ) { value = v; }
+void atm_timer_millis::set( uint32_t v ) {
+  value = v;
+}
 
-void atm_timer_micros::set( uint32_t v ) { value = v; }
+void atm_timer_micros::set( uint32_t v ) {
+  value = v;
+}
 
-int atm_timer_millis::expired( BaseMachine* machine ) { return value == ATM_TIMER_OFF ? 0 : millis() - machine->state_millis >= value; }
+int atm_timer_millis::expired( BaseMachine* machine ) {
+  return value == ATM_TIMER_OFF ? 0 : millis() - machine->state_millis >= value;
+}
 
-int atm_timer_micros::expired( Machine* machine ) { return value == ATM_TIMER_OFF ? 0 : micros() - machine->state_micros >= value; }
+int atm_timer_micros::expired( Machine* machine ) {
+  return value == ATM_TIMER_OFF ? 0 : micros() - machine->state_micros >= value;
+}
 
-void atm_counter::set( uint16_t v ) { value = v; }
+void atm_counter::set( uint16_t v ) {
+  value = v;
+}
 
-uint16_t atm_counter::decrement( void ) { return value > 0 && value != ATM_COUNTER_OFF ? --value : 0; }
+uint16_t atm_counter::decrement( void ) {
+  return value > 0 && value != ATM_COUNTER_OFF ? --value : 0;
+}
 
-uint8_t atm_counter::expired() { return value == ATM_COUNTER_OFF ? 0 : ( value > 0 ? 0 : 1 ); }
+uint8_t atm_counter::expired() {
+  return value == ATM_COUNTER_OFF ? 0 : ( value > 0 ? 0 : 1 );
+}
 
 uint8_t atm_pin::change( uint8_t pin ) {
   unsigned char v = digitalRead( pin ) ? 1 : 0;
@@ -101,7 +121,9 @@ Machine& Machine::state( state_t state ) {
   return *this;
 }
 
-state_t Machine::state() { return current; }
+state_t Machine::state() {
+  return current;
+}
 
 Machine& Machine::trigger( int evt /* = 0 */ ) {
   state_t new_state;
@@ -133,7 +155,9 @@ Machine& Machine::label( const char label[] ) {
   return *this;
 }
 
-int8_t Machine::priority() { return prio; }
+int8_t Machine::priority() {
+  return prio;
+}
 
 Machine& Machine::priority( int8_t priority ) {
   prio = priority;
@@ -223,7 +247,9 @@ TinyMachine& TinyMachine::state( tiny_state_t state ) {
   return *this;
 }
 
-tiny_state_t TinyMachine::state() { return current; }
+tiny_state_t TinyMachine::state() {
+  return current;
+}
 
 TinyMachine& TinyMachine::trigger( int evt /* = 0 */ ) {
   state_t new_state;
