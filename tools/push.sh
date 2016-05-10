@@ -11,5 +11,11 @@ tools/tinyfy.pl Atm_pulse.hpp > Att_pulse.hpp
 tools/tinyfy.pl Atm_condition.cpp > Att_condition.cpp
 tools/tinyfy.pl Atm_condition.hpp > Att_condition.hpp
 
+(
+chmod -x *.cpp *.hpp *.h *.ino
+chmod -x */*.cpp */*.hpp */*.h */*.ino
+chmod -x */*/*.cpp */*/*.hpp */*/*.h */*/*.ino
+) 2> /dev/null
+
 git add .
 
