@@ -7,7 +7,7 @@
 #define MACHINE Machine
 #undef TINYMACHINE
 
-int const ATM_CONDITION_OPERAND_MAX = 4;
+#define ATM_CONDITION_OPERAND_MAX 4
 
 class Atm_condition : public MACHINE {
  public:

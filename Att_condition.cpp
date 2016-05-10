@@ -152,17 +152,17 @@ Att_condition& Att_condition::OP( char logOp, atm_cb_t callback, char relOp, sta
 bool Att_condition::eval_one( uint8_t idx ) {
   switch ( _operand[idx].relOp() ) {
     case atm_connector::REL_EQ:
-      return _operand[idx].pull( factory ) == _operand[idx].event;
+      return _operand[idx].pull( FACTORY ) == _operand[idx].event;
     case atm_connector::REL_NEQ:
-      return _operand[idx].pull( factory ) != _operand[idx].event;
+      return _operand[idx].pull( FACTORY ) != _operand[idx].event;
     case atm_connector::REL_LT:
-      return _operand[idx].pull( factory ) < _operand[idx].event;
+      return _operand[idx].pull( FACTORY ) < _operand[idx].event;
     case atm_connector::REL_GT:
-      return _operand[idx].pull( factory ) > _operand[idx].event;
+      return _operand[idx].pull( FACTORY ) > _operand[idx].event;
     case atm_connector::REL_LTE:
-      return _operand[idx].pull( factory ) <= _operand[idx].event;
+      return _operand[idx].pull( FACTORY ) <= _operand[idx].event;
     case atm_connector::REL_GTE:
-      return _operand[idx].pull( factory ) >= _operand[idx].event;
+      return _operand[idx].pull( FACTORY ) >= _operand[idx].event;
   }
   return false;
 }
@@ -197,11 +197,11 @@ int Att_condition::event( int id ) {
 void Att_condition::action( int id ) {
   switch ( id ) {
     case ACT_OFF:
-      _connection[_last_state == current ? 3 : 1].push( factory );
+      _connection[_last_state == current ? 3 : 1].push( FACTORY );
       _last_state = current;
       return;
     case ACT_ON:
-      if ( _last_state != -1 ) _connection[_last_state == current ? 2 : 0].push( factory );
+      if ( _last_state != -1 ) _connection[_last_state == current ? 2 : 0].push( FACTORY );
       _last_state = current;
       return;
   }

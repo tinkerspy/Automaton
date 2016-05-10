@@ -7,7 +7,7 @@
 #define MACHINE TinyMachine
 #define TINYMACHINE
 
-int const ATM_CONDITION_OPERAND_MAX = 4;
+#define ATM_CONDITION_OPERAND_MAX 4
 
 class Att_condition : public MACHINE {
  public:

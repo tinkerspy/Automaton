@@ -227,6 +227,7 @@ class Factory
 #include <Atm_bit.hpp>
 #include <Att_bit.hpp>
 #include <Atm_condition.hpp>
+#include <Att_condition.hpp>
 #include <Atm_multiplier.hpp>
 
 
