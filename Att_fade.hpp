@@ -2,7 +2,7 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
+#define TINYMACHINE
 
 #ifdef TINYMACHINE
 #define MACHINE TinyMachine
@@ -14,9 +14,9 @@
 #define STATE_TYPE state_t
 #endif
 
-class Atm_fade : public MACHINE {
+class Att_fade : public MACHINE {
  public:
-  Atm_fade( void ) : MACHINE() {
+  Att_fade( void ) : MACHINE() {
 #ifndef TINYMACHINE      
     class_label = "FAD";
 #endif
@@ -33,13 +33,13 @@ class Atm_fade : public MACHINE {
   atm_timer_millis timer_fade, timer_on, timer_off;
   atm_counter counter_fade, counter_repeat;
 
-  Atm_fade& begin( int attached_pin );
-  Atm_fade& trace( Stream& stream );
-  Atm_fade& blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );
-  Atm_fade& blink( uint32_t duration );
-  Atm_fade& pause( uint32_t duration );
-  Atm_fade& fade( int fade );
-  Atm_fade& repeat( int repeat );
+  Att_fade& begin( int attached_pin );
+  Att_fade& trace( Stream& stream );
+  Att_fade& blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );
+  Att_fade& blink( uint32_t duration );
+  Att_fade& pause( uint32_t duration );
+  Att_fade& fade( int fade );
+  Att_fade& repeat( int repeat );
   int event( int id );
   void action( int id );
 };

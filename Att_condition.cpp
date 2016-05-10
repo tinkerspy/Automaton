@@ -14,7 +14,7 @@ Att_condition& Att_condition::begin( bool default_state /* = false */ ) {
   return *this;
 }
 
-const char Att_condition::relOps[] = "0=!<>-+";
+const char Att_condition::relOps[8] = "0=!<>-+";
 
 Att_condition& Att_condition::onFlip( bool st, atm_cb_t callback, int16_t idx /* = 0 */ ) {
   _connector[st ? 0 : 1].set( callback, idx );

@@ -1,6 +1,6 @@
-#include "Atm_step.hpp"
+#include "Att_step.hpp"
 
-Atm_step& Atm_step::begin( void ) {
+Att_step& Att_step::begin( void ) {
   // clang-format off
   const static STATE_TYPE state_table[] PROGMEM = { // TODO: Expand to 10!
     /*            ON_ENTER  ON_LOOP  ON_EXIT  EVT_STEP  EVT_BACK  EVT_SWEEP  EVT_BURST  EVT_LINEAR   ELSE */
@@ -51,32 +51,32 @@ Atm_step& Atm_step::begin( void ) {
   return *this;
 }
 
-Atm_step& Atm_step::onStep( uint8_t id ) {
+Att_step& Att_step::onStep( uint8_t id ) {
   _connector[id].mode_flags = atm_connector::MODE_NULL;
   return *this;
 }
 
-Atm_step& Atm_step::onStep( uint8_t id, atm_step_onstep_cb_t callback, int16_t idx /* = 0 */ ) {
+Att_step& Att_step::onStep( uint8_t id, atm_step_onstep_cb_t callback, int16_t idx /* = 0 */ ) {
   _connector[id].set( (atm_cb_t)callback, idx );
   return *this;
 }
 
-Atm_step& Atm_step::onStep( uint8_t id, Machine& machine, state_t event /* = 0 */ ) {
+Att_step& Att_step::onStep( uint8_t id, Machine& machine, state_t event /* = 0 */ ) {
   _connector[id].set( &machine, event );
   return *this;
 }
 
-Atm_step& Atm_step::onStep( uint8_t id, const char* label, state_t event /* = 0 */ ) {
+Att_step& Att_step::onStep( uint8_t id, const char* label, state_t event /* = 0 */ ) {
   _connector[id].set( label, event );
   return *this;
 }
 
-Atm_step& Atm_step::onStep( uint8_t id, TinyMachine& machine, state_t event /* = 0 */ ) {
+Att_step& Att_step::onStep( uint8_t id, TinyMachine& machine, state_t event /* = 0 */ ) {
   _connector[id].set( &machine, event );
   return *this;
 }
 
-int Atm_step::event( int id ) {
+int Att_step::event( int id ) {
   state_t on_enter = read_state( state_table + ( current * state_width ) + ATM_ON_ENTER );
   switch ( id ) {
     case EVT_STEP:
@@ -87,7 +87,7 @@ int Atm_step::event( int id ) {
   return 0;
 }
 
-void Atm_step::action( int id ) {
+void Att_step::action( int id ) {
   if ( id > -1 ) {
     if ( !_connector[id].push( FACTORY, true ) ) {
       ( *(atm_step_onstep_cb_t)_connector[id].callback )( _connector[id].callback_idx, id );
@@ -96,7 +96,7 @@ void Atm_step::action( int id ) {
 }
 
 #ifndef TINYMACHINE
-Atm_step& Atm_step::trace( Stream& stream ) {
+Att_step& Att_step::trace( Stream& stream ) {
   setTrace( &stream, atm_serial_debug::trace,
             "EVT_STEP\0EVT_BACK\0EVT_SWEEP\0EVT_BURST\0EVT_LINEAR\0ELSE\0"
             "LINEAR\0S0\0S1\0S2\0S3\0S4\0S5\0S6\0S7\0R0\0R1\0R2\0R3\0R4\0R5\0R6\0R7\0"

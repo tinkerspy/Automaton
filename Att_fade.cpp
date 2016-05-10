@@ -1,6 +1,6 @@
-#include "Atm_fade.hpp"
+#include "Att_fade.hpp"
 
-Atm_fade& Atm_fade::begin( int attached_pin ) {
+Att_fade& Att_fade::begin( int attached_pin ) {
   // clang-format off
   const static STATE_TYPE state_table[] PROGMEM = {
     /*               ON_ENTER    ON_LOOP       ON_EXIT  EVT_CNT_FADE EVT_TM_FADE   EVT_TM_ON  EVT_TM_OFF   EVT_CNT_RPT  EVT_ON EVT_OFF EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK    ELSE  */
@@ -26,35 +26,35 @@ Atm_fade& Atm_fade::begin( int attached_pin ) {
   return *this;
 }
 
-Atm_fade& Atm_fade::blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count /* = ATM_COUNTER_OFF */ ) {
+Att_fade& Att_fade::blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count /* = ATM_COUNTER_OFF */ ) {
   blink( duration );  // Time in which led is fully on
   pause( pause_duration );
   repeat( repeat_count );
   return *this;
 }
 
-Atm_fade& Atm_fade::blink( uint32_t duration ) {
+Att_fade& Att_fade::blink( uint32_t duration ) {
   timer_on.set( duration );  // Plateau between slopes (in which led is fully on)
   return *this;
 }
 
-Atm_fade& Atm_fade::pause( uint32_t duration ) {
+Att_fade& Att_fade::pause( uint32_t duration ) {
   timer_off.set( duration );  // Pause between slopes (in which led is fully off)
   return *this;
 }
 
-Atm_fade& Atm_fade::fade( int fade ) {
+Att_fade& Att_fade::fade( int fade ) {
   timer_fade.set( fade >= 0 ? fade : ATM_TIMER_OFF );  // Number of ms per slope step (slope duration: rate * 32 ms)
   return *this;
 }
 
-Atm_fade& Atm_fade::repeat( int repeat ) {
+Att_fade& Att_fade::repeat( int repeat ) {
   repeat_count = repeat >= 0 ? repeat : ATM_COUNTER_OFF;
   counter_repeat.set( repeat_count );
   return *this;
 }
 
-int Atm_fade::event( int id ) {
+int Att_fade::event( int id ) {
   switch ( id ) {
     case EVT_TM_FADE:
       return timer_fade.expired( this );
@@ -70,7 +70,7 @@ int Atm_fade::event( int id ) {
   return 0;
 }
 
-void Atm_fade::action( int id ) {
+void Att_fade::action( int id ) {
   switch ( id ) {
     case ACT_ON:
       analogWrite( pin, 255 );
@@ -97,7 +97,7 @@ void Atm_fade::action( int id ) {
 }
 
 #ifndef TINYMACHINE
-Atm_fade& Atm_fade::trace( Stream& stream ) {
+Att_fade& Att_fade::trace( Stream& stream ) {
   setTrace(
       &stream, atm_serial_debug::trace,
       "EVT_CNT_FADE\0EVT_TM_FADE\0EVT_TM_ON\0EVT_TM_OFF\0EVT_CNT_RPT\0EVT_ON\0EVT_OFF\0EVT_BLINK\0ELSE\0IDLE\0ON\0START\0STARTU\0UP\0STARTD\0DOWN\0REPEAT" );

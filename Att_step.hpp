@@ -2,7 +2,7 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
+#define TINYMACHINE
 
 #ifdef TINYMACHINE
 #define MACHINE TinyMachine
@@ -18,9 +18,9 @@
 
 typedef void ( *atm_step_onstep_cb_t )( int idx, int id );
 
-class Atm_step : public MACHINE {
+class Att_step : public MACHINE {
  public:
-  Atm_step( void ) : MACHINE() {
+  Att_step( void ) : MACHINE() {
 #ifndef TINYMACHINE      
     class_label = "STP";
 #endif    
@@ -35,15 +35,15 @@ class Atm_step : public MACHINE {
   
   atm_connector _connector[ATM_STEP_MAX];
 
-  Atm_step& begin( void );
-  Atm_step& trace( Stream& stream );
+  Att_step& begin( void );
+  Att_step& trace( Stream& stream );
   int event( int id );
   void action( int id );
-  Atm_step& onStep( uint8_t idx );  
-  Atm_step& onStep( uint8_t id, atm_step_onstep_cb_t callback, int16_t idx = 0 );
-  Atm_step& onStep( uint8_t id, Machine& machine, state_t event = 0 );
-  Atm_step& onStep( uint8_t id, const char* label, state_t event = 0 );
-  Atm_step& onStep( uint8_t idx, TinyMachine& machine, state_t event = 0 );
+  Att_step& onStep( uint8_t idx );  
+  Att_step& onStep( uint8_t id, atm_step_onstep_cb_t callback, int16_t idx = 0 );
+  Att_step& onStep( uint8_t id, Machine& machine, state_t event = 0 );
+  Att_step& onStep( uint8_t id, const char* label, state_t event = 0 );
+  Att_step& onStep( uint8_t idx, TinyMachine& machine, state_t event = 0 );
 
   
 };

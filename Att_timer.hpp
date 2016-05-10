@@ -2,7 +2,7 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
+#define TINYMACHINE
 
 #ifdef TINYMACHINE
 #define MACHINE TinyMachine
@@ -14,9 +14,9 @@
 #define STATE_TYPE state_t
 #endif
 
-class Atm_timer : public MACHINE {
+class Att_timer : public MACHINE {
  public:
-  Atm_timer( void ) : MACHINE() {
+  Att_timer( void ) : MACHINE() {
 #ifndef TINYMACHINE      
     class_label = "TMR";
 #endif    
@@ -32,16 +32,16 @@ class Atm_timer : public MACHINE {
   enum { EVT_DAYCNT, EVT_DAYTIMER, EVT_MSTIMER, EVT_REPCNT, EVT_OFF, EVT_ON, ELSE };
   enum { ACT_START, ACT_TRIG, ACT_WAITD };
 
-  Atm_timer& begin( uint32_t ms = 0 );
-  Atm_timer& trace( Stream& stream );
-  Atm_timer& onTimer( atm_cb_t callback, int idx = 0 );
-  Atm_timer& onTimer( Machine& machine, int event = 0 );
-  Atm_timer& onTimer( TinyMachine& machine, int event = 0 );
-  Atm_timer& onTimer( const char* label, int event = 0 );
-  Atm_timer& interval_seconds( uint32_t v );
-  Atm_timer& interval_millis( uint32_t v );
-  Atm_timer& interval( uint32_t v );
-  Atm_timer& repeat( uint16_t v );
+  Att_timer& begin( uint32_t ms = 0 );
+  Att_timer& trace( Stream& stream );
+  Att_timer& onTimer( atm_cb_t callback, int idx = 0 );
+  Att_timer& onTimer( Machine& machine, int event = 0 );
+  Att_timer& onTimer( TinyMachine& machine, int event = 0 );
+  Att_timer& onTimer( const char* label, int event = 0 );
+  Att_timer& interval_seconds( uint32_t v );
+  Att_timer& interval_millis( uint32_t v );
+  Att_timer& interval( uint32_t v );
+  Att_timer& repeat( uint16_t v );
   int event( int id );
   void action( int id );
 };
