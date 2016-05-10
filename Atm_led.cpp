@@ -1,16 +1,17 @@
 #include "Atm_led.hpp"
 
 Atm_led& Atm_led::begin(int attached_pin, bool activeLow) {
+  // clang-format off
   static const state_t state_table[] PROGMEM = {
-      /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK ELSE
-         */
-      /* IDLE      */ ACT_INIT, ATM_SLEEP, -1,        -1,        -1,    -1,   ON, -1,   START, ON,   START, -1,  // LED off
-      /* ON        */ ACT_ON,   ATM_SLEEP, -1,        -1,        -1,    -1,   -1, OFF,  START, OFF,  OFF,   -1,  // LED on
-      /* START     */ ACT_ON,   -1,        -1,        BLINK_OFF, -1,    DONE, ON, OFF,  START, OFF,  OFF,   -1,  // Start blinking
-      /* BLINK_OFF */ ACT_OFF,  -1,        -1,        -1,        START, DONE, ON, IDLE, START, IDLE, IDLE,  -1,
-      /* DONE      */ -1,       -1,        ACT_CHAIN, -1,        IDLE,  -1,   ON, IDLE, START, IDLE, IDLE,  -1,    // Wait after last blink
-      /* OFF       */ ACT_OFF,  -1,        -1,        -1,        -1,    -1,   -1, -1,   START, IDLE, IDLE,  IDLE,  // All off -> IDLE
+    /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK ELSE */
+    /* IDLE      */  ACT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,     ON,      -1,     START,         ON,            START,  -1, // LED off
+    /* ON        */    ACT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,     -1,     OFF,     START,        OFF,              OFF,  -1, // LED on
+    /* START     */    ACT_ON,        -1,        -1,    BLINK_OFF,            -1,        DONE,     ON,     OFF,     START,        OFF,              OFF,  -1, // Start blinking
+    /* BLINK_OFF */   ACT_OFF,        -1,        -1,           -1,         START,        DONE,     ON,    IDLE,     START,       IDLE,             IDLE,  -1,
+    /* DONE      */        -1,        -1, ACT_CHAIN,           -1,          IDLE,          -1,     ON,    IDLE,     START,       IDLE,             IDLE,  -1, // Wait after last blink
+    /* OFF       */   ACT_OFF,        -1,        -1,           -1,            -1,          -1,     -1,      -1,     START,       IDLE,             IDLE,IDLE, // All off -> IDLE
   };
+  // clang-format on
   Machine::begin(state_table, ELSE);
   pin = attached_pin;
   _activeLow = activeLow;
@@ -134,7 +135,8 @@ void Atm_led::action(int id) {
 
 Atm_led& Atm_led::trace(Stream& stream) {
   setTrace(&stream, atm_serial_debug::trace,
-           "EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_BLINK\0EVT_TOGGLE\0EVT_TOGGLE_BLINK\0ELSE\0"
+           "EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_"
+           "BLINK\0EVT_TOGGLE\0EVT_TOGGLE_BLINK\0ELSE\0"
            "IDLE\0ON\0START\0BLINK_OFF\0DONE\0OFF");
   return *this;
 }
@@ -142,16 +144,17 @@ Atm_led& Atm_led::trace(Stream& stream) {
 // TinyMachine version
 
 Att_led& Att_led::begin(int attached_pin, bool activeLow) {
+  // clang-format off
   static const tiny_state_t state_table[] PROGMEM = {
-      /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK ELSE
-         */
-      /* IDLE      */ ACT_INIT, ATM_SLEEP, -1,        -1,        -1,    -1,   ON, -1,   START, ON,   START, -1,  // LED off
-      /* ON        */ ACT_ON,   ATM_SLEEP, -1,        -1,        -1,    -1,   -1, OFF,  START, OFF,  OFF,   -1,  // LED on
-      /* START     */ ACT_ON,   -1,        -1,        BLINK_OFF, -1,    DONE, ON, OFF,  START, OFF,  OFF,   -1,  // Start blinking
-      /* BLINK_OFF */ ACT_OFF,  -1,        -1,        -1,        START, DONE, ON, IDLE, START, IDLE, IDLE,  -1,
-      /* DONE      */ -1,       -1,        ACT_CHAIN, -1,        IDLE,  -1,   ON, IDLE, START, IDLE, IDLE,  -1,    // Wait after last blink
-      /* OFF       */ ACT_OFF,  -1,        -1,        -1,        -1,    -1,   -1, -1,   START, IDLE, IDLE,  IDLE,  // All off -> IDLE
+    /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK ELSE */
+    /* IDLE      */  ACT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,     ON,      -1,     START,         ON,            START,  -1, // LED off
+    /* ON        */    ACT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,     -1,     OFF,     START,        OFF,              OFF,  -1, // LED on
+    /* START     */    ACT_ON,        -1,        -1,    BLINK_OFF,            -1,        DONE,     ON,     OFF,     START,        OFF,              OFF,  -1, // Start blinking
+    /* BLINK_OFF */   ACT_OFF,        -1,        -1,           -1,         START,        DONE,     ON,    IDLE,     START,       IDLE,             IDLE,  -1,
+    /* DONE      */        -1,        -1, ACT_CHAIN,           -1,          IDLE,          -1,     ON,    IDLE,     START,       IDLE,             IDLE,  -1, // Wait after last blink
+    /* OFF       */   ACT_OFF,        -1,        -1,           -1,            -1,          -1,     -1,      -1,     START,       IDLE,             IDLE,IDLE, // All off -> IDLE
   };
+  // clang-format on
   TinyMachine::begin(state_table, ELSE);
   pin = attached_pin;
   _activeLow = activeLow;
