@@ -1,11 +1,18 @@
-
-#ifndef Att_pulse_h
-#define Att_pulse_h
+#pragma once
 
 #include <Automaton.h>
 
-#define MACHINE TinyMachine
 #define TINYMACHINE
+
+#ifdef TINYMACHINE
+#define MACHINE TinyMachine
+#define FACTORY 0
+#define STATE_TYPE tiny_state_t
+#else
+#define MACHINE Machine
+#define FACTORY factory
+#define STATE_TYPE state_t
+#endif
 
 // Detects a pulse (LOW -> HIGH ) on a digital pin with a minimum duration in ms
 // On detection another machine is messaged or a callback is fired
@@ -43,4 +50,4 @@ class Att_pulse : public MACHINE {
   Att_pulse& trace( Stream& stream );
 };
 
-#endif
+

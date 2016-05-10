@@ -1,10 +1,5 @@
 #include "Att_condition.hpp"
 
-#define FACTORY 0
-#define STATE_TYPE tiny_state_t
-#define MACHINE TinyMachine
-#define TINYMACHINE
-
 Att_condition& Att_condition::begin( bool default_state /* = false */ ) {
   // clang-format off
   const static STATE_TYPE state_table[] PROGMEM = {

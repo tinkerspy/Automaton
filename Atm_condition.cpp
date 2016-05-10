@@ -1,10 +1,5 @@
 #include "Atm_condition.hpp"
 
-#define FACTORY factory
-#define STATE_TYPE state_t
-#define MACHINE Machine
-#undef TINYMACHINE
-
 Atm_condition& Atm_condition::begin( bool default_state /* = false */ ) {
   // clang-format off
   const static STATE_TYPE state_table[] PROGMEM = {

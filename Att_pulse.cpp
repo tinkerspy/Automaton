@@ -1,10 +1,5 @@
 #include "Att_pulse.hpp"
 
-#define FACTORY 0
-#define STATE_TYPE tiny_state_t
-#define MACHINE TinyMachine
-#define TINYMACHINE
-
 Att_pulse& Att_pulse::begin( int attached_pin, int minimum_duration /* = 20 */, bool activeLow /* = false */, bool pullUp /* = false */ ) {
   // clang-format off
   const static STATE_TYPE state_table[] PROGMEM = {

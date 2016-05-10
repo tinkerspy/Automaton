@@ -1,11 +1,18 @@
-
-#ifndef Atm_condition_h
-#define Atm_condition_h
+#pragma once
 
 #include <Automaton.h>
 
-#define MACHINE Machine
 #undef TINYMACHINE
+
+#ifdef TINYMACHINE
+#define MACHINE TinyMachine
+#define FACTORY 0
+#define STATE_TYPE tiny_state_t
+#else
+#define MACHINE Machine
+#define FACTORY factory
+#define STATE_TYPE state_t
+#endif
 
 #define ATM_CONDITION_OPERAND_MAX 4
 
@@ -63,4 +70,4 @@ class Atm_condition : public MACHINE {
   bool eval_all();
 };
 
-#endif
+
