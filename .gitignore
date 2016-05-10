@@ -2,5 +2,3 @@
 *.swp
 *.dox
 .development
-.clang-format
-tools/

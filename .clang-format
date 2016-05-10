@@ -1,0 +1,7 @@
+Language:        Cpp
+BasedOnStyle: Google
+IndentWidth: 2
+UseTab:          Never
+ColumnLimit:     160
+SpacesInParentheses: true
+AllowShortFunctionsOnASingleLine: false
