@@ -1,18 +1,18 @@
 #include "Atm_multiplier.hpp"
-  
-Atm_multiplier & Atm_multiplier::begin()
-{
+
+Atm_multiplier& Atm_multiplier::begin() {
+  // clang-format off
   const static state_t state_table[] PROGMEM = {
     /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_INPUT  ELSE */
     /* IDLE    */       -1, ATM_SLEEP,      -1,      SEND,   -1,
     /* SEND    */ ACT_SEND,        -1,      -1,        -1, IDLE,
   };
+  // clang-format on
   Machine::begin( state_table, ELSE );
-  return *this;          
+  return *this;
 }
 
-Atm_multiplier & Atm_multiplier::onInput( multicb_t callback )
-{
+Atm_multiplier& Atm_multiplier::onInput( multicb_t callback ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _comm[idx]._mode == MODE_NULL ) {
       _comm[idx]._mode = MODE_CALLBACK;
@@ -23,8 +23,7 @@ Atm_multiplier & Atm_multiplier::onInput( multicb_t callback )
   return *this;
 }
 
-Atm_multiplier & Atm_multiplier::onInput( Machine & machine, state_t event /* = 0 */ )
-{
+Atm_multiplier& Atm_multiplier::onInput( Machine& machine, state_t event /* = 0 */ ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _comm[idx]._mode == MODE_NULL ) {
       _comm[idx]._mode = MODE_MACHINE;
@@ -36,8 +35,7 @@ Atm_multiplier & Atm_multiplier::onInput( Machine & machine, state_t event /* = 
   return *this;
 }
 
-Atm_multiplier & Atm_multiplier::onInput( const char * label, state_t event /* = 0 */ )
-{
+Atm_multiplier& Atm_multiplier::onInput( const char* label, state_t event /* = 0 */ ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _comm[idx]._mode == MODE_NULL ) {
       _comm[idx]._mode = MODE_FACTORY;
@@ -49,10 +47,9 @@ Atm_multiplier & Atm_multiplier::onInput( const char * label, state_t event /* =
   return *this;
 }
 
-Atm_multiplier & Atm_multiplier::onInput( TinyMachine & machine, state_t event /* = 0 */ )
-{
+Atm_multiplier& Atm_multiplier::onInput( TinyMachine& machine, state_t event /* = 0 */ ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
-    if ( _comm[idx]._mode == MODE_NULL ) {    
+    if ( _comm[idx]._mode == MODE_NULL ) {
       _comm[idx]._mode = MODE_TMACHINE;
       _comm[idx]._client_tmachine = &machine;
       _comm[idx]._client_tmachine_event = event;
@@ -62,16 +59,15 @@ Atm_multiplier & Atm_multiplier::onInput( TinyMachine & machine, state_t event /
   return *this;
 }
 
-void Atm_multiplier::comm( Atm_Multiplier_Comm & c ) {
-
+void Atm_multiplier::comm( Atm_Multiplier_Comm& c ) {
   switch ( c._mode ) {
-    case MODE_CALLBACK :
-      (*c._callback)();
+    case MODE_CALLBACK:
+      ( *c._callback )();
       return;
-    case MODE_MACHINE :
+    case MODE_MACHINE:
       c._client_machine->trigger( c._client_machine_event );
       return;
-    case MODE_TMACHINE :
+    case MODE_TMACHINE:
       c._client_tmachine->trigger( c._client_tmachine_event );
       return;
     case MODE_FACTORY:
@@ -80,46 +76,37 @@ void Atm_multiplier::comm( Atm_Multiplier_Comm & c ) {
   }
 }
 
-int Atm_multiplier::event( int id ) 
-{
-   return 0;
-}
+int Atm_multiplier::event( int id ) { return 0; }
 
-void Atm_multiplier::action( int id ) 
-{
+void Atm_multiplier::action( int id ) {
   switch ( id ) {
-    case ACT_SEND :
+    case ACT_SEND:
       for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
         if ( _comm[idx]._mode != MODE_NULL ) {
           comm( _comm[idx] );
         }
       }
       return;
-   }
+  }
 }
 
-Atm_multiplier & Atm_multiplier::trace( Stream & stream ) 
-{
-  Machine::setTrace( &stream, atm_serial_debug::trace,
-    "EVT_INPUT\0ELSE\0IDLE\0SEND" );
+Atm_multiplier& Atm_multiplier::trace( Stream& stream ) {
+  Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_INPUT\0ELSE\0IDLE\0SEND" );
   return *this;
 }
 
 // Tiny Machine version
-  
-Att_multiplier & Att_multiplier::begin()
-{
-  const static tiny_state_t state_table[] PROGMEM = {
-    /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_INPUT  ELSE */
-    /* IDLE    */       -1, ATM_SLEEP,      -1,      SEND,   -1,
-    /* SEND    */ ACT_SEND,        -1,      -1,        -1, IDLE,
+
+Att_multiplier& Att_multiplier::begin() {
+  const static tiny_state_t state_table[] PROGMEM = {/*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_INPUT  ELSE */
+                                                     /* IDLE    */ -1, ATM_SLEEP, -1, SEND, -1,
+                                                     /* SEND    */ ACT_SEND, -1, -1, -1, IDLE,
   };
   TinyMachine::begin( state_table, ELSE );
-  return *this;          
+  return *this;
 }
 
-Att_multiplier & Att_multiplier::onInput( multicb_t callback )
-{
+Att_multiplier& Att_multiplier::onInput( multicb_t callback ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _comm[idx]._mode == MODE_NULL ) {
       _comm[idx]._mode = MODE_CALLBACK;
@@ -130,8 +117,7 @@ Att_multiplier & Att_multiplier::onInput( multicb_t callback )
   return *this;
 }
 
-Att_multiplier & Att_multiplier::onInput( Machine & machine, state_t event /* = 0 */ )
-{
+Att_multiplier& Att_multiplier::onInput( Machine& machine, state_t event /* = 0 */ ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _comm[idx]._mode == MODE_NULL ) {
       _comm[idx]._mode = MODE_MACHINE;
@@ -143,10 +129,9 @@ Att_multiplier & Att_multiplier::onInput( Machine & machine, state_t event /* = 
   return *this;
 }
 
-Att_multiplier & Att_multiplier::onInput( TinyMachine & machine, state_t event /* = 0 */ )
-{
+Att_multiplier& Att_multiplier::onInput( TinyMachine& machine, state_t event /* = 0 */ ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
-    if ( _comm[idx]._mode == MODE_NULL ) {    
+    if ( _comm[idx]._mode == MODE_NULL ) {
       _comm[idx]._mode = MODE_TMACHINE;
       _comm[idx]._client_tmachine = &machine;
       _comm[idx]._client_tmachine_event = event;
@@ -156,37 +141,30 @@ Att_multiplier & Att_multiplier::onInput( TinyMachine & machine, state_t event /
   return *this;
 }
 
-void Att_multiplier::comm( Atm_Multiplier_Comm & c ) {
-
+void Att_multiplier::comm( Atm_Multiplier_Comm& c ) {
   switch ( c._mode ) {
-    case MODE_CALLBACK :
-      (*c._callback)();
+    case MODE_CALLBACK:
+      ( *c._callback )();
       return;
-    case MODE_MACHINE :
+    case MODE_MACHINE:
       c._client_machine->trigger( c._client_machine_event );
       return;
-    case MODE_TMACHINE :
+    case MODE_TMACHINE:
       c._client_tmachine->trigger( c._client_tmachine_event );
       return;
   }
 }
 
-int Att_multiplier::event( int id ) 
-{
-   return 0;
-}
+int Att_multiplier::event( int id ) { return 0; }
 
-void Att_multiplier::action( int id ) 
-{
+void Att_multiplier::action( int id ) {
   switch ( id ) {
-    case ACT_SEND :
+    case ACT_SEND:
       for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
         if ( _comm[idx]._mode != MODE_NULL ) {
           comm( _comm[idx] );
         }
       }
       return;
-   }
+  }
 }
-
-
