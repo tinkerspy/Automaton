@@ -1,6 +1,6 @@
-#include "Atm_comparator.hpp"
+#include "Att_comparator.hpp"
 
-Atm_comparator& Atm_comparator::begin( int attached_pin, int samplerate /* = 50 */ ) {
+Att_comparator& Att_comparator::begin( int attached_pin, int samplerate /* = 50 */ ) {
   // clang-format off
   const static STATE_TYPE state_table[] PROGMEM = {
     /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_TRIGGER EVT_TIMER   ELSE */
@@ -17,55 +17,55 @@ Atm_comparator& Atm_comparator::begin( int attached_pin, int samplerate /* = 50 
   return *this;
 }
 
-Atm_comparator& Atm_comparator::onUp( atm_comparator_cb_t callback, int16_t idx /* = 0 */ ) {
+Att_comparator& Att_comparator::onUp( atm_comparator_cb_t callback, int16_t idx /* = 0 */ ) {
   _onup.set( (atm_cb_t)callback, idx );
   return *this;
 }
 
-Atm_comparator& Atm_comparator::onUp( Machine& machine, int event /* = 0 */ ) {
+Att_comparator& Att_comparator::onUp( Machine& machine, int event /* = 0 */ ) {
   _onup.set( &machine, event );
   return *this;
 }
 
-Atm_comparator& Atm_comparator::onUp( TinyMachine& machine, int event /* = 0 */ ) {
+Att_comparator& Att_comparator::onUp( TinyMachine& machine, int event /* = 0 */ ) {
   _onup.set( &machine, event );
   return *this;
 }
 
 #ifndef TINYMACHINE
-Atm_comparator& Atm_comparator::onUp( const char* label, int event /* = 0 */ ) {
+Att_comparator& Att_comparator::onUp( const char* label, int event /* = 0 */ ) {
   _onup.set( label, event );
   return *this;
 }
 #endif
 
-Atm_comparator& Atm_comparator::onDown( atm_comparator_cb_t callback, int16_t idx /* = 0 */ ) {
+Att_comparator& Att_comparator::onDown( atm_comparator_cb_t callback, int16_t idx /* = 0 */ ) {
   _ondown.set( (atm_cb_t)callback, idx );
   return *this;
 }
 
-Atm_comparator& Atm_comparator::onDown( Machine& machine, int event /* = 0 */ ) {
+Att_comparator& Att_comparator::onDown( Machine& machine, int event /* = 0 */ ) {
   _ondown.set( &machine, event );
   return *this;
 }
 
-Atm_comparator& Atm_comparator::onDown( TinyMachine& machine, int event /* = 0 */ ) {
+Att_comparator& Att_comparator::onDown( TinyMachine& machine, int event /* = 0 */ ) {
   _ondown.set( &machine, event );
   return *this;
 }
 
 #ifndef TINYMACHINE
-Atm_comparator& Atm_comparator::onDown( const char* label, int event /* = 0 */ ) {
+Att_comparator& Att_comparator::onDown( const char* label, int event /* = 0 */ ) {
   _ondown.set( label, event );
   return *this;
 }
 #endif
 
-int Atm_comparator::read_sample() {
+int Att_comparator::read_sample() {
   return analogRead( pin );
 }
 
-int Atm_comparator::_avg() {
+int Att_comparator::_avg() {
   uint16_t v = read_sample();
   avg_buf_total = avg_buf_total + v - avg_buf[avg_buf_head];
   avg_buf[avg_buf_head] = v;
@@ -77,11 +77,11 @@ int Atm_comparator::_avg() {
   return avg_buf_total / avg_buf_size;
 }
 
-int Atm_comparator::sample() {
+int Att_comparator::sample() {
   return avg_buf_size > 0 ? _avg() : read_sample();
 }
 
-Atm_comparator& Atm_comparator::threshold( uint16_t* v, uint16_t size, bool catchUp /* = false */ ) {
+Att_comparator& Att_comparator::threshold( uint16_t* v, uint16_t size, bool catchUp /* = false */ ) {
   p_threshold = v;
   p_threshold_size = size;
   if ( !catchUp ) {
@@ -93,7 +93,7 @@ Atm_comparator& Atm_comparator::threshold( uint16_t* v, uint16_t size, bool catc
   return *this;
 }
 
-Atm_comparator& Atm_comparator::average( uint16_t* v, uint16_t size ) {
+Att_comparator& Att_comparator::average( uint16_t* v, uint16_t size ) {
   avg_buf = v;
   avg_buf_size = size;
   avg_buf_head = 0;
@@ -105,7 +105,7 @@ Atm_comparator& Atm_comparator::average( uint16_t* v, uint16_t size ) {
   return *this;
 }
 
-Atm_comparator& Atm_comparator::bitmap( uint16_t v ) {
+Att_comparator& Att_comparator::bitmap( uint16_t v ) {
   bitmap_sample = 0;
   for ( uint8_t i = 0; i < p_threshold_size; i++ ) {
     if ( v >= p_threshold[i] ) bitmap_sample |= ( 1 << i );
@@ -114,7 +114,7 @@ Atm_comparator& Atm_comparator::bitmap( uint16_t v ) {
   return *this;
 }
 
-int Atm_comparator::event( int id ) {
+int Att_comparator::event( int id ) {
   switch ( id ) {
     case EVT_TRIGGER:
       if ( bitmap_diff ) {
@@ -127,7 +127,7 @@ int Atm_comparator::event( int id ) {
   return 0;
 }
 
-void Atm_comparator::action( int id ) {
+void Att_comparator::action( int id ) {
   switch ( id ) {
     case ACT_SAMPLE:
       v_previous = v_sample;
@@ -158,7 +158,7 @@ void Atm_comparator::action( int id ) {
 }
 
 #ifndef TINYMACHINE
-Atm_comparator& Atm_comparator::trace( Stream& stream ) {
+Att_comparator& Att_comparator::trace( Stream& stream ) {
   setTrace( &stream, atm_serial_debug::trace,
             "EVT_TRIGGER\0EVT_TIMER\0ELSE\0"
             "IDLE\0SAMPLE\0SEND" );

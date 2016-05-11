@@ -2,7 +2,7 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
+#define TINYMACHINE
 
 #ifdef TINYMACHINE
 #define MACHINE TinyMachine
@@ -16,9 +16,9 @@
 
 typedef void ( *atm_comparator_cb_t )( int16_t idx, int v, int up, int idx_threshold, int v_threshold );
 
-class Atm_comparator : public MACHINE {
+class Att_comparator : public MACHINE {
  public:
-  Atm_comparator( void ) : MACHINE() {
+  Att_comparator( void ) : MACHINE() {
 #ifndef TINYMACHINE      
     class_label = "CMP";
 #endif    
@@ -42,24 +42,24 @@ class Atm_comparator : public MACHINE {
   enum { ACT_SAMPLE, ACT_SEND } ACTIONS;
   enum { MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY };
 
-  Atm_comparator& begin( int attached_pin, int sampleRate = 50 );
-  Atm_comparator& threshold( uint16_t* v, uint16_t size, bool catchUp = false );
-  Atm_comparator& average( uint16_t* v, uint16_t size );
-  Atm_comparator& onUp( atm_comparator_cb_t callback, int16_t idx = 0 );
-  Atm_comparator& onUp( Machine& machine, int event = 0 );
-  Atm_comparator& onUp( TinyMachine& machine, int event = 0 );
-  Atm_comparator& onUp( const char* label, int event = 0 );
-  Atm_comparator& onDown( atm_comparator_cb_t callback, int16_t idx = 0 );
-  Atm_comparator& onDown( Machine& machine, int event = 0 );
-  Atm_comparator& onDown( TinyMachine& machine, int event = 0 );
-  Atm_comparator& onDown( const char* label, int event = 0 );
+  Att_comparator& begin( int attached_pin, int sampleRate = 50 );
+  Att_comparator& threshold( uint16_t* v, uint16_t size, bool catchUp = false );
+  Att_comparator& average( uint16_t* v, uint16_t size );
+  Att_comparator& onUp( atm_comparator_cb_t callback, int16_t idx = 0 );
+  Att_comparator& onUp( Machine& machine, int event = 0 );
+  Att_comparator& onUp( TinyMachine& machine, int event = 0 );
+  Att_comparator& onUp( const char* label, int event = 0 );
+  Att_comparator& onDown( atm_comparator_cb_t callback, int16_t idx = 0 );
+  Att_comparator& onDown( Machine& machine, int event = 0 );
+  Att_comparator& onDown( TinyMachine& machine, int event = 0 );
+  Att_comparator& onDown( const char* label, int event = 0 );
   int _avg();
-  Atm_comparator& bitmap( uint16_t v );
+  Att_comparator& bitmap( uint16_t v );
   int sample();
   virtual int read_sample();
   int event( int id );
   void action( int id );
-  Atm_comparator& trace( Stream& stream );
+  Att_comparator& trace( Stream& stream );
 };
 
 
