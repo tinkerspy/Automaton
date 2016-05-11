@@ -38,6 +38,10 @@ class Att_button : public MACHINE {
   Att_button& onPress( Machine& machine, int event = 0 );
   Att_button& onPress( TinyMachine& machine, int event = 0 );
   Att_button& onPress( const char* label, int event = 0 );
+  Att_button& onRelease( atm_button_cb_t callback, int idx = 0 );
+  Att_button& onRelease( Machine& machine, int event = 0 );
+  Att_button& onRelease( TinyMachine& machine, int event = 0 );
+  Att_button& onRelease( const char* label, int event = 0 );
   Att_button& debounce( int delay );
   Att_button& longPress( int max, int delay );
   Att_button& repeat( int delay = 500, int speed = 50 );
@@ -48,7 +52,7 @@ class Att_button : public MACHINE {
   void action( int id );
   void cb( int press, int id );
   static const int _DEBOUNCE = 5;
-  atm_connector _onpress;
+  atm_connector _onpress, _onrelease;
   short _pin;
   atm_timer_millis _timer_debounce, _timer_delay, _timer_repeat, _timer_auto;
   atm_counter _counter_longpress;
