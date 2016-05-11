@@ -54,6 +54,28 @@ Atm_button& Atm_button::onPress( TinyMachine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
+Atm_button& Atm_button::onRelease( atm_button_cb_t callback, int idx /* = 0 */ ) {
+  _onrelease.set( (atm_cb_t)callback, idx );
+  return *this;
+}
+
+Atm_button& Atm_button::onRelease( Machine& machine, int event /* = 0 */ ) {
+  _onrelease.set( &machine, event );
+  return *this;
+}
+
+#ifndef TINYMACHINE
+Atm_button& Atm_button::onRelease( const char* label, int event /* = 0 */ ) {
+  _onrelease.set( label, event );
+  return *this;
+}
+#endif
+
+Atm_button& Atm_button::onRelease( TinyMachine& machine, int event /* = 0 */ ) {
+  _onrelease.set( &machine, event );
+  return *this;
+}
+
 Atm_button& Atm_button::debounce( int delay ) {
   _timer_debounce.set( delay );
   return *this;
@@ -110,8 +132,8 @@ void Atm_button::action( int id ) {
       return;
     case ACT_RELEASE:
     case ACT_WRELEASE:
-      if ( _onpress.mode() == _onpress.MODE_CALLBACK ) {
-        ( *(atm_button_cb_t)_onpress.callback )( _onpress.callback_idx, 0 );
+      if ( !_onrelease.push( FACTORY, true ) ) {
+        ( *(atm_button_cb_t)_onrelease.callback )( _onrelease.callback_idx, 0 );
       }
       return;
     case ACT_LSTART:
