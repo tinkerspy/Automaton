@@ -14,7 +14,7 @@
 #define STATE_TYPE state_t
 #endif
 
-typedef void ( *atm_comparator_cb_t )( int16_t idx, int v, int up, int idx_threshold, int v_threshold );
+typedef void ( *atm_comparator_cb_t )( int idx, int v, int up, int idx_threshold, int v_threshold );
 
 class Att_comparator : public MACHINE {
  public:
@@ -45,11 +45,11 @@ class Att_comparator : public MACHINE {
   Att_comparator& begin( int attached_pin, int sampleRate = 50 );
   Att_comparator& threshold( uint16_t* v, uint16_t size, bool catchUp = false );
   Att_comparator& average( uint16_t* v, uint16_t size );
-  Att_comparator& onUp( atm_comparator_cb_t callback, int16_t idx = 0 );
+  Att_comparator& onUp( atm_comparator_cb_t callback, int idx = 0 );
   Att_comparator& onUp( Machine& machine, int event = 0 );
   Att_comparator& onUp( TinyMachine& machine, int event = 0 );
   Att_comparator& onUp( const char* label, int event = 0 );
-  Att_comparator& onDown( atm_comparator_cb_t callback, int16_t idx = 0 );
+  Att_comparator& onDown( atm_comparator_cb_t callback, int idx = 0 );
   Att_comparator& onDown( Machine& machine, int event = 0 );
   Att_comparator& onDown( TinyMachine& machine, int event = 0 );
   Att_comparator& onDown( const char* label, int event = 0 );

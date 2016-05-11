@@ -12,7 +12,7 @@ Atm_multiplier& Atm_multiplier::begin() {
   return *this;
 }
 
-Atm_multiplier& Atm_multiplier::onInput( atm_cb_t callback, int16_t idx ) {
+Atm_multiplier& Atm_multiplier::onInput( atm_cb_t callback, int idx ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _connector[idx].mode() == atm_connector::MODE_NULL ) {
       _connector[idx].set( callback, idx );

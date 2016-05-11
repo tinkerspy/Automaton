@@ -19,7 +19,7 @@ Atm_command& Atm_command::begin( Stream& stream, char buffer[], int size ) {
   return *this;
 }
 
-Atm_command& Atm_command::onCommand( atm_command_oncommand_cb_t callback, int16_t idx /* = 0 */ ) {
+Atm_command& Atm_command::onCommand( atm_command_oncommand_cb_t callback, int idx /* = 0 */ ) {
   _oncommand.set( (atm_cb_t)callback, idx );
   return *this;
 }

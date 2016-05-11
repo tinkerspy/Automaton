@@ -25,23 +25,23 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   return *this;
 }
 
-Atm_led& Atm_led::onFinish( Machine& machine, int16_t event /* = 0 */ ) {
+Atm_led& Atm_led::onFinish( Machine& machine, int event /* = 0 */ ) {
   _onfinish.set( &machine, event );
   return *this;
 }
 
-Atm_led& Atm_led::onFinish( TinyMachine& machine, int16_t event /* = 0 */ ) {
+Atm_led& Atm_led::onFinish( TinyMachine& machine, int event /* = 0 */ ) {
   _onfinish.set( &machine, event );
   return *this;
 }
 
-Atm_led& Atm_led::onFinish( atm_cb_t callback, int16_t idx /* = 0 */ ) {
+Atm_led& Atm_led::onFinish( atm_cb_t callback, int idx /* = 0 */ ) {
   _onfinish.set( callback, idx );
   return *this;
 }
 
 #ifndef TINYMACHINE
-Atm_led& Atm_led::onFinish( const char* label, int16_t event /* = 0 */ ) {
+Atm_led& Atm_led::onFinish( const char* label, int event /* = 0 */ ) {
   _onfinish.set( label, event );
   return *this;
 }

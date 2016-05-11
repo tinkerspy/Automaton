@@ -33,10 +33,10 @@ class Atm_led : public MACHINE {
   Atm_led& fade( int fade );
   Atm_led& repeat( int repeat );
   Atm_led& trace( Stream& stream );
-  Atm_led& onFinish( Machine& machine, int16_t event = 0 );
-  Atm_led& onFinish( TinyMachine& machine, int16_t event = 0 );
-  Atm_led& onFinish( atm_cb_t callback, int16_t idx = 0 );
-  Atm_led& onFinish( const char* label, int16_t event = 0 );
+  Atm_led& onFinish( Machine& machine, int event = 0 );
+  Atm_led& onFinish( TinyMachine& machine, int event = 0 );
+  Atm_led& onFinish( atm_cb_t callback, int idx = 0 );
+  Atm_led& onFinish( const char* label, int event = 0 );
 
   
  private:

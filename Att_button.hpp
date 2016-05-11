@@ -49,8 +49,8 @@ class Att_button : public MACHINE {
   short _pin;
   atm_timer_millis _timer_debounce, _timer_delay, _timer_repeat, _timer_auto;
   atm_counter _counter_longpress;
-  int16_t _longpress_max;
-  int16_t _auto_press = 1;
+  int _longpress_max;
+  int _auto_press = 1;
 };
 
 

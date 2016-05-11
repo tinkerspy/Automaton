@@ -33,11 +33,11 @@ class Att_condition : public MACHINE {
   enum { ACT_ON, ACT_OFF, ACT_INPUT };                    // ACTIONS
 
   Att_condition& begin( bool default_state = false );
-  Att_condition& onFlip( bool st, atm_cb_t callback, int16_t idx = 0 );
-  Att_condition& onFlip( bool st, Machine& machine, int16_t event = 0 );
-  Att_condition& onFlip( bool st, const char* label, int16_t = 0 );
-  Att_condition& onFlip( bool st, TinyMachine& machine, int16_t event = 0 );
-  Att_condition& onInput( bool st, atm_cb_t callback, int16_t idx = 0 );
+  Att_condition& onFlip( bool st, atm_cb_t callback, int idx = 0 );
+  Att_condition& onFlip( bool st, Machine& machine, int event = 0 );
+  Att_condition& onFlip( bool st, const char* label, int = 0 );
+  Att_condition& onFlip( bool st, TinyMachine& machine, int event = 0 );
+  Att_condition& onInput( bool st, atm_cb_t callback, int idx = 0 );
   Att_condition& onInput( bool st, Machine& machine, state_t event = 0 );
   Att_condition& onInput( bool st, const char* label, state_t event = 0 );
   Att_condition& onInput( bool st, TinyMachine& machine, state_t event = 0 );

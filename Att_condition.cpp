@@ -16,29 +16,29 @@ Att_condition& Att_condition::begin( bool default_state /* = false */ ) {
 
 const char Att_condition::relOps[8] = "0=!<>-+";
 
-Att_condition& Att_condition::onFlip( bool st, atm_cb_t callback, int16_t idx /* = 0 */ ) {
+Att_condition& Att_condition::onFlip( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
   _connector[st ? 0 : 1].set( callback, idx );
   return *this;
 }
 
-Att_condition& Att_condition::onFlip( bool st, Machine& machine, int16_t evt /* = 0 */ ) {
+Att_condition& Att_condition::onFlip( bool st, Machine& machine, int evt /* = 0 */ ) {
   _connector[st ? 0 : 1].set( &machine, evt );
   return *this;
 }
 
 #ifndef TINYMACHINE
-Att_condition& Att_condition::onFlip( bool st, const char* label, int16_t event /* = 0 */ ) {
+Att_condition& Att_condition::onFlip( bool st, const char* label, int event /* = 0 */ ) {
   _connector[st ? 0 : 1].set( label, event );
   return *this;
 }
 #endif
 
-Att_condition& Att_condition::onFlip( bool st, TinyMachine& machine, int16_t event /* = 0 */ ) {
+Att_condition& Att_condition::onFlip( bool st, TinyMachine& machine, int event /* = 0 */ ) {
   _connector[st ? 0 : 1].set( &machine, event );
   return *this;
 }
 
-Att_condition& Att_condition::onInput( bool st, atm_cb_t callback, int16_t idx /* = 0 */ ) {
+Att_condition& Att_condition::onInput( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
   _connector[st ? 2 : 3].set( callback, idx );
   return *this;
 }

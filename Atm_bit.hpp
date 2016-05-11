@@ -31,11 +31,11 @@ class Atm_bit : public MACHINE {
   enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY };
 
   Atm_bit& begin( bool default_state = false );
-  Atm_bit& onFlip( bool st, atm_cb_t callback, int16_t idx = 0 );
+  Atm_bit& onFlip( bool st, atm_cb_t callback, int idx = 0 );
   Atm_bit& onFlip( bool st, Machine& machine, state_t event = 0 );
   Atm_bit& onFlip( bool st, const char* label, state_t event = 0 );
   Atm_bit& onFlip( bool st, TinyMachine& machine, state_t event = 0 );
-  Atm_bit& onInput( bool st, atm_cb_t callback, int16_t idx = 0 );
+  Atm_bit& onInput( bool st, atm_cb_t callback, int idx = 0 );
   Atm_bit& onInput( bool st, Machine& machine, state_t event = 0 );
   Atm_bit& onInput( bool st, const char* label, state_t event = 0 );
   Atm_bit& onInput( bool st, TinyMachine& machine, state_t event = 0 );

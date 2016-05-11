@@ -16,29 +16,29 @@ Atm_condition& Atm_condition::begin( bool default_state /* = false */ ) {
 
 const char Atm_condition::relOps[8] = "0=!<>-+";
 
-Atm_condition& Atm_condition::onFlip( bool st, atm_cb_t callback, int16_t idx /* = 0 */ ) {
+Atm_condition& Atm_condition::onFlip( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
   _connector[st ? 0 : 1].set( callback, idx );
   return *this;
 }
 
-Atm_condition& Atm_condition::onFlip( bool st, Machine& machine, int16_t evt /* = 0 */ ) {
+Atm_condition& Atm_condition::onFlip( bool st, Machine& machine, int evt /* = 0 */ ) {
   _connector[st ? 0 : 1].set( &machine, evt );
   return *this;
 }
 
 #ifndef TINYMACHINE
-Atm_condition& Atm_condition::onFlip( bool st, const char* label, int16_t event /* = 0 */ ) {
+Atm_condition& Atm_condition::onFlip( bool st, const char* label, int event /* = 0 */ ) {
   _connector[st ? 0 : 1].set( label, event );
   return *this;
 }
 #endif
 
-Atm_condition& Atm_condition::onFlip( bool st, TinyMachine& machine, int16_t event /* = 0 */ ) {
+Atm_condition& Atm_condition::onFlip( bool st, TinyMachine& machine, int event /* = 0 */ ) {
   _connector[st ? 0 : 1].set( &machine, event );
   return *this;
 }
 
-Atm_condition& Atm_condition::onInput( bool st, atm_cb_t callback, int16_t idx /* = 0 */ ) {
+Atm_condition& Atm_condition::onInput( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
   _connector[st ? 2 : 3].set( callback, idx );
   return *this;
 }

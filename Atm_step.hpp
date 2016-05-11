@@ -40,7 +40,7 @@ class Atm_step : public MACHINE {
   int event( int id );
   void action( int id );
   Atm_step& onStep( uint8_t idx );  
-  Atm_step& onStep( uint8_t id, atm_step_onstep_cb_t callback, int16_t idx = 0 );
+  Atm_step& onStep( uint8_t id, atm_step_onstep_cb_t callback, int idx = 0 );
   Atm_step& onStep( uint8_t id, Machine& machine, state_t event = 0 );
   Atm_step& onStep( uint8_t id, const char* label, state_t event = 0 );
   Atm_step& onStep( uint8_t idx, TinyMachine& machine, state_t event = 0 );

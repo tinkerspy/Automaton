@@ -17,7 +17,7 @@ Att_comparator& Att_comparator::begin( int attached_pin, int samplerate /* = 50 
   return *this;
 }
 
-Att_comparator& Att_comparator::onUp( atm_comparator_cb_t callback, int16_t idx /* = 0 */ ) {
+Att_comparator& Att_comparator::onUp( atm_comparator_cb_t callback, int idx /* = 0 */ ) {
   _onup.set( (atm_cb_t)callback, idx );
   return *this;
 }
@@ -39,7 +39,7 @@ Att_comparator& Att_comparator::onUp( const char* label, int event /* = 0 */ ) {
 }
 #endif
 
-Att_comparator& Att_comparator::onDown( atm_comparator_cb_t callback, int16_t idx /* = 0 */ ) {
+Att_comparator& Att_comparator::onDown( atm_comparator_cb_t callback, int idx /* = 0 */ ) {
   _ondown.set( (atm_cb_t)callback, idx );
   return *this;
 }

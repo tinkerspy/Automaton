@@ -7,7 +7,7 @@
 
 #include "Arduino.h"
 
-typedef int16_t state_t;
+typedef int state_t;
 typedef int8_t tiny_state_t;
 
 const uint8_t ATM_SLEEP_FLAG = B00000001;
@@ -91,7 +91,7 @@ class atm_pin {  // TODO untested!
   uint8_t change( uint8_t pin );
 };
 
-typedef bool ( *atm_cb_t )( int16_t idx );
+typedef bool ( *atm_cb_t )( int idx );
 
 class atm_connector {
  public:
@@ -102,7 +102,7 @@ class atm_connector {
   union {
     struct {
       atm_cb_t callback;
-      int16_t callback_idx;  // +2 = 5 bytes per object
+      int callback_idx;  // +2 = 5 bytes per object
     };
     struct {
       union {
@@ -113,12 +113,12 @@ class atm_connector {
       uint16_t event;
     };
   };
-  void set( Machine* m, int16_t evt, int8_t logOp = 0, int8_t relOp = 0 );
-  void set( TinyMachine* tm, int16_t evt, int8_t logOp = 0, int8_t relOp = 0 );
-  void set( const char* l, int16_t evt, int8_t logOp = 0, int8_t relOp = 0 );
-  void set( atm_cb_t cb, int16_t idx, int8_t logOp = 0, int8_t relOp = 0 );
+  void set( Machine* m, int evt, int8_t logOp = 0, int8_t relOp = 0 );
+  void set( TinyMachine* tm, int evt, int8_t logOp = 0, int8_t relOp = 0 );
+  void set( const char* l, int evt, int8_t logOp = 0, int8_t relOp = 0 );
+  void set( atm_cb_t cb, int idx, int8_t logOp = 0, int8_t relOp = 0 );
   bool push( Factory* f = 0, bool noCallback = false );  // returns false (only) if callback is set!
-  int16_t pull( Factory* f = 0, bool def_value = false );
+  int pull( Factory* f = 0, bool def_value = false );
   int8_t logOp( void );
   int8_t relOp( void );
   int8_t mode( void );

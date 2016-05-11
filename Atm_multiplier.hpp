@@ -32,7 +32,7 @@ class Atm_multiplier : public MACHINE {
 
   Atm_multiplier& begin();
   Atm_multiplier& trace( Stream& stream );
-  Atm_multiplier& onInput( atm_cb_t callback, int16_t idx = 0 );
+  Atm_multiplier& onInput( atm_cb_t callback, int idx = 0 );
   Atm_multiplier& onInput( Machine& machine, state_t event = 0 );
   Atm_multiplier& onInput( const char* label, state_t event = 0 );
   Atm_multiplier& onInput( TinyMachine& machine, state_t event = 0 );

@@ -40,7 +40,7 @@ class Att_command : public MACHINE {
   Att_command& trace( Stream& stream );
   int event( int id );
   void action( int id );
-  Att_command& onCommand( atm_command_oncommand_cb_t callback, int16_t idx  = 0 );
+  Att_command& onCommand( atm_command_oncommand_cb_t callback, int idx  = 0 );
   Att_command& list( const char* cmds );
   
   Att_command& separator( const char sep[] );

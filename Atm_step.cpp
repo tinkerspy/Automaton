@@ -56,7 +56,7 @@ Atm_step& Atm_step::onStep( uint8_t id ) {
   return *this;
 }
 
-Atm_step& Atm_step::onStep( uint8_t id, atm_step_onstep_cb_t callback, int16_t idx /* = 0 */ ) {
+Atm_step& Atm_step::onStep( uint8_t id, atm_step_onstep_cb_t callback, int idx /* = 0 */ ) {
   _connector[id].set( (atm_cb_t)callback, idx );
   return *this;
 }

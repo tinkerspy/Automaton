@@ -19,7 +19,7 @@ Att_command& Att_command::begin( Stream& stream, char buffer[], int size ) {
   return *this;
 }
 
-Att_command& Att_command::onCommand( atm_command_oncommand_cb_t callback, int16_t idx /* = 0 */ ) {
+Att_command& Att_command::onCommand( atm_command_oncommand_cb_t callback, int idx /* = 0 */ ) {
   _oncommand.set( (atm_cb_t)callback, idx );
   return *this;
 }

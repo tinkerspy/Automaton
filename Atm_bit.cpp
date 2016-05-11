@@ -15,29 +15,29 @@ Atm_bit& Atm_bit::begin( bool default_state /* = false */ ) {
   return *this;
 }
 
-Atm_bit& Atm_bit::onFlip( bool st, atm_cb_t callback, int16_t idx /* = 0 */ ) {
+Atm_bit& Atm_bit::onFlip( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
   _connector[st ? 0 : 1].set( callback, idx );
   return *this;
 }
 
-Atm_bit& Atm_bit::onFlip( bool st, Machine& machine, int16_t evt /* = 0 */ ) {
+Atm_bit& Atm_bit::onFlip( bool st, Machine& machine, int evt /* = 0 */ ) {
   _connector[st ? 0 : 1].set( &machine, evt );
   return *this;
 }
 
 #ifndef TINYMACHINE
-Atm_bit& Atm_bit::onFlip( bool st, const char* label, int16_t event /* = 0 */ ) {
+Atm_bit& Atm_bit::onFlip( bool st, const char* label, int event /* = 0 */ ) {
   _connector[st ? 0 : 1].set( label, event );
   return *this;
 }
 #endif
 
-Atm_bit& Atm_bit::onFlip( bool st, TinyMachine& machine, int16_t event /* = 0 */ ) {
+Atm_bit& Atm_bit::onFlip( bool st, TinyMachine& machine, int event /* = 0 */ ) {
   _connector[st ? 0 : 1].set( &machine, event );
   return *this;
 }
 
-Atm_bit& Atm_bit::onInput( bool st, atm_cb_t callback, int16_t idx /* = 0 */ ) {
+Atm_bit& Atm_bit::onInput( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
   _connector[st ? 2 : 3].set( callback, idx );
   return *this;
 }
