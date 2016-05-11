@@ -67,7 +67,6 @@ class Atm_condition : public MACHINE {
   Atm_condition& OP( char logOp, TinyMachine& machine, char relOp, state_t match );
   Atm_condition& OP( char logOp, const char* label, char relOp, state_t match );
   Atm_condition& OP( char logOp, atm_cb_t callback, char relOp, state_t match );
-  atm_connector& getfree( atm_connector& list, int max );
 
   bool eval_one( uint8_t idx );
   bool eval_all();
