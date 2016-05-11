@@ -110,7 +110,7 @@ class atm_connector {
         TinyMachine* tmachine;
         const char* label;
       };
-      uint16_t event;
+      int event;
     };
   };
   void set( Machine* m, int evt, int8_t logOp = 0, int8_t relOp = 0 );
