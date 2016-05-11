@@ -77,6 +77,10 @@ Att_led& Att_led::repeat( int repeat ) {
 
 Att_led& Att_led::brightness( uint8_t level ) {
   _level = level;
+  if ( current == ON || current == START ) {
+    analogWrite( pin, level );
+  }
+  return *this;
 }
 
 int Att_led::event( int id ) {

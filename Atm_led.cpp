@@ -77,7 +77,10 @@ Atm_led& Atm_led::repeat( int repeat ) {
 
 Atm_led& Atm_led::brightness( uint8_t level ) {
   _level = level;
-  return *this;  
+  if ( current == ON || current == START ) {
+    analogWrite( pin, level );
+  }
+  return *this;
 }
 
 int Atm_led::event( int id ) {
