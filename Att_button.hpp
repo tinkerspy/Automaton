@@ -3,6 +3,9 @@
 #include <Automaton.h>
 
 #define TINYMACHINE
+#undef FACTORY
+#undef STATE_TYPE
+#undef MACHINE
 
 #ifdef TINYMACHINE
 #define MACHINE TinyMachine
