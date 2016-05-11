@@ -14,7 +14,7 @@
 #define STATE_TYPE state_t
 #endif
 
-typedef void ( *atm_comparator_cb_t )( int idx, int v, int up, int idx_threshold, int v_threshold );
+typedef bool ( *atm_comparator_cb_t )( int idx, int v, int up, int idx_threshold, int v_threshold );
 
 class Att_comparator : public MACHINE {
  public:

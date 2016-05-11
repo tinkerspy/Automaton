@@ -19,7 +19,7 @@ Atm_command& Atm_command::begin( Stream& stream, char buffer[], int size ) {
   return *this;
 }
 
-Atm_command& Atm_command::onCommand( atm_command_oncommand_cb_t callback, int idx /* = 0 */ ) {
+Atm_command& Atm_command::onCommand( atm_command_cb_t callback, int idx /* = 0 */ ) {
   _oncommand.set( (atm_cb_t)callback, idx );
   return *this;
 }
@@ -94,7 +94,7 @@ void Atm_command::action( int id ) {
     case ACT_SEND:
       _buffer[--_bufptr] = '\0';
       if ( _oncommand.mode() == _oncommand.MODE_CALLBACK ) {
-        ( *(atm_command_oncommand_cb_t)_oncommand.callback )( _oncommand.callback_idx, lookup( 0, _commands ) );
+        ( *(atm_command_cb_t)_oncommand.callback )( _oncommand.callback_idx, lookup( 0, _commands ) );
       }
       _lastch = '\0';
       _bufptr = 0;

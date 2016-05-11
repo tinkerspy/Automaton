@@ -16,7 +16,7 @@
 
 #define ATM_STEP_MAX 8
 
-typedef void ( *atm_step_onstep_cb_t )( int idx, int id );
+typedef bool ( *atm_step_cb_t )( int idx, int id );
 
 class Atm_step : public MACHINE {
  public:
@@ -40,7 +40,7 @@ class Atm_step : public MACHINE {
   int event( int id );
   void action( int id );
   Atm_step& onStep( uint8_t idx );  
-  Atm_step& onStep( uint8_t id, atm_step_onstep_cb_t callback, int idx = 0 );
+  Atm_step& onStep( uint8_t id, atm_step_cb_t callback, int idx = 0 );
   Atm_step& onStep( uint8_t id, Machine& machine, state_t event = 0 );
   Atm_step& onStep( uint8_t id, const char* label, state_t event = 0 );
   Atm_step& onStep( uint8_t idx, TinyMachine& machine, state_t event = 0 );

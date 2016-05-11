@@ -212,7 +212,6 @@ class Factory {
 #include <Att_comparator.hpp>
 #include <Atm_fade.hpp>
 #include <Att_fade.hpp>
-#include <Atm_gate.hpp>
 #include <Atm_led.hpp>
 #include <Att_led.hpp>
 #include <Atm_multiplier.hpp>

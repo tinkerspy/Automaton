@@ -56,7 +56,7 @@ Att_step& Att_step::onStep( uint8_t id ) {
   return *this;
 }
 
-Att_step& Att_step::onStep( uint8_t id, atm_step_onstep_cb_t callback, int idx /* = 0 */ ) {
+Att_step& Att_step::onStep( uint8_t id, atm_step_cb_t callback, int idx /* = 0 */ ) {
   _connector[id].set( (atm_cb_t)callback, idx );
   return *this;
 }
@@ -90,7 +90,7 @@ int Att_step::event( int id ) {
 void Att_step::action( int id ) {
   if ( id > -1 ) {
     if ( !_connector[id].push( FACTORY, true ) ) {
-      ( *(atm_step_onstep_cb_t)_connector[id].callback )( _connector[id].callback_idx, id );
+      ( *(atm_step_cb_t)_connector[id].callback )( _connector[id].callback_idx, id );
     }
   }
 }

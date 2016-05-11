@@ -14,7 +14,7 @@
 #define STATE_TYPE state_t
 #endif
 
-typedef void ( *atm_button_onpress_cb_t )( int idx, int press );
+typedef bool ( *atm_button_cb_t )( int idx, int press );
 
 class Atm_button : public MACHINE {
  public:
@@ -31,7 +31,7 @@ class Atm_button : public MACHINE {
 
   Atm_button& begin( int attached_pin );
   Atm_button& trace( Stream& stream );
-  Atm_button& onPress( atm_button_onpress_cb_t callback, int idx = 0 );
+  Atm_button& onPress( atm_button_cb_t callback, int idx = 0 );
   Atm_button& onPress( Machine& machine, int event = 0 );
   Atm_button& onPress( TinyMachine& machine, int event = 0 );
   Atm_button& onPress( const char* label, int event = 0 );

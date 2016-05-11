@@ -14,7 +14,7 @@
 #define STATE_TYPE state_t
 #endif
 
-typedef void ( *atm_command_oncommand_cb_t )( int idx, int cmd );
+typedef bool ( *atm_command_cb_t )( int idx, int cmd );
 
 class Atm_command : public MACHINE {
  public:
@@ -40,7 +40,7 @@ class Atm_command : public MACHINE {
   Atm_command& trace( Stream& stream );
   int event( int id );
   void action( int id );
-  Atm_command& onCommand( atm_command_oncommand_cb_t callback, int idx  = 0 );
+  Atm_command& onCommand( atm_command_cb_t callback, int idx  = 0 );
   Atm_command& list( const char* cmds );
   
   Atm_command& separator( const char sep[] );
