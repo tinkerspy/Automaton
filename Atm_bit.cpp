@@ -76,9 +76,9 @@ void Atm_bit::action( int id ) {
   }
 }
 
-#ifndef TINYMACHINE
 Atm_bit& Atm_bit::trace( Stream& stream ) {
+#ifndef TINYMACHINE
   Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_ON\0EVT_OFF\0EVT_TOGGLE\0EVT_INPUT\0ELSE\0OFF\0ON\0INPUTM" );
+#endif
   return *this;
 }
-#endif

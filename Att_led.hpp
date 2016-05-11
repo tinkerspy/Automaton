@@ -35,14 +35,15 @@ class Att_led : public MACHINE {
   Att_led& pause( uint32_t duration );
   Att_led& fade( int fade );
   Att_led& repeat( int repeat );
+  Att_led& brightness( uint8_t level );
   Att_led& trace( Stream& stream );
   Att_led& onFinish( Machine& machine, int event = 0 );
   Att_led& onFinish( TinyMachine& machine, int event = 0 );
   Att_led& onFinish( atm_cb_t callback, int idx = 0 );
   Att_led& onFinish( const char* label, int event = 0 );
-
   
  private:
+  uint8_t _level;
   short pin;
   bool _activeLow;
   int repeat_count;

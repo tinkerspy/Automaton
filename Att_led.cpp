@@ -15,6 +15,7 @@ Att_led& Att_led::begin( int attached_pin, bool activeLow ) {
   MACHINE::begin( state_table, ELSE );
   pin = attached_pin;
   _activeLow = activeLow;
+  _level = 255;
   pinMode( pin, OUTPUT );
   digitalWrite( pin, _activeLow ? HIGH : LOW );
   on_timer.set( 500 );
@@ -74,6 +75,10 @@ Att_led& Att_led::repeat( int repeat ) {
   return *this;
 }
 
+Att_led& Att_led::brightness( uint8_t level ) {
+  _level = level;
+}
+
 int Att_led::event( int id ) {
   switch ( id ) {
     case EVT_ON_TIMER:
@@ -92,11 +97,27 @@ void Att_led::action( int id ) {
       counter.set( repeat_count );
       return;
     case ACT_ON:
-      digitalWrite( pin, _activeLow ? LOW : HIGH );
+      if ( _activeLow ) {
+        digitalWrite( pin, LOW );
+      } else {
+        if ( _level == 255 ) {
+          digitalWrite( pin, HIGH );
+        } else {
+          analogWrite( pin, _level );
+        }
+      }
       return;
     case ACT_OFF:
       counter.decrement();
-      digitalWrite( pin, _activeLow ? HIGH : LOW );
+      if ( !_activeLow ) {
+        digitalWrite( pin, LOW );
+      } else {
+        if ( _level == 255 ) {
+          digitalWrite( pin, HIGH );
+        } else {
+          analogWrite( pin, _level );
+        }
+      }
       return;
     case ACT_CHAIN:
       _onfinish.push( FACTORY );
@@ -104,12 +125,12 @@ void Att_led::action( int id ) {
   }
 }
 
-#ifndef TINYMACHINE
 Att_led& Att_led::trace( Stream& stream ) {
+#ifndef TINYMACHINE
   setTrace( &stream, atm_serial_debug::trace,
             "EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_"
             "BLINK\0EVT_TOGGLE\0EVT_TOGGLE_BLINK\0ELSE\0"
             "IDLE\0ON\0START\0BLINK_OFF\0DONE\0OFF" );
+#endif
   return *this;
 }
-#endif

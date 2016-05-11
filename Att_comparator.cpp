@@ -157,12 +157,12 @@ void Att_comparator::action( int id ) {
   }
 }
 
-#ifndef TINYMACHINE
 Att_comparator& Att_comparator::trace( Stream& stream ) {
+#ifndef TINYMACHINE
   setTrace( &stream, atm_serial_debug::trace,
             "EVT_TRIGGER\0EVT_TIMER\0ELSE\0"
             "IDLE\0SAMPLE\0SEND" );
 
+#endif
   return *this;
 }
-#endif

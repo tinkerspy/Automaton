@@ -96,11 +96,11 @@ void Atm_fade::action( int id ) {
   }
 }
 
-#ifndef TINYMACHINE
 Atm_fade& Atm_fade::trace( Stream& stream ) {
+#ifndef TINYMACHINE
   setTrace(
       &stream, atm_serial_debug::trace,
       "EVT_CNT_FADE\0EVT_TM_FADE\0EVT_TM_ON\0EVT_TM_OFF\0EVT_CNT_RPT\0EVT_ON\0EVT_OFF\0EVT_BLINK\0ELSE\0IDLE\0ON\0START\0STARTU\0UP\0STARTD\0DOWN\0REPEAT" );
+#endif
   return *this;
 }
-#endif

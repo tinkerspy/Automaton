@@ -131,11 +131,11 @@ void Atm_button::action( int id ) {
   }
 }
 
-#ifndef TINYMACHINE
 Atm_button& Atm_button::trace( Stream& stream ) {
+#ifndef TINYMACHINE
   setTrace( &stream, atm_serial_debug::trace,
             "EVT_LMODE\0EVT_TIMER\0EVT_DELAY\0EVT_REPEAT\0EVT_PRESS\0EVT_RELEASE\0EVT_COUNTER\0EVT_"
             "AUTO\0ELSE\0IDLE\0WAIT\0PRESSED\0REPEAT\0RELEASE\0LIDLE\0LWAIT\0LPRESSED\0LRELEASE\0WRELEASE\0AUTO" );
+#endif
   return *this;
 }
-#endif

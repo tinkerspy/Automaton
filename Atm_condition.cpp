@@ -114,6 +114,24 @@ Atm_condition& Atm_condition::OR( atm_cb_t callback, char relOp /* = '>' */, sta
   return OP( atm_connector::LOG_OR, callback, relOp, match );
 }
 
+Atm_condition& Atm_condition::XOR( Machine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_XOR, machine, relOp, match );
+}
+
+Atm_condition& Atm_condition::XOR( TinyMachine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_XOR, machine, relOp, match );
+}
+
+#ifndef TINYMACHINE
+Atm_condition& Atm_condition::XOR( const char* label, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_XOR, label, relOp, match );
+}
+#endif
+
+Atm_condition& Atm_condition::XOR( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+  return OP( atm_connector::LOG_XOR, callback, relOp, match );
+}
+
 Atm_condition& Atm_condition::OP( char logOp, Machine& machine, char relOp, state_t match ) {
   for ( uint8_t i = 0; i < ATM_CONDITION_OPERAND_MAX; i++ ) {
     if ( _operand[i].mode() == atm_connector::MODE_NULL ) {  // Pick the first free slot
@@ -185,6 +203,9 @@ bool Atm_condition::eval_all() {
         case atm_connector::LOG_OR:
           r = r || eval_one( i );
           break;
+        case atm_connector::LOG_XOR:
+          r = !r != !eval_one( i );
+          break;
       }
     }
   }
@@ -214,9 +235,9 @@ void Atm_condition::action( int id ) {
   }
 }
 
-#ifndef TINYMACHINE
 Atm_condition& Atm_condition::trace( Stream& stream ) {
+#ifndef TINYMACHINE
   Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_ON\0EVT_OFF\0EVT_TOGGLE\0EVT_INPUT\0ELSE\0OFF\0ON" );
+#endif
   return *this;
 }
-#endif

@@ -57,6 +57,10 @@ class Att_condition : public MACHINE {
   Att_condition& OR( TinyMachine& machine, char relOp = '>', state_t match = 0 );
   Att_condition& OR( const char* label, char relOp = '>', state_t match = 0 );
   Att_condition& OR( atm_cb_t callback, char relOp = '>', state_t match = 0 );
+  Att_condition& XOR( Machine& machine, char relOp = '>', state_t match = 0 );
+  Att_condition& XOR( TinyMachine& machine, char relOp = '>', state_t match = 0 );
+  Att_condition& XOR( const char* label, char relOp = '>', state_t match = 0 );
+  Att_condition& XOR( atm_cb_t callback, char relOp = '>', state_t match = 0 );
   Att_condition& trace( Stream& stream );
 
  private:

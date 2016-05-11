@@ -102,9 +102,9 @@ void Atm_command::action( int id ) {
   }
 }
 
-#ifndef TINYMACHINE
 Atm_command& Atm_command::trace( Stream& stream ) {
+#ifndef TINYMACHINE
   setTrace( &stream, atm_serial_debug::trace, "EVT_INPUT\0EVT_EOL\0ELSE\0IDLE\0READCHAR\0SEND" );
+#endif
   return *this;
 }
-#endif

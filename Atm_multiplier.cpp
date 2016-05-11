@@ -70,9 +70,9 @@ void Atm_multiplier::action( int id ) {
   }
 }
 
-#ifndef TINYMACHINE
 Atm_multiplier& Atm_multiplier::trace( Stream& stream ) {
+#ifndef TINYMACHINE
   Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_INPUT\0ELSE\0IDLE\0SEND" );
+#endif
   return *this;
 }
-#endif

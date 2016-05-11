@@ -97,9 +97,9 @@ void Att_timer::action( int id ) {
   }
 }
 
-#ifndef TINYMACHINE
 Att_timer& Att_timer::trace( Stream& stream ) {
+#ifndef TINYMACHINE
   setTrace( &stream, atm_serial_debug::trace, "EVT_DAYCNT\0EVT_DAYTIMER\0EVT_MSTIMER\0EVT_REPCNT\0EVT_OFF\0EVT_ON\0ELSE\0IDLE\0START\0WAITD\0WAITMS\0TRIGGER" );
+#endif
   return *this;
 }
-#endif

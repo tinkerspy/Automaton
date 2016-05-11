@@ -84,9 +84,9 @@ void Att_pulse::action( int id ) {
   }
 }
 
-#ifndef TINYMACHINE
 Att_pulse& Att_pulse::trace( Stream& stream ) {
+#ifndef TINYMACHINE
   setTrace( &stream, atm_serial_debug::trace, "EVT_TIMER\0EVT_HIGH\0EVT_LOW\0ELSE\0IDLE\0WAIT\0PULSE" );
+#endif
   return *this;
 }
-#endif

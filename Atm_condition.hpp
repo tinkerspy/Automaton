@@ -57,6 +57,10 @@ class Atm_condition : public MACHINE {
   Atm_condition& OR( TinyMachine& machine, char relOp = '>', state_t match = 0 );
   Atm_condition& OR( const char* label, char relOp = '>', state_t match = 0 );
   Atm_condition& OR( atm_cb_t callback, char relOp = '>', state_t match = 0 );
+  Atm_condition& XOR( Machine& machine, char relOp = '>', state_t match = 0 );
+  Atm_condition& XOR( TinyMachine& machine, char relOp = '>', state_t match = 0 );
+  Atm_condition& XOR( const char* label, char relOp = '>', state_t match = 0 );
+  Atm_condition& XOR( atm_cb_t callback, char relOp = '>', state_t match = 0 );
   Atm_condition& trace( Stream& stream );
 
  private:
