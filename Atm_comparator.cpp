@@ -148,7 +148,7 @@ void Atm_comparator::action( int id ) {
         for ( int i = p_threshold_size; i >= 0; i-- ) {
           if ( ( bitmap_diff >> i ) & 1 ) {
             if ( !_ondown.push( FACTORY, true ) ) {
-              ( *(atm_comparator_cb_t)_ondown.callback )( _onup.callback_idx, v_sample, 1, i, p_threshold[i] );
+              ( *(atm_comparator_cb_t)_ondown.callback )( _onup.callback_idx, v_sample, 0, i, p_threshold[i] );
             }
           }
         }
