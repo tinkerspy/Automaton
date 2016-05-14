@@ -4,11 +4,11 @@ Atm_digital_in& Atm_digital_in::begin( int attached_pin, int debounce /* = 20 */
   // clang-format off
   const static STATE_TYPE state_table[] PROGMEM = {
     /*              ON_ENTER    ON_LOOP      ON_EXIT  EVT_TIMER   EVT_HIGH  EVT_LOW   ELSE */
-    /* IDLE    */         -1,        -1,          -1,        -1,      WAIT,      -1,    -1,
-    /* WAIT    */         -1,        -1,          -1,     VHIGH,        -1,    IDLE,    -1,
-    /* VHIGH   */   ACT_HIGH,        -1,          -1,        -1,        -1,   WAIT2,    -1, 
-    /* WAIT2   */         -1,        -1,          -1,      VLOW,     VHIGH,      -1,    -1,
-    /* VLOW     */   ACT_LOW,        -1,          -1,        -1,        -1,      -1,  IDLE,
+    /* IDLE    */         -1,        -1,          -1,        -1,     WAITH,      -1,    -1,
+    /* WAITH   */         -1,        -1,          -1,     VHIGH,        -1,    IDLE,    -1,
+    /* VHIGH   */   ACT_HIGH,        -1,          -1,        -1,        -1,   WAITL,    -1, 
+    /* WAITL   */         -1,        -1,          -1,      VLOW,     VHIGH,      -1,    -1,
+    /* VLOW    */    ACT_LOW,        -1,          -1,        -1,        -1,      -1,  IDLE,
   };
   // clang-format on
   MACHINE::begin( state_table, ELSE );
@@ -17,6 +17,10 @@ Atm_digital_in& Atm_digital_in::begin( int attached_pin, int debounce /* = 20 */
   timer.set( debounce );
   pinMode( pin, pullUp ? INPUT_PULLUP : INPUT );
   return *this;
+}
+
+int Atm_digital_in::state( void ) {
+  return (current == VHIGH || current == WAITL );
 }
 
 Atm_digital_in& Atm_digital_in::onFlip( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
@@ -66,7 +70,7 @@ void Atm_digital_in::action( int id ) {
 
 Atm_digital_in& Atm_digital_in::trace( Stream& stream ) {
 #ifndef TINYMACHINE
-  setTrace( &stream, atm_serial_debug::trace, "EVT_TIMER\0EVT_HIGH\0EVT_LOW\0ELSE\0IDLE\0WAIT\0VHIGH\0WAIT2\0VLOW" );
+  setTrace( &stream, atm_serial_debug::trace, "EVT_TIMER\0EVT_HIGH\0EVT_LOW\0ELSE\0IDLE\0WAITH\0VHIGH\0WAITL\0VLOW" );
 #endif
   return *this;
 }
