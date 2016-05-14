@@ -18,6 +18,8 @@
 #endif
 
 
+typedef bool ( *atm_analog_in_cb_t )( int idx, int v, int up );
+
 class Att_analog_in : public MACHINE {
  public:
   Att_analog_in( void ) : MACHINE() {
@@ -29,6 +31,7 @@ class Att_analog_in : public MACHINE {
   short pin;
   atm_timer_millis timer;
   int v_sample, v_threshold, v_previous;
+  atm_connector _onchange;
 
   uint16_t* avg_buf;
   uint16_t avg_buf_size;
@@ -36,8 +39,8 @@ class Att_analog_in : public MACHINE {
   uint32_t avg_buf_total;
   uint16_t _toLow, _toHigh;
   
-  enum { IDLE, SAMPLE } STATES;
-  enum { EVT_TIMER, ELSE } EVENTS;
+  enum { IDLE, SAMPLE, SEND } STATES;
+  enum { EVT_TRIGGER, EVT_TIMER, ELSE } EVENTS;
   enum { ACT_SAMPLE, ACT_SEND } ACTIONS;
   enum { MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY };
 
@@ -46,6 +49,11 @@ class Att_analog_in : public MACHINE {
   Att_analog_in& trace( Stream& stream );
   int state( void );
   Att_analog_in& range( int toLow, int toHigh );
+
+  Att_analog_in& onChange( Machine& machine, int event = 0 );
+  Att_analog_in& onChange( TinyMachine& machine, int event = 0 );
+  Att_analog_in& onChange( atm_analog_in_cb_t callback, int idx = 0 );
+  Att_analog_in& onChange( const char* label, int event = 0 );
 
  private:
   int _avg();

@@ -60,7 +60,7 @@ int Atm_analog_in::_avg() {
 }
 
 int Atm_analog_in::sample() {
-  int v = avg_buf_size > 0 ? _avg() : read_sample(); 
+  int v = avg_buf_size > 0 ? _avg() : read_sample();
   if ( _toHigh ) {
     return map( v, 0, 1023, _toLow, _toHigh );
   } else {
@@ -102,7 +102,7 @@ void Atm_analog_in::action( int id ) {
       return;
     case ACT_SEND:
       if ( !_onchange.push( FACTORY, true ) ) {
-        ( *(atm_analog_in_cb_t)_onchange.callback )( _onchange.callback_idx, v_sample, v_sample > v_previous ); 
+        ( *(atm_analog_in_cb_t)_onchange.callback )( _onchange.callback_idx, v_sample, v_sample > v_previous );
       }
   }
 }
