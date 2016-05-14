@@ -30,7 +30,9 @@ Atm_encoder& Atm_encoder::range( int min, int max, bool wrap /* = false */ ) {
   _min = min;
   _max = max;
   _wrap = wrap;
-  _value = min;
+  if ( _value < _min || _value > _max ) {    
+    _value = min;
+  }
   return *this;
 }
 

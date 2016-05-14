@@ -204,6 +204,8 @@ class Factory {
   void runTiny( void );
 };
 
+#include <Atm_analog_in.hpp>
+#include <Att_analog_in.hpp>
 #include <Atm_button.hpp>
 #include <Att_button.hpp>
 #include <Atm_command.hpp>
