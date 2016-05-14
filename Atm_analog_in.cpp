@@ -17,7 +17,7 @@ Atm_analog_in& Atm_analog_in::begin( int attached_pin, int samplerate /* = 50 */
 Atm_analog_in& Atm_analog_in::range( int toLow, int toHigh ) {
   _toLow = toLow;
   _toHigh = toHigh;
-  return *this;    
+  return *this;
 }
 
 int Atm_analog_in::read_sample() {
@@ -42,7 +42,7 @@ int Atm_analog_in::sample() {
 
 int Atm_analog_in::state( void ) {
   if ( _toHigh ) {
-    return map( sample(), 0, 1023, _toLow, _toHigh ); 
+    return map( sample(), 0, 1023, _toLow, _toHigh );
   } else {
     return sample();
   }
