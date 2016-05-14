@@ -137,8 +137,8 @@ class BaseMachine {
 
 class Machine : public BaseMachine {
  public:
-  state_t state( void );
-  Machine& trigger( int evt = 0 );
+  virtual int state( void );
+  virtual Machine& trigger( int evt = 0 );
   Machine& priority( int8_t priority );
   int8_t priority( void );
   Machine& cycle( uint32_t time = 0 );
@@ -171,9 +171,9 @@ class Machine : public BaseMachine {
 
 class TinyMachine : public BaseMachine {
  public:
-  tiny_state_t state( void );
+  virtual int state( void );
+  virtual TinyMachine& trigger( int evt = 0 );
   TinyMachine& cycle( uint32_t time = 0 );
-  TinyMachine& trigger( int evt = 0 );
   TinyMachine* inventory_next;
 
  protected:

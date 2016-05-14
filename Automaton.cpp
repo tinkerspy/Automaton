@@ -121,7 +121,7 @@ Machine& Machine::state( state_t state ) {
   return *this;
 }
 
-state_t Machine::state() {
+int Machine::state() {
   return current;
 }
 
@@ -247,7 +247,7 @@ TinyMachine& TinyMachine::state( tiny_state_t state ) {
   return *this;
 }
 
-tiny_state_t TinyMachine::state() {
+int TinyMachine::state() {
   return current;
 }
 

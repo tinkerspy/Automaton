@@ -50,6 +50,10 @@ class Atm_encoder: public MACHINE {
     Atm_encoder& onDown( TinyMachine& machine, int event = 0 );
     Atm_encoder& onDown( atm_cb_t callback, int idx = 0 );
     Atm_encoder& onDown( const char * label, int event = 0 );
+    int state( void );
+    Atm_encoder& range( int min, int max, bool wrap = false );
+    Atm_encoder& set( int value );
+
   private:
     void count( int direction );
     int event( int id ); 
