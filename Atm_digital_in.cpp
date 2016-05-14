@@ -20,7 +20,7 @@ Atm_digital_in& Atm_digital_in::begin( int attached_pin, int debounce /* = 20 */
 }
 
 int Atm_digital_in::state( void ) {
-  return (current == VHIGH || current == WAITL );
+  return ( current == VHIGH || current == WAITL );
 }
 
 Atm_digital_in& Atm_digital_in::onFlip( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
