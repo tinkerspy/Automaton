@@ -40,7 +40,7 @@ class Atm_encoder: public MACHINE {
     enum { EVT_UP, EVT_DOWN, ELSE }; // EVENTS
     enum { ACT_SAMPLE, ACT_UP, ACT_DOWN }; // ACTIONS
 	
-    Atm_encoder & begin( int pin1, int pin2, int divider = 4 );
+    Atm_encoder & begin( int pin1, int pin2, int divider = 1 );
     Atm_encoder & trace( Stream & stream );
     Atm_encoder& onUp( Machine& machine, int event = 0 );
     Atm_encoder& onUp( TinyMachine& machine, int event = 0 );
@@ -55,7 +55,7 @@ class Atm_encoder: public MACHINE {
     Atm_encoder& set( int value );
 
   private:
-    void count( int direction );
+    bool count( int direction );
     int event( int id ); 
     void action( int id ); 
 };

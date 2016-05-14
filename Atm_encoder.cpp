@@ -97,14 +97,23 @@ int Atm_encoder::event( int id ) {
   return 0;
 }
 
-void Atm_encoder::count( int direction ) {
+bool Atm_encoder::count( int direction ) {
   if ( (long)_value + direction > _max ) {
-    _value = _wrap ? _min : _value;
+    if ( _wrap ) {
+      _value = _min;
+    } else {
+      return false;
+    }
   } else if ( (long)_value + direction < _min ) {
-    _value = _wrap ? _max : _value;
+    if ( _wrap ) {
+      _value = _max;
+    } else {
+      return false;
+    }
   } else {
     _value += direction;
   }
+  return true;
 }
 
 void Atm_encoder::action( int id ) {
@@ -113,7 +122,9 @@ void Atm_encoder::action( int id ) {
       _enc_bits = ( ( _enc_bits << 2 ) | ( digitalRead( _pin1 ) << 1 ) | ( digitalRead( _pin2 ) ) ) & 0x0f;
       if ( ( _enc_direction = _enc_states[_enc_bits] ) != 0 ) {
         if ( ++_enc_counter % _divider == 0 )
-          count( _enc_direction );
+          if ( !count( _enc_direction ) ) {
+              _enc_direction = 0;
+          }
       }
       return;
     case ACT_UP:

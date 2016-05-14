@@ -17,7 +17,7 @@
 #define STATE_TYPE state_t
 #endif
 
-#define ATM_STEP_MAX 8
+#define ATM_STEP_MAX 10
 
 typedef bool ( *atm_step_cb_t )( int idx, int id );
 
