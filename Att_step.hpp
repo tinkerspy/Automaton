@@ -29,11 +29,10 @@ class Att_step : public MACHINE {
 #endif    
   };
   // clang-format off
-  enum { LINEAR,S0,S1,S2, S3, S4, S5, S6, S7, R0, R1, R2, R3, R4, R5, R6, R7, 
-         SWEEP, X0, X1, X2, X3, X4, X5, X6, X7, X8, X9, XA, XB, XC, XD, 
-         BURST, U0, U1, U2, U3, U4, U5, U6, U7 };
-  enum { EVT_STEP, EVT_BACK, EVT_SWEEP, EVT_BURST, EVT_LINEAR, ELSE };
-  enum { ACT_S0, ACT_S1, ACT_S2, ACT_S3, ACT_S4, ACT_S5, ACT_S6, ACT_S7 };
+  enum { LINEAR, S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9,
+         SWEEP, X0, X1, X2, X3, X4, X5, X6, X7, X8, X9, XA, XB, XC, XD, XE, XF, XG, XH }; 
+  enum { EVT_STEP, EVT_BACK, EVT_SWEEP, EVT_LINEAR, ELSE };
+  enum { ACT_S0, ACT_S1, ACT_S2, ACT_S3, ACT_S4, ACT_S5, ACT_S6, ACT_S7, ACT_S8, ACT_S9 };
   // clang-format on
   
   atm_connector _connector[ATM_STEP_MAX];
@@ -42,11 +41,11 @@ class Att_step : public MACHINE {
   Att_step& trace( Stream& stream );
   int event( int id );
   void action( int id );
-  Att_step& onStep( uint8_t idx );  
+  Att_step& onStep( uint8_t idx );  // fix id -> step???
   Att_step& onStep( uint8_t id, atm_step_cb_t callback, int idx = 0 );
   Att_step& onStep( uint8_t id, Machine& machine, state_t event = 0 );
   Att_step& onStep( uint8_t id, const char* label, state_t event = 0 );
-  Att_step& onStep( uint8_t idx, TinyMachine& machine, state_t event = 0 );
+  Att_step& onStep( uint8_t idx, TinyMachine& machine, state_t event = 0 ); // fix id
 
   
 };

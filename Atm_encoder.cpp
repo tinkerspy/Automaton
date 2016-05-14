@@ -1,7 +1,7 @@
 #include "Atm_encoder.hpp"
 #include <limits.h>
 
-const char Atm_encoder::_enc_states[16] = { 0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0 };
+const char Atm_encoder::_enc_states[16] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0};
 
 Atm_encoder& Atm_encoder::begin( int pin1, int pin2, int divider /* = 4 */ ) {
   // clang-format off
@@ -30,12 +30,12 @@ Atm_encoder& Atm_encoder::range( int min, int max, bool wrap /* = false */ ) {
   _min = min;
   _max = max;
   _wrap = wrap;
-  _value = min;  
+  _value = min;
   return *this;
 }
 
 Atm_encoder& Atm_encoder::set( int value ) {
-  _value = value;  
+  _value = value;
   return *this;
 }
 
@@ -84,7 +84,7 @@ Atm_encoder& Atm_encoder::onDown( const char* label, int event /* = 0 */ ) {
 #endif
 
 int Atm_encoder::state( void ) {
-    return _value;
+  return _value;
 }
 
 int Atm_encoder::event( int id ) {
@@ -123,7 +123,7 @@ void Atm_encoder::action( int id ) {
       if ( ( _enc_direction = _enc_states[_enc_bits] ) != 0 ) {
         if ( ++_enc_counter % _divider == 0 )
           if ( !count( _enc_direction ) ) {
-              _enc_direction = 0;
+            _enc_direction = 0;
           }
       }
       return;

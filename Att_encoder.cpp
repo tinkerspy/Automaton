@@ -26,6 +26,19 @@ Att_encoder& Att_encoder::begin( int pin1, int pin2, int divider /* = 4 */ ) {
   return *this;
 }
 
+Att_encoder& Att_encoder::range( int min, int max, bool wrap /* = false */ ) {
+  _min = min;
+  _max = max;
+  _wrap = wrap;
+  _value = min;
+  return *this;
+}
+
+Att_encoder& Att_encoder::set( int value ) {
+  _value = value;
+  return *this;
+}
+
 Att_encoder& Att_encoder::onUp( Machine& machine, int event /* = 0 */ ) {
   _onup.set( &machine, event );
   return *this;
@@ -70,24 +83,37 @@ Att_encoder& Att_encoder::onDown( const char* label, int event /* = 0 */ ) {
 }
 #endif
 
+int Att_encoder::state( void ) {
+  return _value;
+}
+
 int Att_encoder::event( int id ) {
   switch ( id ) {
     case EVT_UP:
-      return _enc_direction == 1 && ( _enc_counter % _divider == 0 );
+      return _enc_direction == +1 && ( _enc_counter % _divider == 0 );
     case EVT_DOWN:
       return _enc_direction == -1 && ( _enc_counter % _divider == 0 );
   }
   return 0;
 }
 
-void Att_encoder::count( int direction ) {
+bool Att_encoder::count( int direction ) {
   if ( (long)_value + direction > _max ) {
-    _value = _wrap ? _min : _value + direction;
+    if ( _wrap ) {
+      _value = _min;
+    } else {
+      return false;
+    }
   } else if ( (long)_value + direction < _min ) {
-    _value = _wrap ? _max : _value + direction;
+    if ( _wrap ) {
+      _value = _max;
+    } else {
+      return false;
+    }
   } else {
     _value += direction;
   }
+  return true;
 }
 
 void Att_encoder::action( int id ) {
@@ -95,7 +121,10 @@ void Att_encoder::action( int id ) {
     case ACT_SAMPLE:
       _enc_bits = ( ( _enc_bits << 2 ) | ( digitalRead( _pin1 ) << 1 ) | ( digitalRead( _pin2 ) ) ) & 0x0f;
       if ( ( _enc_direction = _enc_states[_enc_bits] ) != 0 ) {
-        _enc_counter++;
+        if ( ++_enc_counter % _divider == 0 )
+          if ( !count( _enc_direction ) ) {
+            _enc_direction = 0;
+          }
       }
       return;
     case ACT_UP:

@@ -40,7 +40,7 @@ class Att_encoder: public MACHINE {
     enum { EVT_UP, EVT_DOWN, ELSE }; // EVENTS
     enum { ACT_SAMPLE, ACT_UP, ACT_DOWN }; // ACTIONS
 	
-    Att_encoder & begin( int pin1, int pin2, int divider = 4 );
+    Att_encoder & begin( int pin1, int pin2, int divider = 1 );
     Att_encoder & trace( Stream & stream );
     Att_encoder& onUp( Machine& machine, int event = 0 );
     Att_encoder& onUp( TinyMachine& machine, int event = 0 );
@@ -50,8 +50,13 @@ class Att_encoder: public MACHINE {
     Att_encoder& onDown( TinyMachine& machine, int event = 0 );
     Att_encoder& onDown( atm_cb_t callback, int idx = 0 );
     Att_encoder& onDown( const char * label, int event = 0 );
+    int state( void );
+    Att_encoder& range( int min, int max, bool wrap = false );
+    Att_encoder& set( int value );
+    
+
   private:
-    void count( int direction );
+    bool count( int direction );
     int event( int id ); 
     void action( int id ); 
 };
