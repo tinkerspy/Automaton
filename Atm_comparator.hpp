@@ -58,6 +58,7 @@ class Atm_comparator : public MACHINE {
   Atm_comparator& onDown( const char* label, int event = 0 );
   int _avg();
   Atm_comparator& bitmap( uint16_t v );
+  int state( void );
   int sample();
   virtual int read_sample();
   int event( int id );

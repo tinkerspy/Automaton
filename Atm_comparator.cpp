@@ -81,6 +81,10 @@ int Atm_comparator::sample() {
   return avg_buf_size > 0 ? _avg() : read_sample();
 }
 
+int Atm_comparator::state( void ) {
+  return sample();
+}
+
 Atm_comparator& Atm_comparator::threshold( uint16_t* v, uint16_t size, bool catchUp /* = false */ ) {
   p_threshold = v;
   p_threshold_size = size;
