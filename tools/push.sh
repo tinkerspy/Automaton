@@ -8,6 +8,7 @@ clang-format -i Atm_button.cpp
 clang-format -i Atm_command.cpp
 clang-format -i Atm_comparator.cpp
 clang-format -i Atm_condition.cpp
+clang-format -i Atm_encoder.cpp
 clang-format -i Atm_fade.cpp
 clang-format -i Atm_multiplier.cpp
 clang-format -i Atm_led.cpp
@@ -25,6 +26,8 @@ tools/tinyfy.pl Atm_comparator.cpp > Att_comparator.cpp
 tools/tinyfy.pl Atm_comparator.hpp > Att_comparator.hpp
 tools/tinyfy.pl Atm_condition.cpp > Att_condition.cpp
 tools/tinyfy.pl Atm_condition.hpp > Att_condition.hpp
+tools/tinyfy.pl Atm_encoder.cpp > Att_encoder.cpp
+tools/tinyfy.pl Atm_encoder.hpp > Att_encoder.hpp
 tools/tinyfy.pl Atm_fade.cpp > Att_fade.cpp
 tools/tinyfy.pl Atm_fade.hpp > Att_fade.hpp
 tools/tinyfy.pl Atm_multiplier.cpp > Att_multiplier.cpp

@@ -1,4 +1,4 @@
-#include "Atm_blink.hpp"
+#include "Atm_blink.h"
 	
 Atm_blink & Atm_blink::begin( int attached_pin, uint32_t blinkrate )
 {
