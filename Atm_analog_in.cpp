@@ -14,6 +14,12 @@ Atm_analog_in& Atm_analog_in::begin( int attached_pin, int samplerate /* = 50 */
   return *this;
 }
 
+Atm_analog_in& Atm_analog_in::range( int toLow, int toHigh ) {
+  _toLow = toLow;
+  _toHigh = toHigh;
+  return *this;    
+}
+
 int Atm_analog_in::read_sample() {
   return analogRead( pin );
 }
@@ -35,7 +41,11 @@ int Atm_analog_in::sample() {
 }
 
 int Atm_analog_in::state( void ) {
-  return sample();
+  if ( _toHigh ) {
+    return map( sample(), 0, 1023, _toLow, _toHigh ); 
+  } else {
+    return sample();
+  }
 }
 
 Atm_analog_in& Atm_analog_in::average( uint16_t* v, uint16_t size ) {

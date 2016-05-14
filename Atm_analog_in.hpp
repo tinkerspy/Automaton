@@ -34,6 +34,7 @@ class Atm_analog_in : public MACHINE {
   uint16_t avg_buf_size;
   uint16_t avg_buf_head;
   uint32_t avg_buf_total;
+  uint16_t _toLow, _toHigh;
   
   enum { IDLE, SAMPLE } STATES;
   enum { EVT_TIMER, ELSE } EVENTS;
@@ -42,13 +43,16 @@ class Atm_analog_in : public MACHINE {
 
   Atm_analog_in& begin( int attached_pin, int sampleRate = 50 );
   Atm_analog_in& average( uint16_t* v, uint16_t size );
-  int _avg();
+  Atm_analog_in& trace( Stream& stream );
   int state( void );
+  Atm_analog_in& range( int toLow, int toHigh );
+
+ private:
+  int _avg();
   int sample();
   virtual int read_sample();
   int event( int id );
   void action( int id );
-  Atm_analog_in& trace( Stream& stream );
 };
 
 
