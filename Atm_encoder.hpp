@@ -53,6 +53,7 @@ class Atm_encoder: public MACHINE {
     int state( void );
     Atm_encoder& range( int min, int max, bool wrap = false );
     Atm_encoder& set( int value );
+    
 
   private:
     bool count( int direction );

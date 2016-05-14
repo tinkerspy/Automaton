@@ -1,7 +1,7 @@
 #include "Atm_encoder.hpp"
 #include <limits.h>
 
-const char Atm_encoder::_enc_states[16] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0};
+const char Atm_encoder::_enc_states[16] = { 0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0 };
 
 Atm_encoder& Atm_encoder::begin( int pin1, int pin2, int divider /* = 4 */ ) {
   // clang-format off
