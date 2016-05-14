@@ -1,4 +1,5 @@
 #include "Atm_encoder.hpp"
+#include <limits.h>
 
 const char Atm_encoder::_enc_states[16] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0};
 
@@ -19,6 +20,9 @@ Atm_encoder& Atm_encoder::begin( int pin1, int pin2, int divider /* = 4 */ ) {
   pinMode( _pin2, INPUT );
   digitalWrite( _pin1, HIGH );  // Is this needed?
   digitalWrite( _pin2, HIGH );
+  _min = INT_MIN;
+  _max = INT_MAX;
+  _value = 0;
   return *this;
 }
 
@@ -37,10 +41,12 @@ Atm_encoder& Atm_encoder::onUp( atm_cb_t callback, int idx /* = 0 */ ) {
   return *this;
 }
 
+#ifndef TINYMACHINE        
 Atm_encoder& Atm_encoder::onUp( const char* label, int event /* = 0 */ ) {
   _onup.set( label, event );
   return *this;
 }
+#endif
 
 Atm_encoder& Atm_encoder::onDown( Machine& machine, int event /* = 0 */ ) {
   _ondown.set( &machine, event );
@@ -57,10 +63,12 @@ Atm_encoder& Atm_encoder::onDown( atm_cb_t callback, int idx /* = 0 */ ) {
   return *this;
 }
 
+#ifndef TINYMACHINE        
 Atm_encoder& Atm_encoder::onDown( const char* label, int event /* = 0 */ ) {
   _ondown.set( label, event );
   return *this;
 }
+#endif
 
 int Atm_encoder::event( int id ) {
   switch ( id ) {
@@ -70,6 +78,16 @@ int Atm_encoder::event( int id ) {
       return _enc_direction == -1 && ( _enc_counter % _divider == 0 );
   }
   return 0;
+}
+
+void Atm_encoder::count( int direction ) {
+    if ( (long)_value + direction > _max ) {
+        _value = _wrap ? _min : _value + direction;
+    } else if ( (long)_value + direction < _min ) {
+        _value = _wrap ? _max : _value + direction;
+    } else {
+        _value += direction; 
+    }
 }
 
 void Atm_encoder::action( int id ) {
@@ -90,6 +108,8 @@ void Atm_encoder::action( int id ) {
 }
 
 Atm_encoder& Atm_encoder::trace( Stream& stream ) {
+#ifndef TINYMACHINE        
   Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_UP\0EVT_DOWN\0ELSE\0IDLE\0UP\0DOWN" );
+#endif
   return *this;
 }
