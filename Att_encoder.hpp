@@ -23,8 +23,8 @@ class Att_encoder: public MACHINE {
     Att_encoder( void ) : MACHINE() {
 #ifndef TINYMACHINE        
       class_label = "ENC"; 
-    };
 #endif
+    };
     short _pin1, _pin2;     
     const static char _enc_states[];
     uint8_t _enc_bits;
