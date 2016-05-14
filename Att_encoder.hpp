@@ -17,17 +17,22 @@
 #define STATE_TYPE state_t
 #endif
 
-class Att_encoder: public Machine {
+class Att_encoder: public MACHINE {
 
   public:
-    Att_encoder( void ) : Machine() { class_label = "ENC"; };
-
+    Att_encoder( void ) : MACHINE() {
+#ifndef TINYMACHINE        
+      class_label = "ENC"; 
+    };
+#endif
     short _pin1, _pin2;     
     const static char _enc_states[];
     uint8_t _enc_bits;
     uint8_t _enc_counter; 
     int8_t _enc_direction;
     int _divider;
+    int _value, _min, _max;
+    bool _wrap;
     atm_connector _onup;
     atm_connector _ondown;
 
@@ -45,6 +50,8 @@ class Att_encoder: public Machine {
     Att_encoder& onDown( TinyMachine& machine, int event = 0 );
     Att_encoder& onDown( atm_cb_t callback, int idx = 0 );
     Att_encoder& onDown( const char * label, int event = 0 );
+  private:
+    void count( int direction );
     int event( int id ); 
     void action( int id ); 
 };

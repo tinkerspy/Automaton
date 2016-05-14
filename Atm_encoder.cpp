@@ -41,7 +41,7 @@ Atm_encoder& Atm_encoder::onUp( atm_cb_t callback, int idx /* = 0 */ ) {
   return *this;
 }
 
-#ifndef TINYMACHINE        
+#ifndef TINYMACHINE
 Atm_encoder& Atm_encoder::onUp( const char* label, int event /* = 0 */ ) {
   _onup.set( label, event );
   return *this;
@@ -63,7 +63,7 @@ Atm_encoder& Atm_encoder::onDown( atm_cb_t callback, int idx /* = 0 */ ) {
   return *this;
 }
 
-#ifndef TINYMACHINE        
+#ifndef TINYMACHINE
 Atm_encoder& Atm_encoder::onDown( const char* label, int event /* = 0 */ ) {
   _ondown.set( label, event );
   return *this;
@@ -81,13 +81,13 @@ int Atm_encoder::event( int id ) {
 }
 
 void Atm_encoder::count( int direction ) {
-    if ( (long)_value + direction > _max ) {
-        _value = _wrap ? _min : _value + direction;
-    } else if ( (long)_value + direction < _min ) {
-        _value = _wrap ? _max : _value + direction;
-    } else {
-        _value += direction; 
-    }
+  if ( (long)_value + direction > _max ) {
+    _value = _wrap ? _min : _value + direction;
+  } else if ( (long)_value + direction < _min ) {
+    _value = _wrap ? _max : _value + direction;
+  } else {
+    _value += direction;
+  }
 }
 
 void Atm_encoder::action( int id ) {
@@ -108,7 +108,7 @@ void Atm_encoder::action( int id ) {
 }
 
 Atm_encoder& Atm_encoder::trace( Stream& stream ) {
-#ifndef TINYMACHINE        
+#ifndef TINYMACHINE
   Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_UP\0EVT_DOWN\0ELSE\0IDLE\0UP\0DOWN" );
 #endif
   return *this;
