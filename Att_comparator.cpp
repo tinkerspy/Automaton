@@ -81,6 +81,10 @@ int Att_comparator::sample() {
   return avg_buf_size > 0 ? _avg() : read_sample();
 }
 
+int Att_comparator::state( void ) {
+  return sample();
+}
+
 Att_comparator& Att_comparator::threshold( uint16_t* v, uint16_t size, bool catchUp /* = false */ ) {
   p_threshold = v;
   p_threshold_size = size;

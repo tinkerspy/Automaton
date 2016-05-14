@@ -5,9 +5,9 @@ const char Atm_encoder::_enc_states[16] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1
 Atm_encoder& Atm_encoder::begin( int pin1, int pin2, int divider /* = 4 */ ) {
   // clang_format off
   const static STATE_TYPE state_table[] PROGMEM = {/*          ON_ENTER     ON_LOOP  ON_EXIT  EVT_UP  EVT_DOWN  ELSE */
-                                                   /* IDLE  */ -1,       ACT_SAMPLE, -1, UP, DOWN, -1,
-                                                   /* UP    */ ACT_UP,   -1,         -1, -1, -1,   IDLE,
-                                                   /* DOWN  */ ACT_DOWN, -1,         -1, -1, -1,   IDLE,
+                                                   /* IDLE  */ -1, ACT_SAMPLE, -1, UP, DOWN, -1,
+                                                   /* UP    */ ACT_UP, -1, -1, -1, -1, IDLE,
+                                                   /* DOWN  */ ACT_DOWN, -1, -1, -1, -1, IDLE,
   };
   // clang_format on
   MACHINE::begin( state_table, ELSE );
