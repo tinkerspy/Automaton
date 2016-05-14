@@ -122,7 +122,8 @@ void Att_encoder::action( int id ) {
   switch ( id ) {
     case ACT_SAMPLE:
       _enc_bits = ( ( _enc_bits << 2 ) | ( digitalRead( _pin1 ) << 1 ) | ( digitalRead( _pin2 ) ) ) & 0x0f;
-      if ( ( _enc_direction = _enc_states[_enc_bits] ) != 0 ) {
+      _enc_direction = _enc_states[_enc_bits];
+      if ( _enc_direction != 0 ) {
         if ( ++_enc_counter % _divider == 0 ) {
           if ( !count( _enc_direction ) ) {
             _enc_direction = 0;
