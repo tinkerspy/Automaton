@@ -212,6 +212,8 @@ class Factory {
 #include <Att_command.hpp>
 #include <Atm_comparator.hpp>
 #include <Att_comparator.hpp>
+#include <Atm_digital_in.hpp>
+#include <Att_digital_in.hpp>
 #include <Atm_encoder.hpp>
 #include <Att_encoder.hpp>
 #include <Atm_fade.hpp>
@@ -220,8 +222,6 @@ class Factory {
 #include <Att_led.hpp>
 #include <Atm_multiplier.hpp>
 #include <Att_multiplier.hpp>
-#include <Atm_pulse.hpp>
-#include <Att_pulse.hpp>
 #include <Atm_step.hpp>
 #include <Att_step.hpp>
 #include <Atm_timer.hpp>
