@@ -3,6 +3,7 @@
 clang-format -i Automaton.cpp
 clang-format -i Automaton.h
 
+clang-format -i Atm_analog_in.cpp
 clang-format -i Atm_bit.cpp
 clang-format -i Atm_button.cpp
 clang-format -i Atm_command.cpp
@@ -16,8 +17,8 @@ clang-format -i Atm_pulse.cpp
 clang-format -i Atm_step.cpp
 clang-format -i Atm_timer.cpp
 
-tools/tinyfy.pl Atm_bit.cpp > Att_bit.cpp
-tools/tinyfy.pl Atm_bit.hpp > Att_bit.hpp
+tools/tinyfy.pl Atm_analog_in.cpp > Att_analog_in.cpp
+tools/tinyfy.pl Atm_analog_in.hpp > Att_analog_in.hpp
 tools/tinyfy.pl Atm_button.cpp > Att_button.cpp
 tools/tinyfy.pl Atm_button.hpp > Att_button.hpp
 tools/tinyfy.pl Atm_command.cpp > Att_command.cpp
