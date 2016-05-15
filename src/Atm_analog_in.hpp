@@ -17,15 +17,14 @@
 #define STATE_TYPE state_t
 #endif
 
-
 typedef bool ( *atm_analog_in_cb_t )( int idx, int v, int up );
 
 class Atm_analog_in : public MACHINE {
  public:
   Atm_analog_in( void ) : MACHINE() {
-#ifndef TINYMACHINE      
+#ifndef TINYMACHINE
     class_label = "ANI";
-#endif    
+#endif
   };
 
   short pin;
@@ -38,7 +37,7 @@ class Atm_analog_in : public MACHINE {
   uint16_t avg_buf_head;
   uint32_t avg_buf_total;
   uint16_t _toLow, _toHigh;
-  
+
   enum { IDLE, SAMPLE, SEND } STATES;
   enum { EVT_TRIGGER, EVT_TIMER, ELSE } EVENTS;
   enum { ACT_SAMPLE, ACT_SEND } ACTIONS;
@@ -62,5 +61,3 @@ class Atm_analog_in : public MACHINE {
   int event( int id );
   void action( int id );
 };
-
-

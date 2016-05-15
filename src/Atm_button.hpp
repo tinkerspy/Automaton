@@ -22,11 +22,11 @@ typedef bool ( *atm_button_cb_t )( int idx, int press );
 class Atm_button : public MACHINE {
  public:
   Atm_button( void ) : MACHINE() {
-#ifndef TINYMACHINE      
+#ifndef TINYMACHINE
     class_label = "BTN";
-#endif    
+#endif
   };
-  
+
   enum { IDLE, WAIT, PRESSED, REPEAT, RELEASE, LIDLE, LWAIT, LPRESSED, LRELEASE, WRELEASE, AUTO };
   enum { EVT_LMODE, EVT_TIMER, EVT_DELAY, EVT_REPEAT, EVT_PRESS, EVT_RELEASE, EVT_COUNTER, EVT_AUTO, ELSE };
   enum { ACT_PRESS, ACT_RELEASE, ACT_LSTART, ACT_LCOUNT, ACT_LRELEASE, ACT_WRELEASE, ACT_AUTO };
@@ -59,5 +59,3 @@ class Atm_button : public MACHINE {
   int _longpress_max;
   int _auto_press = 1;
 };
-
-

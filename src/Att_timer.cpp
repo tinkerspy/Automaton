@@ -8,12 +8,13 @@
 Att_timer& Att_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */ ) {
   // clang-format off
   const static STATE_TYPE state_table[] PROGMEM = {
-    /*             ON_ENTER    ON_LOOP    ON_EXIT  EVT_DAYCNT  EVT_DAYTIMER  EVT_MSTIMER  EVT_REPCNT  EVT_OFF  EVT_ON   ELSE */
-    /* IDLE    */        -1, ATM_SLEEP,        -1,         -1,           -1,          -1,         -1,      -1,  START,    -1,
-    /* START   */ ACT_START,        -1,        -1,         -1,           -1,          -1,         -1,      -1,  WAITD, WAITD,  
-    /* WAITD   */        -1,        -1, ACT_WAITD,     WAITMS,        WAITD,          -1,         -1,    IDLE,  START,    -1,
-    /* WAITMS  */        -1,        -1,        -1,         -1,           -1,     TRIGGER,         -1,    IDLE,  START,    -1,
-    /* TRIGGER */  ACT_TRIG,        -1,        -1,         -1,           -1,          -1,       IDLE,    IDLE,  START, START,
+    /*              ON_ENTER    ON_LOOP    ON_EXIT  EVT_DAYCNT  EVT_DAYTIMER  EVT_MSTIMER  EVT_REPCNT  EVT_OFF  EVT_ON   ELSE */
+    /* IDLE    */         -1, ATM_SLEEP,        -1,         -1,           -1,          -1,         -1,      -1,  START,    -1,
+    /* START   */  ACT_START,        -1,        -1,         -1,           -1,          -1,         -1,      -1,  WAITD, WAITD,  
+    /* WAITD   */         -1,        -1, ACT_WAITD,     WAITMS,        WAITD,          -1,         -1,    IDLE,  START,    -1,
+    /* WAITMS  */         -1,        -1,        -1,         -1,           -1,     TRIGGER,         -1,    IDLE,  START,    -1,
+    /* TRIGGER */   ACT_TRIG,        -1,        -1,         -1,           -1,          -1,     FINISH,    IDLE,  START, START,
+    /* FINISH  */ ACT_FINISH,        -1,        -1,         -1,           -1,          -1,         -1,      -1,     -1,  IDLE,
   };
   // clang-format on
   MACHINE::begin( state_table, ELSE );
@@ -41,6 +42,26 @@ Att_timer& Att_timer::onTimer( const char* label, int event /* = 0 */ ) {
 
 Att_timer& Att_timer::onTimer( TinyMachine& machine, int event /* = 0 */ ) {
   _ontimer.set( &machine, event );
+  return *this;
+}
+
+Att_timer& Att_timer::onFinish( atm_cb_t callback, int idx /* = 0 */ ) {
+  _onfinish.set( callback, idx );
+  return *this;
+}
+
+Att_timer& Att_timer::onFinish( Machine& machine, int event /* = 0 */ ) {
+  _onfinish.set( &machine, event );
+  return *this;
+}
+
+Att_timer& Att_timer::onFinish( const char* label, int event /* = 0 */ ) {
+  _onfinish.set( label, event );
+  return *this;
+}
+
+Att_timer& Att_timer::onFinish( TinyMachine& machine, int event /* = 0 */ ) {
+  _onfinish.set( &machine, event );
   return *this;
 }
 
@@ -93,6 +114,10 @@ void Att_timer::action( int id ) {
     case ACT_TRIG:
       repcounter.decrement();
       _ontimer.push( FACTORY );
+      return;
+    case ACT_FINISH:
+      repcounter.decrement();
+      _onfinish.push( FACTORY );
       return;
   }
 }

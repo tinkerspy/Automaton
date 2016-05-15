@@ -20,9 +20,9 @@
 class Atm_led : public MACHINE {
  public:
   Atm_led( void ) : MACHINE() {
-#ifndef TINYMACHINE      
+#ifndef TINYMACHINE
     class_label = "LED";
-#endif    
+#endif
   };
 
   enum { IDLE, ON, START, BLINK_OFF, DONE, OFF };
@@ -41,7 +41,7 @@ class Atm_led : public MACHINE {
   Atm_led& onFinish( TinyMachine& machine, int event = 0 );
   Atm_led& onFinish( atm_cb_t callback, int idx = 0 );
   Atm_led& onFinish( const char* label, int event = 0 );
-  
+
  private:
   uint8_t _level;
   short pin;
@@ -54,4 +54,3 @@ class Atm_led : public MACHINE {
   int event( int id );
   void action( int id );
 };
-

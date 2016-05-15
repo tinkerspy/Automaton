@@ -20,18 +20,18 @@
 class Atm_timer : public MACHINE {
  public:
   Atm_timer( void ) : MACHINE() {
-#ifndef TINYMACHINE      
+#ifndef TINYMACHINE
     class_label = "TMR";
-#endif    
+#endif
   };
 
   atm_timer_millis daytimer, mstimer;
   atm_counter daycounter, repcounter;
   uint16_t days;
   uint16_t repeat_cnt;
-  atm_connector _ontimer;
+  atm_connector _ontimer, _onfinish;
 
-  enum { IDLE, START, WAITD, WAITMS, TRIGGER };
+  enum { IDLE, START, WAITD, WAITMS, TRIGGER, FINISH };
   enum { EVT_DAYCNT, EVT_DAYTIMER, EVT_MSTIMER, EVT_REPCNT, EVT_OFF, EVT_ON, ELSE };
   enum { ACT_START, ACT_TRIG, ACT_WAITD };
 
@@ -41,6 +41,10 @@ class Atm_timer : public MACHINE {
   Atm_timer& onTimer( Machine& machine, int event = 0 );
   Atm_timer& onTimer( TinyMachine& machine, int event = 0 );
   Atm_timer& onTimer( const char* label, int event = 0 );
+  Atm_timer& onFinish( atm_cb_t callback, int idx = 0 );
+  Atm_timer& onFinish( Machine& machine, int event = 0 );
+  Atm_timer& onFinish( TinyMachine& machine, int event = 0 );
+  Atm_timer& onFinish( const char* label, int event = 0 );
   Atm_timer& interval_seconds( uint32_t v );
   Atm_timer& interval_millis( uint32_t v );
   Atm_timer& interval( uint32_t v );
@@ -48,4 +52,3 @@ class Atm_timer : public MACHINE {
   int event( int id );
   void action( int id );
 };
-

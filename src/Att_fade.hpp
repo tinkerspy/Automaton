@@ -20,7 +20,7 @@
 class Att_fade : public MACHINE {
  public:
   Att_fade( void ) : MACHINE() {
-#ifndef TINYMACHINE      
+#ifndef TINYMACHINE
     class_label = "FAD";
 #endif
   };
@@ -46,4 +46,3 @@ class Att_fade : public MACHINE {
   int event( int id );
   void action( int id );
 };
-

@@ -22,9 +22,9 @@
 class Atm_multiplier : public MACHINE {
  public:
   Atm_multiplier( void ) : MACHINE() {
-#ifndef TINYMACHINE      
+#ifndef TINYMACHINE
     class_label = "MUL";
-#endif    
+#endif
   };
 
   atm_connector _connector[ATM_MULTIPLIER_COMMS_MAX];
@@ -44,4 +44,3 @@ class Atm_multiplier : public MACHINE {
   int event( int id );
   void action( int id );
 };
-

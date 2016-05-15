@@ -24,7 +24,7 @@ class Atm_digital_in : public MACHINE {
  public:
   Atm_digital_in( void ) : MACHINE() {
 #ifndef TINYMACHINE
-    class_label = "PULSE"; 
+    class_label = "PULSE";
 #endif
   };
 
@@ -49,5 +49,3 @@ class Atm_digital_in : public MACHINE {
   Atm_digital_in& onFlip( bool st, const char* label, int event = 0 );
   Atm_digital_in& trace( Stream& stream );
 };
-
-

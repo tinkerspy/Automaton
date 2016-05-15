@@ -22,7 +22,7 @@
 class Atm_condition : public MACHINE {
  public:
   Atm_condition( void ) : MACHINE() {
-#ifndef TINYMACHINE      
+#ifndef TINYMACHINE
     class_label = "CON";
 #endif
   };
@@ -30,7 +30,7 @@ class Atm_condition : public MACHINE {
   state_t _last_state;
   atm_connector _connector[4];
   atm_connector _operand[ATM_CONDITION_OPERAND_MAX];
-  
+
   enum { OFF, ON };                                       // STATES
   enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE };  // EVENTS
   enum { ACT_ON, ACT_OFF, ACT_INPUT };                    // ACTIONS
@@ -75,5 +75,3 @@ class Atm_condition : public MACHINE {
   bool eval_one( uint8_t idx );
   bool eval_all();
 };
-
-

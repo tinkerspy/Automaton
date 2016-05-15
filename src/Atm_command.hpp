@@ -22,9 +22,9 @@ typedef bool ( *atm_command_cb_t )( int idx, int cmd );
 class Atm_command : public MACHINE {
  public:
   Atm_command( void ) : MACHINE() {
-#ifndef TINYMACHINE      
+#ifndef TINYMACHINE
     class_label = "CMD";
-#endif    
+#endif
   };
 
   atm_connector _oncommand;
@@ -43,11 +43,10 @@ class Atm_command : public MACHINE {
   Atm_command& trace( Stream& stream );
   int event( int id );
   void action( int id );
-  Atm_command& onCommand( atm_command_cb_t callback, int idx  = 0 );
+  Atm_command& onCommand( atm_command_cb_t callback, int idx = 0 );
   Atm_command& list( const char* cmds );
-  
+
   Atm_command& separator( const char sep[] );
   int lookup( int id, const char* cmdlist );
   char* arg( int id );
 };
-

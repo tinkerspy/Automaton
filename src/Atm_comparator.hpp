@@ -22,9 +22,9 @@ typedef bool ( *atm_comparator_cb_t )( int idx, int v, int up, int idx_threshold
 class Atm_comparator : public MACHINE {
  public:
   Atm_comparator( void ) : MACHINE() {
-#ifndef TINYMACHINE      
+#ifndef TINYMACHINE
     class_label = "CMP";
-#endif    
+#endif
   };
 
   short pin;
@@ -39,7 +39,7 @@ class Atm_comparator : public MACHINE {
   uint16_t avg_buf_head;
   uint32_t avg_buf_total;
   atm_connector _onup, _ondown;
-  
+
   enum { IDLE, SAMPLE, SEND } STATES;
   enum { EVT_TRIGGER, EVT_TIMER, ELSE } EVENTS;
   enum { ACT_SAMPLE, ACT_SEND } ACTIONS;
@@ -65,5 +65,3 @@ class Atm_comparator : public MACHINE {
   void action( int id );
   Atm_comparator& trace( Stream& stream );
 };
-
-

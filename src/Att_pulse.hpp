@@ -24,7 +24,7 @@ class Att_pulse : public MACHINE {
  public:
   Att_pulse( void ) : MACHINE() {
 #ifndef TINYMACHINE
-    class_label = "PULSE"; 
+    class_label = "PULSE";
 #endif
   };
 
@@ -52,5 +52,3 @@ class Att_pulse : public MACHINE {
   Att_pulse& onRelease( const char* label, int event = 0 );
   Att_pulse& trace( Stream& stream );
 };
-
-

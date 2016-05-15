@@ -20,9 +20,9 @@
 class Atm_bit : public MACHINE {
  public:
   Atm_bit( void ) : MACHINE() {
-#ifndef TINYMACHINE      
+#ifndef TINYMACHINE
     class_label = "BIT";
-#endif    
+#endif
   };
 
   state_t _last_state;
@@ -46,5 +46,3 @@ class Atm_bit : public MACHINE {
   int event( int id );
   void action( int id );
 };
-
-
