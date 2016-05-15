@@ -32,10 +32,10 @@ class Att_timer : public MACHINE {
   atm_connector _ontimer, _onfinish;
 
   enum { IDLE, START, WAITD, WAITMS, TRIGGER, FINISH };
-  enum { EVT_DAYCNT, EVT_DAYTIMER, EVT_MSTIMER, EVT_REPCNT, EVT_OFF, EVT_ON, ELSE };
-  enum { ACT_START, ACT_TRIG, ACT_WAITD };
+  enum { EVT_DAYCNT, EVT_DAYTIMER, EVT_MSTIMER, EVT_REPCNT, EVT_STOP, EVT_START, ELSE };
+  enum { ACT_START, ACT_TRIGGER, ACT_WAITD, ACT_FINISH };
 
-  Att_timer& begin( uint32_t ms = 0 );
+  Att_timer& begin( uint32_t ms = 0, uint16_t repeats = 1 );
   Att_timer& trace( Stream& stream );
   Att_timer& onTimer( atm_cb_t callback, int idx = 0 );
   Att_timer& onTimer( Machine& machine, int event = 0 );
