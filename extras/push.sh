@@ -16,8 +16,8 @@ extras/tinyfy.pl src/Atm_encoder.cpp > src/Att_encoder.cpp
 extras/tinyfy.pl src/Atm_encoder.hpp > src/Att_encoder.hpp
 extras/tinyfy.pl src/Atm_fade.cpp > src/Att_fade.cpp
 extras/tinyfy.pl src/Atm_fade.hpp > src/Att_fade.hpp
-extras/tinyfy.pl src/Atm_multiplier.cpp > src/Att_multiplier.cpp
-extras/tinyfy.pl src/Atm_multiplier.hpp > src/Att_multiplier.hpp
+extras/tinyfy.pl src/Atm_fan.cpp > src/Att_fan.cpp
+extras/tinyfy.pl src/Atm_fan.hpp > src/Att_fan.hpp
 extras/tinyfy.pl src/Atm_led.cpp > src/Att_led.cpp
 extras/tinyfy.pl src/Atm_led.hpp > src/Att_led.hpp
 extras/tinyfy.pl src/Atm_digital.cpp > src/Att_digital.cpp
