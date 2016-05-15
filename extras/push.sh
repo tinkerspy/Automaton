@@ -2,8 +2,8 @@
 
 clang-format -i src/Automaton.cpp src/Automaton.h src/*.cpp src/*.hpp
 
-extras/tinyfy.pl src/Atm_analog_in.cpp > src/Att_analog_in.cpp
-extras/tinyfy.pl src/Atm_analog_in.hpp > src/Att_analog_in.hpp
+extras/tinyfy.pl src/Atm_analog.cpp > src/Att_analog.cpp
+extras/tinyfy.pl src/Atm_analog.hpp > src/Att_analog.hpp
 extras/tinyfy.pl src/Atm_button.cpp > src/Att_button.cpp
 extras/tinyfy.pl src/Atm_button.hpp > src/Att_button.hpp
 extras/tinyfy.pl src/Atm_command.cpp > src/Att_command.cpp
@@ -20,8 +20,8 @@ extras/tinyfy.pl src/Atm_multiplier.cpp > src/Att_multiplier.cpp
 extras/tinyfy.pl src/Atm_multiplier.hpp > src/Att_multiplier.hpp
 extras/tinyfy.pl src/Atm_led.cpp > src/Att_led.cpp
 extras/tinyfy.pl src/Atm_led.hpp > src/Att_led.hpp
-extras/tinyfy.pl src/Atm_digital_in.cpp > src/Att_digital_in.cpp
-extras/tinyfy.pl src/Atm_digital_in.hpp > src/Att_digital_in.hpp
+extras/tinyfy.pl src/Atm_digital.cpp > src/Att_digital.cpp
+extras/tinyfy.pl src/Atm_digital.hpp > src/Att_digital.hpp
 extras/tinyfy.pl src/Atm_step.cpp > src/Att_step.cpp
 extras/tinyfy.pl src/Atm_step.hpp > src/Att_step.hpp
 extras/tinyfy.pl src/Atm_timer.cpp > src/Att_timer.cpp
