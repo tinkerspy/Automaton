@@ -204,24 +204,24 @@ class Factory {
   void runTiny( void );
 };
 
-#include <Atm_analog_in.hpp>
-#include <Att_analog_in.hpp>
+#include <Atm_analog.hpp>
+#include <Att_analog.hpp>
 #include <Atm_button.hpp>
 #include <Att_button.hpp>
 #include <Atm_command.hpp>
 #include <Att_command.hpp>
 #include <Atm_comparator.hpp>
 #include <Att_comparator.hpp>
-#include <Atm_digital_in.hpp>
-#include <Att_digital_in.hpp>
+#include <Atm_digital.hpp>
+#include <Att_digital.hpp>
 #include <Atm_encoder.hpp>
 #include <Att_encoder.hpp>
 #include <Atm_fade.hpp>
 #include <Att_fade.hpp>
 #include <Atm_led.hpp>
 #include <Att_led.hpp>
-#include <Atm_multiplier.hpp>
-#include <Att_multiplier.hpp>
+#include <Atm_fan.hpp>
+#include <Att_fan.hpp>
 #include <Atm_step.hpp>
 #include <Att_step.hpp>
 #include <Atm_timer.hpp>
