@@ -7,8 +7,8 @@ Att_led& Att_led::begin( int attached_pin, bool activeLow ) {
     /* IDLE      */  ACT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,     ON,      -1,     START,         ON,            START,   -1, // LED off
     /* ON        */    ACT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,     -1,     OFF,     START,        OFF,              OFF,   -1, // LED on
     /* START     */    ACT_ON,        -1,        -1,    BLINK_OFF,            -1,        DONE,     ON,     OFF,     START,        OFF,              OFF,   -1, // Start blinking
-    /* BLINK_OFF */   ACT_OFF,        -1,        -1,           -1,         START,        DONE,     ON,    IDLE,     START,       IDLE,             OFF,   -1,
-    /* DONE      */        -1,        -1, ACT_CHAIN,           -1,           OFF,          -1,     ON,    IDLE,     START,       IDLE,             OFF,   -1, // Wait after last blink
+    /* BLINK_OFF */   ACT_OFF,        -1,        -1,           -1,         START,        DONE,     ON,     OFF,     START,        OFF,             OFF,   -1,
+    /* DONE      */        -1,        -1, ACT_CHAIN,           -1,           OFF,          -1,     ON,     OFF,     START,        OFF,             OFF,   -1, // Wait after last blink
     /* OFF       */   ACT_OFF,        -1,        -1,           -1,            -1,          -1,     -1,      -1,        -1,         -1,               -1, IDLE, // All off -> IDLE
   };
   // clang-format on
