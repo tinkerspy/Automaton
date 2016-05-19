@@ -30,7 +30,7 @@ class Att_condition : public MACHINE {
   state_t _last_state;
   atm_connector _connector[4];
   atm_connector _operand[ATM_CONDITION_OPERAND_MAX];
-  uint8_t _indicator;
+  int8_t _indicator;
   bool _indicatorActiveLow;
 
   enum { OFF, ON };                                       // STATES

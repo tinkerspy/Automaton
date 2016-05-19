@@ -135,6 +135,9 @@ void Att_button::action( int id ) {
       if ( !_onrelease.push( FACTORY, true ) ) {
         ( *(atm_button_cb_t)_onrelease.callback )( _onrelease.callback_idx, 0 );
       }
+      if ( _onpress.mode() == _onpress.MODE_CALLBACK ) {
+        ( *(atm_button_cb_t)_onpress.callback )( _onpress.callback_idx, 0 );
+      }
       return;
     case ACT_LSTART:
       _counter_longpress.set( _longpress_max );

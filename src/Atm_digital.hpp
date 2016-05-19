@@ -33,7 +33,7 @@ class Atm_digital : public MACHINE {
   atm_timer_millis timer;
   bool _activeLow;
   atm_connector _connection[2];
-  uint8_t _indicator;
+  int8_t _indicator;
   bool _indicatorActiveLow;
 
   enum { IDLE, WAITH, VHIGH, WAITL, VLOW };

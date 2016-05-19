@@ -27,7 +27,7 @@ class Att_bit : public MACHINE {
 
   state_t _last_state;
   atm_connector _connector[4];
-  uint8_t _indicator;
+  int8_t _indicator;
   bool _indicatorActiveLow;
 
   enum { OFF, ON };                                       // STATES

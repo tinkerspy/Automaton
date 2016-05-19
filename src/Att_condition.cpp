@@ -234,11 +234,11 @@ void Att_condition::action( int id ) {
   switch ( id ) {
     case ACT_OFF:
       _connector[_last_state == current ? 3 : 1].push( FACTORY );
-      if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
+      if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );  // _indicator gets clobbered!
       _last_state = current;
       return;
     case ACT_ON:
-      if ( _last_state != -1 ) _connector[_last_state == current ? 2 : 0].push( FACTORY );
+      if ( _last_state != -1 ) _connector[( _last_state == current ) ? 2 : 0].push( FACTORY );
       if ( _indicator > -1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
       _last_state = current;
       return;
