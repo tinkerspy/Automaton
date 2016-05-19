@@ -17,14 +17,14 @@
 #define STATE_TYPE state_t
 #endif
 
-// Detects a pulse (LOW -> HIGH ) on a digital pin with a minimum duration in ms
+// Digital pin with a minimum duration in ms
 // On detection another machine is messaged or a callback is fired
 
 class Atm_digital : public MACHINE {
  public:
   Atm_digital( void ) : MACHINE() {
 #ifndef TINYMACHINE
-    class_label = "PULSE";
+    class_label = "DIG";
 #endif
   };
 
@@ -45,10 +45,10 @@ class Atm_digital : public MACHINE {
   int event( int id );
   void action( int id );
   int state( void );
-  Atm_digital& onFlip( bool st, atm_cb_t callback, int idx = 0 );
-  Atm_digital& onFlip( bool st, Machine& machine, int event = 0 );
-  Atm_digital& onFlip( bool st, TinyMachine& machine, int event = 0 );
-  Atm_digital& onFlip( bool st, const char* label, int event = 0 );
+  Atm_digital& onFlip( bool status, atm_cb_t callback, int idx = 0 );
+  Atm_digital& onFlip( bool status, Machine& machine, int event = 0 );
+  Atm_digital& onFlip( bool status, TinyMachine& machine, int event = 0 );
+  Atm_digital& onFlip( bool status, const char* label, int event = 0 );
   Atm_digital& indicator( int led, bool activeLow = false );
   Atm_digital& trace( Stream& stream );
 };

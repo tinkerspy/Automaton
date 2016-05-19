@@ -38,14 +38,14 @@ class Atm_condition : public MACHINE {
   enum { ACT_ON, ACT_OFF, ACT_INPUT };                    // ACTIONS
 
   Atm_condition& begin( bool default_state = false );
-  Atm_condition& onFlip( bool st, atm_cb_t callback, int idx = 0 );
-  Atm_condition& onFlip( bool st, Machine& machine, int event = 0 );
-  Atm_condition& onFlip( bool st, const char* label, int = 0 );
-  Atm_condition& onFlip( bool st, TinyMachine& machine, int event = 0 );
-  Atm_condition& onInput( bool st, atm_cb_t callback, int idx = 0 );
-  Atm_condition& onInput( bool st, Machine& machine, state_t event = 0 );
-  Atm_condition& onInput( bool st, const char* label, state_t event = 0 );
-  Atm_condition& onInput( bool st, TinyMachine& machine, state_t event = 0 );
+  Atm_condition& onFlip( bool status, atm_cb_t callback, int idx = 0 );
+  Atm_condition& onFlip( bool status, Machine& machine, int event = 0 );
+  Atm_condition& onFlip( bool status, const char* label, int = 0 );
+  Atm_condition& onFlip( bool status, TinyMachine& machine, int event = 0 );
+  Atm_condition& onInput( bool status, atm_cb_t callback, int idx = 0 );
+  Atm_condition& onInput( bool status, Machine& machine, state_t event = 0 );
+  Atm_condition& onInput( bool status, const char* label, state_t event = 0 );
+  Atm_condition& onInput( bool status, TinyMachine& machine, state_t event = 0 );
 
   Atm_condition& IF( Machine& machine, char relOp = '>', state_t match = 0 );
   Atm_condition& IF( TinyMachine& machine, char relOp = '>', state_t match = 0 );

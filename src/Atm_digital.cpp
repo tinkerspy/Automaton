@@ -31,24 +31,24 @@ Atm_digital& Atm_digital::indicator( int led, bool activeLow /* = false */ ) {
     return *this;
 }
 
-Atm_digital& Atm_digital::onFlip( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
-  _connection[st ? 1 : 0].set( callback, idx );
+Atm_digital& Atm_digital::onFlip( bool status, atm_cb_t callback, int idx /* = 0 */ ) {
+  _connection[status ? 1 : 0].set( callback, idx );
   return *this;
 }
 
-Atm_digital& Atm_digital::onFlip( bool st, Machine& machine, int event /* = 0 */ ) {
-  _connection[st ? 1 : 0].set( &machine, event );
+Atm_digital& Atm_digital::onFlip( bool status, Machine& machine, int event /* = 0 */ ) {
+  _connection[status ? 1 : 0].set( &machine, event );
   return *this;
 }
 
-Atm_digital& Atm_digital::onFlip( bool st, TinyMachine& machine, int event /* = 0 */ ) {
-  _connection[st ? 1 : 0].set( &machine, event );
+Atm_digital& Atm_digital::onFlip( bool status, TinyMachine& machine, int event /* = 0 */ ) {
+  _connection[status ? 1 : 0].set( &machine, event );
   return *this;
 }
 
 #ifndef TINYMACHINE
-Atm_digital& Atm_digital::onFlip( bool st, const char* label, int event /* = 0 */ ) {
-  _connection[st ? 1 : 0].set( label, event );
+Atm_digital& Atm_digital::onFlip( bool status, const char* label, int event /* = 0 */ ) {
+  _connection[status ? 1 : 0].set( label, event );
   return *this;
 }
 #endif
@@ -73,7 +73,7 @@ void Atm_digital::action( int id ) {
       return;
     case ACT_LOW:
       _connection[0].push( FACTORY );
-      if ( _indicator > - 1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
+      if ( _indicator > - 1 ) digitalWrite( _indicator,  !LOW != !_indicatorActiveLow );
       return;
   }
 }
