@@ -30,20 +30,22 @@ class Att_condition : public MACHINE {
   state_t _last_state;
   atm_connector _connector[4];
   atm_connector _operand[ATM_CONDITION_OPERAND_MAX];
+  uint8_t _indicator;
+  bool _indicatorActiveLow;
 
   enum { OFF, ON };                                       // STATES
   enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE };  // EVENTS
   enum { ACT_ON, ACT_OFF, ACT_INPUT };                    // ACTIONS
 
   Att_condition& begin( bool default_state = false );
-  Att_condition& onFlip( bool st, atm_cb_t callback, int idx = 0 );
-  Att_condition& onFlip( bool st, Machine& machine, int event = 0 );
-  Att_condition& onFlip( bool st, const char* label, int = 0 );
-  Att_condition& onFlip( bool st, TinyMachine& machine, int event = 0 );
-  Att_condition& onInput( bool st, atm_cb_t callback, int idx = 0 );
-  Att_condition& onInput( bool st, Machine& machine, state_t event = 0 );
-  Att_condition& onInput( bool st, const char* label, state_t event = 0 );
-  Att_condition& onInput( bool st, TinyMachine& machine, state_t event = 0 );
+  Att_condition& onFlip( bool status, atm_cb_t callback, int idx = 0 );
+  Att_condition& onFlip( bool status, Machine& machine, int event = 0 );
+  Att_condition& onFlip( bool status, const char* label, int = 0 );
+  Att_condition& onFlip( bool status, TinyMachine& machine, int event = 0 );
+  Att_condition& onInput( bool status, atm_cb_t callback, int idx = 0 );
+  Att_condition& onInput( bool status, Machine& machine, state_t event = 0 );
+  Att_condition& onInput( bool status, const char* label, state_t event = 0 );
+  Att_condition& onInput( bool status, TinyMachine& machine, state_t event = 0 );
 
   Att_condition& IF( Machine& machine, char relOp = '>', state_t match = 0 );
   Att_condition& IF( TinyMachine& machine, char relOp = '>', state_t match = 0 );
@@ -61,6 +63,7 @@ class Att_condition : public MACHINE {
   Att_condition& XOR( TinyMachine& machine, char relOp = '>', state_t match = 0 );
   Att_condition& XOR( const char* label, char relOp = '>', state_t match = 0 );
   Att_condition& XOR( atm_cb_t callback, char relOp = '>', state_t match = 0 );
+  Att_condition& indicator( int led, bool activeLow = false );
   Att_condition& trace( Stream& stream );
 
  private:

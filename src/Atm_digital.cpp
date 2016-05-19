@@ -25,10 +25,10 @@ int Atm_digital::state( void ) {
 }
 
 Atm_digital& Atm_digital::indicator( int led, bool activeLow /* = false */ ) {
-    _indicator = led;
-    _indicatorActiveLow = activeLow;
-    pinMode( _indicator, OUTPUT );
-    return *this;
+  _indicator = led;
+  _indicatorActiveLow = activeLow;
+  pinMode( _indicator, OUTPUT );
+  return *this;
 }
 
 Atm_digital& Atm_digital::onFlip( bool status, atm_cb_t callback, int idx /* = 0 */ ) {
@@ -69,11 +69,11 @@ void Atm_digital::action( int id ) {
   switch ( id ) {
     case ACT_HIGH:
       _connection[1].push( FACTORY );
-      if ( _indicator > - 1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
+      if ( _indicator > -1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
       return;
     case ACT_LOW:
       _connection[0].push( FACTORY );
-      if ( _indicator > - 1 ) digitalWrite( _indicator,  !LOW != !_indicatorActiveLow );
+      if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
       return;
   }
 }

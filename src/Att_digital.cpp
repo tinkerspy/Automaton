@@ -15,6 +15,7 @@ Att_digital& Att_digital::begin( int attached_pin, int debounce /* = 20 */, bool
   pin = attached_pin;
   _activeLow = activeLow;
   timer.set( debounce );
+  _indicator = -1;
   pinMode( pin, pullUp ? INPUT_PULLUP : INPUT );
   return *this;
 }
@@ -23,24 +24,31 @@ int Att_digital::state( void ) {
   return ( current == VHIGH || current == WAITL );
 }
 
-Att_digital& Att_digital::onFlip( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
-  _connection[st ? 1 : 0].set( callback, idx );
+Att_digital& Att_digital::indicator( int led, bool activeLow /* = false */ ) {
+  _indicator = led;
+  _indicatorActiveLow = activeLow;
+  pinMode( _indicator, OUTPUT );
   return *this;
 }
 
-Att_digital& Att_digital::onFlip( bool st, Machine& machine, int event /* = 0 */ ) {
-  _connection[st ? 1 : 0].set( &machine, event );
+Att_digital& Att_digital::onFlip( bool status, atm_cb_t callback, int idx /* = 0 */ ) {
+  _connection[status ? 1 : 0].set( callback, idx );
   return *this;
 }
 
-Att_digital& Att_digital::onFlip( bool st, TinyMachine& machine, int event /* = 0 */ ) {
-  _connection[st ? 1 : 0].set( &machine, event );
+Att_digital& Att_digital::onFlip( bool status, Machine& machine, int event /* = 0 */ ) {
+  _connection[status ? 1 : 0].set( &machine, event );
+  return *this;
+}
+
+Att_digital& Att_digital::onFlip( bool status, TinyMachine& machine, int event /* = 0 */ ) {
+  _connection[status ? 1 : 0].set( &machine, event );
   return *this;
 }
 
 #ifndef TINYMACHINE
-Att_digital& Att_digital::onFlip( bool st, const char* label, int event /* = 0 */ ) {
-  _connection[st ? 1 : 0].set( label, event );
+Att_digital& Att_digital::onFlip( bool status, const char* label, int event /* = 0 */ ) {
+  _connection[status ? 1 : 0].set( label, event );
   return *this;
 }
 #endif
@@ -61,9 +69,11 @@ void Att_digital::action( int id ) {
   switch ( id ) {
     case ACT_HIGH:
       _connection[1].push( FACTORY );
+      if ( _indicator > -1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
       return;
     case ACT_LOW:
       _connection[0].push( FACTORY );
+      if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
       return;
   }
 }

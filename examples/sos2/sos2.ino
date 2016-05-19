@@ -5,7 +5,7 @@ Atm_timer stepTimer;
 Atm_step step;
 Factory factory;
 
-const int pin = 4;
+const int pin = 19;
 const int dotTime = 100;
 const int dashTime = 300;
 const int waitTime = 200;
@@ -32,7 +32,7 @@ void setup() {
   stepTimer.onTimer( step, Atm_step::EVT_STEP );  
   
   // Start the timer
-  stepTimer.trigger( Atm_timer::EVT_ON );
+  stepTimer.trigger( Atm_timer::EVT_START );
 }
 
 void loop() {

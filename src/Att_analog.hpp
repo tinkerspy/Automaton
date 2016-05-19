@@ -23,7 +23,7 @@ class Att_analog : public MACHINE {
  public:
   Att_analog( void ) : MACHINE() {
 #ifndef TINYMACHINE
-    class_label = "ANI";
+    class_label = "ANA";
 #endif
   };
 
