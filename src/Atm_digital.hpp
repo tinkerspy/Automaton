@@ -33,6 +33,8 @@ class Atm_digital : public MACHINE {
   atm_timer_millis timer;
   bool _activeLow;
   atm_connector _connection[2];
+  uint8_t _indicator;
+  bool _indicatorActiveLow;
 
   enum { IDLE, WAITH, VHIGH, WAITL, VLOW };
   enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };
@@ -47,5 +49,6 @@ class Atm_digital : public MACHINE {
   Atm_digital& onFlip( bool st, Machine& machine, int event = 0 );
   Atm_digital& onFlip( bool st, TinyMachine& machine, int event = 0 );
   Atm_digital& onFlip( bool st, const char* label, int event = 0 );
+  Atm_digital& indicator( int led, bool activeLow = false );
   Atm_digital& trace( Stream& stream );
 };

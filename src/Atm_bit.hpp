@@ -27,7 +27,8 @@ class Atm_bit : public MACHINE {
 
   state_t _last_state;
   atm_connector _connector[4];
-  uint8_t _indicator, _indicatorActiveLow;
+  uint8_t _indicator;
+  bool _indicatorActiveLow;
 
   enum { OFF, ON };                                       // STATES
   enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE };  // EVENTS

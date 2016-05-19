@@ -15,12 +15,20 @@ Atm_digital& Atm_digital::begin( int attached_pin, int debounce /* = 20 */, bool
   pin = attached_pin;
   _activeLow = activeLow;
   timer.set( debounce );
+  _indicator = -1;
   pinMode( pin, pullUp ? INPUT_PULLUP : INPUT );
   return *this;
 }
 
 int Atm_digital::state( void ) {
   return ( current == VHIGH || current == WAITL );
+}
+
+Atm_digital& Atm_digital::indicator( int led, bool activeLow /* = false */ ) {
+    _indicator = led;
+    _indicatorActiveLow = activeLow;
+    pinMode( _indicator, OUTPUT );
+    return *this;
 }
 
 Atm_digital& Atm_digital::onFlip( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
@@ -61,9 +69,11 @@ void Atm_digital::action( int id ) {
   switch ( id ) {
     case ACT_HIGH:
       _connection[1].push( FACTORY );
+      if ( _indicator > - 1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
       return;
     case ACT_LOW:
       _connection[0].push( FACTORY );
+      if ( _indicator > - 1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
       return;
   }
 }
