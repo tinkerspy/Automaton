@@ -4,6 +4,8 @@ clang-format -i src/Automaton.cpp src/Automaton.h src/*.cpp src/*.hpp
 
 extras/tinyfy.pl src/Atm_analog.cpp > src/Att_analog.cpp
 extras/tinyfy.pl src/Atm_analog.hpp > src/Att_analog.hpp
+extras/tinyfy.pl src/Atm_bit.cpp > src/Att_bit.cpp
+extras/tinyfy.pl src/Atm_bit.hpp > src/Att_bit.hpp
 extras/tinyfy.pl src/Atm_button.cpp > src/Att_button.cpp
 extras/tinyfy.pl src/Atm_button.hpp > src/Att_button.hpp
 extras/tinyfy.pl src/Atm_command.cpp > src/Att_command.cpp

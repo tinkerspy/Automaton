@@ -11,51 +11,59 @@ Att_bit& Att_bit::begin( bool default_state /* = false */ ) {
   MACHINE::begin( state_table, ELSE );
   _last_state = -1;
   state( default_state ? ON : OFF );
+  _indicator = -1;
   cycle();
   return *this;
 }
 
-Att_bit& Att_bit::onFlip( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
-  _connector[st ? 0 : 1].set( callback, idx );
+Att_bit& Att_bit::indicator( int led, bool activeLow /* = false */ ) {
+  _indicator = led;
+  _indicatorActiveLow = activeLow;
+  pinMode( _indicator, OUTPUT );
   return *this;
 }
 
-Att_bit& Att_bit::onFlip( bool st, Machine& machine, int evt /* = 0 */ ) {
-  _connector[st ? 0 : 1].set( &machine, evt );
+Att_bit& Att_bit::onFlip( bool status, atm_cb_t callback, int idx /* = 0 */ ) {
+  _connector[status ? 0 : 1].set( callback, idx );
   return *this;
 }
 
-#ifndef TINYMACHINE
-Att_bit& Att_bit::onFlip( bool st, const char* label, int event /* = 0 */ ) {
-  _connector[st ? 0 : 1].set( label, event );
-  return *this;
-}
-#endif
-
-Att_bit& Att_bit::onFlip( bool st, TinyMachine& machine, int event /* = 0 */ ) {
-  _connector[st ? 0 : 1].set( &machine, event );
-  return *this;
-}
-
-Att_bit& Att_bit::onInput( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
-  _connector[st ? 2 : 3].set( callback, idx );
-  return *this;
-}
-
-Att_bit& Att_bit::onInput( bool st, Machine& machine, state_t event /* = 0 */ ) {
-  _connector[st ? 2 : 3].set( &machine, event );
+Att_bit& Att_bit::onFlip( bool status, Machine& machine, int evt /* = 0 */ ) {
+  _connector[status ? 0 : 1].set( &machine, evt );
   return *this;
 }
 
 #ifndef TINYMACHINE
-Att_bit& Att_bit::onInput( bool st, const char* label, state_t event /* = 0 */ ) {
-  _connector[st ? 2 : 3].set( label, event );
+Att_bit& Att_bit::onFlip( bool status, const char* label, int event /* = 0 */ ) {
+  _connector[status ? 0 : 1].set( label, event );
   return *this;
 }
 #endif
 
-Att_bit& Att_bit::onInput( bool st, TinyMachine& machine, state_t event /* = 0 */ ) {
-  _connector[st ? 2 : 3].set( &machine, event );
+Att_bit& Att_bit::onFlip( bool status, TinyMachine& machine, int event /* = 0 */ ) {
+  _connector[status ? 0 : 1].set( &machine, event );
+  return *this;
+}
+
+Att_bit& Att_bit::onInput( bool status, atm_cb_t callback, int idx /* = 0 */ ) {
+  _connector[status ? 2 : 3].set( callback, idx );
+  return *this;
+}
+
+Att_bit& Att_bit::onInput( bool status, Machine& machine, state_t event /* = 0 */ ) {
+  _connector[status ? 2 : 3].set( &machine, event );
+  return *this;
+}
+
+#ifndef TINYMACHINE
+Att_bit& Att_bit::onInput( bool status, const char* label, state_t event /* = 0 */ ) {
+  _connector[status ? 2 : 3].set( label, event );
+  return *this;
+}
+#endif
+
+Att_bit& Att_bit::onInput( bool status, TinyMachine& machine, state_t event /* = 0 */ ) {
+  _connector[status ? 2 : 3].set( &machine, event );
   return *this;
 }
 
@@ -67,10 +75,12 @@ void Att_bit::action( int id ) {
   switch ( id ) {
     case ACT_OFF:
       if ( _last_state != -1 ) _connector[_last_state == current ? 3 : 1].push( FACTORY );
+      if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
       _last_state = current;
       return;
     case ACT_ON:
       if ( _last_state != -1 ) _connector[_last_state == current ? 2 : 0].push( FACTORY );
+      if ( _indicator > -1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
       _last_state = current;
       return;
   }

@@ -27,6 +27,8 @@ class Att_bit : public MACHINE {
 
   state_t _last_state;
   atm_connector _connector[4];
+  uint8_t _indicator;
+  bool _indicatorActiveLow;
 
   enum { OFF, ON };                                       // STATES
   enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE };  // EVENTS
@@ -34,14 +36,15 @@ class Att_bit : public MACHINE {
   enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY };
 
   Att_bit& begin( bool default_state = false );
-  Att_bit& onFlip( bool st, atm_cb_t callback, int idx = 0 );
-  Att_bit& onFlip( bool st, Machine& machine, state_t event = 0 );
-  Att_bit& onFlip( bool st, const char* label, state_t event = 0 );
-  Att_bit& onFlip( bool st, TinyMachine& machine, state_t event = 0 );
-  Att_bit& onInput( bool st, atm_cb_t callback, int idx = 0 );
-  Att_bit& onInput( bool st, Machine& machine, state_t event = 0 );
-  Att_bit& onInput( bool st, const char* label, state_t event = 0 );
-  Att_bit& onInput( bool st, TinyMachine& machine, state_t event = 0 );
+  Att_bit& onFlip( bool status, atm_cb_t callback, int idx = 0 );
+  Att_bit& onFlip( bool status, Machine& machine, state_t event = 0 );
+  Att_bit& onFlip( bool status, const char* label, state_t event = 0 );
+  Att_bit& onFlip( bool status, TinyMachine& machine, state_t event = 0 );
+  Att_bit& onInput( bool status, atm_cb_t callback, int idx = 0 );
+  Att_bit& onInput( bool status, Machine& machine, state_t event = 0 );
+  Att_bit& onInput( bool status, const char* label, state_t event = 0 );
+  Att_bit& onInput( bool status, TinyMachine& machine, state_t event = 0 );
+  Att_bit& indicator( int led, bool activeLow = false );
   Att_bit& trace( Stream& stream );
   int event( int id );
   void action( int id );
