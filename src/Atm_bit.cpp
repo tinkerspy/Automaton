@@ -11,8 +11,17 @@ Atm_bit& Atm_bit::begin( bool default_state /* = false */ ) {
   MACHINE::begin( state_table, ELSE );
   _last_state = -1;
   state( default_state ? ON : OFF );
+  _indicator = -1;
   cycle();
   return *this;
+}
+
+Atm_bit& Atm_bit::indicator( int led, bool activeLow /* = false */ ) {
+    
+    _indicator = led;
+    _indicatorActiveLow = activeLow;
+    pinMode( _indicator, OUTPUT );
+    return *this;
 }
 
 Atm_bit& Atm_bit::onFlip( bool st, atm_cb_t callback, int idx /* = 0 */ ) {
@@ -67,10 +76,12 @@ void Atm_bit::action( int id ) {
   switch ( id ) {
     case ACT_OFF:
       if ( _last_state != -1 ) _connector[_last_state == current ? 3 : 1].push( FACTORY );
+      if ( _indicator > - 1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
       _last_state = current;
       return;
     case ACT_ON:
       if ( _last_state != -1 ) _connector[_last_state == current ? 2 : 0].push( FACTORY );
+      if ( _indicator > - 1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
       _last_state = current;
       return;
   }

@@ -27,6 +27,7 @@ class Atm_bit : public MACHINE {
 
   state_t _last_state;
   atm_connector _connector[4];
+  uint8_t _indicator, _indicatorActiveLow;
 
   enum { OFF, ON };                                       // STATES
   enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE };  // EVENTS
@@ -42,6 +43,7 @@ class Atm_bit : public MACHINE {
   Atm_bit& onInput( bool st, Machine& machine, state_t event = 0 );
   Atm_bit& onInput( bool st, const char* label, state_t event = 0 );
   Atm_bit& onInput( bool st, TinyMachine& machine, state_t event = 0 );
+  Atm_bit& indicator( int led, bool activeLow = false );
   Atm_bit& trace( Stream& stream );
   int event( int id );
   void action( int id );

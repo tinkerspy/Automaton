@@ -30,6 +30,8 @@ class Atm_condition : public MACHINE {
   state_t _last_state;
   atm_connector _connector[4];
   atm_connector _operand[ATM_CONDITION_OPERAND_MAX];
+  uint8_t _indicator;
+  bool _indicatorActiveLow;
 
   enum { OFF, ON };                                       // STATES
   enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE };  // EVENTS
@@ -61,6 +63,7 @@ class Atm_condition : public MACHINE {
   Atm_condition& XOR( TinyMachine& machine, char relOp = '>', state_t match = 0 );
   Atm_condition& XOR( const char* label, char relOp = '>', state_t match = 0 );
   Atm_condition& XOR( atm_cb_t callback, char relOp = '>', state_t match = 0 );
+  Atm_condition& indicator( int led, bool activeLow = false );
   Atm_condition& trace( Stream& stream );
 
  private:
