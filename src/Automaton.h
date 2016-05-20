@@ -143,7 +143,7 @@ class Machine {
 
 class Appliance {
  public:
-  Appliance& add( Machine& machine );
+  Appliance& component( Machine& machine );
   Appliance& run( uint32_t time = 0 );
 
  private:

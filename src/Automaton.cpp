@@ -203,7 +203,7 @@ void Appliance::runTiny() {
 }
 
 // .add( machine ) Adds a state machine to the factory by prepending it to the inventory list
-Appliance& Appliance::add( Machine& machine ) {
+Appliance& Appliance::component( Machine& machine ) {
   machine.inventory_next = inventory_root;
   inventory_root = &machine;
   return *this;
