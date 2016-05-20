@@ -17,7 +17,7 @@ class Atm_led : public Machine {
   Atm_led& brightness( uint8_t level );
   Atm_led& trace( Stream& stream );
   Atm_led& onFinish( Machine& machine, int event = 0 );
-  Atm_led& onFinish( atm_cb_t callback, int idx = 0 );
+  Atm_led& onFinish( atm_cb_push_t callback, int idx = 0 );
 
  private:
   uint8_t _level;

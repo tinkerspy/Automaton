@@ -22,8 +22,8 @@ const uint8_t ATM_USR_FLAGS = B11110000;
 class Appliance;
 class Machine;
 
-typedef void ( *swcb_sym_t )( Stream* stream, Machine& machine, const char current[], const char next[], const char trigger[], uint32_t runtime,
-                              uint32_t cycles );
+typedef void ( *swcb_sym_t )( Stream* stream, Machine& machine, const char label[], const char current[], const char next[], const char trigger[],
+                              uint32_t runtime, uint32_t cycles );
 
 const int8_t ATM_NO_OF_QUEUES = 5;  // queues 0, 1, 2, 3, 4
 const int8_t ATM_DEFAULT_PRIO = 1;
@@ -40,9 +40,12 @@ const uint16_t ATM_COUNTER_OFF = 0xffff;    // This counter value never expires
 
 class atm_serial_debug {
  public:
-  static void trace( Stream* stream, Machine& machine, const char current[], const char next[], const char trigger[], uint32_t runtime, uint32_t cycles ) {
+  static void trace( Stream* stream, Machine& machine, const char label[], const char current[], const char next[], const char trigger[], uint32_t runtime,
+                     uint32_t cycles ) {
     stream->print( millis() );
     stream->print( " Switch " );
+    stream->print( label );
+    stream->print( "@" );
     stream->print( (long)&machine, HEX );
     stream->print( " from " );
     stream->print( current );
@@ -73,17 +76,19 @@ class atm_counter {
   uint16_t decrement( void );
 };
 
-typedef bool ( *atm_cb_t )( int idx );
+typedef void ( *atm_cb_push_t )( int idx );
+typedef bool ( *atm_cb_pull_t )( int idx );
 
 class atm_connector {
  public:
-  enum { MODE_NULL, MODE_CALLBACK, MODE_Machine };                       // bits 0, 1, 2
+  enum { MODE_NULL, MODE_PUSHCB, MODE_PULLCB, MODE_MACHINE };            // bits 0, 1, 2
   enum { LOG_AND, LOG_OR, LOG_XOR };                                     // bits 3, 4 MOVE to condition
   enum { REL_NULL, REL_EQ, REL_NEQ, REL_LT, REL_GT, REL_LTE, REL_GTE };  // bits 5, 6, 7 Move condition
   uint8_t mode_flags;
   union {
     struct {
-      atm_cb_t callback;
+      atm_cb_push_t push_callback;
+      atm_cb_pull_t pull_callback;
       int callback_idx;  // +2 = 5 bytes per object
     };
     struct {
@@ -95,7 +100,8 @@ class atm_connector {
     };
   };
   void set( Machine* m, int evt, int8_t logOp = 0, int8_t relOp = 0 );
-  void set( atm_cb_t cb, int idx, int8_t logOp = 0, int8_t relOp = 0 );
+  void set( atm_cb_push_t cb, int idx, int8_t logOp = 0, int8_t relOp = 0 );
+  void set( atm_cb_pull_t cb, int idx, int8_t logOp = 0, int8_t relOp = 0 );
   bool push( bool noCallback = false );  // returns false (only) if callback is set!
   int pull( bool def_value = false );
   int8_t logOp( void );

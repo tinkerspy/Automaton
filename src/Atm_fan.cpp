@@ -12,7 +12,7 @@ Atm_fan& Atm_fan::begin() {
   return *this;
 }
 
-Atm_fan& Atm_fan::onInput( atm_cb_t callback, int idx ) {
+Atm_fan& Atm_fan::onInput( atm_cb_push_t callback, int idx ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _connector[idx].mode() == atm_connector::MODE_NULL ) {
       _connector[idx].set( callback, idx );
@@ -49,6 +49,6 @@ void Atm_fan::action( int id ) {
 }
 
 Atm_fan& Atm_fan::trace( Stream& stream ) {
-  Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_INPUT\0ELSE\0IDLE\0SEND" );
+  Machine::setTrace( &stream, atm_serial_debug::trace, "FAN\0EVT_INPUT\0ELSE\0IDLE\0SEND" );
   return *this;
 }

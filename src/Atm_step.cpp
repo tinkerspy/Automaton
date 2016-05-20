@@ -56,7 +56,7 @@ Atm_step& Atm_step::onStep( uint8_t id ) {
 }
 
 Atm_step& Atm_step::onStep( uint8_t id, atm_step_cb_t callback, int idx /* = 0 */ ) {
-  _connector[id].set( (atm_cb_t)callback, idx );
+  _connector[id].set( (atm_cb_push_t)callback, idx );
   return *this;
 }
 
@@ -79,7 +79,7 @@ int Atm_step::event( int id ) {
 void Atm_step::action( int id ) {
   if ( id > -1 ) {
     if ( !_connector[id].push( true ) ) {
-      ( *(atm_step_cb_t)_connector[id].callback )( _connector[id].callback_idx, id );
+      ( *(atm_step_cb_t)_connector[id].push_callback )( _connector[id].callback_idx, id );
     }
   }
 }
@@ -87,7 +87,7 @@ void Atm_step::action( int id ) {
 Atm_step& Atm_step::trace( Stream& stream ) {
 #ifndef TINYMachine
   setTrace( &stream, atm_serial_debug::trace,
-            "EVT_STEP\0EVT_BACK\0EVT_SWEEP\0EVT_LINEAR\0ELSE\0"
+            "STEP\0EVT_STEP\0EVT_BACK\0EVT_SWEEP\0EVT_LINEAR\0ELSE\0"
             "LINEAR\0S0\0S1\0S2\0S3\0S4\0S5\0S6\0S7\0S8\0S9\0R0\0R1\0R2\0R3\0R4\0R5\0R6\0R7\0R8\0R9\0"
             "SWEEP\0X0\0X1\0X2\0X3\0X4\0X5\0X6\0X7\0X8\0X9\0XA\0XB\0XC\0XD\0XE\0XF\0XG\0XH" );
 #endif

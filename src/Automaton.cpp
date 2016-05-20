@@ -7,14 +7,14 @@
 
 bool atm_connector::push( bool noCallback /* = false */ ) {
   switch ( mode_flags & B00000111 ) {
-    case MODE_CALLBACK:
+    case MODE_PUSHCB:
       if ( noCallback ) {
         return false;
       } else {
-        ( *callback )( callback_idx );
+        ( *push_callback )( callback_idx );
       }
       return true;
-    case MODE_Machine:
+    case MODE_MACHINE:
       machine->trigger( event );
       return true;
   }
@@ -23,9 +23,9 @@ bool atm_connector::push( bool noCallback /* = false */ ) {
 
 int atm_connector::pull( bool def_value /* = false */ ) {
   switch ( mode_flags & B00000111 ) {
-    case MODE_CALLBACK:
-      return ( *callback )( callback_idx );
-    case MODE_Machine:
+    case MODE_PULLCB:
+      return ( *pull_callback )( callback_idx );
+    case MODE_MACHINE:
       return machine->state();
   }
   return def_value;
@@ -39,14 +39,20 @@ int8_t atm_connector::relOp( void ) {
   return ( mode_flags & B11100000 ) >> 5;
 }
 
-void atm_connector::set( atm_cb_t cb, int idx, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
-  mode_flags = MODE_CALLBACK | ( logOp << 3 ) | ( relOp << 5 );
-  callback = cb;
+void atm_connector::set( atm_cb_push_t cb, int idx, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
+  mode_flags = MODE_PUSHCB | ( logOp << 3 ) | ( relOp << 5 );
+  push_callback = cb;
+  callback_idx = idx;
+}
+
+void atm_connector::set( atm_cb_pull_t cb, int idx, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
+  mode_flags = MODE_PULLCB | ( logOp << 3 ) | ( relOp << 5 );
+  pull_callback = cb;
   callback_idx = idx;
 }
 
 void atm_connector::set( Machine* m, int evt, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
-  mode_flags = MODE_Machine | ( logOp << 3 ) | ( relOp << 5 );
+  mode_flags = MODE_MACHINE | ( logOp << 3 ) | ( relOp << 5 );
   machine = m;
   event = evt;
 }
@@ -148,8 +154,8 @@ Machine& Machine::cycle( uint32_t time /* = 0 */ ) {
       if ( next != -1 ) {
         action( ATM_ON_SWITCH );
         if ( callback_trace ) {
-          callback_trace( stream_trace, *this, mapSymbol( current == -1 ? current : current + state_width - ATM_ON_EXIT - 1, _symbols ),
-                          mapSymbol( next == -1 ? next : next + state_width - ATM_ON_EXIT - 1, _symbols ), mapSymbol( last_trigger, _symbols ),
+          callback_trace( stream_trace, *this, _symbols, mapSymbol( current == -1 ? current : current + state_width - ATM_ON_EXIT, _symbols ),
+                          mapSymbol( next == -1 ? next : next + state_width - ATM_ON_EXIT, _symbols ), mapSymbol( last_trigger + 1, _symbols ),
                           millis() - state_millis, cycles );
         }
         if ( current > -1 ) action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );

@@ -27,7 +27,7 @@ Atm_analog& Atm_analog::onChange( Machine& machine, int event /* = 0 */ ) {
 }
 
 Atm_analog& Atm_analog::onChange( atm_analog_cb_t callback, int idx /* = 0 */ ) {
-  _onchange.set( (atm_cb_t)callback, idx );
+  _onchange.set( (atm_cb_push_t)callback, idx );
   return *this;
 }
 
@@ -90,14 +90,14 @@ void Atm_analog::action( int id ) {
       return;
     case ACT_SEND:
       if ( !_onchange.push( true ) ) {
-        ( *(atm_analog_cb_t)_onchange.callback )( _onchange.callback_idx, v_sample, v_sample > v_previous );
+        ( *(atm_analog_cb_t)_onchange.push_callback )( _onchange.callback_idx, v_sample, v_sample > v_previous );
       }
   }
 }
 
 Atm_analog& Atm_analog::trace( Stream& stream ) {
   setTrace( &stream, atm_serial_debug::trace,
-            "EVT_TRIGGER\0EVT_TIMER\0ELSE\0"
+            "ANALOG\0EVT_TRIGGER\0EVT_TIMER\0ELSE\0"
             "IDLE\0SAMPLE\0SEND" );
 
   return *this;

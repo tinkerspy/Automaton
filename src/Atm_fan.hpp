@@ -16,7 +16,7 @@ class Atm_fan : public Machine {
 
   Atm_fan& begin();
   Atm_fan& trace( Stream& stream );
-  Atm_fan& onInput( atm_cb_t callback, int idx = 0 );
+  Atm_fan& onInput( atm_cb_push_t callback, int idx = 0 );
   Atm_fan& onInput( Machine& machine, int event = 0 );
 
  private:

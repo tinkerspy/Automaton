@@ -31,7 +31,7 @@ Atm_led& Atm_led::onFinish( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
-Atm_led& Atm_led::onFinish( atm_cb_t callback, int idx /* = 0 */ ) {
+Atm_led& Atm_led::onFinish( atm_cb_push_t callback, int idx /* = 0 */ ) {
   _onfinish.set( callback, idx );
   return *this;
 }
@@ -119,7 +119,7 @@ void Atm_led::action( int id ) {
 
 Atm_led& Atm_led::trace( Stream& stream ) {
   setTrace( &stream, atm_serial_debug::trace,
-            "EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_"
+            "LED\0EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_"
             "BLINK\0EVT_TOGGLE\0EVT_TOGGLE_BLINK\0ELSE\0"
             "IDLE\0ON\0START\0BLINK_OFF\0DONE\0OFF" );
   return *this;

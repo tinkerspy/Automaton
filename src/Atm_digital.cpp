@@ -31,7 +31,7 @@ Atm_digital& Atm_digital::indicator( int led, bool activeLow /* = false */ ) {
   return *this;
 }
 
-Atm_digital& Atm_digital::onFlip( bool status, atm_cb_t callback, int idx /* = 0 */ ) {
+Atm_digital& Atm_digital::onFlip( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
   _connection[status ? 1 : 0].set( callback, idx );
   return *this;
 }
@@ -67,6 +67,6 @@ void Atm_digital::action( int id ) {
 }
 
 Atm_digital& Atm_digital::trace( Stream& stream ) {
-  setTrace( &stream, atm_serial_debug::trace, "EVT_TIMER\0EVT_HIGH\0EVT_LOW\0ELSE\0IDLE\0WAITH\0VHIGH\0WAITL\0VLOW" );
+  setTrace( &stream, atm_serial_debug::trace, "DIGITAL\0EVT_TIMER\0EVT_HIGH\0EVT_LOW\0ELSE\0IDLE\0WAITH\0VHIGH\0WAITL\0VLOW" );
   return *this;
 }

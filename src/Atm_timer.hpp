@@ -18,9 +18,9 @@ class Atm_timer : public Machine {
 
   Atm_timer& begin( uint32_t ms = 0, uint16_t repeats = 1 );
   Atm_timer& trace( Stream& stream );
-  Atm_timer& onTimer( atm_cb_t callback, int idx = 0 );
+  Atm_timer& onTimer( atm_cb_push_t callback, int idx = 0 );
   Atm_timer& onTimer( Machine& machine, int event = 0 );
-  Atm_timer& onFinish( atm_cb_t callback, int idx = 0 );
+  Atm_timer& onFinish( atm_cb_push_t callback, int idx = 0 );
   Atm_timer& onFinish( Machine& machine, int event = 0 );
   Atm_timer& interval_seconds( uint32_t v );
   Atm_timer& interval_millis( uint32_t v );

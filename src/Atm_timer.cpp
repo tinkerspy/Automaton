@@ -25,7 +25,7 @@ Atm_timer& Atm_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */, uint16_t repeats
   return *this;
 }
 
-Atm_timer& Atm_timer::onTimer( atm_cb_t callback, int idx /* = 0 */ ) {
+Atm_timer& Atm_timer::onTimer( atm_cb_push_t callback, int idx /* = 0 */ ) {
   _ontimer.set( callback, idx );
   return *this;
 }
@@ -35,7 +35,7 @@ Atm_timer& Atm_timer::onTimer( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
-Atm_timer& Atm_timer::onFinish( atm_cb_t callback, int idx /* = 0 */ ) {
+Atm_timer& Atm_timer::onFinish( atm_cb_push_t callback, int idx /* = 0 */ ) {
   _onfinish.set( callback, idx );
   return *this;
 }
@@ -104,6 +104,6 @@ void Atm_timer::action( int id ) {
 
 Atm_timer& Atm_timer::trace( Stream& stream ) {
   setTrace( &stream, atm_serial_debug::trace,
-            "EVT_DAYCNT\0EVT_DAYTIMER\0EVT_MSTIMER\0EVT_REPCNT\0EVT_OFF\0EVT_START\0ELSE\0IDLE\0START\0WAITD\0WAITMS\0TRIGGER\0FINISH" );
+            "TIMER\0EVT_DAYCNT\0EVT_DAYTIMER\0EVT_MSTIMER\0EVT_REPCNT\0EVT_OFF\0EVT_START\0ELSE\0IDLE\0START\0WAITD\0WAITMS\0TRIGGER\0FINISH" );
   return *this;
 }

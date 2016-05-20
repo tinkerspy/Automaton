@@ -46,7 +46,7 @@ Atm_encoder& Atm_encoder::onUp( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
-Atm_encoder& Atm_encoder::onUp( atm_cb_t callback, int idx /* = 0 */ ) {
+Atm_encoder& Atm_encoder::onUp( atm_cb_push_t callback, int idx /* = 0 */ ) {
   _onup.set( callback, idx );
   return *this;
 }
@@ -56,7 +56,7 @@ Atm_encoder& Atm_encoder::onDown( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
-Atm_encoder& Atm_encoder::onDown( atm_cb_t callback, int idx /* = 0 */ ) {
+Atm_encoder& Atm_encoder::onDown( atm_cb_push_t callback, int idx /* = 0 */ ) {
   _ondown.set( callback, idx );
   return *this;
 }
@@ -117,6 +117,6 @@ void Atm_encoder::action( int id ) {
 }
 
 Atm_encoder& Atm_encoder::trace( Stream& stream ) {
-  Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_UP\0EVT_DOWN\0ELSE\0IDLE\0UP\0DOWN" );
+  Machine::setTrace( &stream, atm_serial_debug::trace, "ENCODER\0EVT_UP\0EVT_DOWN\0ELSE\0IDLE\0UP\0DOWN" );
   return *this;
 }

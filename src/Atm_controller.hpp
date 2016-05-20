@@ -19,19 +19,19 @@ class Atm_controller : public Machine {
   enum { ACT_ON, ACT_OFF, ACT_INPUT };                    // ACTIONS
 
   Atm_controller& begin( bool initialState = false );
-  Atm_controller& onFlip( bool status, atm_cb_t callback, int idx = 0 );
+  Atm_controller& onFlip( bool status, atm_cb_push_t callback, int idx = 0 );
   Atm_controller& onFlip( bool status, Machine& machine, int event = 0 );
-  Atm_controller& onInput( bool status, atm_cb_t callback, int idx = 0 );
+  Atm_controller& onInput( bool status, atm_cb_push_t callback, int idx = 0 );
   Atm_controller& onInput( bool status, Machine& machine, int event = 0 );
 
   Atm_controller& IF( Machine& machine, char relOp = '>', int match = 0 );
-  Atm_controller& IF( atm_cb_t callback, char relOp = '>', int match = 0 );
+  Atm_controller& IF( atm_cb_pull_t callback, char relOp = '>', int match = 0 );
   Atm_controller& AND( Machine& machine, char relOp = '>', int match = 0 );
-  Atm_controller& AND( atm_cb_t callback, char relOp = '>', int match = 0 );
+  Atm_controller& AND( atm_cb_pull_t callback, char relOp = '>', int match = 0 );
   Atm_controller& OR( Machine& machine, char relOp = '>', int match = 0 );
-  Atm_controller& OR( atm_cb_t callback, char relOp = '>', int match = 0 );
+  Atm_controller& OR( atm_cb_pull_t callback, char relOp = '>', int match = 0 );
   Atm_controller& XOR( Machine& machine, char relOp = '>', int match = 0 );
-  Atm_controller& XOR( atm_cb_t callback, char relOp = '>', int match = 0 );
+  Atm_controller& XOR( atm_cb_pull_t callback, char relOp = '>', int match = 0 );
   Atm_controller& indicator( int led, bool activeLow = false );
   Atm_controller& trace( Stream& stream );
 
@@ -40,7 +40,7 @@ class Atm_controller : public Machine {
   int event( int id );
   void action( int id );
   Atm_controller& OP( char logOp, Machine& machine, char relOp, int match );
-  Atm_controller& OP( char logOp, atm_cb_t callback, char relOp, int match );
+  Atm_controller& OP( char logOp, atm_cb_pull_t callback, char relOp, int match );
 
   bool eval_one( uint8_t idx );
   bool eval_all();

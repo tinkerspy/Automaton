@@ -18,7 +18,7 @@ Atm_comparator& Atm_comparator::begin( int attached_pin, int samplerate /* = 50 
 }
 
 Atm_comparator& Atm_comparator::onUp( atm_comparator_cb_t callback, int idx /* = 0 */ ) {
-  _onup.set( (atm_cb_t)callback, idx );
+  _onup.set( (atm_cb_push_t)callback, idx );
   return *this;
 }
 
@@ -27,7 +27,7 @@ Atm_comparator& Atm_comparator::onUp( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 Atm_comparator& Atm_comparator::onDown( atm_comparator_cb_t callback, int idx /* = 0 */ ) {
-  _ondown.set( (atm_cb_t)callback, idx );
+  _ondown.set( (atm_cb_push_t)callback, idx );
   return *this;
 }
 
@@ -119,7 +119,7 @@ void Atm_comparator::action( int id ) {
         for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
           if ( ( bitmap_diff >> i ) & 1 ) {
             if ( !_onup.push( true ) ) {
-              ( *(atm_comparator_cb_t)_onup.callback )( _onup.callback_idx, v_sample, 1, i, p_threshold[i] );
+              ( *(atm_comparator_cb_t)_onup.push_callback )( _onup.callback_idx, v_sample, 1, i, p_threshold[i] );
             }
           }
         }
@@ -127,7 +127,7 @@ void Atm_comparator::action( int id ) {
         for ( int i = p_threshold_size; i >= 0; i-- ) {
           if ( ( bitmap_diff >> i ) & 1 ) {
             if ( !_ondown.push( true ) ) {
-              ( *(atm_comparator_cb_t)_ondown.callback )( _onup.callback_idx, v_sample, 0, i, p_threshold[i] );
+              ( *(atm_comparator_cb_t)_ondown.push_callback )( _onup.callback_idx, v_sample, 0, i, p_threshold[i] );
             }
           }
         }

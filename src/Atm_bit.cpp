@@ -23,7 +23,7 @@ Atm_bit& Atm_bit::indicator( int led, bool activeLow /* = false */ ) {
   return *this;
 }
 
-Atm_bit& Atm_bit::onFlip( bool status, atm_cb_t callback, int idx /* = 0 */ ) {
+Atm_bit& Atm_bit::onFlip( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
   _connector[status ? 0 : 1].set( callback, idx );
   return *this;
 }
@@ -33,7 +33,7 @@ Atm_bit& Atm_bit::onFlip( bool status, Machine& machine, int evt /* = 0 */ ) {
   return *this;
 }
 
-Atm_bit& Atm_bit::onInput( bool status, atm_cb_t callback, int idx /* = 0 */ ) {
+Atm_bit& Atm_bit::onInput( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
   _connector[status ? 2 : 3].set( callback, idx );
   return *this;
 }
@@ -63,6 +63,6 @@ void Atm_bit::action( int id ) {
 }
 
 Atm_bit& Atm_bit::trace( Stream& stream ) {
-  Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_ON\0EVT_OFF\0EVT_TOGGLE\0EVT_INPUT\0ELSE\0OFF\0ON\0INPUTM" );
+  Machine::setTrace( &stream, atm_serial_debug::trace, "BIT\0EVT_ON\0EVT_OFF\0EVT_TOGGLE\0EVT_INPUT\0ELSE\0OFF\0ON\0INPUTM" );
   return *this;
 }

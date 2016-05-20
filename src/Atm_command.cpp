@@ -20,7 +20,7 @@ Atm_command& Atm_command::begin( Stream& stream, char buffer[], int size ) {
 }
 
 Atm_command& Atm_command::onCommand( atm_command_cb_t callback, int idx /* = 0 */ ) {
-  _oncommand.set( (atm_cb_t)callback, idx );
+  _oncommand.set( (atm_cb_push_t)callback, idx );
   return *this;
 }
 
@@ -93,8 +93,8 @@ void Atm_command::action( int id ) {
       return;
     case ACT_SEND:
       _buffer[--_bufptr] = '\0';
-      if ( _oncommand.mode() == _oncommand.MODE_CALLBACK ) {
-        ( *(atm_command_cb_t)_oncommand.callback )( _oncommand.callback_idx, lookup( 0, _commands ) );
+      if ( _oncommand.mode() == _oncommand.MODE_PUSHCB ) {
+        ( *(atm_command_cb_t)_oncommand.push_callback )( _oncommand.callback_idx, lookup( 0, _commands ) );
       }
       _lastch = '\0';
       _bufptr = 0;
@@ -103,6 +103,6 @@ void Atm_command::action( int id ) {
 }
 
 Atm_command& Atm_command::trace( Stream& stream ) {
-  setTrace( &stream, atm_serial_debug::trace, "EVT_INPUT\0EVT_EOL\0ELSE\0IDLE\0READCHAR\0SEND" );
+  setTrace( &stream, atm_serial_debug::trace, "COMMAND\0EVT_INPUT\0EVT_EOL\0ELSE\0IDLE\0READCHAR\0SEND" );
   return *this;
 }
