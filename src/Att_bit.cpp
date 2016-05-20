@@ -1,6 +1,6 @@
 #include "Att_bit.hpp"
 
-Att_bit& Att_bit::begin( bool default_state /* = false */ ) {
+Att_bit& Att_bit::begin( bool initialState /* = false */ ) {
   // clang-format off
   const static STATE_TYPE state_table[] PROGMEM = {
     /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON  EVT_OFF  EVT_TOGGLE EVT_INPUT ELSE */
@@ -10,7 +10,7 @@ Att_bit& Att_bit::begin( bool default_state /* = false */ ) {
   // clang-format on
   MACHINE::begin( state_table, ELSE );
   _last_state = -1;
-  state( default_state ? ON : OFF );
+  state( initialState ? ON : OFF );
   _indicator = -1;
   cycle();
   return *this;

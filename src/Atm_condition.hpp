@@ -23,7 +23,7 @@ class Atm_condition : public MACHINE {
  public:
   Atm_condition( void ) : MACHINE() {
 #ifndef TINYMACHINE
-    class_label = "CON";
+    class_label = "CTL";
 #endif
   };
 
@@ -37,7 +37,7 @@ class Atm_condition : public MACHINE {
   enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE };  // EVENTS
   enum { ACT_ON, ACT_OFF, ACT_INPUT };                    // ACTIONS
 
-  Atm_condition& begin( bool default_state = false );
+  Atm_condition& begin( bool initialState = false );
   Atm_condition& onFlip( bool status, atm_cb_t callback, int idx = 0 );
   Atm_condition& onFlip( bool status, Machine& machine, int event = 0 );
   Atm_condition& onFlip( bool status, const char* label, int = 0 );

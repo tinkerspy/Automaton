@@ -39,7 +39,6 @@ class Atm_digital : public MACHINE {
   enum { IDLE, WAITH, VHIGH, WAITL, VLOW };
   enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };
   enum { ACT_HIGH, ACT_LOW };
-  enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY };
 
   Atm_digital& begin( int attached_pin, int debounce = 20, bool activeLow = false, bool pullUp = false );
   int event( int id );

@@ -41,7 +41,6 @@ class Att_analog : public MACHINE {
   enum { IDLE, SAMPLE, SEND } STATES;
   enum { EVT_TRIGGER, EVT_TIMER, ELSE } EVENTS;
   enum { ACT_SAMPLE, ACT_SEND } ACTIONS;
-  enum { MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY };
 
   Att_analog& begin( int attached_pin, int sampleRate = 50 );
   Att_analog& average( uint16_t* v, uint16_t size );

@@ -43,7 +43,6 @@ class Atm_comparator : public MACHINE {
   enum { IDLE, SAMPLE, SEND } STATES;
   enum { EVT_TRIGGER, EVT_TIMER, ELSE } EVENTS;
   enum { ACT_SAMPLE, ACT_SEND } ACTIONS;
-  enum { MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY };
 
   Atm_comparator& begin( int attached_pin, int sampleRate = 50 );
   Atm_comparator& threshold( uint16_t* v, uint16_t size, bool catchUp = false );

@@ -12,7 +12,7 @@ static short pin_list[] = { 9, 8, 7, 6, 5, 4 };
 
 void setup() 
 {
-  factory.add( cmp.begin( A5, 50 ) );
+  factory.add( cmp.begin( A0, 50 ) );
   cmp.threshold( threshold_list, sizeof( threshold_list ) / sizeof( threshold_list[0] ), true )
     .onUp( step, Atm_step::EVT_STEP )
     .onDown( step, Atm_step::EVT_BACK );

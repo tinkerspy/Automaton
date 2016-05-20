@@ -1,6 +1,8 @@
 #include "Atm_condition.hpp"
 
-Atm_condition& Atm_condition::begin( bool default_state /* = false */ ) {
+const char Atm_condition::relOps[8] = "0=!<>-+";
+
+Atm_condition& Atm_condition::begin( bool initialState /* = false */ ) {
   // clang-format off
   const static STATE_TYPE state_table[] PROGMEM = {
     /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON  EVT_OFF  EVT_TOGGLE EVT_INPUT ELSE */
@@ -10,12 +12,10 @@ Atm_condition& Atm_condition::begin( bool default_state /* = false */ ) {
   // clang-format on
   MACHINE::begin( state_table, ELSE );
   _last_state = -1;
-  state( default_state ? ON : OFF );
+  state( initialState ? ON : OFF );
   _indicator = -1;
   return *this;
 }
-
-const char Atm_condition::relOps[8] = "0=!<>-+";
 
 Atm_condition& Atm_condition::indicator( int led, bool activeLow /* = false */ ) {
   _indicator = led;
@@ -234,7 +234,7 @@ void Atm_condition::action( int id ) {
   switch ( id ) {
     case ACT_OFF:
       _connector[_last_state == current ? 3 : 1].push( FACTORY );
-      if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );  // _indicator gets clobbered!
+      if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
       _last_state = current;
       return;
     case ACT_ON:
