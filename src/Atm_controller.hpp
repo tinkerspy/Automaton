@@ -42,6 +42,6 @@ class Atm_controller : public Machine {
   Atm_controller& OP( char logOp, Machine& machine, char relOp, int match );
   Atm_controller& OP( char logOp, atm_cb_pull_t callback, char relOp, int match );
 
-  bool eval_one( uint8_t idx );
+  bool eval_one( atm_connector& connector );
   bool eval_all();
 };

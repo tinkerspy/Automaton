@@ -39,15 +39,15 @@ int8_t atm_connector::relOp( void ) {
   return ( mode_flags & B11100000 ) >> 5;
 }
 
-void atm_connector::set( atm_cb_push_t cb, int idx, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
+void atm_connector::set( atm_cb_push_t callback, int idx, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
   mode_flags = MODE_PUSHCB | ( logOp << 3 ) | ( relOp << 5 );
-  push_callback = cb;
+  push_callback = callback;
   callback_idx = idx;
 }
 
-void atm_connector::set( atm_cb_pull_t cb, int idx, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
+void atm_connector::set( atm_cb_pull_t callback, int idx, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
   mode_flags = MODE_PULLCB | ( logOp << 3 ) | ( relOp << 5 );
-  pull_callback = cb;
+  pull_callback = callback;
   callback_idx = idx;
 }
 

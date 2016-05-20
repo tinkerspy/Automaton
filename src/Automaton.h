@@ -38,7 +38,7 @@ const state_t ATM_ON_EXIT = 2;
 const uint32_t ATM_TIMER_OFF = 0xffffffff;  // This timer value never expires
 const uint16_t ATM_COUNTER_OFF = 0xffff;    // This counter value never expires
 
-class atm_serial_debug {
+class atm_serial_debug { // It seems necessary to put this code in .h to keep it from being compiled in unnecessarily
  public:
   static void trace( Stream* stream, Machine& machine, const char label[], const char current[], const char next[], const char trigger[], uint32_t runtime,
                      uint32_t cycles ) {
@@ -81,9 +81,9 @@ typedef bool ( *atm_cb_pull_t )( int idx );
 
 class atm_connector {
  public:
-  enum { MODE_NULL, MODE_PUSHCB, MODE_PULLCB, MODE_MACHINE };            // bits 0, 1, 2
-  enum { LOG_AND, LOG_OR, LOG_XOR };                                     // bits 3, 4 MOVE to condition
-  enum { REL_NULL, REL_EQ, REL_NEQ, REL_LT, REL_GT, REL_LTE, REL_GTE };  // bits 5, 6, 7 Move condition
+  enum { MODE_NULL, MODE_PUSHCB, MODE_PULLCB, MODE_MACHINE };            // bits 0, 1, 2 - Mode 
+  enum { LOG_AND, LOG_OR, LOG_XOR };                                     // bits 3, 4    - Logical operator
+  enum { REL_NULL, REL_EQ, REL_NEQ, REL_LT, REL_GT, REL_LTE, REL_GTE };  // bits 5, 6, 7 - Relational operator
   uint8_t mode_flags;
   union {
     struct {
@@ -94,14 +94,13 @@ class atm_connector {
     struct {
       union {
         Machine* machine;
-        const char* label;
       };
       int event;
     };
   };
   void set( Machine* m, int evt, int8_t logOp = 0, int8_t relOp = 0 );
-  void set( atm_cb_push_t cb, int idx, int8_t logOp = 0, int8_t relOp = 0 );
-  void set( atm_cb_pull_t cb, int idx, int8_t logOp = 0, int8_t relOp = 0 );
+  void set( atm_cb_push_t callback, int idx, int8_t logOp = 0, int8_t relOp = 0 );
+  void set( atm_cb_pull_t callback, int idx, int8_t logOp = 0, int8_t relOp = 0 );
   bool push( bool noCallback = false );  // returns false (only) if callback is set!
   int pull( bool def_value = false );
   int8_t logOp( void );
