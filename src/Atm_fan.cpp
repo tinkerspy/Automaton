@@ -22,7 +22,7 @@ Atm_fan& Atm_fan::onInput( atm_cb_t callback, int idx ) {
   return *this;
 }
 
-Atm_fan& Atm_fan::onInput( Machine& machine, state_t event /* = 0 */ ) {
+Atm_fan& Atm_fan::onInput( Machine& machine, int event /* = 0 */ ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _connector[idx].mode() == atm_connector::MODE_NULL ) {
       _connector[idx].set( &machine, event );
