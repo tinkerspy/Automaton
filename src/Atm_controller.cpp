@@ -29,8 +29,8 @@ Atm_controller& Atm_controller::onFlip( bool status, atm_cb_push_t callback, int
   return *this;
 }
 
-Atm_controller& Atm_controller::onFlip( bool status, Machine& machine, int evt /* = 0 */ ) {
-  _connector[status ? 0 : 1].set( &machine, evt );
+Atm_controller& Atm_controller::onFlip( bool status, Machine& machine, int event /* = 0 */ ) {
+  _connector[status ? 0 : 1].set( &machine, event );
   return *this;
 }
 
@@ -96,37 +96,37 @@ Atm_controller& Atm_controller::OP( char logOp, atm_cb_pull_t callback, char rel
   return *this;
 }
 
-bool Atm_controller::eval_one( uint8_t idx ) {
-  switch ( _operand[idx].relOp() ) {
-    case atm_connector::REL_EQ:
-      return _operand[idx].pull() == _operand[idx].event;
-    case atm_connector::REL_NEQ:
-      return _operand[idx].pull() != _operand[idx].event;
-    case atm_connector::REL_LT:
-      return _operand[idx].pull() < _operand[idx].event;
-    case atm_connector::REL_GT:
-      return _operand[idx].pull() > _operand[idx].event;
-    case atm_connector::REL_LTE:
-      return _operand[idx].pull() <= _operand[idx].event;
-    case atm_connector::REL_GTE:
-      return _operand[idx].pull() >= _operand[idx].event;
+bool Atm_controller::eval_one( atm_connector& connector ) {
+  switch ( connector.relOp() ) {
+    case connector.REL_EQ:
+      return connector.pull() == connector.event;
+    case connector.REL_NEQ:
+      return connector.pull() != connector.event;
+    case connector.REL_LT:
+      return connector.pull() < connector.event;
+    case connector.REL_GT:
+      return connector.pull() > connector.event;
+    case connector.REL_LTE:
+      return connector.pull() <= connector.event;
+    case connector.REL_GTE:
+      return connector.pull() >= connector.event;
   }
   return false;
 }
 
 bool Atm_controller::eval_all() {
-  bool r = eval_one( 0 );
+  bool r = eval_one( _operand[0] );
   for ( uint8_t i = 1; i < ATM_CONDITION_OPERAND_MAX; i++ ) {
     if ( _operand[i].mode() ) {
       switch ( _operand[i].logOp() ) {
         case atm_connector::LOG_AND:
-          r = r && eval_one( i );
+          r = r && eval_one( _operand[i] );
           break;
         case atm_connector::LOG_OR:
-          r = r || eval_one( i );
+          r = r || eval_one( _operand[i] );
           break;
         case atm_connector::LOG_XOR:
-          r = !r != !eval_one( i );
+          r = !r != !eval_one( _operand[i] );
           break;
       }
     }
