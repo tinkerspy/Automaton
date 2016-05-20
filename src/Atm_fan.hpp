@@ -2,23 +2,11 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
-#undef STATE_TYPE
-#undef MACHINE
-
-#ifdef TINYMACHINE
-#define MACHINE TinyMachine
-#define STATE_TYPE tiny_state_t
-#else
-#define MACHINE Machine
-#define STATE_TYPE state_t
-#endif
-
 #define ATM_MULTIPLIER_COMMS_MAX 4
 
-class Atm_fan : public MACHINE {
+class Atm_fan : public Machine {
  public:
-  Atm_fan( void ) : MACHINE() {};
+  Atm_fan( void ) : Machine() {};
 
   atm_connector _connector[ATM_MULTIPLIER_COMMS_MAX];
 

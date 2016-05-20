@@ -2,21 +2,9 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
-#undef STATE_TYPE
-#undef MACHINE
-
-#ifdef TINYMACHINE
-#define MACHINE TinyMachine
-#define STATE_TYPE tiny_state_t
-#else
-#define MACHINE Machine
-#define STATE_TYPE state_t
-#endif
-
-class Atm_timer : public MACHINE {
+class Atm_timer : public Machine {
  public:
-  Atm_timer( void ) : MACHINE() {};
+  Atm_timer( void ) : Machine() {};
 
   atm_timer_millis daytimer, mstimer;
   atm_counter daycounter, repcounter;

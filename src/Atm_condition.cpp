@@ -4,13 +4,13 @@ const char Atm_condition::relOps[8] = "0=!<>-+";
 
 Atm_condition& Atm_condition::begin( bool initialState /* = false */ ) {
   // clang-format off
-  const static STATE_TYPE state_table[] PROGMEM = {
+  const static state_t state_table[] PROGMEM = {
     /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON  EVT_OFF  EVT_TOGGLE EVT_INPUT ELSE */
     /* OFF     */    ACT_OFF,        -1,      -1,     ON,      -1,         ON,      OFF,  -1,
     /* ON      */     ACT_ON,        -1,      -1,     -1,     OFF,        OFF,       ON,  -1,
   };
   // clang-format on
-  MACHINE::begin( state_table, ELSE );
+  Machine::begin( state_table, ELSE );
   _last_state = -1;
   state( initialState ? ON : OFF );
   _indicator = -1;
@@ -160,8 +160,6 @@ void Atm_condition::action( int id ) {
 }
 
 Atm_condition& Atm_condition::trace( Stream& stream ) {
-#ifndef TINYMACHINE
   Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_ON\0EVT_OFF\0EVT_TOGGLE\0EVT_INPUT\0ELSE\0OFF\0ON" );
-#endif
   return *this;
 }

@@ -2,23 +2,12 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
-#undef STATE_TYPE
-#undef MACHINE
-
-#ifdef TINYMACHINE
-#define MACHINE TinyMachine
-#define STATE_TYPE tiny_state_t
-#else
-#define MACHINE Machine
-#define STATE_TYPE state_t
-#endif
 
 typedef bool ( *atm_button_cb_t )( int idx, int press );
 
-class Atm_button : public MACHINE {
+class Atm_button : public Machine {
  public:
-  Atm_button( void ) : MACHINE() {};
+  Atm_button( void ) : Machine() {};
 
   enum { IDLE, WAIT, PRESSED, REPEAT, RELEASE, LIDLE, LWAIT, LPRESSED, LRELEASE, WRELEASE, AUTO };
   enum { EVT_LMODE, EVT_TIMER, EVT_DELAY, EVT_REPEAT, EVT_PRESS, EVT_RELEASE, EVT_COUNTER, EVT_AUTO, ELSE };

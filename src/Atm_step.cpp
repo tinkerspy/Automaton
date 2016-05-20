@@ -2,7 +2,7 @@
 
 Atm_step& Atm_step::begin( void ) {
   // clang-format off
-  const static STATE_TYPE state_table[] PROGMEM = { 
+  const static state_t state_table[] PROGMEM = { 
     /*            ON_ENTER  ON_LOOP  ON_EXIT  EVT_STEP  EVT_BACK  EVT_SWEEP  EVT_LINEAR   ELSE */
     /* LINEAR  */       -1,      -1,      -1,       S0,       R9,     SWEEP,     LINEAR,    -1,
     /* S0      */   ACT_S0,      -1,      -1,       S1,       R0,     SWEEP,     LINEAR,    -1, // Linear
@@ -46,7 +46,7 @@ Atm_step& Atm_step::begin( void ) {
     /* XH      */   ACT_S1,      -1,      -1,       X0,       X0,     SWEEP,     LINEAR,    -1,
   };
   // clang-format on
-  MACHINE::begin( state_table, ELSE );
+  Machine::begin( state_table, ELSE );
   return *this;
 }
 
@@ -85,7 +85,7 @@ void Atm_step::action( int id ) {
 }
 
 Atm_step& Atm_step::trace( Stream& stream ) {
-#ifndef TINYMACHINE
+#ifndef TINYMachine
   setTrace( &stream, atm_serial_debug::trace,
             "EVT_STEP\0EVT_BACK\0EVT_SWEEP\0EVT_LINEAR\0ELSE\0"
             "LINEAR\0S0\0S1\0S2\0S3\0S4\0S5\0S6\0S7\0S8\0S9\0R0\0R1\0R2\0R3\0R4\0R5\0R6\0R7\0R8\0R9\0"

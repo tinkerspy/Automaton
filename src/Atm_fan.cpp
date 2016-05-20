@@ -2,13 +2,13 @@
 
 Atm_fan& Atm_fan::begin() {
   // clang-format off
-  const static STATE_TYPE state_table[] PROGMEM = {
+  const static state_t state_table[] PROGMEM = {
     /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_INPUT  ELSE */
     /* IDLE    */       -1, ATM_SLEEP,      -1,      SEND,   -1,
     /* SEND    */ ACT_SEND,        -1,      -1,        -1, IDLE,
   };
   // clang-format on
-  MACHINE::begin( state_table, ELSE );
+  Machine::begin( state_table, ELSE );
   return *this;
 }
 
@@ -49,8 +49,6 @@ void Atm_fan::action( int id ) {
 }
 
 Atm_fan& Atm_fan::trace( Stream& stream ) {
-#ifndef TINYMACHINE
   Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_INPUT\0ELSE\0IDLE\0SEND" );
-#endif
   return *this;
 }

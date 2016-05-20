@@ -4,7 +4,7 @@
 
 Atm_button& Atm_button::begin( int attached_pin ) {
   // clang-format off
-  const static STATE_TYPE state_table[] PROGMEM = {
+  const static state_t state_table[] PROGMEM = {
     /* Standard Mode: press/repeat */
     /*                  ON_ENTER  ON_LOOP       ON_EXIT  EVT_LMODE  EVT_TIMER  EVT_DELAY  EVT_REPEAT EVT_PRESS  EVT_RELEASE  EVT_COUNTER   EVT_AUTO  ELSE */
     /* IDLE     */            -1,      -1,           -1,     LIDLE,        -1,        -1,         -1,     WAIT,          -1,          -1,      AUTO,   -1,
@@ -21,7 +21,7 @@ Atm_button& Atm_button::begin( int attached_pin ) {
     /* AUTO     */      ACT_AUTO,      -1,           -1,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1,  IDLE,
   };
   // clang-format on
-  MACHINE::begin( state_table, ELSE );
+  Machine::begin( state_table, ELSE );
   _pin = attached_pin;
   _counter_longpress.set( 0 );
   _timer_debounce.set( _DEBOUNCE );
@@ -132,10 +132,8 @@ void Atm_button::action( int id ) {
 }
 
 Atm_button& Atm_button::trace( Stream& stream ) {
-#ifndef TINYMACHINE
   setTrace( &stream, atm_serial_debug::trace,
             "EVT_LMODE\0EVT_TIMER\0EVT_DELAY\0EVT_REPEAT\0EVT_PRESS\0EVT_RELEASE\0EVT_COUNTER\0EVT_"
             "AUTO\0ELSE\0IDLE\0WAIT\0PRESSED\0REPEAT\0RELEASE\0LIDLE\0LWAIT\0LPRESSED\0LRELEASE\0WRELEASE\0AUTO" );
-#endif
   return *this;
 }

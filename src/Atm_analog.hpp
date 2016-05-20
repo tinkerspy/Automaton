@@ -2,23 +2,11 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
-#undef STATE_TYPE
-#undef MACHINE
-
-#ifdef TINYMACHINE
-#define MACHINE TinyMachine
-#define STATE_TYPE tiny_state_t
-#else
-#define MACHINE Machine
-#define STATE_TYPE state_t
-#endif
-
 typedef bool ( *atm_analog_cb_t )( int idx, int v, int up );
 
-class Atm_analog : public MACHINE {
+class Atm_analog : public Machine {
  public:
-  Atm_analog( void ) : MACHINE() {};
+  Atm_analog( void ) : Machine() {};
 
   short pin;
   atm_timer_millis timer;

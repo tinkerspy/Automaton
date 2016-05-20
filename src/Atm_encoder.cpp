@@ -5,14 +5,14 @@ const char Atm_encoder::_enc_states[16] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1
 
 Atm_encoder& Atm_encoder::begin( int pin1, int pin2, int divider /* = 4 */ ) {
   // clang-format off
-  const static STATE_TYPE state_table[] PROGMEM = {
+  const static state_t state_table[] PROGMEM = {
     /*          ON_ENTER     ON_LOOP  ON_EXIT  EVT_UP  EVT_DOWN  ELSE */
     /* IDLE  */       -1, ACT_SAMPLE,      -1,     UP,     DOWN,   -1,
     /* UP    */   ACT_UP,         -1,      -1,     -1,       -1, IDLE,
     /* DOWN  */ ACT_DOWN,         -1,      -1,     -1,       -1, IDLE,
   };
   // clang-format on
-  MACHINE::begin( state_table, ELSE );
+  Machine::begin( state_table, ELSE );
   _pin1 = pin1;
   _pin2 = pin2;
   _divider = divider;
@@ -117,8 +117,6 @@ void Atm_encoder::action( int id ) {
 }
 
 Atm_encoder& Atm_encoder::trace( Stream& stream ) {
-#ifndef TINYMACHINE
   Machine::setTrace( &stream, atm_serial_debug::trace, "EVT_UP\0EVT_DOWN\0ELSE\0IDLE\0UP\0DOWN" );
-#endif
   return *this;
 }

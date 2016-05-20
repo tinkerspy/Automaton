@@ -2,24 +2,12 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
-#undef STATE_TYPE
-#undef MACHINE
-
-#ifdef TINYMACHINE
-#define MACHINE TinyMachine
-#define STATE_TYPE tiny_state_t
-#else
-#define MACHINE Machine
-#define STATE_TYPE state_t
-#endif
-
 // Digital pin with a minimum duration in ms
 // On detection another machine is messaged or a callback is fired
 
-class Atm_digital : public MACHINE {
+class Atm_digital : public Machine {
  public:
-  Atm_digital( void ) : MACHINE() {};
+  Atm_digital( void ) : Machine() {};
 
   short pin;
   int state_high, state_low;

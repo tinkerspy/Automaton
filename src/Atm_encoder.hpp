@@ -2,21 +2,9 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
-#undef STATE_TYPE
-#undef MACHINE
-
-#ifdef TINYMACHINE
-#define MACHINE TinyMachine
-#define STATE_TYPE tiny_state_t
-#else
-#define MACHINE Machine
-#define STATE_TYPE state_t
-#endif
-
-class Atm_encoder : public MACHINE {
+class Atm_encoder : public Machine {
  public:
-  Atm_encoder( void ) : MACHINE() {};
+  Atm_encoder( void ) : Machine() {};
   short _pin1, _pin2;
   const static char _enc_states[];
   uint8_t _enc_bits;

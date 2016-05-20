@@ -10,8 +10,10 @@ Appliance app;
 static uint16_t threshold_list[] = { 100, 300, 500, 700, 900, 1000 }; 
 static short pin_list[] = { 9, 8, 7, 6, 5, 4 };
 
-void setup() 
-{
+void setup() {
+  Serial.begin( 9600 );
+  step.trace( Serial );
+  led[0].trace( Serial );
   app.add( cmp.begin( A0, 50 ) );
   cmp.threshold( threshold_list, sizeof( threshold_list ) / sizeof( threshold_list[0] ), true )
     .onUp( step, Atm_step::EVT_STEP )

@@ -2,23 +2,12 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
-#undef STATE_TYPE
-#undef MACHINE
-
-#ifdef TINYMACHINE
-#define MACHINE TinyMachine
-#define STATE_TYPE tiny_state_t
-#else
-#define MACHINE Machine
-#define STATE_TYPE state_t
-#endif
 
 typedef bool ( *atm_command_cb_t )( int idx, int cmd );
 
-class Atm_command : public MACHINE {
+class Atm_command : public Machine {
  public:
-  Atm_command( void ) : MACHINE() {};
+  Atm_command( void ) : Machine() {};
 
   atm_connector _oncommand;
   Stream* _stream;

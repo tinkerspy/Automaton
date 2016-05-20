@@ -2,23 +2,11 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
-#undef STATE_TYPE
-#undef MACHINE
-
-#ifdef TINYMACHINE
-#define MACHINE TinyMachine
-#define STATE_TYPE tiny_state_t
-#else
-#define MACHINE Machine
-#define STATE_TYPE state_t
-#endif
-
 #define ATM_CONDITION_OPERAND_MAX 4
 
-class Atm_condition : public MACHINE {
+class Atm_condition : public Machine {
  public:
-  Atm_condition( void ) : MACHINE() {};
+  Atm_condition( void ) : Machine() {};
 
   state_t _last_state;
   atm_connector _connector[4];

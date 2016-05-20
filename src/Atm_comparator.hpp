@@ -2,23 +2,11 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
-#undef STATE_TYPE
-#undef MACHINE
-
-#ifdef TINYMACHINE
-#define MACHINE TinyMachine
-#define STATE_TYPE tiny_state_t
-#else
-#define MACHINE Machine
-#define STATE_TYPE state_t
-#endif
-
 typedef bool ( *atm_comparator_cb_t )( int idx, int v, int up, int idx_threshold, int v_threshold );
 
-class Atm_comparator : public MACHINE {
+class Atm_comparator : public Machine {
  public:
-  Atm_comparator( void ) : MACHINE() {};
+  Atm_comparator( void ) : Machine() {};
 
   short pin;
   atm_timer_millis timer;

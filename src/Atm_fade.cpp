@@ -2,7 +2,7 @@
 
 Atm_fade& Atm_fade::begin( int attached_pin ) {
   // clang-format off
-  const static STATE_TYPE state_table[] PROGMEM = {
+  const static state_t state_table[] PROGMEM = {
     /*               ON_ENTER    ON_LOOP       ON_EXIT  EVT_CNT_FADE EVT_TM_FADE   EVT_TM_ON  EVT_TM_OFF   EVT_CNT_RPT  EVT_ON EVT_OFF EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK    ELSE  */
     /* IDLE   */      ACT_OFF, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     ON,   IDLE,    START,         ON,            START,     -1,  // LED off
     /* ON     */       ACT_ON, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,  // LED on
@@ -14,7 +14,7 @@ Atm_fade& Atm_fade::begin( int attached_pin ) {
     /* REPEAT */   ACT_REPEAT,        -1,           -1,           -1,         -1,         -1,         -1,         IDLE,     ON,   IDLE,    START,       IDLE,             IDLE, STARTU,
   };
   // clang-format on
-  MACHINE::begin( state_table, ELSE );
+  Machine::begin( state_table, ELSE );
   pin = attached_pin;
   pinMode( pin, OUTPUT );
   timer_fade.set( 0 );   // Number of ms per slope step (slope duration: rate * 32 ms)
@@ -97,7 +97,7 @@ void Atm_fade::action( int id ) {
 }
 
 Atm_fade& Atm_fade::trace( Stream& stream ) {
-#ifndef TINYMACHINE
+#ifndef TINYMachine
   setTrace(
       &stream, atm_serial_debug::trace,
       "EVT_CNT_FADE\0EVT_TM_FADE\0EVT_TM_ON\0EVT_TM_OFF\0EVT_CNT_RPT\0EVT_ON\0EVT_OFF\0EVT_BLINK\0ELSE\0IDLE\0ON\0START\0STARTU\0UP\0STARTD\0DOWN\0REPEAT" );

@@ -2,25 +2,13 @@
 
 #include <Automaton.h>
 
-#undef TINYMACHINE
-#undef STATE_TYPE
-#undef MACHINE
-
-#ifdef TINYMACHINE
-#define MACHINE TinyMachine
-#define STATE_TYPE tiny_state_t
-#else
-#define MACHINE Machine
-#define STATE_TYPE state_t
-#endif
-
 #define ATM_STEP_MAX 10
 
 typedef bool ( *atm_step_cb_t )( int idx, int id );
 
-class Atm_step : public MACHINE {
+class Atm_step : public Machine {
  public:
-  Atm_step( void ) : MACHINE() {};
+  Atm_step( void ) : Machine() {};
   // clang-format off
   enum { LINEAR, S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9,
          SWEEP, X0, X1, X2, X3, X4, X5, X6, X7, X8, X9, XA, XB, XC, XD, XE, XF, XG, XH }; 

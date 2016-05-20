@@ -2,14 +2,14 @@
 
 Atm_command& Atm_command::begin( Stream& stream, char buffer[], int size ) {
   // clang-format off
-  const static STATE_TYPE state_table[] PROGMEM = {
+  const static state_t state_table[] PROGMEM = {
     /*                  ON_ENTER    ON_LOOP    ON_EXIT  EVT_INPUT   EVT_EOL   ELSE */
     /* IDLE     */            -1,        -1,        -1,  READCHAR,       -1,    -1,
     /* READCHAR */  ACT_READCHAR,        -1,        -1,  READCHAR,     SEND,    -1,
     /* SEND     */      ACT_SEND,        -1,        -1,        -1,       -1,  IDLE,
   };
   // clang-format on
-  MACHINE::begin( state_table, ELSE );
+  Machine::begin( state_table, ELSE );
   _stream = &stream;
   _buffer = buffer;
   _bufsize = size;
@@ -103,8 +103,6 @@ void Atm_command::action( int id ) {
 }
 
 Atm_command& Atm_command::trace( Stream& stream ) {
-#ifndef TINYMACHINE
   setTrace( &stream, atm_serial_debug::trace, "EVT_INPUT\0EVT_EOL\0ELSE\0IDLE\0READCHAR\0SEND" );
-#endif
   return *this;
 }

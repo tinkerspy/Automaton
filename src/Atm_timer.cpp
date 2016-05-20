@@ -7,7 +7,7 @@
 
 Atm_timer& Atm_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */, uint16_t repeats /* = 1 */ ) {
   // clang-format off
-  const static STATE_TYPE state_table[] PROGMEM = {
+  const static state_t state_table[] PROGMEM = {
     /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_DAYCNT  EVT_DAYTIMER  EVT_MSTIMER  EVT_REPCNT  EVT_STOP  EVT_START   ELSE */
     /* IDLE    */          -1, ATM_SLEEP,        -1,         -1,           -1,          -1,         -1,       -1,     START,    -1,
     /* START   */   ACT_START,        -1,        -1,         -1,           -1,          -1,         -1,       -1,     WAITD, WAITD,  
@@ -17,7 +17,7 @@ Atm_timer& Atm_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */, uint16_t repeats
     /* FINISH  */  ACT_FINISH,        -1,        -1,         -1,           -1,          -1,         -1,       -1,        -1,  IDLE,
   };
   // clang-format on
-  MACHINE::begin( state_table, ELSE );
+  Machine::begin( state_table, ELSE );
   daytimer.set( (uint32_t)DIVIDER * 1000 );  // Always set to one day
   mstimer.set( ms );
   daycounter.set( days = 0 );
@@ -103,9 +103,7 @@ void Atm_timer::action( int id ) {
 }
 
 Atm_timer& Atm_timer::trace( Stream& stream ) {
-#ifndef TINYMACHINE
   setTrace( &stream, atm_serial_debug::trace,
             "EVT_DAYCNT\0EVT_DAYTIMER\0EVT_MSTIMER\0EVT_REPCNT\0EVT_OFF\0EVT_START\0ELSE\0IDLE\0START\0WAITD\0WAITMS\0TRIGGER\0FINISH" );
-#endif
   return *this;
 }

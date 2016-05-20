@@ -2,7 +2,7 @@
 
 Atm_digital& Atm_digital::begin( int attached_pin, int debounce /* = 20 */, bool activeLow /* = false */, bool pullUp /* = false */ ) {
   // clang-format off
-  const static STATE_TYPE state_table[] PROGMEM = {
+  const static state_t state_table[] PROGMEM = {
     /*              ON_ENTER    ON_LOOP      ON_EXIT  EVT_TIMER   EVT_HIGH  EVT_LOW   ELSE */
     /* IDLE    */         -1,        -1,          -1,        -1,     WAITH,      -1,    -1,
     /* WAITH   */         -1,        -1,          -1,     VHIGH,        -1,    IDLE,    -1,
@@ -11,7 +11,7 @@ Atm_digital& Atm_digital::begin( int attached_pin, int debounce /* = 20 */, bool
     /* VLOW    */    ACT_LOW,        -1,          -1,        -1,        -1,      -1,  IDLE,
   };
   // clang-format on
-  MACHINE::begin( state_table, ELSE );
+  Machine::begin( state_table, ELSE );
   pin = attached_pin;
   _activeLow = activeLow;
   timer.set( debounce );
@@ -67,8 +67,6 @@ void Atm_digital::action( int id ) {
 }
 
 Atm_digital& Atm_digital::trace( Stream& stream ) {
-#ifndef TINYMACHINE
   setTrace( &stream, atm_serial_debug::trace, "EVT_TIMER\0EVT_HIGH\0EVT_LOW\0ELSE\0IDLE\0WAITH\0VHIGH\0WAITL\0VLOW" );
-#endif
   return *this;
 }

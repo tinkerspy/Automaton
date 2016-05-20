@@ -14,7 +14,7 @@ bool atm_connector::push( bool noCallback /* = false */ ) {
         ( *callback )( callback_idx );
       }
       return true;
-    case MODE_MACHINE:
+    case MODE_Machine:
       machine->trigger( event );
       return true;
   }
@@ -25,7 +25,7 @@ int atm_connector::pull( bool def_value /* = false */ ) {
   switch ( mode_flags & B00000111 ) {
     case MODE_CALLBACK:
       return ( *callback )( callback_idx );
-    case MODE_MACHINE:
+    case MODE_Machine:
       return machine->state();
   }
   return def_value;
@@ -46,7 +46,7 @@ void atm_connector::set( atm_cb_t cb, int idx, int8_t logOp /* = 0 */, int8_t re
 }
 
 void atm_connector::set( Machine* m, int evt, int8_t logOp /* = 0 */, int8_t relOp /* = 0 */ ) {
-  mode_flags = MODE_MACHINE | ( logOp << 3 ) | ( relOp << 5 );
+  mode_flags = MODE_Machine | ( logOp << 3 ) | ( relOp << 5 );
   machine = m;
   event = evt;
 }
@@ -148,7 +148,7 @@ Machine& Machine::cycle( uint32_t time /* = 0 */ ) {
       if ( next != -1 ) {
         action( ATM_ON_SWITCH );
         if ( callback_trace ) {
-          callback_trace( stream_trace, "FIXME", mapSymbol( current == -1 ? current : current + state_width - ATM_ON_EXIT - 1, _symbols ),
+          callback_trace( stream_trace, *this, mapSymbol( current == -1 ? current : current + state_width - ATM_ON_EXIT - 1, _symbols ),
                           mapSymbol( next == -1 ? next : next + state_width - ATM_ON_EXIT - 1, _symbols ), mapSymbol( last_trigger, _symbols ),
                           millis() - state_millis, cycles );
         }

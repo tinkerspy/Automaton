@@ -2,14 +2,14 @@
 
 Atm_analog& Atm_analog::begin( int attached_pin, int samplerate /* = 50 */ ) {
   // clang-format off
-  const static STATE_TYPE state_table[] PROGMEM = {
+  const static state_t state_table[] PROGMEM = {
     /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_TRIGGER  EVT_TIMER   ELSE */
     /* IDLE   */          -1,        -1,      -1,          -1,   SAMPLE,    -1,
     /* SAMPLE */  ACT_SAMPLE,        -1,      -1,        SEND,       -1,  IDLE,
     /* SEND   */    ACT_SEND,        -1,      -1,          -1,       -1,  IDLE,
   };
   // clang-format on
-  MACHINE::begin( state_table, ELSE );
+  Machine::begin( state_table, ELSE );
   pin = attached_pin;
   timer.set( samplerate );
   return *this;
@@ -96,11 +96,9 @@ void Atm_analog::action( int id ) {
 }
 
 Atm_analog& Atm_analog::trace( Stream& stream ) {
-#ifndef TINYMACHINE
   setTrace( &stream, atm_serial_debug::trace,
             "EVT_TRIGGER\0EVT_TIMER\0ELSE\0"
             "IDLE\0SAMPLE\0SEND" );
 
-#endif
   return *this;
 }

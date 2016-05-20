@@ -2,7 +2,7 @@
 
 Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   // clang-format off
-  static const STATE_TYPE state_table[] PROGMEM = {
+  static const state_t state_table[] PROGMEM = {
     /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK  ELSE */
     /* IDLE      */  ACT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,     ON,      -1,     START,         ON,            START,   -1, // LED off
     /* ON        */    ACT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,     -1,     OFF,     START,        OFF,              OFF,   -1, // LED on
@@ -12,7 +12,7 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
     /* OFF       */   ACT_OFF,        -1,        -1,           -1,            -1,          -1,     -1,      -1,        -1,         -1,               -1, IDLE, // All off -> IDLE
   };
   // clang-format on
-  MACHINE::begin( state_table, ELSE );
+  Machine::begin( state_table, ELSE );
   pin = attached_pin;
   _activeLow = activeLow;
   _level = 255;
@@ -118,11 +118,9 @@ void Atm_led::action( int id ) {
 }
 
 Atm_led& Atm_led::trace( Stream& stream ) {
-#ifndef TINYMACHINE
   setTrace( &stream, atm_serial_debug::trace,
             "EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_"
             "BLINK\0EVT_TOGGLE\0EVT_TOGGLE_BLINK\0ELSE\0"
             "IDLE\0ON\0START\0BLINK_OFF\0DONE\0OFF" );
-#endif
   return *this;
 }
