@@ -8,7 +8,7 @@ Factory factory;
 // Timer drives step sequencer in sweep mode, step sequencer blinks leds.
 
 short evt = Atm_led::EVT_BLINK;
-static short pin_list[] = { 9, 8, 7, 6, 5, 4 };
+static short pin_list[] = { 4, 5, 6, 7, 8, 9 };
 int blink_time = 70;
 int interval_time = 50;
 
