@@ -24,5 +24,5 @@ class Atm_step : public Machine {
   void action( int id );
   Atm_step& onStep( uint8_t idx );  // fix id -> step???
   Atm_step& onStep( uint8_t id, atm_step_cb_t callback, int idx = 0 );
-  Atm_step& onStep( uint8_t id, Machine& machine, state_t event = 0 );
+  Atm_step& onStep( uint8_t id, Machine& machine, int event = 0 );
 };

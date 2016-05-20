@@ -22,16 +22,16 @@ class Atm_controller : public Machine {
   Atm_controller& onFlip( bool status, atm_cb_t callback, int idx = 0 );
   Atm_controller& onFlip( bool status, Machine& machine, int event = 0 );
   Atm_controller& onInput( bool status, atm_cb_t callback, int idx = 0 );
-  Atm_controller& onInput( bool status, Machine& machine, state_t event = 0 );
+  Atm_controller& onInput( bool status, Machine& machine, int event = 0 );
 
-  Atm_controller& IF( Machine& machine, char relOp = '>', state_t match = 0 );
-  Atm_controller& IF( atm_cb_t callback, char relOp = '>', state_t match = 0 );
-  Atm_controller& AND( Machine& machine, char relOp = '>', state_t match = 0 );
-  Atm_controller& AND( atm_cb_t callback, char relOp = '>', state_t match = 0 );
-  Atm_controller& OR( Machine& machine, char relOp = '>', state_t match = 0 );
-  Atm_controller& OR( atm_cb_t callback, char relOp = '>', state_t match = 0 );
-  Atm_controller& XOR( Machine& machine, char relOp = '>', state_t match = 0 );
-  Atm_controller& XOR( atm_cb_t callback, char relOp = '>', state_t match = 0 );
+  Atm_controller& IF( Machine& machine, char relOp = '>', int match = 0 );
+  Atm_controller& IF( atm_cb_t callback, char relOp = '>', int match = 0 );
+  Atm_controller& AND( Machine& machine, char relOp = '>', int match = 0 );
+  Atm_controller& AND( atm_cb_t callback, char relOp = '>', int match = 0 );
+  Atm_controller& OR( Machine& machine, char relOp = '>', int match = 0 );
+  Atm_controller& OR( atm_cb_t callback, char relOp = '>', int match = 0 );
+  Atm_controller& XOR( Machine& machine, char relOp = '>', int match = 0 );
+  Atm_controller& XOR( atm_cb_t callback, char relOp = '>', int match = 0 );
   Atm_controller& indicator( int led, bool activeLow = false );
   Atm_controller& trace( Stream& stream );
 
@@ -39,8 +39,8 @@ class Atm_controller : public Machine {
   const static char relOps[];
   int event( int id );
   void action( int id );
-  Atm_controller& OP( char logOp, Machine& machine, char relOp, state_t match );
-  Atm_controller& OP( char logOp, atm_cb_t callback, char relOp, state_t match );
+  Atm_controller& OP( char logOp, Machine& machine, char relOp, int match );
+  Atm_controller& OP( char logOp, atm_cb_t callback, char relOp, int match );
 
   bool eval_one( uint8_t idx );
   bool eval_all();

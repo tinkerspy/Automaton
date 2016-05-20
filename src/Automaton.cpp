@@ -75,7 +75,7 @@ uint8_t atm_counter::expired() {
   return value == ATM_COUNTER_OFF ? 0 : ( value > 0 ? 0 : 1 );
 }
 
-Machine& Machine::state( state_t state ) {
+Machine& Machine::state( int state ) {
   next = state;
   last_trigger = -1;
   flags &= ~ATM_SLEEP_FLAG;
@@ -87,7 +87,7 @@ int Machine::state() {
 }
 
 Machine& Machine::trigger( int evt /* = 0 */ ) {
-  state_t new_state;
+  int new_state;
   int max_cycle = 8;
   do {
     flags &= ~ATM_SLEEP_FLAG;

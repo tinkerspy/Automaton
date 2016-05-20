@@ -39,44 +39,44 @@ Atm_controller& Atm_controller::onInput( bool status, atm_cb_t callback, int idx
   return *this;
 }
 
-Atm_controller& Atm_controller::onInput( bool status, Machine& machine, state_t event /* = 0 */ ) {
+Atm_controller& Atm_controller::onInput( bool status, Machine& machine, int event /* = 0 */ ) {
   _connector[status ? 2 : 3].set( &machine, event );
   return *this;
 }
 
-Atm_controller& Atm_controller::IF( Machine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+Atm_controller& Atm_controller::IF( Machine& machine, char relOp /* = '>' */, int match /* = 0 */ ) {
   return OP( atm_connector::LOG_AND, machine, relOp, match );
 }
 
-Atm_controller& Atm_controller::IF( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+Atm_controller& Atm_controller::IF( atm_cb_t callback, char relOp /* = '>' */, int match /* = 0 */ ) {
   return OP( atm_connector::LOG_AND, callback, relOp, match );
 }
 
-Atm_controller& Atm_controller::AND( Machine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+Atm_controller& Atm_controller::AND( Machine& machine, char relOp /* = '>' */, int match /* = 0 */ ) {
   return OP( atm_connector::LOG_AND, machine, relOp, match );
 }
 
-Atm_controller& Atm_controller::AND( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+Atm_controller& Atm_controller::AND( atm_cb_t callback, char relOp /* = '>' */, int match /* = 0 */ ) {
   return OP( atm_connector::LOG_AND, callback, relOp, match );
 }
 
-Atm_controller& Atm_controller::OR( Machine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+Atm_controller& Atm_controller::OR( Machine& machine, char relOp /* = '>' */, int match /* = 0 */ ) {
   return OP( atm_connector::LOG_OR, machine, relOp, match );
 }
 
-Atm_controller& Atm_controller::OR( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+Atm_controller& Atm_controller::OR( atm_cb_t callback, char relOp /* = '>' */, int match /* = 0 */ ) {
   return OP( atm_connector::LOG_OR, callback, relOp, match );
 }
 
-Atm_controller& Atm_controller::XOR( Machine& machine, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+Atm_controller& Atm_controller::XOR( Machine& machine, char relOp /* = '>' */, int match /* = 0 */ ) {
   return OP( atm_connector::LOG_XOR, machine, relOp, match );
 }
 
-Atm_controller& Atm_controller::XOR( atm_cb_t callback, char relOp /* = '>' */, state_t match /* = 0 */ ) {
+Atm_controller& Atm_controller::XOR( atm_cb_t callback, char relOp /* = '>' */, int match /* = 0 */ ) {
   return OP( atm_connector::LOG_XOR, callback, relOp, match );
 }
 
-Atm_controller& Atm_controller::OP( char logOp, Machine& machine, char relOp, state_t match ) {
+Atm_controller& Atm_controller::OP( char logOp, Machine& machine, char relOp, int match ) {
   for ( uint8_t i = 0; i < ATM_CONDITION_OPERAND_MAX; i++ ) {
     if ( _operand[i].mode() == atm_connector::MODE_NULL ) {  // Pick the first free slot
       _operand[i].set( &machine, match, logOp, (int)( strchr( relOps, relOp ) - relOps ) );
@@ -86,7 +86,7 @@ Atm_controller& Atm_controller::OP( char logOp, Machine& machine, char relOp, st
   return *this;
 }
 
-Atm_controller& Atm_controller::OP( char logOp, atm_cb_t callback, char relOp, state_t match ) {
+Atm_controller& Atm_controller::OP( char logOp, atm_cb_t callback, char relOp, int match ) {
   for ( uint8_t i = 0; i < ATM_CONDITION_OPERAND_MAX; i++ ) {
     if ( _operand[i].mode() == atm_connector::MODE_NULL ) {  // Pick the first free slot
       _operand[i].set( callback, match, logOp, (int)( strchr( relOps, relOp ) - relOps ) );

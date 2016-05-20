@@ -60,13 +60,13 @@ Atm_step& Atm_step::onStep( uint8_t id, atm_step_cb_t callback, int idx /* = 0 *
   return *this;
 }
 
-Atm_step& Atm_step::onStep( uint8_t id, Machine& machine, state_t event /* = 0 */ ) {
+Atm_step& Atm_step::onStep( uint8_t id, Machine& machine, int event /* = 0 */ ) {
   _connector[id].set( &machine, event );
   return *this;
 }
 
 int Atm_step::event( int id ) {
-  state_t on_enter = read_state( state_table + ( current * state_width ) + ATM_ON_ENTER );
+  int on_enter = read_state( state_table + ( current * state_width ) + ATM_ON_ENTER );
   switch ( id ) {
     case EVT_STEP:
       return ( current < R0 || current > R9 ) && ( on_enter > -1 ) && ( _connector[on_enter].mode() == 0 );

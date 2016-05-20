@@ -119,7 +119,7 @@ class Machine {
   Machine* inventory_next;
 
  protected:
-  Machine& state( state_t state );
+  Machine& state( int state );
   Machine& begin( const state_t tbl[], int width );
   const char* mapSymbol( int id, const char map[] );
   Machine& setTrace( Stream* stream, swcb_sym_t callback, const char symbols[] );
