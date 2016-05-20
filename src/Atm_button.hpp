@@ -2,12 +2,11 @@
 
 #include <Automaton.h>
 
-
 typedef bool ( *atm_button_cb_t )( int idx, int press );
 
 class Atm_button : public Machine {
  public:
-  Atm_button( void ) : Machine() {};
+  Atm_button( void ) : Machine(){};
 
   enum { IDLE, WAIT, PRESSED, REPEAT, RELEASE, LIDLE, LWAIT, LPRESSED, LRELEASE, WRELEASE, AUTO };
   enum { EVT_LMODE, EVT_TIMER, EVT_DELAY, EVT_REPEAT, EVT_PRESS, EVT_RELEASE, EVT_COUNTER, EVT_AUTO, ELSE };

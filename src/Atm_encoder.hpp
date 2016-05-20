@@ -4,7 +4,7 @@
 
 class Atm_encoder : public Machine {
  public:
-  Atm_encoder( void ) : Machine() {};
+  Atm_encoder( void ) : Machine(){};
   short _pin1, _pin2;
   const static char _enc_states[];
   uint8_t _enc_bits;

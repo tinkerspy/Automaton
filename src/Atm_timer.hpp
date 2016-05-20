@@ -4,7 +4,7 @@
 
 class Atm_timer : public Machine {
  public:
-  Atm_timer( void ) : Machine() {};
+  Atm_timer( void ) : Machine(){};
 
   atm_timer_millis daytimer, mstimer;
   atm_counter daycounter, repcounter;

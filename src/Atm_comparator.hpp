@@ -6,7 +6,7 @@ typedef bool ( *atm_comparator_cb_t )( int idx, int v, int up, int idx_threshold
 
 class Atm_comparator : public Machine {
  public:
-  Atm_comparator( void ) : Machine() {};
+  Atm_comparator( void ) : Machine(){};
 
   short pin;
   atm_timer_millis timer;

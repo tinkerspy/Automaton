@@ -6,7 +6,7 @@ typedef bool ( *atm_analog_cb_t )( int idx, int v, int up );
 
 class Atm_analog : public Machine {
  public:
-  Atm_analog( void ) : Machine() {};
+  Atm_analog( void ) : Machine(){};
 
   short pin;
   atm_timer_millis timer;

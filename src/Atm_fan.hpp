@@ -6,7 +6,7 @@
 
 class Atm_fan : public Machine {
  public:
-  Atm_fan( void ) : Machine() {};
+  Atm_fan( void ) : Machine(){};
 
   atm_connector _connector[ATM_MULTIPLIER_COMMS_MAX];
 

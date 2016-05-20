@@ -77,9 +77,9 @@ typedef bool ( *atm_cb_t )( int idx );
 
 class atm_connector {
  public:
-  enum { MODE_NULL, MODE_CALLBACK, MODE_Machine };  // bits 0, 1, 2
-  enum { LOG_AND, LOG_OR, LOG_XOR };                                             // bits 3, 4 MOVE to condition
-  enum { REL_NULL, REL_EQ, REL_NEQ, REL_LT, REL_GT, REL_LTE, REL_GTE };          // bits 5, 6, 7 Move condition
+  enum { MODE_NULL, MODE_CALLBACK, MODE_Machine };                       // bits 0, 1, 2
+  enum { LOG_AND, LOG_OR, LOG_XOR };                                     // bits 3, 4 MOVE to condition
+  enum { REL_NULL, REL_EQ, REL_NEQ, REL_LT, REL_GT, REL_LTE, REL_GTE };  // bits 5, 6, 7 Move condition
   uint8_t mode_flags;
   union {
     struct {
@@ -102,7 +102,6 @@ class atm_connector {
   int8_t relOp( void );
   int8_t mode( void );
 };
-
 
 class Machine {
  public:
@@ -151,7 +150,7 @@ class Appliance {
 #include <Atm_button.hpp>
 #include <Atm_command.hpp>
 #include <Atm_comparator.hpp>
-#include <Atm_condition.hpp>
+#include <Atm_controller.hpp>
 #include <Atm_digital.hpp>
 #include <Atm_encoder.hpp>
 #include <Atm_fade.hpp>

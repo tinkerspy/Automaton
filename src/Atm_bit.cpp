@@ -55,7 +55,7 @@ void Atm_bit::action( int id ) {
       _last_state = current;
       return;
     case ACT_ON:
-      if ( _last_state != -1 ) _connector[_last_state == current ? 2 : 0].push( );
+      if ( _last_state != -1 ) _connector[_last_state == current ? 2 : 0].push();
       if ( _indicator > -1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
       _last_state = current;
       return;

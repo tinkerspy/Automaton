@@ -4,7 +4,7 @@
 
 class Atm_bit : public Machine {
  public:
-  Atm_bit( void ) : Machine() { };
+  Atm_bit( void ) : Machine(){};
 
   state_t _last_state;
   atm_connector _connector[4];

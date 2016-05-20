@@ -2,12 +2,11 @@
 
 #include <Automaton.h>
 
-
 typedef bool ( *atm_command_cb_t )( int idx, int cmd );
 
 class Atm_command : public Machine {
  public:
-  Atm_command( void ) : Machine() {};
+  Atm_command( void ) : Machine(){};
 
   atm_connector _oncommand;
   Stream* _stream;

@@ -7,7 +7,7 @@
 
 class Atm_digital : public Machine {
  public:
-  Atm_digital( void ) : Machine() {};
+  Atm_digital( void ) : Machine(){};
 
   short pin;
   int state_high, state_low;
