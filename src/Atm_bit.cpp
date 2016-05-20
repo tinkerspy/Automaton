@@ -28,8 +28,8 @@ Atm_bit& Atm_bit::onFlip( bool status, atm_cb_push_t callback, int idx /* = 0 */
   return *this;
 }
 
-Atm_bit& Atm_bit::onFlip( bool status, Machine& machine, int evt /* = 0 */ ) {
-  _connector[status ? 0 : 1].set( &machine, evt );
+Atm_bit& Atm_bit::onFlip( bool status, Machine& machine, int event /* = 0 */ ) {
+  _connector[status ? 0 : 1].set( &machine, event );
   return *this;
 }
 
