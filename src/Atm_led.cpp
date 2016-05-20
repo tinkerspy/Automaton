@@ -31,22 +31,10 @@ Atm_led& Atm_led::onFinish( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
-Atm_led& Atm_led::onFinish( TinyMachine& machine, int event /* = 0 */ ) {
-  _onfinish.set( &machine, event );
-  return *this;
-}
-
 Atm_led& Atm_led::onFinish( atm_cb_t callback, int idx /* = 0 */ ) {
   _onfinish.set( callback, idx );
   return *this;
 }
-
-#ifndef TINYMACHINE
-Atm_led& Atm_led::onFinish( const char* label, int event /* = 0 */ ) {
-  _onfinish.set( label, event );
-  return *this;
-}
-#endif
 
 Atm_led& Atm_led::blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count /* = ATM_COUNTER_OFF */ ) {
   blink( duration );  // Time in which led is fully on
@@ -124,7 +112,7 @@ void Atm_led::action( int id ) {
       }
       return;
     case ACT_CHAIN:
-      _onfinish.push( FACTORY );
+      _onfinish.push();
       return;
   }
 }

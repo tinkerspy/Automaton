@@ -3,27 +3,20 @@
 #include <Automaton.h>
 
 #undef TINYMACHINE
-#undef FACTORY
 #undef STATE_TYPE
 #undef MACHINE
 
 #ifdef TINYMACHINE
 #define MACHINE TinyMachine
-#define FACTORY 0
 #define STATE_TYPE tiny_state_t
 #else
 #define MACHINE Machine
-#define FACTORY factory
 #define STATE_TYPE state_t
 #endif
 
 class Atm_timer : public MACHINE {
  public:
-  Atm_timer( void ) : MACHINE() {
-#ifndef TINYMACHINE
-    class_label = "TMR";
-#endif
-  };
+  Atm_timer( void ) : MACHINE() {};
 
   atm_timer_millis daytimer, mstimer;
   atm_counter daycounter, repcounter;
@@ -39,12 +32,8 @@ class Atm_timer : public MACHINE {
   Atm_timer& trace( Stream& stream );
   Atm_timer& onTimer( atm_cb_t callback, int idx = 0 );
   Atm_timer& onTimer( Machine& machine, int event = 0 );
-  Atm_timer& onTimer( TinyMachine& machine, int event = 0 );
-  Atm_timer& onTimer( const char* label, int event = 0 );
   Atm_timer& onFinish( atm_cb_t callback, int idx = 0 );
   Atm_timer& onFinish( Machine& machine, int event = 0 );
-  Atm_timer& onFinish( TinyMachine& machine, int event = 0 );
-  Atm_timer& onFinish( const char* label, int event = 0 );
   Atm_timer& interval_seconds( uint32_t v );
   Atm_timer& interval_millis( uint32_t v );
   Atm_timer& interval( uint32_t v );

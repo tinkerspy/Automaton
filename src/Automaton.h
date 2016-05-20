@@ -7,8 +7,7 @@
 
 #include "Arduino.h"
 
-typedef int state_t;
-typedef int8_t tiny_state_t;
+typedef int8_t state_t;
 
 const uint8_t ATM_SLEEP_FLAG = B00000001;
 const uint8_t ATM_CYCLE_FLAG = B00000010;
@@ -18,8 +17,7 @@ const uint8_t ATM_USR3_FLAG = B01000000;
 const uint8_t ATM_USR4_FLAG = B10000000;
 const uint8_t ATM_USR_FLAGS = B11110000;
 
-#define tiny_read_state( addr ) ( tiny_state_t ) pgm_read_byte_near( addr )
-#define read_state( addr ) ( state_t ) pgm_read_word_near( addr )
+#define read_state( addr ) ( state_t ) pgm_read_byte_near( addr )
 
 typedef void ( *swcb_sym_t )( Stream* stream, const char label[], const char current[], const char next[], const char trigger[], uint32_t runtime,
                               uint32_t cycles );
@@ -37,10 +35,8 @@ const state_t ATM_ON_EXIT = 2;
 const uint32_t ATM_TIMER_OFF = 0xffffffff;  // This timer value never expires
 const uint16_t ATM_COUNTER_OFF = 0xffff;    // This counter value never expires
 
-class Factory;
+class Appliance;
 class Machine;
-class TinyMachine;
-class BaseMachine;
 
 class atm_serial_debug {
  public:
@@ -66,13 +62,6 @@ class atm_timer_millis {
  public:
   uint32_t value;
   void set( uint32_t v );
-  int expired( BaseMachine* machine );
-};
-
-class atm_timer_micros {
- public:
-  uint32_t value;
-  void set( uint32_t v );
   int expired( Machine* machine );
 };
 
@@ -84,18 +73,11 @@ class atm_counter {
   uint16_t decrement( void );
 };
 
-class atm_pin {  // TODO untested!
-  uint32_t pinstate;
-
- public:
-  uint8_t change( uint8_t pin );
-};
-
 typedef bool ( *atm_cb_t )( int idx );
 
 class atm_connector {
  public:
-  enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE, MODE_TMACHINE, MODE_FACTORY };  // bits 0, 1, 2
+  enum { MODE_NULL, MODE_CALLBACK, MODE_MACHINE };  // bits 0, 1, 2
   enum { LOG_AND, LOG_OR, LOG_XOR };                                             // bits 3, 4 MOVE to condition
   enum { REL_NULL, REL_EQ, REL_NEQ, REL_LT, REL_GT, REL_LTE, REL_GTE };          // bits 5, 6, 7 Move condition
   uint8_t mode_flags;
@@ -107,50 +89,35 @@ class atm_connector {
     struct {
       union {
         Machine* machine;
-        TinyMachine* tmachine;
         const char* label;
       };
       int event;
     };
   };
   void set( Machine* m, int evt, int8_t logOp = 0, int8_t relOp = 0 );
-  void set( TinyMachine* tm, int evt, int8_t logOp = 0, int8_t relOp = 0 );
-  void set( const char* l, int evt, int8_t logOp = 0, int8_t relOp = 0 );
   void set( atm_cb_t cb, int idx, int8_t logOp = 0, int8_t relOp = 0 );
-  bool push( Factory* f = 0, bool noCallback = false );  // returns false (only) if callback is set!
-  int pull( Factory* f = 0, bool def_value = false );
+  bool push( bool noCallback = false );  // returns false (only) if callback is set!
+  int pull( bool def_value = false );
   int8_t logOp( void );
   int8_t relOp( void );
   int8_t mode( void );
 };
 
-class BaseMachine {
- public:
-  uint32_t state_millis;
-  uint8_t flags = ATM_SLEEP_FLAG;
-  state_t next_trigger = -1;
 
-  uint8_t sleep( int8_t v = -1 );
-  virtual int event( int id ) = 0;  // Pure virtual methods -> make this an abstract class
-  virtual void action( int id ) = 0;
-};
-
-class Machine : public BaseMachine {
+class Machine {
  public:
   virtual int state( void );
   virtual Machine& trigger( int evt = 0 );
-  Machine& priority( int8_t priority );
-  int8_t priority( void );
   Machine& cycle( uint32_t time = 0 );
   Machine& label( const char label[] );
+  uint32_t state_millis;
+  uint8_t flags = ATM_SLEEP_FLAG;
+  state_t next_trigger = -1;
+  uint8_t sleep( int8_t v = -1 );
+  virtual int event( int id ) = 0;  // Pure virtual methods -> make this an abstract class
+  virtual void action( int id ) = 0;
 
-  int8_t prio;
-  uint32_t state_micros;
-  const char* inst_label;
-  const char* class_label;
   Machine* inventory_next;
-  Machine* priority_next;
-  Factory* factory;
 
  protected:
   Machine& state( state_t state );
@@ -169,64 +136,26 @@ class Machine : public BaseMachine {
   uint32_t cycles;
 };
 
-class TinyMachine : public BaseMachine {
+class Appliance {
  public:
-  virtual int state( void );
-  virtual TinyMachine& trigger( int evt = 0 );
-  TinyMachine& cycle( uint32_t time = 0 );
-  TinyMachine* inventory_next;
-
- protected:
-  TinyMachine& state( tiny_state_t state );
-  TinyMachine& begin( const tiny_state_t tbl[], int width );
-  const tiny_state_t* state_table;
-  tiny_state_t next = 0;
-  tiny_state_t current = -1;
-  uint8_t state_width;
-};
-
-class Factory {
- public:
-  Factory& add( Machine& machine );
-  Factory& add( TinyMachine& machine );
-  Machine* find( const char label[] );
-  Factory& trigger( const char label[], int event = 0 );
-  int state( const char label[] );
-  Factory& cycle( uint32_t time = 0 );
+  Appliance& add( Machine& machine );
+  Appliance& run( uint32_t time = 0 );
 
  private:
-  int8_t recalibrate = 1;
   Machine* inventory_root;
-  Machine* priority_root[ATM_NO_OF_QUEUES];
-  TinyMachine* tiny_root;
-  void calibrate( void );
-  void run( int q );
   void runTiny( void );
 };
 
 #include <Atm_analog.hpp>
-#include <Att_analog.hpp>
-#include <Atm_button.hpp>
-#include <Att_button.hpp>
-#include <Atm_command.hpp>
-#include <Att_command.hpp>
-#include <Atm_comparator.hpp>
-#include <Att_comparator.hpp>
-#include <Atm_digital.hpp>
-#include <Att_digital.hpp>
-#include <Atm_encoder.hpp>
-#include <Att_encoder.hpp>
-#include <Atm_fade.hpp>
-#include <Att_fade.hpp>
-#include <Atm_led.hpp>
-#include <Att_led.hpp>
-#include <Atm_fan.hpp>
-#include <Att_fan.hpp>
-#include <Atm_step.hpp>
-#include <Att_step.hpp>
-#include <Atm_timer.hpp>
-#include <Att_timer.hpp>
 #include <Atm_bit.hpp>
-#include <Att_bit.hpp>
+#include <Atm_button.hpp>
+#include <Atm_command.hpp>
+#include <Atm_comparator.hpp>
 #include <Atm_condition.hpp>
-#include <Att_condition.hpp>
+#include <Atm_digital.hpp>
+#include <Atm_encoder.hpp>
+#include <Atm_fade.hpp>
+#include <Atm_led.hpp>
+#include <Atm_fan.hpp>
+#include <Atm_step.hpp>
+#include <Atm_timer.hpp>

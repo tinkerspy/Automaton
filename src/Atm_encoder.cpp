@@ -46,29 +46,12 @@ Atm_encoder& Atm_encoder::onUp( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
-Atm_encoder& Atm_encoder::onUp( TinyMachine& machine, int event /* = 0 */ ) {
-  _onup.set( &machine, event );
-  return *this;
-}
-
 Atm_encoder& Atm_encoder::onUp( atm_cb_t callback, int idx /* = 0 */ ) {
   _onup.set( callback, idx );
   return *this;
 }
 
-#ifndef TINYMACHINE
-Atm_encoder& Atm_encoder::onUp( const char* label, int event /* = 0 */ ) {
-  _onup.set( label, event );
-  return *this;
-}
-#endif
-
 Atm_encoder& Atm_encoder::onDown( Machine& machine, int event /* = 0 */ ) {
-  _ondown.set( &machine, event );
-  return *this;
-}
-
-Atm_encoder& Atm_encoder::onDown( TinyMachine& machine, int event /* = 0 */ ) {
   _ondown.set( &machine, event );
   return *this;
 }
@@ -77,13 +60,6 @@ Atm_encoder& Atm_encoder::onDown( atm_cb_t callback, int idx /* = 0 */ ) {
   _ondown.set( callback, idx );
   return *this;
 }
-
-#ifndef TINYMACHINE
-Atm_encoder& Atm_encoder::onDown( const char* label, int event /* = 0 */ ) {
-  _ondown.set( label, event );
-  return *this;
-}
-#endif
 
 int Atm_encoder::state( void ) {
   return _value;
@@ -132,10 +108,10 @@ void Atm_encoder::action( int id ) {
       }
       return;
     case ACT_UP:
-      _onup.push( FACTORY );
+      _onup.push();
       return;
     case ACT_DOWN:
-      _ondown.push( FACTORY );
+      _ondown.push();
       return;
   }
 }

@@ -65,16 +65,6 @@ Atm_step& Atm_step::onStep( uint8_t id, Machine& machine, state_t event /* = 0 *
   return *this;
 }
 
-Atm_step& Atm_step::onStep( uint8_t id, const char* label, state_t event /* = 0 */ ) {
-  _connector[id].set( label, event );
-  return *this;
-}
-
-Atm_step& Atm_step::onStep( uint8_t id, TinyMachine& machine, state_t event /* = 0 */ ) {
-  _connector[id].set( &machine, event );
-  return *this;
-}
-
 int Atm_step::event( int id ) {
   state_t on_enter = read_state( state_table + ( current * state_width ) + ATM_ON_ENTER );
   switch ( id ) {
@@ -88,7 +78,7 @@ int Atm_step::event( int id ) {
 
 void Atm_step::action( int id ) {
   if ( id > -1 ) {
-    if ( !_connector[id].push( FACTORY, true ) ) {
+    if ( !_connector[id].push( true ) ) {
       ( *(atm_step_cb_t)_connector[id].callback )( _connector[id].callback_idx, id );
     }
   }

@@ -32,28 +32,6 @@ Atm_fan& Atm_fan::onInput( Machine& machine, state_t event /* = 0 */ ) {
   return *this;
 }
 
-#ifndef TINYMACHINE
-Atm_fan& Atm_fan::onInput( const char* label, state_t event /* = 0 */ ) {
-  for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
-    if ( _connector[idx].mode() == atm_connector::MODE_NULL ) {
-      _connector[idx].set( label, event );
-      break;
-    }
-  }
-  return *this;
-}
-#endif
-
-Atm_fan& Atm_fan::onInput( TinyMachine& machine, state_t event /* = 0 */ ) {
-  for ( uint8_t i = 0; i < ATM_MULTIPLIER_COMMS_MAX; i++ ) {
-    if ( _connector[i].mode() == atm_connector::MODE_NULL ) {
-      _connector[i].set( &machine, event );
-      break;
-    }
-  }
-  return *this;
-}
-
 int Atm_fan::event( int id ) {
   return 0;
 }
@@ -63,7 +41,7 @@ void Atm_fan::action( int id ) {
     case ACT_SEND:
       for ( uint8_t i = 0; i < ATM_MULTIPLIER_COMMS_MAX; i++ ) {
         if ( _connector[i].mode() != atm_connector::MODE_NULL ) {
-          _connector[i].push( FACTORY );
+          _connector[i].push();
         }
       }
       return;

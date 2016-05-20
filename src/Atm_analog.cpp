@@ -26,22 +26,10 @@ Atm_analog& Atm_analog::onChange( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
-Atm_analog& Atm_analog::onChange( TinyMachine& machine, int event /* = 0 */ ) {
-  _onchange.set( &machine, event );
-  return *this;
-}
-
 Atm_analog& Atm_analog::onChange( atm_analog_cb_t callback, int idx /* = 0 */ ) {
   _onchange.set( (atm_cb_t)callback, idx );
   return *this;
 }
-
-#ifndef TINYMACHINE
-Atm_analog& Atm_analog::onChange( const char* label, int event /* = 0 */ ) {
-  _onchange.set( label, event );
-  return *this;
-}
-#endif
 
 int Atm_analog::read_sample() {
   return analogRead( pin );
@@ -101,7 +89,7 @@ void Atm_analog::action( int id ) {
       v_sample = sample();
       return;
     case ACT_SEND:
-      if ( !_onchange.push( FACTORY, true ) ) {
+      if ( !_onchange.push( true ) ) {
         ( *(atm_analog_cb_t)_onchange.callback )( _onchange.callback_idx, v_sample, v_sample > v_previous );
       }
   }

@@ -3,17 +3,14 @@
 #include <Automaton.h>
 
 #undef TINYMACHINE
-#undef FACTORY
 #undef STATE_TYPE
 #undef MACHINE
 
 #ifdef TINYMACHINE
 #define MACHINE TinyMachine
-#define FACTORY 0
 #define STATE_TYPE tiny_state_t
 #else
 #define MACHINE Machine
-#define FACTORY factory
 #define STATE_TYPE state_t
 #endif
 
@@ -21,11 +18,7 @@ typedef bool ( *atm_comparator_cb_t )( int idx, int v, int up, int idx_threshold
 
 class Atm_comparator : public MACHINE {
  public:
-  Atm_comparator( void ) : MACHINE() {
-#ifndef TINYMACHINE
-    class_label = "CMP";
-#endif
-  };
+  Atm_comparator( void ) : MACHINE() {};
 
   short pin;
   atm_timer_millis timer;
@@ -49,12 +42,8 @@ class Atm_comparator : public MACHINE {
   Atm_comparator& average( uint16_t* v, uint16_t size );
   Atm_comparator& onUp( atm_comparator_cb_t callback, int idx = 0 );
   Atm_comparator& onUp( Machine& machine, int event = 0 );
-  Atm_comparator& onUp( TinyMachine& machine, int event = 0 );
-  Atm_comparator& onUp( const char* label, int event = 0 );
   Atm_comparator& onDown( atm_comparator_cb_t callback, int idx = 0 );
   Atm_comparator& onDown( Machine& machine, int event = 0 );
-  Atm_comparator& onDown( TinyMachine& machine, int event = 0 );
-  Atm_comparator& onDown( const char* label, int event = 0 );
   int _avg();
   Atm_comparator& bitmap( uint16_t v );
   int state( void );

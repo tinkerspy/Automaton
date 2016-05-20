@@ -3,17 +3,14 @@
 #include <Automaton.h>
 
 #undef TINYMACHINE
-#undef FACTORY
 #undef STATE_TYPE
 #undef MACHINE
 
 #ifdef TINYMACHINE
 #define MACHINE TinyMachine
-#define FACTORY 0
 #define STATE_TYPE tiny_state_t
 #else
 #define MACHINE Machine
-#define FACTORY factory
 #define STATE_TYPE state_t
 #endif
 
@@ -21,11 +18,7 @@ typedef bool ( *atm_command_cb_t )( int idx, int cmd );
 
 class Atm_command : public MACHINE {
  public:
-  Atm_command( void ) : MACHINE() {
-#ifndef TINYMACHINE
-    class_label = "CMD";
-#endif
-  };
+  Atm_command( void ) : MACHINE() {};
 
   atm_connector _oncommand;
   Stream* _stream;

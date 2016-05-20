@@ -3,17 +3,14 @@
 #include <Automaton.h>
 
 #undef TINYMACHINE
-#undef FACTORY
 #undef STATE_TYPE
 #undef MACHINE
 
 #ifdef TINYMACHINE
 #define MACHINE TinyMachine
-#define FACTORY 0
 #define STATE_TYPE tiny_state_t
 #else
 #define MACHINE Machine
-#define FACTORY factory
 #define STATE_TYPE state_t
 #endif
 
@@ -23,11 +20,7 @@ typedef bool ( *atm_step_cb_t )( int idx, int id );
 
 class Atm_step : public MACHINE {
  public:
-  Atm_step( void ) : MACHINE() {
-#ifndef TINYMACHINE
-    class_label = "STP";
-#endif
-  };
+  Atm_step( void ) : MACHINE() {};
   // clang-format off
   enum { LINEAR, S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9,
          SWEEP, X0, X1, X2, X3, X4, X5, X6, X7, X8, X9, XA, XB, XC, XD, XE, XF, XG, XH }; 
@@ -44,6 +37,4 @@ class Atm_step : public MACHINE {
   Atm_step& onStep( uint8_t idx );  // fix id -> step???
   Atm_step& onStep( uint8_t id, atm_step_cb_t callback, int idx = 0 );
   Atm_step& onStep( uint8_t id, Machine& machine, state_t event = 0 );
-  Atm_step& onStep( uint8_t id, const char* label, state_t event = 0 );
-  Atm_step& onStep( uint8_t idx, TinyMachine& machine, state_t event = 0 );  // fix id
 };

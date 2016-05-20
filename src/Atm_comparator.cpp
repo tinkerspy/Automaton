@@ -26,19 +26,6 @@ Atm_comparator& Atm_comparator::onUp( Machine& machine, int event /* = 0 */ ) {
   _onup.set( &machine, event );
   return *this;
 }
-
-Atm_comparator& Atm_comparator::onUp( TinyMachine& machine, int event /* = 0 */ ) {
-  _onup.set( &machine, event );
-  return *this;
-}
-
-#ifndef TINYMACHINE
-Atm_comparator& Atm_comparator::onUp( const char* label, int event /* = 0 */ ) {
-  _onup.set( label, event );
-  return *this;
-}
-#endif
-
 Atm_comparator& Atm_comparator::onDown( atm_comparator_cb_t callback, int idx /* = 0 */ ) {
   _ondown.set( (atm_cb_t)callback, idx );
   return *this;
@@ -48,18 +35,6 @@ Atm_comparator& Atm_comparator::onDown( Machine& machine, int event /* = 0 */ ) 
   _ondown.set( &machine, event );
   return *this;
 }
-
-Atm_comparator& Atm_comparator::onDown( TinyMachine& machine, int event /* = 0 */ ) {
-  _ondown.set( &machine, event );
-  return *this;
-}
-
-#ifndef TINYMACHINE
-Atm_comparator& Atm_comparator::onDown( const char* label, int event /* = 0 */ ) {
-  _ondown.set( label, event );
-  return *this;
-}
-#endif
 
 int Atm_comparator::read_sample() {
   return analogRead( pin );
@@ -143,7 +118,7 @@ void Atm_comparator::action( int id ) {
       if ( v_sample >= v_previous ) {
         for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
           if ( ( bitmap_diff >> i ) & 1 ) {
-            if ( !_onup.push( FACTORY, true ) ) {
+            if ( !_onup.push( true ) ) {
               ( *(atm_comparator_cb_t)_onup.callback )( _onup.callback_idx, v_sample, 1, i, p_threshold[i] );
             }
           }
@@ -151,7 +126,7 @@ void Atm_comparator::action( int id ) {
       } else {
         for ( int i = p_threshold_size; i >= 0; i-- ) {
           if ( ( bitmap_diff >> i ) & 1 ) {
-            if ( !_ondown.push( FACTORY, true ) ) {
+            if ( !_ondown.push( true ) ) {
               ( *(atm_comparator_cb_t)_ondown.callback )( _onup.callback_idx, v_sample, 0, i, p_threshold[i] );
             }
           }

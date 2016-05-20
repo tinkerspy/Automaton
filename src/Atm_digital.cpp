@@ -41,18 +41,6 @@ Atm_digital& Atm_digital::onFlip( bool status, Machine& machine, int event /* = 
   return *this;
 }
 
-Atm_digital& Atm_digital::onFlip( bool status, TinyMachine& machine, int event /* = 0 */ ) {
-  _connection[status ? 1 : 0].set( &machine, event );
-  return *this;
-}
-
-#ifndef TINYMACHINE
-Atm_digital& Atm_digital::onFlip( bool status, const char* label, int event /* = 0 */ ) {
-  _connection[status ? 1 : 0].set( label, event );
-  return *this;
-}
-#endif
-
 int Atm_digital::event( int id ) {
   switch ( id ) {
     case EVT_TIMER:
@@ -68,11 +56,11 @@ int Atm_digital::event( int id ) {
 void Atm_digital::action( int id ) {
   switch ( id ) {
     case ACT_HIGH:
-      _connection[1].push( FACTORY );
+      _connection[1].push();
       if ( _indicator > -1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
       return;
     case ACT_LOW:
-      _connection[0].push( FACTORY );
+      _connection[0].push();
       if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
       return;
   }

@@ -3,27 +3,20 @@
 #include <Automaton.h>
 
 #undef TINYMACHINE
-#undef FACTORY
 #undef STATE_TYPE
 #undef MACHINE
 
 #ifdef TINYMACHINE
 #define MACHINE TinyMachine
-#define FACTORY 0
 #define STATE_TYPE tiny_state_t
 #else
 #define MACHINE Machine
-#define FACTORY factory
 #define STATE_TYPE state_t
 #endif
 
 class Atm_bit : public MACHINE {
  public:
-  Atm_bit( void ) : MACHINE() {
-#ifndef TINYMACHINE
-    class_label = "BIT";
-#endif
-  };
+  Atm_bit( void ) : MACHINE() { };
 
   state_t _last_state;
   atm_connector _connector[4];
@@ -36,13 +29,9 @@ class Atm_bit : public MACHINE {
 
   Atm_bit& begin( bool initialState = false );
   Atm_bit& onFlip( bool status, atm_cb_t callback, int idx = 0 );
-  Atm_bit& onFlip( bool status, Machine& machine, state_t event = 0 );
-  Atm_bit& onFlip( bool status, const char* label, state_t event = 0 );
-  Atm_bit& onFlip( bool status, TinyMachine& machine, state_t event = 0 );
+  Atm_bit& onFlip( bool status, Machine& machine, int event = 0 );
   Atm_bit& onInput( bool status, atm_cb_t callback, int idx = 0 );
-  Atm_bit& onInput( bool status, Machine& machine, state_t event = 0 );
-  Atm_bit& onInput( bool status, const char* label, state_t event = 0 );
-  Atm_bit& onInput( bool status, TinyMachine& machine, state_t event = 0 );
+  Atm_bit& onInput( bool status, Machine& machine, int event = 0 );
   Atm_bit& indicator( int led, bool activeLow = false );
   Atm_bit& trace( Stream& stream );
   int event( int id );

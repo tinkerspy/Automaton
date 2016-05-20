@@ -3,17 +3,14 @@
 #include <Automaton.h>
 
 #undef TINYMACHINE
-#undef FACTORY
 #undef STATE_TYPE
 #undef MACHINE
 
 #ifdef TINYMACHINE
 #define MACHINE TinyMachine
-#define FACTORY 0
 #define STATE_TYPE tiny_state_t
 #else
 #define MACHINE Machine
-#define FACTORY factory
 #define STATE_TYPE state_t
 #endif
 
@@ -22,11 +19,7 @@
 
 class Atm_digital : public MACHINE {
  public:
-  Atm_digital( void ) : MACHINE() {
-#ifndef TINYMACHINE
-    class_label = "DIG";
-#endif
-  };
+  Atm_digital( void ) : MACHINE() {};
 
   short pin;
   int state_high, state_low;
@@ -46,8 +39,6 @@ class Atm_digital : public MACHINE {
   int state( void );
   Atm_digital& onFlip( bool status, atm_cb_t callback, int idx = 0 );
   Atm_digital& onFlip( bool status, Machine& machine, int event = 0 );
-  Atm_digital& onFlip( bool status, TinyMachine& machine, int event = 0 );
-  Atm_digital& onFlip( bool status, const char* label, int event = 0 );
   Atm_digital& indicator( int led, bool activeLow = false );
   Atm_digital& trace( Stream& stream );
 };

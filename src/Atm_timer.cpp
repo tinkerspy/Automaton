@@ -35,32 +35,12 @@ Atm_timer& Atm_timer::onTimer( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
-Atm_timer& Atm_timer::onTimer( const char* label, int event /* = 0 */ ) {
-  _ontimer.set( label, event );
-  return *this;
-}
-
-Atm_timer& Atm_timer::onTimer( TinyMachine& machine, int event /* = 0 */ ) {
-  _ontimer.set( &machine, event );
-  return *this;
-}
-
 Atm_timer& Atm_timer::onFinish( atm_cb_t callback, int idx /* = 0 */ ) {
   _onfinish.set( callback, idx );
   return *this;
 }
 
 Atm_timer& Atm_timer::onFinish( Machine& machine, int event /* = 0 */ ) {
-  _onfinish.set( &machine, event );
-  return *this;
-}
-
-Atm_timer& Atm_timer::onFinish( const char* label, int event /* = 0 */ ) {
-  _onfinish.set( label, event );
-  return *this;
-}
-
-Atm_timer& Atm_timer::onFinish( TinyMachine& machine, int event /* = 0 */ ) {
   _onfinish.set( &machine, event );
   return *this;
 }
@@ -113,10 +93,10 @@ void Atm_timer::action( int id ) {
       return;
     case ACT_TRIGGER:
       repcounter.decrement();
-      _ontimer.push( FACTORY );
+      _ontimer.push();
       return;
     case ACT_FINISH:
-      _onfinish.push( FACTORY );
+      _onfinish.push();
       repcounter.set( repeat_cnt );
       return;
   }
