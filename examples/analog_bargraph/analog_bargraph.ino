@@ -1,6 +1,6 @@
 #include <Automaton.h>
 
-// six leds on 4, 5, 6, 7, 8, 9 and a pot on A5
+// six leds on 4, 5, 6, 7, 8, 9 and a pot on A0
 
 Atm_comparator cmp;
 Atm_led led[6];
