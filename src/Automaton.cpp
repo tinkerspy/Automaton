@@ -1,6 +1,6 @@
 /*
-  Automaton.cpp - Library for creating and running Finite State Machines.
-  Published under the MIT License (MIT), Copyright (c) 2015, J.P. van der Landen
+  Automaton.cpp - Reactive State Machine Framework.
+  Published under the MIT License (MIT), Copyright (c) 2015-2016, J.P. van der Landen
 */
 
 #include "Automaton.h"
@@ -189,7 +189,7 @@ Machine& Machine::cycle( uint32_t time /* = 0 */ ) {
   return *this;
 }
 
-// FACTORY
+// APPLIANCE
 
 void Appliance::runTiny() {
   Machine* m;
@@ -202,14 +202,14 @@ void Appliance::runTiny() {
   }
 }
 
-// .add( machine ) Adds a state machine to the factory by prepending it to the inventory list
+// .component( machine ) Adds a state machine to the appliance by prepending it to the inventory list
 Appliance& Appliance::component( Machine& machine ) {
   machine.inventory_next = inventory_root;
   inventory_root = &machine;
   return *this;
 }
 
-// .cycle() executes one factory cycle (runs all priority queues a certain number of times)
+// .run() executes one appliance cycle (runs all machines once)
 Appliance& Appliance::run( uint32_t time /* = 0 */ )  // Is it safe to allow recursion here???
 {
   uint32_t cycle_start = millis();

@@ -1,6 +1,6 @@
 /*
-  Automaton.h - Library for creating and running Finite State Machines.
-  Published under the MIT License (MIT), Copyright (c) 2015, J.P. van der Landen
+  Automaton.h - Reactive State Machine Framework.
+  Published under the MIT License (MIT), Copyright (c) 2015-2016, J.P. van der Landen
 */
 
 #pragma once
@@ -150,6 +150,8 @@ class Appliance {
   Machine* inventory_root;
   void runTiny( void );
 };
+
+// Bundled state machines (components)
 
 #include <Atm_analog.hpp>
 #include <Atm_bit.hpp>
