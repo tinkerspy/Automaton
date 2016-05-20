@@ -87,9 +87,11 @@ class atm_connector {
   uint8_t mode_flags;
   union {
     struct {
-      atm_cb_push_t push_callback;
-      atm_cb_pull_t pull_callback;
-      int callback_idx;  // +2 = 5 bytes per object
+      union {
+        atm_cb_push_t push_callback;
+        atm_cb_pull_t pull_callback;
+      };
+      int callback_idx;  // +2 = 5 bytes per connector/object
     };
     struct {
       union {
