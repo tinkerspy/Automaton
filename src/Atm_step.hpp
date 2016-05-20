@@ -4,7 +4,7 @@
 
 #define ATM_STEP_MAX 10
 
-typedef bool ( *atm_step_cb_t )( int idx, int id );
+typedef void ( *atm_step_cb_t )( int idx, int id );
 
 class Atm_step : public Machine {
  public:

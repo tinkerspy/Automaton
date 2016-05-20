@@ -2,7 +2,7 @@
 
 #include <Automaton.h>
 
-typedef bool ( *atm_analog_cb_t )( int idx, int v, int up );
+typedef void ( *atm_analog_cb_t )( int idx, int v, int up );
 
 class Atm_analog : public Machine {
  public:

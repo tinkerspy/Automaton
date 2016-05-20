@@ -2,7 +2,7 @@
 
 #include <Automaton.h>
 
-typedef bool ( *atm_comparator_cb_t )( int idx, int v, int up, int idx_threshold, int v_threshold );
+typedef void ( *atm_comparator_cb_t )( int idx, int v, int up, int idx_threshold, int v_threshold );
 
 class Atm_comparator : public Machine {
  public:
