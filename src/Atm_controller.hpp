@@ -6,8 +6,8 @@
 
 class Atm_controller : public Machine {
  public:
-  enum { OFF, ON };                                       // STATES
-  enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE };  // EVENTS
+  enum { OFF, ON };                           // STATES
+  enum { EVT_ON, EVT_OFF, EVT_INPUT, ELSE };  // EVENTS
 
   Atm_controller( void ) : Machine(){};
   Atm_controller& begin( bool initialState = false );
