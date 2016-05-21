@@ -17,9 +17,10 @@ class Atm_digital : public Machine {
   int8_t _indicator;
   bool _indicatorActiveLow;
 
-  enum { IDLE, WAITH, VHIGH, WAITL, VLOW };
-  enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };
-  enum { ACT_HIGH, ACT_LOW };
+  enum { IDLE, WAITH, VHIGH, WAITL, VLOW };     // STATES
+  enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };  // EVENTS
+  enum { ACT_HIGH, ACT_LOW };                   // ACTIONS
+  enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE };     // CONNECTORS
 
   Atm_digital& begin( int attached_pin, int debounce = 20, bool activeLow = false, bool pullUp = false );
   int event( int id );
