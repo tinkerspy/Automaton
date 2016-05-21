@@ -38,8 +38,8 @@ Atm_fade& Atm_fade::blink( uint32_t duration ) {
   return *this;
 }
 
-Atm_fade& Atm_fade::pause( uint32_t duration ) {
-  timer_off.set( duration );  // Pause between slopes (in which led is fully off)
+Atm_fade& Atm_fade::pause( uint32_t duration ) {  // Pause between slopes (in which led is fully off)
+  timer_off.set( duration ? duration : 1 ); // Make sure off_timer is never 0 (work around)
   return *this;
 }
 
