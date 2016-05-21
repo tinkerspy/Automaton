@@ -22,6 +22,8 @@ class Atm_encoder : public Machine {
 
   Atm_encoder& begin( int pin1, int pin2, int divider = 1 );
   Atm_encoder& trace( Stream& stream );
+  Atm_encoder& onChange( Machine& machine, int event = 0 );
+  Atm_encoder& onChange( atm_cb_push_t callback, int idx = 0 );
   Atm_encoder& onUp( Machine& machine, int event = 0 );
   Atm_encoder& onUp( atm_cb_push_t callback, int idx = 0 );
   Atm_encoder& onDown( Machine& machine, int event = 0 );

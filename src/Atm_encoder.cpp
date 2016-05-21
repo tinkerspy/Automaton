@@ -5,7 +5,7 @@
 
 const char Atm_encoder::_enc_states[16] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0};
 
-Atm_encoder& Atm_encoder::begin( int pin1, int pin2, int divider /* = 4 */ ) {
+Atm_encoder& Atm_encoder::begin( int pin1, int pin2, int divider /* = 1 */ ) {
   // clang-format off
   const static state_t state_table[] PROGMEM = {
     /*          ON_ENTER     ON_LOOP  ON_EXIT  EVT_UP  EVT_DOWN  ELSE */
@@ -40,6 +40,18 @@ Atm_encoder& Atm_encoder::range( int min, int max, bool wrap /* = false */ ) {
 
 Atm_encoder& Atm_encoder::set( int value ) {
   _value = value;
+  return *this;
+}
+
+Atm_encoder& Atm_encoder::onChange( Machine& machine, int event /* = 0 */ ) {
+  _onup.set( &machine, event );
+  _ondown.set( &machine, event );
+  return *this;
+}
+
+Atm_encoder& Atm_encoder::onChange( atm_cb_push_t callback, int idx /* = 0 */ ) {
+  _onup.set( callback, idx );
+  _ondown.set( &machine, event );
   return *this;
 }
 
