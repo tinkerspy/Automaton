@@ -17,6 +17,31 @@ Atm_controller& Atm_controller::begin( bool initialState /* = false */ ) {
   return *this;
 }
 
+int Atm_controller::event( int id ) {
+  switch ( id ) {
+    case EVT_ON:
+      return eval_all();
+    case EVT_OFF:
+      return !eval_all();
+  }
+  return 0;
+}
+
+void Atm_controller::action( int id ) {
+  switch ( id ) {
+    case ACT_OFF:
+      _connector[_last_state == current ? 3 : 1].push();
+      if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
+      _last_state = current;
+      return;
+    case ACT_ON:
+      if ( _last_state != -1 ) _connector[( _last_state == current ) ? 2 : 0].push();
+      if ( _indicator > -1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
+      _last_state = current;
+      return;
+  }
+}
+
 Atm_controller& Atm_controller::led( int led, bool activeLow /* = false */ ) {
   _indicator = led;
   _indicatorActiveLow = activeLow;
@@ -144,31 +169,6 @@ bool Atm_controller::eval_all() {
     }
   }
   return r;
-}
-
-int Atm_controller::event( int id ) {
-  switch ( id ) {
-    case EVT_ON:
-      return eval_all();
-    case EVT_OFF:
-      return !eval_all();
-  }
-  return 0;
-}
-
-void Atm_controller::action( int id ) {
-  switch ( id ) {
-    case ACT_OFF:
-      _connector[_last_state == current ? 3 : 1].push();
-      if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
-      _last_state = current;
-      return;
-    case ACT_ON:
-      if ( _last_state != -1 ) _connector[( _last_state == current ) ? 2 : 0].push();
-      if ( _indicator > -1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
-      _last_state = current;
-      return;
-  }
 }
 
 Atm_controller& Atm_controller::trace( Stream& stream ) {
