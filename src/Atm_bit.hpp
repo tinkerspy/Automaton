@@ -11,9 +11,10 @@ class Atm_bit : public Machine {
   int8_t _indicator;
   bool _indicatorActiveLow;
 
-  enum { OFF, ON };                                       // STATES
-  enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE };  // EVENTS
-  enum { ACT_ON, ACT_OFF, ACT_INPUT };                    // ACTIONS
+  enum { OFF, ON };                                                         // STATES
+  enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE };                    // EVENTS
+  enum { ACT_ON, ACT_OFF, ACT_INPUT };                                      // ACTIONS
+  enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, ON_INPUT_FALSE, ON_INPUT_TRUE };  // CONNECTORS
 
   Atm_bit& begin( bool initialState = false );
   Atm_bit& onChange( atm_cb_push_t callback, int idx = 0 );

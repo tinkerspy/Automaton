@@ -23,12 +23,12 @@ int Atm_bit::event( int id ) {
 void Atm_bit::action( int id ) {
   switch ( id ) {
     case ACT_OFF:
-      if ( _last_state != -1 ) _connector[_last_state == current ? 3 : 1].push();
+      if ( _last_state != -1 ) _connector[_last_state == current ? ON_INPUT_FALSE : ON_CHANGE_FALSE].push();
       if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
       _last_state = current;
       return;
     case ACT_ON:
-      if ( _last_state != -1 ) _connector[_last_state == current ? 2 : 0].push();
+      if ( _last_state != -1 ) _connector[_last_state == current ? ON_INPUT_TRUE : ON_CHANGE_TRUE].push();
       if ( _indicator > -1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
       _last_state = current;
       return;
@@ -43,34 +43,34 @@ Atm_bit& Atm_bit::led( int led, bool activeLow /* = false */ ) {
 }
 
 Atm_bit& Atm_bit::onChange( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _connector[0].set( callback, idx );
-  _connector[1].set( callback, idx );
+  _connector[ON_CHANGE_FALSE].set( callback, idx );
+  _connector[ON_CHANGE_TRUE].set( callback, idx );
   return *this;
 }
 
 Atm_bit& Atm_bit::onChange( Machine& machine, int event /* = 0 */ ) {
-  _connector[0].set( &machine, event );
-  _connector[1].set( &machine, event );
+  _connector[ON_CHANGE_FALSE].set( &machine, event );
+  _connector[ON_CHANGE_TRUE].set( &machine, event );
   return *this;
 }
 
 Atm_bit& Atm_bit::onChange( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _connector[status ? 0 : 1].set( callback, idx );
+  _connector[status ? ON_CHANGE_TRUE : ON_CHANGE_FALSE].set( callback, idx );
   return *this;
 }
 
 Atm_bit& Atm_bit::onChange( bool status, Machine& machine, int event /* = 0 */ ) {
-  _connector[status ? 0 : 1].set( &machine, event );
+  _connector[status ? ON_CHANGE_TRUE : ON_CHANGE_FALSE].set( &machine, event );
   return *this;
 }
 
 Atm_bit& Atm_bit::onInput( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _connector[status ? 2 : 3].set( callback, idx );
+  _connector[status ? ON_INPUT_TRUE : ON_INPUT_FALSE].set( callback, idx );
   return *this;
 }
 
 Atm_bit& Atm_bit::onInput( bool status, Machine& machine, int event /* = 0 */ ) {
-  _connector[status ? 2 : 3].set( &machine, event );
+  _connector[status ? ON_INPUT_TRUE : ON_INPUT_FALSE].set( &machine, event );
   return *this;
 }
 
