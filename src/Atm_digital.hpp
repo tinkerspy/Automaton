@@ -9,18 +9,18 @@ class Atm_digital : public Machine {
  public:
   Atm_digital( void ) : Machine(){};
 
+  enum { IDLE, WAITH, VHIGH, WAITL, VLOW };             // STATES
+  enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };          // EVENTS
+  enum { ACT_HIGH, ACT_LOW };                           // ACTIONS
+  enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, CONN_SIZE };  // CONNECTORS
+
   short pin;
   int state_high, state_low;
   atm_timer_millis timer;
   bool _activeLow;
-  atm_connector _connection[2];
+  atm_connector _connection[CONN_SIZE];
   int8_t _indicator;
   bool _indicatorActiveLow;
-
-  enum { IDLE, WAITH, VHIGH, WAITL, VLOW };     // STATES
-  enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };  // EVENTS
-  enum { ACT_HIGH, ACT_LOW };                   // ACTIONS
-  enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE };     // CONNECTORS
 
   Atm_digital& begin( int attached_pin, int debounce = 20, bool activeLow = false, bool pullUp = false );
   int event( int id );

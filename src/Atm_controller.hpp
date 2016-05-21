@@ -8,16 +8,16 @@ class Atm_controller : public Machine {
  public:
   Atm_controller( void ) : Machine(){};
 
+  enum { OFF, ON };                                                                    // STATES
+  enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE };                               // EVENTS
+  enum { ACT_ON, ACT_OFF, ACT_INPUT };                                                 // ACTIONS
+  enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, ON_INPUT_FALSE, ON_INPUT_TRUE, CONN_SIZE };  // CONNECTORS
+
   state_t _last_state;
-  atm_connector _connector[4];
+  atm_connector _connector[CONN_SIZE];
   atm_connector _operand[ATM_CONDITION_OPERAND_MAX];
   int8_t _indicator;
   bool _indicatorActiveLow;
-
-  enum { OFF, ON };                                                         // STATES
-  enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE };                    // EVENTS
-  enum { ACT_ON, ACT_OFF, ACT_INPUT };                                      // ACTIONS
-  enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, ON_INPUT_FALSE, ON_INPUT_TRUE };  // CONNECTORS
 
   Atm_controller& begin( bool initialState = false );
   Atm_controller& onChange( bool status, atm_cb_push_t callback, int idx = 0 );
