@@ -3,14 +3,12 @@
 
 Atm_blink led;
 
-void setup()
-{
+void setup() {
   led.begin( 4, 200 );        // Setup a blink machine
   led.trigger( led.EVT_ON );  // Turn it on
 }
 
-void loop()
-{
+void loop() {
   led.cycle();
 }
 

@@ -2,7 +2,7 @@
 
 Atm_led led[3];
 Atm_timer timer[3];
-Factory factory;
+Appliance app;
 
 const int pin = 19;
 const int dotTime = 100;
@@ -13,24 +13,39 @@ const int longerwaitTime = 1000;
 
 void setup() {
 
-  factory.add( led[0].begin( pin ).blink(  dotTime, waitTime, 3 ) );
-  factory.add( timer[0].begin( longwaitTime ) );
-  led[0].onFinish( timer[0], Atm_timer::EVT_START );
-  timer[0].onTimer( led[1], Atm_led::EVT_BLINK );  
-
-  factory.add( led[1].begin( pin ).blink( dashTime, waitTime, 3 ) );
-  factory.add( timer[1].begin( longwaitTime ) );
-  led[1].onFinish( timer[1], Atm_timer::EVT_START );
-  timer[1].onTimer( led[2], Atm_led::EVT_BLINK );  
+  app.component( // S
+    led[0].begin( pin )
+      .blink(  dotTime, waitTime, 3 ) 
+      .onFinish( timer[0], Atm_timer::EVT_START )
+  );
+  app.component( 
+    timer[0].begin( longwaitTime ) 
+      .onTimer( led[1], Atm_led::EVT_BLINK )
+  );
   
-  factory.add( led[2].begin( pin ).blink(  dotTime, waitTime, 3 ) );
-  factory.add( timer[2].begin( longerwaitTime ) );
-  led[2].onFinish( timer[2], Atm_timer::EVT_START );
-  timer[2].onTimer( led[0], Atm_led::EVT_BLINK );
+  app.component( // O
+    led[1].begin( pin )
+      .blink( dashTime, waitTime, 3 ) 
+      .onFinish( timer[1], Atm_timer::EVT_START )
+  );
+  app.component( 
+    timer[1].begin( longwaitTime )
+    .onTimer( led[2], Atm_led::EVT_BLINK )
+  );
+  
+  app.component( // S
+    led[2].begin( pin )
+      .blink(  dotTime, waitTime, 3 ) 
+      .onFinish( timer[2], Atm_timer::EVT_START )
+  );
+  app.component( 
+    timer[2].begin( longerwaitTime )
+      .onTimer( led[0], Atm_led::EVT_BLINK )    
+  );
 
   led[0].trigger( Atm_led::EVT_BLINK );
 }
 
 void loop() {
-  factory.cycle();
+  app.run();
 }

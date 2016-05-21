@@ -1,13 +1,11 @@
-
-#ifndef Atm_blink_h
-#define Atm_blink_h
+#pragma once
 
 #include <Automaton.h>
 
 class Atm_blink: public Machine {
 
   public:
-    Atm_blink( void ) : Machine() { class_label = "BLNK"; };
+    Atm_blink( void ) : Machine() {};
 
     short pin;     
     atm_timer_millis timer;
@@ -21,5 +19,3 @@ class Atm_blink: public Machine {
     int event( int id ); 
     void action( int id ); 
 };
-
-#endif

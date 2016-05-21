@@ -7,7 +7,7 @@ Atm_button button1, button2;
 Atm_step burst1, burst2;
 Atm_timer reset_timer;
 Atm_gate gate;
-Factory factory;
+Appliance app;
 
 const int pinButton1 = 2;
 const int pinButton2 = 3;
@@ -52,8 +52,8 @@ void setup() {
   // Create the ignition LED (connected in hardware to the missile launch trigger)
   ignition.begin( pinIgnitionLed );
 
-  // Add all machines to the  factory
-  factory
+  // Add all machines to the  app
+  app
     .add( button1 ).add( button2 )
     .add( burst1 ).add( burst2 )
     .add( gate ).add( reset_timer )
@@ -61,6 +61,6 @@ void setup() {
 }
 
 void loop() {
-  // Run the factory
-  factory.cycle();
+  // Run the app
+  app.run();
 }

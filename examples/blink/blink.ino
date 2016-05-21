@@ -3,9 +3,7 @@
 class Atm_blink : public Machine {
 
   public:
-    Atm_blink( void ) : Machine() {
-      class_label = "BLNK";
-    };
+    Atm_blink( void ) : Machine() {};
 
     short pin;
     atm_timer_millis timer;
@@ -14,8 +12,7 @@ class Atm_blink : public Machine {
     enum { EVT_TIMER, EVT_ON, EVT_OFF, ELSE }; // EVENTS
     enum { ACT_ON, ACT_OFF }; // ACTIONS
 
-    Atm_blink & begin( int attached_pin, uint32_t blinkrate )
-    {
+    Atm_blink & begin( int attached_pin, uint32_t blinkrate ) {
       const static state_t state_table[] PROGMEM = {
         /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER  EVT_ON  EVT_OFF  ELSE */
         /* IDLE    */  ACT_OFF,        -1,      -1,        -1, LED_ON,      -1,   -1,
@@ -29,8 +26,7 @@ class Atm_blink : public Machine {
       return *this;
     }
 
-    int event( int id )
-    {
+    int event( int id ) {
       switch ( id ) {
         case EVT_TIMER :
           return timer.expired( this );
@@ -38,8 +34,7 @@ class Atm_blink : public Machine {
       return 0;
     }
 
-    void action( int id )
-    {
+    void action( int id ) {
       switch ( id ) {
         case ACT_ON :
           digitalWrite( pin, HIGH );
@@ -53,13 +48,11 @@ class Atm_blink : public Machine {
 
 Atm_blink led;
 
-void setup()
-{
+void setup() {
   led.begin( 4, 200 );        // Setup a blink machine
   led.trigger( led.EVT_ON );  // Turn it on
 }
 
-void loop()
-{
+void loop() {
   led.cycle();
 }

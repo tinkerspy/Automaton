@@ -15,8 +15,7 @@ Atm_blink & Atm_blink::begin( int attached_pin, uint32_t blinkrate )
   return *this;          
 }
 
-int Atm_blink::event( int id ) 
-{
+int Atm_blink::event( int id ) {
   switch ( id ) {
   	case EVT_TIMER :
   	  return timer.expired( this );        
@@ -24,8 +23,7 @@ int Atm_blink::event( int id )
    return 0;
 }
 
-void Atm_blink::action( int id ) 
-{
+void Atm_blink::action( int id ) {
   switch ( id ) {
   	case ACT_ON :
   	  digitalWrite( pin, HIGH );
@@ -36,10 +34,9 @@ void Atm_blink::action( int id )
    }
 }
 
-Atm_blink & Atm_blink::trace( Stream & stream ) 
-{
+Atm_blink & Atm_blink::trace( Stream & stream ) {
   Machine::setTrace( &stream, atm_serial_debug::trace,
-    "EVT_TIMER\0EVT_ON\0EVT_OFF\0ELSE\0IDLE\0LED_ON\0LED_OFF" );
+    "BLINK\0EVT_TIMER\0EVT_ON\0EVT_OFF\0ELSE\0IDLE\0LED_ON\0LED_OFF" );
   return *this;
 }
 

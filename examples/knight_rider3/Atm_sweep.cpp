@@ -1,8 +1,7 @@
 #include <Automaton.h>
 #include "Atm_sweep.h"
 
-Atm_sweep & Atm_sweep::begin( int p0, int p1, int p2, int p3, int p4, int p5 )
-{
+Atm_sweep & Atm_sweep::begin( int p0, int p1, int p2, int p3, int p4, int p5 ) {
   const static state_t state_table[] PROGMEM = {
     /*          ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER   EVT_START  EVT_STOP  EVT_TOGGLE, ELSE */
     /* IDLE  */  ACT_OFF, ATM_SLEEP,      -1,        -1,         U0,     IDLE,         U0,   -1,
@@ -28,15 +27,12 @@ Atm_sweep & Atm_sweep::begin( int p0, int p1, int p2, int p3, int p4, int p5 )
   return *this;
 }
 
-Atm_sweep & Atm_sweep::speed( uint32_t v )
-{
+Atm_sweep & Atm_sweep::speed( uint32_t v ) {
   timer.set( v );
   return *this;
 }
 
-
-int Atm_sweep::event( int id )
-{
+int Atm_sweep::event( int id ) {
   switch ( id ) {
     case EVT_TIMER :
       return timer.expired( this );
@@ -44,8 +40,7 @@ int Atm_sweep::event( int id )
   return 0;
 }
 
-void Atm_sweep::action( int id )
-{
+void Atm_sweep::action( int id ) {
   switch ( id ) {
     case ACT_L0 : return digitalWrite( pin[0], HIGH );
     case ACT_L1 : return digitalWrite( pin[1], HIGH );
@@ -62,9 +57,8 @@ void Atm_sweep::action( int id )
 }
 
 Atm_sweep & Atm_sweep::trace( Stream & stream ) {
-
   Machine::setTrace( &stream, atm_serial_debug::trace,
-       "EVT_TIMER\0EVT_START\0EVT_STOP\0ELSE\0"
+       "SWEEP\0EVT_TIMER\0EVT_START\0EVT_STOP\0ELSE\0"
        "IDLE\0U0\0U1\0U2\0U3\0U4\0U5\0D4\0D3\0D2\0D1\0D0" );
   return *this;
 }

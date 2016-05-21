@@ -7,17 +7,24 @@ int buttonPin = 2;
 
 Atm_led led;
 Atm_button btn;
-Factory factory;
+Appliance app;
 
 void setup() {
   Serial.begin( 9600 );
-  led.begin( ledPin ).blink( 1000 );
-  btn.begin( buttonPin ).onPress( led, led.EVT_TOGGLE );
-  led.trace( Serial ).label( "LED1" );
-  btn.trace( Serial ).label( "BTN1" );
-  factory.add( led ).add( btn );  
+  
+  app.component(
+    led.begin( ledPin )
+      .blink( 1000 )
+      .trace( Serial )
+  );
+  
+  app.component(
+    btn.begin( buttonPin )
+      .onPress( led, led.EVT_TOGGLE )
+      .trace( Serial )
+  );
 }
 
 void loop() {
-  factory.cycle();
+  app.run();
 }

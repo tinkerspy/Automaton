@@ -1,15 +1,11 @@
-
-#ifndef Atm_sweep_h
-#define Atm_sweep_h
+#pragma once
 
 #include <Automaton.h>
 
 class Atm_sweep: public Machine {
 
   public:
-    Atm_sweep( void ) : Machine() {
-      class_label = "SWP";
-    };
+    Atm_sweep( void ) : Machine() {};
 
     enum { IDLE, U0, U1, U2, U3, U4, U5, D4, D3, D2, D1, D0 };
     enum { EVT_TIMER, EVT_START, EVT_STOP, EVT_TOGGLE, ELSE };
@@ -26,5 +22,3 @@ class Atm_sweep: public Machine {
     int event( int id );
     void action( int id );
 };
-
-#endif
