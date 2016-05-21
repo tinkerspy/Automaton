@@ -48,8 +48,8 @@ Atm_led& Atm_led::blink( uint32_t duration ) {
   return *this;
 }
 
-Atm_led& Atm_led::pause( uint32_t duration ) {
-  off_timer.set( duration );  // Time in which led is fully off
+Atm_led& Atm_led::pause( uint32_t duration ) { // Time in which led is fully off
+  off_timer.set( duration ? duration : 1 );  // Make sure off_timer is never 0 (work around)
   return *this;
 }
 
