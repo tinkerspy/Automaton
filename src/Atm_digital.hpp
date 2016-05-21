@@ -7,10 +7,8 @@
 
 class Atm_digital : public Machine {
  public:
-  enum { IDLE, WAITH, VHIGH, WAITL, VLOW };             // STATES
-  enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };          // EVENTS
-  enum { ACT_HIGH, ACT_LOW };                           // ACTIONS
-  enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, CONN_SIZE };  // CONNECTORS
+  enum { IDLE, WAITH, VHIGH, WAITL, VLOW };     // STATES
+  enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };  // EVENTS
 
   Atm_digital( void ) : Machine(){};
   Atm_digital& begin( int pin, int debounce = 20, bool activeLow = false, bool pullUp = false );
@@ -23,6 +21,8 @@ class Atm_digital : public Machine {
   Atm_digital& trace( Stream& stream );
 
  private:
+  enum { ACT_HIGH, ACT_LOW };                           // ACTIONS
+  enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, CONN_SIZE };  // CONNECTORS
   short _pin;
   atm_timer_millis _timer;
   bool _activeLow;

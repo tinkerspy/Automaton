@@ -4,9 +4,8 @@
 
 class Atm_encoder : public Machine {
  public:
-  enum { IDLE, UP, DOWN };                // STATES
-  enum { EVT_UP, EVT_DOWN, ELSE };        // EVENTS
-  enum { ACT_SAMPLE, ACT_UP, ACT_DOWN };  // ACTIONS
+  enum { IDLE, UP, DOWN };          // STATES
+  enum { EVT_UP, EVT_DOWN, ELSE };  // EVENTS
 
   Atm_encoder( void ) : Machine(){};
   Atm_encoder& begin( int pin1, int pin2, int divider = 1 );
@@ -20,6 +19,7 @@ class Atm_encoder : public Machine {
   Atm_encoder& set( int value );
 
  private:
+  enum { ACT_SAMPLE, ACT_UP, ACT_DOWN };  // ACTIONS
   short _pin1, _pin2;
   const static char _enc_states[];
   uint8_t _enc_bits;
