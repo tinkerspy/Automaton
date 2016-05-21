@@ -28,6 +28,8 @@ class Atm_comparator : public Machine {
   Atm_comparator& begin( int attached_pin, int sampleRate = 50 );
   Atm_comparator& threshold( uint16_t* v, uint16_t size, bool catchUp = false );
   Atm_comparator& average( uint16_t* v, uint16_t size );
+  Atm_comparator& onChange( atm_comparator_cb_t callback, int idx = 0 );
+  Atm_comparator& onChange( Machine& machine, int event = 0 );
   Atm_comparator& onUp( atm_comparator_cb_t callback, int idx = 0 );
   Atm_comparator& onUp( Machine& machine, int event = 0 );
   Atm_comparator& onDown( atm_comparator_cb_t callback, int idx = 0 );

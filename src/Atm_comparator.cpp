@@ -17,6 +17,18 @@ Atm_comparator& Atm_comparator::begin( int attached_pin, int samplerate /* = 50 
   return *this;
 }
 
+Atm_comparator& Atm_comparator::onChange( atm_comparator_cb_t callback, int idx /* = 0 */ ) {
+  _onup.set( (atm_cb_push_t)callback, idx );
+  _onudown.set( (atm_cb_push_t)callback, idx );
+  return *this;
+}
+
+Atm_comparator& Atm_comparator::onChange( Machine& machine, int event /* = 0 */ ) {
+  _onup.set( &machine, event );
+  _ondown.set( &machine, event );
+  return *this;
+}
+
 Atm_comparator& Atm_comparator::onUp( atm_comparator_cb_t callback, int idx /* = 0 */ ) {
   _onup.set( (atm_cb_push_t)callback, idx );
   return *this;
@@ -26,6 +38,7 @@ Atm_comparator& Atm_comparator::onUp( Machine& machine, int event /* = 0 */ ) {
   _onup.set( &machine, event );
   return *this;
 }
+
 Atm_comparator& Atm_comparator::onDown( atm_comparator_cb_t callback, int idx /* = 0 */ ) {
   _ondown.set( (atm_cb_push_t)callback, idx );
   return *this;
