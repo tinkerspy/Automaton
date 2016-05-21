@@ -22,7 +22,7 @@ class Atm_bit : public Machine {
   Atm_bit& onChange( bool status, Machine& machine, int event = 0 );
   Atm_bit& onInput( bool status, atm_cb_push_t callback, int idx = 0 );
   Atm_bit& onInput( bool status, Machine& machine, int event = 0 );
-  Atm_bit& indicator( int led, bool activeLow = false );
+  Atm_bit& led( int led, bool activeLow = false );
   Atm_bit& trace( Stream& stream );
   int event( int id );
   void action( int id );

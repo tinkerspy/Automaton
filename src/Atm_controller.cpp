@@ -17,7 +17,7 @@ Atm_controller& Atm_controller::begin( bool initialState /* = false */ ) {
   return *this;
 }
 
-Atm_controller& Atm_controller::indicator( int led, bool activeLow /* = false */ ) {
+Atm_controller& Atm_controller::led( int led, bool activeLow /* = false */ ) {
   _indicator = led;
   _indicatorActiveLow = activeLow;
   pinMode( _indicator, OUTPUT );

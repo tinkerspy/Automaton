@@ -24,7 +24,7 @@ int Atm_digital::state( void ) {
   return ( current == VHIGH || current == WAITL );
 }
 
-Atm_digital& Atm_digital::indicator( int led, bool activeLow /* = false */ ) {
+Atm_digital& Atm_digital::led( int led, bool activeLow /* = false */ ) {
   _indicator = led;
   _indicatorActiveLow = activeLow;
   pinMode( _indicator, OUTPUT );

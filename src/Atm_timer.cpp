@@ -8,13 +8,13 @@
 Atm_timer& Atm_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */, uint16_t repeats /* = 1 */ ) {
   // clang-format off
   const static state_t state_table[] PROGMEM = {
-    /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_DAYCNT  EVT_DAYTIMER  EVT_MSTIMER  EVT_REPCNT  EVT_STOP  EVT_START   ELSE */
-    /* IDLE    */          -1, ATM_SLEEP,        -1,         -1,           -1,          -1,         -1,       -1,     START,    -1,
-    /* START   */   ACT_START,        -1,        -1,         -1,           -1,          -1,         -1,       -1,     WAITD, WAITD,  
-    /* WAITD   */          -1,        -1, ACT_WAITD,     WAITMS,        WAITD,          -1,         -1,     IDLE,     START,    -1,
-    /* WAITMS  */          -1,        -1,        -1,         -1,           -1,     TRIGGER,         -1,     IDLE,     START,    -1,
-    /* TRIGGER */ ACT_TRIGGER,        -1,        -1,         -1,           -1,          -1,     FINISH,     IDLE,     START, START,
-    /* FINISH  */  ACT_FINISH,        -1,        -1,         -1,           -1,          -1,         -1,       -1,        -1,  IDLE,
+    /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_DAYCNT  EVT_DAYTIMER  EVT_MSTIMER  EVT_REPCNT  EVT_STOP  EVT_START  EVT_TOGGLE   ELSE */
+    /* IDLE    */          -1, ATM_SLEEP,        -1,         -1,           -1,          -1,         -1,       -1,     START,      START,    -1,
+    /* START   */   ACT_START,        -1,        -1,         -1,           -1,          -1,         -1,       -1,     WAITD,         -1, WAITD,  
+    /* WAITD   */          -1,        -1, ACT_WAITD,     WAITMS,        WAITD,          -1,         -1,     IDLE,     START,       IDLE,    -1,
+    /* WAITMS  */          -1,        -1,        -1,         -1,           -1,     TRIGGER,         -1,     IDLE,     START,       IDLE,    -1,
+    /* TRIGGER */ ACT_TRIGGER,        -1,        -1,         -1,           -1,          -1,     FINISH,     IDLE,     START,       IDLE, START,
+    /* FINISH  */  ACT_FINISH,        -1,        -1,         -1,           -1,          -1,         -1,       -1,        -1,         -1,  IDLE,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -104,6 +104,7 @@ void Atm_timer::action( int id ) {
 
 Atm_timer& Atm_timer::trace( Stream& stream ) {
   setTrace( &stream, atm_serial_debug::trace,
-            "TIMER\0EVT_DAYCNT\0EVT_DAYTIMER\0EVT_MSTIMER\0EVT_REPCNT\0EVT_OFF\0EVT_START\0ELSE\0IDLE\0START\0WAITD\0WAITMS\0TRIGGER\0FINISH" );
+            "TIMER\0EVT_DAYCNT\0EVT_DAYTIMER\0EVT_MSTIMER\0EVT_REPCNT\0EVT_OFF\0EVT_START\0EVT_TOGGLE\0"
+            "ELSE\0IDLE\0START\0WAITD\0WAITMS\0TRIGGER\0FINISH" );
   return *this;
 }

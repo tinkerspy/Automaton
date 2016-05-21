@@ -29,6 +29,6 @@ class Atm_digital : public Machine {
   Atm_digital& onChange( bool status, Machine& machine, int event = 0 );
   Atm_digital& onChange( atm_cb_push_t callback, int idx = 0 );
   Atm_digital& onChange( Machine& machine, int event = 0 );
-  Atm_digital& indicator( int led, bool activeLow = false );
+  Atm_digital& led( int led, bool activeLow = false );
   Atm_digital& trace( Stream& stream );
 };

@@ -34,7 +34,7 @@ class Atm_controller : public Machine {
   Atm_controller& OR( atm_cb_pull_t callback, char relOp = '>', int match = 0 );
   Atm_controller& XOR( Machine& machine, char relOp = '>', int match = 0 );
   Atm_controller& XOR( atm_cb_pull_t callback, char relOp = '>', int match = 0 );
-  Atm_controller& indicator( int led, bool activeLow = false );
+  Atm_controller& led( int led, bool activeLow = false );
   Atm_controller& trace( Stream& stream );
 
  private:
