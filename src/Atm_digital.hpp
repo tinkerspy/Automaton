@@ -7,22 +7,12 @@
 
 class Atm_digital : public Machine {
  public:
-  Atm_digital( void ) : Machine(){};
-
   enum { IDLE, WAITH, VHIGH, WAITL, VLOW };             // STATES
   enum { EVT_TIMER, EVT_HIGH, EVT_LOW, ELSE };          // EVENTS
   enum { ACT_HIGH, ACT_LOW };                           // ACTIONS
   enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, CONN_SIZE };  // CONNECTORS
 
- private:
-  short _pin;
-  atm_timer_millis _timer;
-  bool _activeLow;
-  atm_connector _connection[CONN_SIZE];
-  int8_t _indicator;
-  bool _indicatorActiveLow;
-
- public:
+  Atm_digital( void ) : Machine(){};
   Atm_digital& begin( int pin, int debounce = 20, bool activeLow = false, bool pullUp = false );
   int state( void );
   Atm_digital& onChange( bool status, atm_cb_push_t callback, int idx = 0 );
@@ -33,6 +23,13 @@ class Atm_digital : public Machine {
   Atm_digital& trace( Stream& stream );
 
  private:
+  short _pin;
+  atm_timer_millis _timer;
+  bool _activeLow;
+  atm_connector _connection[CONN_SIZE];
+  int8_t _indicator;
+  bool _indicatorActiveLow;
+
   int event( int id );
   void action( int id );
 };
