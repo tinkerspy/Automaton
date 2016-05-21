@@ -25,9 +25,9 @@ class Machine;
 typedef void ( *swcb_sym_t )( Stream* stream, Machine& machine, const char label[], const char current[], const char next[], const char trigger[],
                               uint32_t runtime, uint32_t cycles );
 
-const int8_t ATM_NO_OF_QUEUES = 5;  // queues 0, 1, 2, 3, 4
-const int8_t ATM_DEFAULT_PRIO = 1;
-
+const uint8_t ATM_UP = 1;                              
+const uint8_t ATM_DOWN = 0;                              
+                              
 const state_t ATM_NOP = -1;
 const state_t ATM_SLEEP = -2;
 const state_t ATM_ON_SWITCH = -3;
