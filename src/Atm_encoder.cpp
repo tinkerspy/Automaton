@@ -51,7 +51,7 @@ Atm_encoder& Atm_encoder::onChange( Machine& machine, int event /* = 0 */ ) {
 
 Atm_encoder& Atm_encoder::onChange( atm_cb_push_t callback, int idx /* = 0 */ ) {
   _onup.set( callback, idx );
-  _ondown.set( &machine, event );
+  _ondown.set( callback, idx );
   return *this;
 }
 
