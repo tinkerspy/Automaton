@@ -55,23 +55,21 @@ Atm_encoder& Atm_encoder::onChange( atm_cb_push_t callback, int idx /* = 0 */ ) 
   return *this;
 }
 
-Atm_encoder& Atm_encoder::onUp( Machine& machine, int event /* = 0 */ ) {
-  _onup.set( &machine, event );
+Atm_encoder& Atm_encoder::onChange( bool status, Machine& machine, int event /* = 0 */ ) {
+  if ( status ) {
+    _onup.set( &machine, event );
+  } else {
+    _ondown.set( &machine, event );
+  }
   return *this;
 }
 
-Atm_encoder& Atm_encoder::onUp( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _onup.set( callback, idx );
-  return *this;
-}
-
-Atm_encoder& Atm_encoder::onDown( Machine& machine, int event /* = 0 */ ) {
-  _ondown.set( &machine, event );
-  return *this;
-}
-
-Atm_encoder& Atm_encoder::onDown( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _ondown.set( callback, idx );
+Atm_encoder& Atm_encoder::onChange( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
+  if ( status ) {
+    _onup.set( callback, idx );
+  } else {
+    _ondown.set( callback, idx );
+  }
   return *this;
 }
 

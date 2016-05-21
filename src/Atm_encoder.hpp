@@ -24,10 +24,8 @@ class Atm_encoder : public Machine {
   Atm_encoder& trace( Stream& stream );
   Atm_encoder& onChange( Machine& machine, int event = 0 );
   Atm_encoder& onChange( atm_cb_push_t callback, int idx = 0 );
-  Atm_encoder& onUp( Machine& machine, int event = 0 );
-  Atm_encoder& onUp( atm_cb_push_t callback, int idx = 0 );
-  Atm_encoder& onDown( Machine& machine, int event = 0 );
-  Atm_encoder& onDown( atm_cb_push_t callback, int idx = 0 );
+  Atm_encoder& onChange( bool status, Machine& machine, int event = 0 );
+  Atm_encoder& onChange( bool status, atm_cb_push_t callback, int idx = 0 );
   int state( void );
   Atm_encoder& range( int min, int max, bool wrap = false );
   Atm_encoder& set( int value );
