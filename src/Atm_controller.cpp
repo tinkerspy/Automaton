@@ -24,13 +24,25 @@ Atm_controller& Atm_controller::indicator( int led, bool activeLow /* = false */
   return *this;
 }
 
-Atm_controller& Atm_controller::onFlip( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
+Atm_controller& Atm_controller::onChange( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
   _connector[status ? 0 : 1].set( callback, idx );
   return *this;
 }
 
-Atm_controller& Atm_controller::onFlip( bool status, Machine& machine, int event /* = 0 */ ) {
+Atm_controller& Atm_controller::onChange( bool status, Machine& machine, int event /* = 0 */ ) {
   _connector[status ? 0 : 1].set( &machine, event );
+  return *this;
+}
+
+Atm_controller& Atm_controller::onChange( atm_cb_push_t callback, int idx /* = 0 */ ) {
+  _connector[0].set( callback, idx );
+  _connector[1].set( callback, idx );
+  return *this;
+}
+
+Atm_controller& Atm_controller::onChange( Machine& machine, int event /* = 0 */ ) {
+  _connector[0].set( &machine, event );
+  _connector[1].set( &machine, event );
   return *this;
 }
 

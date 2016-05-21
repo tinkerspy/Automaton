@@ -19,8 +19,10 @@ class Atm_controller : public Machine {
   enum { ACT_ON, ACT_OFF, ACT_INPUT };                    // ACTIONS
 
   Atm_controller& begin( bool initialState = false );
-  Atm_controller& onFlip( bool status, atm_cb_push_t callback, int idx = 0 );
-  Atm_controller& onFlip( bool status, Machine& machine, int event = 0 );
+  Atm_controller& onChange( bool status, atm_cb_push_t callback, int idx = 0 );
+  Atm_controller& onChange( bool status, Machine& machine, int event = 0 );
+  Atm_controller& onChange( atm_cb_push_t callback, int idx = 0 );
+  Atm_controller& onChange( Machine& machine, int event = 0 );
   Atm_controller& onInput( bool status, atm_cb_push_t callback, int idx = 0 );
   Atm_controller& onInput( bool status, Machine& machine, int event = 0 );
 

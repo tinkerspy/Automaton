@@ -19,7 +19,7 @@ Atm_comparator& Atm_comparator::begin( int attached_pin, int samplerate /* = 50 
 
 Atm_comparator& Atm_comparator::onChange( atm_comparator_cb_t callback, int idx /* = 0 */ ) {
   _onup.set( (atm_cb_push_t)callback, idx );
-  _onudown.set( (atm_cb_push_t)callback, idx );
+  _ondown.set( (atm_cb_push_t)callback, idx );
   return *this;
 }
 
@@ -29,23 +29,21 @@ Atm_comparator& Atm_comparator::onChange( Machine& machine, int event /* = 0 */ 
   return *this;
 }
 
-Atm_comparator& Atm_comparator::onUp( atm_comparator_cb_t callback, int idx /* = 0 */ ) {
-  _onup.set( (atm_cb_push_t)callback, idx );
+Atm_comparator& Atm_comparator::onChange( bool status, atm_comparator_cb_t callback, int idx /* = 0 */ ) {
+  if ( status ) {
+    _onup.set( (atm_cb_push_t)callback, idx );
+  } else {
+    _ondown.set( (atm_cb_push_t)callback, idx );
+  }
   return *this;
 }
 
-Atm_comparator& Atm_comparator::onUp( Machine& machine, int event /* = 0 */ ) {
-  _onup.set( &machine, event );
-  return *this;
-}
-
-Atm_comparator& Atm_comparator::onDown( atm_comparator_cb_t callback, int idx /* = 0 */ ) {
-  _ondown.set( (atm_cb_push_t)callback, idx );
-  return *this;
-}
-
-Atm_comparator& Atm_comparator::onDown( Machine& machine, int event /* = 0 */ ) {
-  _ondown.set( &machine, event );
+Atm_comparator& Atm_comparator::onChange( bool status, Machine& machine, int event /* = 0 */ ) {
+  if ( status ) {
+    _onup.set( &machine, event );
+  } else {
+    _ondown.set( &machine, event );
+  }
   return *this;
 }
 

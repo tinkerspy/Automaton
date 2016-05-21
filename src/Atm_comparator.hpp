@@ -30,10 +30,8 @@ class Atm_comparator : public Machine {
   Atm_comparator& average( uint16_t* v, uint16_t size );
   Atm_comparator& onChange( atm_comparator_cb_t callback, int idx = 0 );
   Atm_comparator& onChange( Machine& machine, int event = 0 );
-  Atm_comparator& onUp( atm_comparator_cb_t callback, int idx = 0 );
-  Atm_comparator& onUp( Machine& machine, int event = 0 );
-  Atm_comparator& onDown( atm_comparator_cb_t callback, int idx = 0 );
-  Atm_comparator& onDown( Machine& machine, int event = 0 );
+  Atm_comparator& onChange( bool status, atm_comparator_cb_t callback, int idx = 0 );
+  Atm_comparator& onChange( bool status, Machine& machine, int event = 0 );
   int _avg();
   Atm_comparator& bitmap( uint16_t v );
   int state( void );

@@ -16,8 +16,10 @@ class Atm_bit : public Machine {
   enum { ACT_ON, ACT_OFF, ACT_INPUT };                    // ACTIONS
 
   Atm_bit& begin( bool initialState = false );
-  Atm_bit& onFlip( bool status, atm_cb_push_t callback, int idx = 0 );
-  Atm_bit& onFlip( bool status, Machine& machine, int event = 0 );
+  Atm_bit& onChange( atm_cb_push_t callback, int idx = 0 );
+  Atm_bit& onChange( Machine& machine, int event = 0 );
+  Atm_bit& onChange( bool status, atm_cb_push_t callback, int idx = 0 );
+  Atm_bit& onChange( bool status, Machine& machine, int event = 0 );
   Atm_bit& onInput( bool status, atm_cb_push_t callback, int idx = 0 );
   Atm_bit& onInput( bool status, Machine& machine, int event = 0 );
   Atm_bit& indicator( int led, bool activeLow = false );
