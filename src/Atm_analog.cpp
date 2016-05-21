@@ -90,7 +90,11 @@ void Atm_analog::action( int id ) {
       return;
     case ACT_SEND:
       if ( !_onchange.push( true ) ) {
-        ( *(atm_analog_cb_t)_onchange.push_callback )( _onchange.callback_idx, v_sample, v_sample > v_previous );
+        if ( v_sample > v_previous ) {
+          ( *(atm_analog_cb_t)_onchange.push_callback )( _onchange.callback_idx, v_sample, true );
+        } else {
+          ( *(atm_analog_cb_t)_onchange.push_callback )( _onchange.callback_idx, v_sample, false );
+        }
       }
   }
 }

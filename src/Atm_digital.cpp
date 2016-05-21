@@ -31,13 +31,25 @@ Atm_digital& Atm_digital::indicator( int led, bool activeLow /* = false */ ) {
   return *this;
 }
 
-Atm_digital& Atm_digital::onFlip( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
+Atm_digital& Atm_digital::onChange( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
   _connection[status ? 1 : 0].set( callback, idx );
   return *this;
 }
 
-Atm_digital& Atm_digital::onFlip( bool status, Machine& machine, int event /* = 0 */ ) {
+Atm_digital& Atm_digital::onChange( bool status, Machine& machine, int event /* = 0 */ ) {
   _connection[status ? 1 : 0].set( &machine, event );
+  return *this;
+}
+
+Atm_digital& Atm_digital::onChange( atm_cb_push_t callback, int idx /* = 0 */ ) {
+  _connection[0].set( callback, idx );
+  _connection[1].set( callback, idx );
+  return *this;
+}
+
+Atm_digital& Atm_digital::onChange( Machine& machine, int event /* = 0 */ ) {
+  _connection[0].set( &machine, event );
+  _connection[1].set( &machine, event );
   return *this;
 }
 

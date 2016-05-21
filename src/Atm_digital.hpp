@@ -25,8 +25,10 @@ class Atm_digital : public Machine {
   int event( int id );
   void action( int id );
   int state( void );
-  Atm_digital& onFlip( bool status, atm_cb_push_t callback, int idx = 0 );
-  Atm_digital& onFlip( bool status, Machine& machine, int event = 0 );
+  Atm_digital& onChange( bool status, atm_cb_push_t callback, int idx = 0 );
+  Atm_digital& onChange( bool status, Machine& machine, int event = 0 );
+  Atm_digital& onChange( atm_cb_push_t callback, int idx = 0 );
+  Atm_digital& onChange( Machine& machine, int event = 0 );
   Atm_digital& indicator( int led, bool activeLow = false );
   Atm_digital& trace( Stream& stream );
 };
