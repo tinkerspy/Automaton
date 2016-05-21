@@ -1,7 +1,6 @@
 #include "Atm_blink.h"
 	
-Atm_blink & Atm_blink::begin( int attached_pin, uint32_t blinkrate )
-{
+Atm_blink & Atm_blink::begin( int attached_pin, uint32_t blinkrate ) {
   const static state_t state_table[] PROGMEM = {
     /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_TIMER  EVT_ON  EVT_OFF  ELSE */
     /* IDLE    */  ACT_OFF,        -1,      -1,        -1, LED_ON,      -1,   -1,

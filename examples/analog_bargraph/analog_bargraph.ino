@@ -15,8 +15,8 @@ void setup() {
   app.component( 
     cmp.begin( A0, 50 )
       .threshold( threshold_list, sizeof( threshold_list ) / sizeof( threshold_list[0] ), true )
-      .onUp( step, Atm_step::EVT_STEP )
-      .onDown( step, Atm_step::EVT_BACK )
+      .onChange( true, step, Atm_step::EVT_STEP )
+      .onChange( false, step, Atm_step::EVT_BACK )
   );
     
   app.component( step.begin() );
