@@ -1,6 +1,6 @@
 #include "Atm_digital.hpp"
 
-Atm_digital& Atm_digital::begin( int attached_pin, int debounce /* = 20 */, bool activeLow /* = false */, bool pullUp /* = false */ ) {
+Atm_digital& Atm_digital::begin( int pin, int debounce /* = 20 */, bool activeLow /* = false */, bool pullUp /* = false */ ) {
   // clang-format off
   const static state_t state_table[] PROGMEM = {
     /*              ON_ENTER    ON_LOOP      ON_EXIT  EVT_TIMER   EVT_HIGH  EVT_LOW   ELSE */
@@ -12,22 +12,22 @@ Atm_digital& Atm_digital::begin( int attached_pin, int debounce /* = 20 */, bool
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
-  pin = attached_pin;
+  _pin = pin;
   _activeLow = activeLow;
-  timer.set( debounce );
+  _timer.set( debounce );
   _indicator = -1;
-  pinMode( pin, pullUp ? INPUT_PULLUP : INPUT );
+  pinMode( _pin, pullUp ? INPUT_PULLUP : INPUT );
   return *this;
 }
 
 int Atm_digital::event( int id ) {
   switch ( id ) {
     case EVT_TIMER:
-      return timer.expired( this );
+      return _timer.expired( this );
     case EVT_HIGH:
-      return ( !digitalRead( pin ) != !_activeLow );  // XOR
+      return ( !digitalRead( _pin ) != !_activeLow );  // XOR
     case EVT_LOW:
-      return !( !digitalRead( pin ) != !_activeLow );
+      return !( !digitalRead( _pin ) != !_activeLow );
   }
   return 0;
 }

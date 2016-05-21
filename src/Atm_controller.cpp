@@ -1,6 +1,6 @@
 #include "Atm_controller.hpp"
 
-const char Atm_controller::relOps[8] = "0=!<>-+";
+const char Atm_controller::_relOps[8] = "0=!<>-+";
 
 Atm_controller& Atm_controller::begin( bool initialState /* = false */ ) {
   // clang-format off
@@ -116,7 +116,7 @@ Atm_controller& Atm_controller::XOR( atm_cb_pull_t callback, char relOp /* = '>'
 Atm_controller& Atm_controller::OP( char logOp, Machine& machine, char relOp, int match ) {
   for ( uint8_t i = 0; i < ATM_CONDITION_OPERAND_MAX; i++ ) {
     if ( _operand[i].mode() == atm_connector::MODE_NULL ) {  // Pick the first free slot
-      _operand[i].set( &machine, match, logOp, (int)( strchr( relOps, relOp ) - relOps ) );
+      _operand[i].set( &machine, match, logOp, (int)( strchr( _relOps, relOp ) - _relOps ) );
       break;
     }
   }
@@ -126,7 +126,7 @@ Atm_controller& Atm_controller::OP( char logOp, Machine& machine, char relOp, in
 Atm_controller& Atm_controller::OP( char logOp, atm_cb_pull_t callback, char relOp, int match ) {
   for ( uint8_t i = 0; i < ATM_CONDITION_OPERAND_MAX; i++ ) {
     if ( _operand[i].mode() == atm_connector::MODE_NULL ) {  // Pick the first free slot
-      _operand[i].set( callback, match, logOp, (int)( strchr( relOps, relOp ) - relOps ) );
+      _operand[i].set( callback, match, logOp, (int)( strchr( _relOps, relOp ) - _relOps ) );
       break;
     }
   }
