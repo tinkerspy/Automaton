@@ -152,18 +152,6 @@ uint8_t atm_counter::expired() {
   return value == ATM_COUNTER_OFF ? 0 : ( value > 0 ? 0 : 1 );
 }
 
-/*
- * Machine::state( state ) - Sets the next state for the machine
- *
- */
-
-Machine& Machine::state( int state ) {
-  next = state;
-  last_trigger = -1;
-  flags &= ~ATM_SLEEP_FLAG;
-  return *this;
-}
-
 /* The Machine class is a base class for creating and running State Machines
  *
  *********************************************************************************************
@@ -175,6 +163,18 @@ Machine& Machine::state( int state ) {
 
 int Machine::state() {
   return current;
+}
+
+/*
+ * Machine::state( state ) - Sets the next state for the machine
+ *
+ */
+
+Machine& Machine::state( int state ) {
+  next = state;
+  last_trigger = -1;
+  flags &= ~ATM_SLEEP_FLAG;
+  return *this;
 }
 
 /*
