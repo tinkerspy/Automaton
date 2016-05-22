@@ -9,9 +9,8 @@
  * The atm_connector class facilitates creating push and pull connections between
  * State Machines.
  *
- */
-
-/*
+ *********************************************************************************************
+ *
  * push( v, up, noCallback ) - Calls a machine's trigger method or a callback
  *
  * Will return false if a callback is configured while the noCallback arg was specified
@@ -167,9 +166,8 @@ Machine& Machine::state( int state ) {
 
 /* The Machine class is a base class for creating and running State Machines
  *
- */
-
-/*
+ *********************************************************************************************
+ *
  * Machine::state( void ) - Retrieves the current state for the machine
  *
  * (may be overridden by a subclass in which case it may return something else, like a value )
@@ -329,9 +327,8 @@ Machine& Machine::cycle( uint32_t time /* = 0 */ ) {
 /*
  * The Appliance class is a simple scheduler for running State Machines
  *
- */
-
-/*
+ *********************************************************************************************
+ *
  * Appliance::component( machine ) - Adds a State Machine object to the current appliance
  *
  */
