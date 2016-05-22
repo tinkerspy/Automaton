@@ -278,6 +278,8 @@ const char* Machine::mapSymbol( int id, const char map[] ) {
  * - Executes the ON_LOOP action
  * - Scans the event columns in the current table and calls active events
  *
+ * If the 'time' argument is given, loops until that time has passed
+ * otherwise executes only one cycle of the machine
  */
 
 Machine& Machine::cycle( uint32_t time /* = 0 */ ) {
@@ -342,7 +344,8 @@ Appliance& Appliance::component( Machine& machine ) {
 /*
  * Appliance::run( time ) - executes one appliance cycle (runs all machines once)
  *
- * If the time argument is specified keep running th eappliance until that time  expires
+ * If the 'time' argument is given, loops until that time has passed
+ * otherwise executes only one cycle of each machine
  *
  */
 
