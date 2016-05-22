@@ -1,5 +1,5 @@
 /*
-  Automaton.h - Reactive State Machine Framework.
+  Automaton.h - Reactive State Machine Framework for Arduino.
   Published under the MIT License (MIT), Copyright (c) 2015-2016, J.P. van der Landen
 */
 
@@ -115,7 +115,6 @@ class Machine {
   virtual int state( void );
   virtual Machine& trigger( int evt = 0 );
   Machine& cycle( uint32_t time = 0 );
-  Machine& label( const char label[] );
   uint32_t state_millis;
   uint8_t flags = ATM_SLEEP_FLAG;
   state_t next_trigger = -1;
