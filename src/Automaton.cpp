@@ -342,10 +342,10 @@ Appliance& Appliance::component( Machine& machine ) {
 }
 
 /*
- * Appliance::run( time ) - executes one appliance cycle (runs all machines once)
+ * Appliance::run( time ) - Runs the appliance
  *
  * If the 'time' argument is given, loops until that time has passed
- * otherwise executes only one cycle of each machine
+ * otherwise executes only one cycle of each machine and exits
  *
  */
 
