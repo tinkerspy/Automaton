@@ -34,7 +34,7 @@ void Atm_analog::action( int id ) {
     case ACT_SEND:
       v_sample = sample();
       _onchange.push( v_sample, v_sample > v_previous );
-      return;      
+      return;
   }
 }
 
