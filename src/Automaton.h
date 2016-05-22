@@ -76,7 +76,7 @@ class atm_counter {
   uint16_t decrement( void );
 };
 
-typedef void ( *atm_cb_push_t )( int idx );
+typedef void ( *atm_cb_push_t )( int idx, int v, int up );
 typedef bool ( *atm_cb_pull_t )( int idx );
 
 class atm_connector {
@@ -103,8 +103,8 @@ class atm_connector {
   void set( Machine* m, int evt, int8_t logOp = 0, int8_t relOp = 0 );
   void set( atm_cb_push_t callback, int idx, int8_t logOp = 0, int8_t relOp = 0 );
   void set( atm_cb_pull_t callback, int idx, int8_t logOp = 0, int8_t relOp = 0 );
-  bool push( bool noCallback = false );  // returns false (only) if callback is set!
-  int pull( bool def_value = false );
+  bool push( int v = 0, int up = 0, bool noCallback = false );  // returns false (only) if callback is set!
+  int pull( int v = 0, int up = 0, bool def_value = false );
   int8_t logOp( void );
   int8_t relOp( void );
   int8_t mode( void );

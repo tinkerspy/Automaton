@@ -5,13 +5,13 @@
 
 #include "Automaton.h"
 
-bool atm_connector::push( bool noCallback /* = false */ ) {
+bool atm_connector::push( int v /* = 0 */, int up /* = 0 */, bool noCallback /* = false */ ) {
   switch ( mode_flags & B00000111 ) {
     case MODE_PUSHCB:
       if ( noCallback ) {
         return false;
       } else {
-        ( *push_callback )( callback_idx );
+        ( *push_callback )( callback_idx, v, up );
       }
       return true;
     case MODE_MACHINE:
@@ -21,7 +21,7 @@ bool atm_connector::push( bool noCallback /* = false */ ) {
   return true;
 }
 
-int atm_connector::pull( bool def_value /* = false */ ) {
+int atm_connector::pull( int v /* = 0 */, int up /* = 0 */, bool def_value /* = false */ ) {
   switch ( mode_flags & B00000111 ) {
     case MODE_PULLCB:
       return ( *pull_callback )( callback_idx );

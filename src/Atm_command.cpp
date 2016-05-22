@@ -19,8 +19,41 @@ Atm_command& Atm_command::begin( Stream& stream, char buffer[], int size ) {
   return *this;
 }
 
-Atm_command& Atm_command::onCommand( atm_command_cb_t callback, int idx /* = 0 */ ) {
-  _oncommand.set( (atm_cb_push_t)callback, idx );
+int Atm_command::event( int id ) {
+  switch ( id ) {
+    case EVT_INPUT:
+      return _stream->available();
+    case EVT_EOL:
+      return _buffer[_bufptr - 1] == '\n' || _buffer[_bufptr - 1] == '\r' || _bufptr >= _bufsize;
+  }
+  return 0;
+}
+
+void Atm_command::action( int id ) {
+  switch ( id ) {
+    case ACT_READCHAR:
+      if ( _stream->available() ) {
+        char ch = _stream->read();
+        if ( strchr( _separator, ch ) == NULL ) {
+          _buffer[_bufptr++] = ch;
+          _lastch = ch;
+        } else {
+          if ( _lastch != '\0' ) _buffer[_bufptr++] = '\0';
+          _lastch = '\0';
+        }
+      }
+      return;
+    case ACT_SEND:
+      _buffer[--_bufptr] = '\0';
+      _oncommand.push( lookup( 0, _commands ) );
+      _lastch = '\0';
+      _bufptr = 0;
+      return;
+  }
+}
+
+Atm_command& Atm_command::onCommand( atm_cb_push_t callback, int idx /* = 0 */ ) {
+  _oncommand.set( callback, idx );
   return *this;
 }
 
@@ -65,41 +98,6 @@ int Atm_command::lookup( int id, const char* cmdlist ) {
     cnt++;
   }
   return -1;
-}
-
-int Atm_command::event( int id ) {
-  switch ( id ) {
-    case EVT_INPUT:
-      return _stream->available();
-    case EVT_EOL:
-      return _buffer[_bufptr - 1] == '\n' || _buffer[_bufptr - 1] == '\r' || _bufptr >= _bufsize;
-  }
-  return 0;
-}
-
-void Atm_command::action( int id ) {
-  switch ( id ) {
-    case ACT_READCHAR:
-      if ( _stream->available() ) {
-        char ch = _stream->read();
-        if ( strchr( _separator, ch ) == NULL ) {
-          _buffer[_bufptr++] = ch;
-          _lastch = ch;
-        } else {
-          if ( _lastch != '\0' ) _buffer[_bufptr++] = '\0';
-          _lastch = '\0';
-        }
-      }
-      return;
-    case ACT_SEND:
-      _buffer[--_bufptr] = '\0';
-      if ( _oncommand.mode() == _oncommand.MODE_PUSHCB ) {
-        ( *(atm_command_cb_t)_oncommand.push_callback )( _oncommand.callback_idx, lookup( 0, _commands ) );
-      }
-      _lastch = '\0';
-      _bufptr = 0;
-      return;
-  }
 }
 
 Atm_command& Atm_command::trace( Stream& stream ) {

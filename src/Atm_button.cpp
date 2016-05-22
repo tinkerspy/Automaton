@@ -32,8 +32,60 @@ Atm_button& Atm_button::begin( int attached_pin ) {
   return *this;
 }
 
-Atm_button& Atm_button::onPress( atm_button_cb_t callback, int idx /* = 0 */ ) {
-  _onpress.set( (atm_cb_push_t)callback, idx );
+int Atm_button::event( int id ) {
+  switch ( id ) {
+    case EVT_LMODE:
+      return _counter_longpress.value > 0;
+    case EVT_TIMER:
+      return _timer_debounce.expired( this );
+    case EVT_DELAY:
+      return _timer_delay.expired( this );
+    case EVT_REPEAT:
+      return _timer_repeat.expired( this );
+    case EVT_AUTO:
+      return _timer_auto.expired( this );
+    case EVT_PRESS:
+      return !digitalRead( _pin );
+    case EVT_RELEASE:
+      return digitalRead( _pin );
+    case EVT_COUNTER:
+      return _counter_longpress.expired();
+  }
+  return 0;
+}
+
+void Atm_button::action( int id ) {
+  switch ( id ) {
+    case ACT_PRESS:
+    case ACT_AUTO:
+      _onpress.push( 1 );
+      return;
+    case ACT_RELEASE:
+    case ACT_WRELEASE:
+      _onrelease.push( 0 );
+      if ( _onpress.mode() == _onpress.MODE_PUSHCB ) {
+        _onpress.push( 0 );
+      }
+      return;
+    case ACT_LSTART:
+      _counter_longpress.set( _longpress_max );
+      return;
+    case ACT_LCOUNT:
+      _counter_longpress.decrement();
+      if ( _onpress.mode() == _onpress.MODE_PUSHCB ) {
+        _onpress.push( ( _longpress_max - _counter_longpress.value ) * -1 );
+      }
+      return;
+    case ACT_LRELEASE:
+      if ( _onpress.mode() == _onpress.MODE_PUSHCB ) {
+        _onpress.push( _longpress_max - _counter_longpress.value );
+      }
+      return;
+  }
+}
+
+Atm_button& Atm_button::onPress( atm_cb_push_t callback, int idx /* = 0 */ ) {
+  _onpress.set( callback, idx );
   return *this;
 }
 
@@ -41,8 +93,8 @@ Atm_button& Atm_button::onPress( Machine& machine, int event /* = 0 */ ) {
   _onpress.set( &machine, event );
   return *this;
 }
-Atm_button& Atm_button::onRelease( atm_button_cb_t callback, int idx /* = 0 */ ) {
-  _onrelease.set( (atm_cb_push_t)callback, idx );
+Atm_button& Atm_button::onRelease( atm_cb_push_t callback, int idx /* = 0 */ ) {
+  _onrelease.set( callback, idx );
   return *this;
 }
 
@@ -73,62 +125,6 @@ Atm_button& Atm_button::autoPress( int delay, int press /* = 1 */ ) {
   _auto_press = press;
   _timer_auto.set( delay );
   return *this;
-}
-
-int Atm_button::event( int id ) {
-  switch ( id ) {
-    case EVT_LMODE:
-      return _counter_longpress.value > 0;
-    case EVT_TIMER:
-      return _timer_debounce.expired( this );
-    case EVT_DELAY:
-      return _timer_delay.expired( this );
-    case EVT_REPEAT:
-      return _timer_repeat.expired( this );
-    case EVT_AUTO:
-      return _timer_auto.expired( this );
-    case EVT_PRESS:
-      return !digitalRead( _pin );
-    case EVT_RELEASE:
-      return digitalRead( _pin );
-    case EVT_COUNTER:
-      return _counter_longpress.expired();
-  }
-  return 0;
-}
-
-void Atm_button::action( int id ) {
-  switch ( id ) {
-    case ACT_PRESS:
-    case ACT_AUTO:
-      if ( !_onpress.push( true ) ) {
-        ( *(atm_button_cb_t)_onpress.push_callback )( _onpress.callback_idx, 1 );
-      }
-      return;
-    case ACT_RELEASE:
-    case ACT_WRELEASE:
-      if ( !_onrelease.push( true ) ) {
-        ( *(atm_button_cb_t)_onrelease.push_callback )( _onrelease.callback_idx, 0 );
-      }
-      if ( _onpress.mode() == _onpress.MODE_PUSHCB ) {
-        ( *(atm_button_cb_t)_onpress.push_callback )( _onpress.callback_idx, 0 );
-      }
-      return;
-    case ACT_LSTART:
-      _counter_longpress.set( _longpress_max );
-      return;
-    case ACT_LCOUNT:
-      _counter_longpress.decrement();
-      if ( _onpress.mode() == _onpress.MODE_PUSHCB ) {
-        ( *(atm_button_cb_t)_onpress.push_callback )( _onpress.callback_idx, ( _longpress_max - _counter_longpress.value ) * -1 );
-      }
-      return;
-    case ACT_LRELEASE:
-      if ( _onpress.mode() == _onpress.MODE_PUSHCB ) {
-        ( *(atm_button_cb_t)_onpress.push_callback )( _onpress.callback_idx, ( _longpress_max - _counter_longpress.value ) );
-      }
-      return;
-  }
 }
 
 Atm_button& Atm_button::trace( Stream& stream ) {

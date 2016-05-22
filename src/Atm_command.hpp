@@ -2,8 +2,6 @@
 
 #include <Automaton.h>
 
-typedef void ( *atm_command_cb_t )( int idx, int cmd );
-
 class Atm_command : public Machine {
  public:
   Atm_command( void ) : Machine(){};
@@ -24,7 +22,7 @@ class Atm_command : public Machine {
   Atm_command& trace( Stream& stream );
   int event( int id );
   void action( int id );
-  Atm_command& onCommand( atm_command_cb_t callback, int idx = 0 );
+  Atm_command& onCommand( atm_cb_push_t callback, int idx = 0 );
   Atm_command& list( const char* cmds );
 
   Atm_command& separator( const char sep[] );

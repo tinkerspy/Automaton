@@ -50,21 +50,6 @@ Atm_step& Atm_step::begin( void ) {
   return *this;
 }
 
-Atm_step& Atm_step::onStep( uint8_t id ) {
-  _connector[id].mode_flags = atm_connector::MODE_NULL;
-  return *this;
-}
-
-Atm_step& Atm_step::onStep( uint8_t id, atm_step_cb_t callback, int idx /* = 0 */ ) {
-  _connector[id].set( (atm_cb_push_t)callback, idx );
-  return *this;
-}
-
-Atm_step& Atm_step::onStep( uint8_t id, Machine& machine, int event /* = 0 */ ) {
-  _connector[id].set( &machine, event );
-  return *this;
-}
-
 int Atm_step::event( int id ) {
   int on_enter = read_state( state_table + ( current * state_width ) + ATM_ON_ENTER );
   switch ( id ) {
@@ -78,10 +63,23 @@ int Atm_step::event( int id ) {
 
 void Atm_step::action( int id ) {
   if ( id > -1 ) {
-    if ( !_connector[id].push( true ) ) {
-      ( *(atm_step_cb_t)_connector[id].push_callback )( _connector[id].callback_idx, id );
-    }
+    _connector[id].push( id, 0 );
   }
+}
+
+Atm_step& Atm_step::onStep( uint8_t id ) {
+  _connector[id].mode_flags = atm_connector::MODE_NULL;
+  return *this;
+}
+
+Atm_step& Atm_step::onStep( uint8_t id, atm_cb_push_t callback, int idx /* = 0 */ ) {
+  _connector[id].set( callback, idx );
+  return *this;
+}
+
+Atm_step& Atm_step::onStep( uint8_t id, Machine& machine, int event /* = 0 */ ) {
+  _connector[id].set( &machine, event );
+  return *this;
 }
 
 Atm_step& Atm_step::trace( Stream& stream ) {

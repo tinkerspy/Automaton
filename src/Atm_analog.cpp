@@ -15,6 +15,29 @@ Atm_analog& Atm_analog::begin( int attached_pin, int samplerate /* = 50 */ ) {
   return *this;
 }
 
+int Atm_analog::event( int id ) {
+  switch ( id ) {
+    case EVT_TIMER:
+      return timer.expired( this );
+    case EVT_TRIGGER:
+      return v_previous != v_sample;
+  }
+  return 0;
+}
+
+void Atm_analog::action( int id ) {
+  switch ( id ) {
+    case ACT_SAMPLE:
+      v_previous = v_sample;
+      v_sample = sample();
+      return;
+    case ACT_SEND:
+      v_sample = sample();
+      _onchange.push( v_sample, v_sample > v_previous );
+      return;      
+  }
+}
+
 Atm_analog& Atm_analog::range( int toLow, int toHigh ) {
   _toLow = toLow;
   _toHigh = toHigh;
@@ -26,8 +49,8 @@ Atm_analog& Atm_analog::onChange( Machine& machine, int event /* = 0 */ ) {
   return *this;
 }
 
-Atm_analog& Atm_analog::onChange( atm_analog_cb_t callback, int idx /* = 0 */ ) {
-  _onchange.set( (atm_cb_push_t)callback, idx );
+Atm_analog& Atm_analog::onChange( atm_cb_push_t callback, int idx /* = 0 */ ) {
+  _onchange.set( callback, idx );
   return *this;
 }
 
@@ -70,33 +93,6 @@ Atm_analog& Atm_analog::average( uint16_t* v, uint16_t size ) {
     avg_buf_total += avg_buf[i];
   }
   return *this;
-}
-
-int Atm_analog::event( int id ) {
-  switch ( id ) {
-    case EVT_TIMER:
-      return timer.expired( this );
-    case EVT_TRIGGER:
-      return v_previous != v_sample;
-  }
-  return 0;
-}
-
-void Atm_analog::action( int id ) {
-  switch ( id ) {
-    case ACT_SAMPLE:
-      v_previous = v_sample;
-      v_sample = sample();
-      return;
-    case ACT_SEND:
-      if ( !_onchange.push( true ) ) {
-        if ( v_sample > v_previous ) {
-          ( *(atm_analog_cb_t)_onchange.push_callback )( _onchange.callback_idx, v_sample, true );
-        } else {
-          ( *(atm_analog_cb_t)_onchange.push_callback )( _onchange.callback_idx, v_sample, false );
-        }
-      }
-  }
 }
 
 Atm_analog& Atm_analog::trace( Stream& stream ) {

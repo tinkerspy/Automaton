@@ -4,8 +4,6 @@
 
 #define ATM_STEP_MAX 10
 
-typedef void ( *atm_step_cb_t )( int idx, int id );
-
 class Atm_step : public Machine {
  public:
   Atm_step( void ) : Machine(){};
@@ -23,6 +21,6 @@ class Atm_step : public Machine {
   int event( int id );
   void action( int id );
   Atm_step& onStep( uint8_t idx );  // fix id -> step???
-  Atm_step& onStep( uint8_t id, atm_step_cb_t callback, int idx = 0 );
+  Atm_step& onStep( uint8_t id, atm_cb_push_t callback, int idx = 0 );
   Atm_step& onStep( uint8_t id, Machine& machine, int event = 0 );
 };

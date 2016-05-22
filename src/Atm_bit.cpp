@@ -23,12 +23,12 @@ int Atm_bit::event( int id ) {
 void Atm_bit::action( int id ) {
   switch ( id ) {
     case ACT_OFF:
-      if ( _last_state != -1 ) _connector[_last_state == current ? ON_INPUT_FALSE : ON_CHANGE_FALSE].push();
+      if ( _last_state != -1 ) _connector[_last_state == current ? ON_INPUT_FALSE : ON_CHANGE_FALSE].push( state() );
       if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
       _last_state = current;
       return;
     case ACT_ON:
-      if ( _last_state != -1 ) _connector[_last_state == current ? ON_INPUT_TRUE : ON_CHANGE_TRUE].push();
+      if ( _last_state != -1 ) _connector[_last_state == current ? ON_INPUT_TRUE : ON_CHANGE_TRUE].push( state() );
       if ( _indicator > -1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
       _last_state = current;
       return;

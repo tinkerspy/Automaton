@@ -25,6 +25,39 @@ Atm_timer& Atm_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */, uint16_t repeats
   return *this;
 }
 
+int Atm_timer::event( int id ) {
+  switch ( id ) {
+    case EVT_REPCNT:
+      return repcounter.expired();
+    case EVT_DAYCNT:
+      return daycounter.expired();
+    case EVT_MSTIMER:
+      return mstimer.expired( this );
+    case EVT_DAYTIMER:
+      return daytimer.expired( this );
+  }
+  return 0;
+}
+
+void Atm_timer::action( int id ) {
+  switch ( id ) {
+    case ACT_START:
+      daycounter.set( days );
+      return;
+    case ACT_WAITD:
+      daycounter.decrement();
+      return;
+    case ACT_TRIGGER:
+      repcounter.decrement();
+      _ontimer.push( 1 );
+      return;
+    case ACT_FINISH:
+      _onfinish.push( 0 );
+      repcounter.set( repeat_cnt );
+      return;
+  }
+}
+
 Atm_timer& Atm_timer::onTimer( atm_cb_push_t callback, int idx /* = 0 */ ) {
   _ontimer.set( callback, idx );
   return *this;
@@ -67,39 +100,6 @@ Atm_timer& Atm_timer::repeat( uint16_t v ) {
   repeat_cnt = v;
   repcounter.set( v );
   return *this;
-}
-
-int Atm_timer::event( int id ) {
-  switch ( id ) {
-    case EVT_REPCNT:
-      return repcounter.expired();
-    case EVT_DAYCNT:
-      return daycounter.expired();
-    case EVT_MSTIMER:
-      return mstimer.expired( this );
-    case EVT_DAYTIMER:
-      return daytimer.expired( this );
-  }
-  return 0;
-}
-
-void Atm_timer::action( int id ) {
-  switch ( id ) {
-    case ACT_START:
-      daycounter.set( days );
-      return;
-    case ACT_WAITD:
-      daycounter.decrement();
-      return;
-    case ACT_TRIGGER:
-      repcounter.decrement();
-      _ontimer.push();
-      return;
-    case ACT_FINISH:
-      _onfinish.push();
-      repcounter.set( repeat_cnt );
-      return;
-  }
 }
 
 Atm_timer& Atm_timer::trace( Stream& stream ) {

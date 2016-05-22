@@ -2,8 +2,6 @@
 
 #include <Automaton.h>
 
-typedef void ( *atm_analog_cb_t )( int idx, int v, int up );
-
 class Atm_analog : public Machine {
  public:
   Atm_analog( void ) : Machine(){};
@@ -30,7 +28,7 @@ class Atm_analog : public Machine {
   Atm_analog& range( int toLow, int toHigh );
 
   Atm_analog& onChange( Machine& machine, int event = 0 );
-  Atm_analog& onChange( atm_analog_cb_t callback, int idx = 0 );
+  Atm_analog& onChange( atm_cb_push_t callback, int idx = 0 );
 
  private:
   int _avg();

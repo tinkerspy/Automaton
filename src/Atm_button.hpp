@@ -2,8 +2,6 @@
 
 #include <Automaton.h>
 
-typedef void ( *atm_button_cb_t )( int idx, int press );
-
 class Atm_button : public Machine {
  public:
   Atm_button( void ) : Machine(){};
@@ -15,9 +13,9 @@ class Atm_button : public Machine {
 
   Atm_button& begin( int attached_pin );
   Atm_button& trace( Stream& stream );
-  Atm_button& onPress( atm_button_cb_t callback, int idx = 0 );
+  Atm_button& onPress( atm_cb_push_t callback, int idx = 0 );
   Atm_button& onPress( Machine& machine, int event = 0 );
-  Atm_button& onRelease( atm_button_cb_t callback, int idx = 0 );
+  Atm_button& onRelease( atm_cb_push_t callback, int idx = 0 );
   Atm_button& onRelease( Machine& machine, int event = 0 );
   Atm_button& debounce( int delay );
   Atm_button& longPress( int max, int delay );

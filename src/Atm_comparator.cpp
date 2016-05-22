@@ -17,6 +17,49 @@ Atm_comparator& Atm_comparator::begin( int attached_pin, int samplerate /* = 50 
   return *this;
 }
 
+int Atm_comparator::event( int id ) {
+  switch ( id ) {
+    case EVT_TRIGGER:
+      if ( bitmap_diff ) {
+        return 1;
+      }
+      return 0;
+    case EVT_TIMER:
+      return timer.expired( this );
+  }
+  return 0;
+}
+
+void Atm_comparator::action( int id ) {
+  switch ( id ) {
+    case ACT_SAMPLE:
+      v_previous = v_sample;
+      bitmap_previous = bitmap_sample;
+      v_sample = sample();
+      bitmap( v_sample );
+      return;
+    case ACT_SEND:
+      if ( v_sample >= v_previous ) {
+        for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
+          if ( ( bitmap_diff >> i ) & 1 ) {
+            if ( !_onup.push( 0, 0, true ) ) {
+              ( *(atm_comparator_cb_t)_onup.push_callback )( _onup.callback_idx, v_sample, 1, i, p_threshold[i] );
+            }
+          }
+        }
+      } else {
+        for ( int i = p_threshold_size; i >= 0; i-- ) {
+          if ( ( bitmap_diff >> i ) & 1 ) {
+            if ( !_ondown.push( 0, 0, true ) ) {
+              ( *(atm_comparator_cb_t)_ondown.push_callback )( _onup.callback_idx, v_sample, 0, i, p_threshold[i] );
+            }
+          }
+        }
+      }
+      return;
+  }
+}
+
 Atm_comparator& Atm_comparator::onChange( atm_comparator_cb_t callback, int idx /* = 0 */ ) {
   _onup.set( (atm_cb_push_t)callback, idx );
   _ondown.set( (atm_cb_push_t)callback, idx );
@@ -102,49 +145,6 @@ Atm_comparator& Atm_comparator::bitmap( uint16_t v ) {
   }
   bitmap_diff = bitmap_sample ^ bitmap_previous;
   return *this;
-}
-
-int Atm_comparator::event( int id ) {
-  switch ( id ) {
-    case EVT_TRIGGER:
-      if ( bitmap_diff ) {
-        return 1;
-      }
-      return 0;
-    case EVT_TIMER:
-      return timer.expired( this );
-  }
-  return 0;
-}
-
-void Atm_comparator::action( int id ) {
-  switch ( id ) {
-    case ACT_SAMPLE:
-      v_previous = v_sample;
-      bitmap_previous = bitmap_sample;
-      v_sample = sample();
-      bitmap( v_sample );
-      return;
-    case ACT_SEND:
-      if ( v_sample >= v_previous ) {
-        for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
-          if ( ( bitmap_diff >> i ) & 1 ) {
-            if ( !_onup.push( true ) ) {
-              ( *(atm_comparator_cb_t)_onup.push_callback )( _onup.callback_idx, v_sample, 1, i, p_threshold[i] );
-            }
-          }
-        }
-      } else {
-        for ( int i = p_threshold_size; i >= 0; i-- ) {
-          if ( ( bitmap_diff >> i ) & 1 ) {
-            if ( !_ondown.push( true ) ) {
-              ( *(atm_comparator_cb_t)_ondown.push_callback )( _onup.callback_idx, v_sample, 0, i, p_threshold[i] );
-            }
-          }
-        }
-      }
-      return;
-  }
 }
 
 Atm_comparator& Atm_comparator::trace( Stream& stream ) {

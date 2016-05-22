@@ -12,6 +12,22 @@ Atm_fan& Atm_fan::begin() {
   return *this;
 }
 
+int Atm_fan::event( int id ) {
+  return 0;
+}
+
+void Atm_fan::action( int id ) {
+  switch ( id ) {
+    case ACT_SEND:
+      for ( uint8_t i = 0; i < ATM_MULTIPLIER_COMMS_MAX; i++ ) {
+        if ( _connector[i].mode() != atm_connector::MODE_NULL ) {
+          _connector[i].push( 0, 0 );
+        }
+      }
+      return;
+  }
+}
+
 Atm_fan& Atm_fan::onInput( atm_cb_push_t callback, int idx ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
     if ( _connector[idx].mode() == atm_connector::MODE_NULL ) {
@@ -30,22 +46,6 @@ Atm_fan& Atm_fan::onInput( Machine& machine, int event /* = 0 */ ) {
     }
   }
   return *this;
-}
-
-int Atm_fan::event( int id ) {
-  return 0;
-}
-
-void Atm_fan::action( int id ) {
-  switch ( id ) {
-    case ACT_SEND:
-      for ( uint8_t i = 0; i < ATM_MULTIPLIER_COMMS_MAX; i++ ) {
-        if ( _connector[i].mode() != atm_connector::MODE_NULL ) {
-          _connector[i].push();
-        }
-      }
-      return;
-  }
 }
 
 Atm_fan& Atm_fan::trace( Stream& stream ) {

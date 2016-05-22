@@ -28,6 +28,38 @@ Atm_encoder& Atm_encoder::begin( int pin1, int pin2, int divider /* = 1 */ ) {
   return *this;
 }
 
+int Atm_encoder::event( int id ) {
+  switch ( id ) {
+    case EVT_UP:
+      return _enc_direction == +1 && ( _enc_counter % _divider == 0 );
+    case EVT_DOWN:
+      return _enc_direction == -1 && ( _enc_counter % _divider == 0 );
+  }
+  return 0;
+}
+
+void Atm_encoder::action( int id ) {
+  switch ( id ) {
+    case ACT_SAMPLE:
+      _enc_bits = ( ( _enc_bits << 2 ) | ( digitalRead( _pin1 ) << 1 ) | ( digitalRead( _pin2 ) ) ) & 0x0f;
+      _enc_direction = _enc_states[_enc_bits];
+      if ( _enc_direction != 0 ) {
+        if ( ++_enc_counter % _divider == 0 ) {
+          if ( !count( _enc_direction ) ) {
+            _enc_direction = 0;
+          }
+        }
+      }
+      return;
+    case ACT_UP:
+      _onup.push( state(), 1 );
+      return;
+    case ACT_DOWN:
+      _ondown.push( state(), 0 );
+      return;
+  }
+}
+
 Atm_encoder& Atm_encoder::range( int min, int max, bool wrap /* = false */ ) {
   _min = min;
   _max = max;
@@ -77,16 +109,6 @@ int Atm_encoder::state( void ) {
   return _value;
 }
 
-int Atm_encoder::event( int id ) {
-  switch ( id ) {
-    case EVT_UP:
-      return _enc_direction == +1 && ( _enc_counter % _divider == 0 );
-    case EVT_DOWN:
-      return _enc_direction == -1 && ( _enc_counter % _divider == 0 );
-  }
-  return 0;
-}
-
 bool Atm_encoder::count( int direction ) {
   if ( (long)_value + direction > _max ) {
     if ( _wrap ) {
@@ -104,28 +126,6 @@ bool Atm_encoder::count( int direction ) {
     _value += direction;
   }
   return true;
-}
-
-void Atm_encoder::action( int id ) {
-  switch ( id ) {
-    case ACT_SAMPLE:
-      _enc_bits = ( ( _enc_bits << 2 ) | ( digitalRead( _pin1 ) << 1 ) | ( digitalRead( _pin2 ) ) ) & 0x0f;
-      _enc_direction = _enc_states[_enc_bits];
-      if ( _enc_direction != 0 ) {
-        if ( ++_enc_counter % _divider == 0 ) {
-          if ( !count( _enc_direction ) ) {
-            _enc_direction = 0;
-          }
-        }
-      }
-      return;
-    case ACT_UP:
-      _onup.push();
-      return;
-    case ACT_DOWN:
-      _ondown.push();
-      return;
-  }
 }
 
 Atm_encoder& Atm_encoder::trace( Stream& stream ) {

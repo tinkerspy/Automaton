@@ -26,6 +26,52 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   return *this;
 }
 
+int Atm_led::event( int id ) {
+  switch ( id ) {
+    case EVT_ON_TIMER:
+      return on_timer.expired( this );
+    case EVT_OFF_TIMER:
+      return off_timer.expired( this );
+    case EVT_COUNTER:
+      return counter.expired();
+  }
+  return 0;
+}
+
+void Atm_led::action( int id ) {
+  switch ( id ) {
+    case ACT_INIT:
+      counter.set( repeat_count );
+      return;
+    case ACT_ON:
+      if ( _activeLow ) {
+        digitalWrite( pin, LOW );
+      } else {
+        if ( _level == 255 ) {
+          digitalWrite( pin, HIGH );
+        } else {
+          analogWrite( pin, _level );
+        }
+      }
+      return;
+    case ACT_OFF:
+      counter.decrement();
+      if ( !_activeLow ) {
+        digitalWrite( pin, LOW );
+      } else {
+        if ( _level == 255 ) {
+          digitalWrite( pin, HIGH );
+        } else {
+          analogWrite( pin, _level );
+        }
+      }
+      return;
+    case ACT_CHAIN:
+      _onfinish.push( 0 );
+      return;
+  }
+}
+
 Atm_led& Atm_led::onFinish( Machine& machine, int event /* = 0 */ ) {
   _onfinish.set( &machine, event );
   return *this;
@@ -69,52 +115,6 @@ Atm_led& Atm_led::brightness( uint8_t level ) {
     analogWrite( pin, level );
   }
   return *this;
-}
-
-int Atm_led::event( int id ) {
-  switch ( id ) {
-    case EVT_ON_TIMER:
-      return on_timer.expired( this );
-    case EVT_OFF_TIMER:
-      return off_timer.expired( this );
-    case EVT_COUNTER:
-      return counter.expired();
-  }
-  return 0;
-}
-
-void Atm_led::action( int id ) {
-  switch ( id ) {
-    case ACT_INIT:
-      counter.set( repeat_count );
-      return;
-    case ACT_ON:
-      if ( _activeLow ) {
-        digitalWrite( pin, LOW );
-      } else {
-        if ( _level == 255 ) {
-          digitalWrite( pin, HIGH );
-        } else {
-          analogWrite( pin, _level );
-        }
-      }
-      return;
-    case ACT_OFF:
-      counter.decrement();
-      if ( !_activeLow ) {
-        digitalWrite( pin, LOW );
-      } else {
-        if ( _level == 255 ) {
-          digitalWrite( pin, HIGH );
-        } else {
-          analogWrite( pin, _level );
-        }
-      }
-      return;
-    case ACT_CHAIN:
-      _onfinish.push();
-      return;
-  }
 }
 
 Atm_led& Atm_led::trace( Stream& stream ) {

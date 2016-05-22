@@ -35,11 +35,11 @@ int Atm_digital::event( int id ) {
 void Atm_digital::action( int id ) {
   switch ( id ) {
     case ACT_HIGH:
-      _connection[ON_CHANGE_TRUE].push();
+      _connection[ON_CHANGE_TRUE].push( state() );
       if ( _indicator > -1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
       return;
     case ACT_LOW:
-      _connection[ON_CHANGE_FALSE].push();
+      _connection[ON_CHANGE_FALSE].push( state() );
       if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
       return;
   }
