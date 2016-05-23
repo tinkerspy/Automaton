@@ -6,8 +6,8 @@ typedef void ( *atm_comparator_cb_t )( int idx, int v, int up, int idx_threshold
 
 class Atm_comparator : public Machine {
  public:
-  enum { IDLE, SAMPLE, SEND } STATES;
-  enum { EVT_TRIGGER, EVT_TIMER, ELSE } EVENTS;
+  enum { IDLE, SAMPLE, SEND };            // STATES
+  enum { EVT_TRIGGER, EVT_TIMER, ELSE };  // EVENTS
 
   Atm_comparator( void ) : Machine(){};
   Atm_comparator& begin( int attached_pin, int sampleRate = 50 );
@@ -25,7 +25,7 @@ class Atm_comparator : public Machine {
   Atm_comparator& trace( Stream& stream );
 
  private:
-  enum { ACT_SAMPLE, ACT_SEND } ACTIONS;
+  enum { ACT_SAMPLE, ACT_SEND };  // ACTIONS
   short pin;
   atm_timer_millis timer;
   int v_sample, v_threshold, v_previous;

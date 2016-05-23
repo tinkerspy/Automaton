@@ -4,8 +4,8 @@
 
 class Atm_analog : public Machine {
  public:
-  enum { IDLE, SAMPLE, SEND } STATES;
-  enum { EVT_TRIGGER, EVT_TIMER, ELSE } EVENTS;
+  enum { IDLE, SAMPLE, SEND };            // STATES
+  enum { EVT_TRIGGER, EVT_TIMER, ELSE };  // EVENTS
 
   Atm_analog( void ) : Machine(){};
   Atm_analog& begin( int attached_pin, int sampleRate = 50 );
@@ -17,7 +17,10 @@ class Atm_analog : public Machine {
   Atm_analog& onChange( atm_cb_push_t callback, int idx = 0 );
 
  private:
-  enum { ACT_SAMPLE, ACT_SEND } ACTIONS;
+  enum {
+    ACT_SAMPLE,
+    ACT_SEND
+  }  // ACTIONS
   short pin;
   atm_timer_millis timer;
   int v_sample, v_threshold, v_previous;
