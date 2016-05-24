@@ -4,60 +4,70 @@
 
 Atm_led countdown, ignition;
 Atm_button button1, button2;
-Atm_step burst1, burst2;
-Atm_timer reset_timer;
-Atm_gate gate;
+Atm_bit bit1, bit2;
+Atm_timer timer1, timer2;
+Atm_controller ctrl;
 Appliance app;
 
 const int pinButton1 = 2;
 const int pinButton2 = 3;
-const int pinCountdownLed = 4;
-const int pinIgnitionLed = 5;
+const int pinCountdownLed = 8;
+const int pinIgnitionLed = 9;
 const int buttonIntervalMax = 2000;
 const int countdownCount = 10;
 const int countdownFlashOn = 100;
 const int countdownFlashOff = 900;
 
 void setup() {
+
+  // Self resetting button 1
+  app.component( 
+    button1.begin( pinButton1 )
+      .onPress( bit1, bit1.EVT_ON )
+  );
+  app.component(
+    timer1.begin( buttonIntervalMax )
+      .onTimer( bit1, bit1.EVT_OFF )
+  );
+  app.component(
+    bit1.begin( false ).led( 4 )
+      .onChange( true, timer1, timer1.EVT_START )
+  );
   
-  // Create two button machines, linked to the burst machines
-  button1.begin( pinButton1 ).onPress( burst1, burst1.EVT_STEP );
-  button2.begin( pinButton2 ).onPress( burst2, burst2.EVT_STEP );
+  // Self resetting button 2
+  app.component( 
+    button2.begin( pinButton2 )
+      .onPress( bit2, bit2.EVT_ON )
+  );
+  app.component(
+    timer2.begin( buttonIntervalMax )
+      .onTimer( bit2, bit2.EVT_OFF )
+  );
+  app.component(
+    bit2.begin( false ).led( 5 )
+      .onChange( true, timer2, timer2.EVT_START )
+  );
 
-  // Create two step machines and put them in burst mode
-  // On receipt of a EVT_STEP trigger: fires all steps at once
-  burst1.begin()
-    .onStep( 0,   countdown,   countdown.EVT_OFF ) 
-    .onStep( 1, reset_timer, reset_timer.EVT_ON  )
-    .onStep( 2,        gate,        gate.EVT_G0  )
-    .trigger( burst1.EVT_BURST );
-  burst2.begin()
-    .onStep( 0,   countdown,   countdown.EVT_OFF )
-    .onStep( 1, reset_timer, reset_timer.EVT_ON  )
-    .onStep( 2,        gate,        gate.EVT_G1  )
-    .trigger( burst2.EVT_BURST );
+  // Controller
+  app.component(
+    ctrl.begin( false )
+      .IF( bit1 ).AND( bit2 )
+      .onChange( true, countdown, countdown.EVT_BLINK )
+  );
 
-  // Create the gate machine with two inputs 
-  // When both inputs are triggered, the output gate opens and starts the countdown
-  gate.begin( 2 ).onOpen( countdown, countdown.EVT_BLINK );
+  // Countdown led
+  app.component(
+    countdown.begin( pinCountdownLed )
+      .blink( countdownFlashOn, countdownFlashOff, countdownCount )
+      .onFinish( ignition, ignition.EVT_BLINK )
+  );
 
-  // Create the reset timer to reset the gate some time after a button press
-  reset_timer.begin( buttonIntervalMax ).onTimer( gate, gate.EVT_RESET );
+  // Ignition
+  app.component(
+    ignition.begin( pinIgnitionLed )
+      .repeat( 1 )
+  );
 
-  // Create the countdown LED (10 times 1 flash per second), chained to the ignition 
-  countdown.begin( pinCountdownLed )
-    .blink( countdownFlashOn, countdownFlashOff, countdownCount )
-    .onFinish( ignition, ignition.EVT_ON ); 
-
-  // Create the ignition LED (connected in hardware to the missile launch trigger)
-  ignition.begin( pinIgnitionLed );
-
-  // Add all machines to the  app
-  app
-    .add( button1 ).add( button2 )
-    .add( burst1 ).add( burst2 )
-    .add( gate ).add( reset_timer )
-    .add( countdown ).add( ignition );
 }
 
 void loop() {
