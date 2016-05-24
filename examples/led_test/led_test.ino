@@ -6,22 +6,22 @@ int ledPin = 4;
 int buttonPin = 2;
 
 Atm_led led;
-Atm_button btn;
+Atm_button button;
 Appliance app;
 
 void setup() {
   Serial.begin( 9600 );
+  led.trace( Serial );
+  button.trace( Serial );
   
   app.component(
     led.begin( ledPin )
       .blink( 1000 )
-      .trace( Serial )
   );
   
   app.component(
-    btn.begin( buttonPin )
+    button.begin( buttonPin )
       .onPress( led, led.EVT_TOGGLE )
-      .trace( Serial )
   );
 }
 

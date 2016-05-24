@@ -5,7 +5,7 @@ Atm_timer stepTimer;
 Atm_step step;
 Appliance app;
 
-const int pin = 19;
+const int pin = 4;
 const int dotTime = 100;
 const int dashTime = 300;
 const int waitTime = 200;

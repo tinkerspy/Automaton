@@ -8,7 +8,7 @@ Atm_step step;
 Appliance app;
 
 static uint16_t threshold_list[] = { 100, 300, 500, 700, 900, 1000 }; 
-static short pin_list[] = { 9, 8, 7, 6, 5, 4 };
+static short pin_list[] = { 4, 5, 6, 7, 8, 9 };
 
 void setup() {
     
