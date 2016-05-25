@@ -14,10 +14,10 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   // clang-format on
   Machine::begin( state_table, ELSE );
   pin = attached_pin;
-  _activeLow = activeLow;
-  _level = 255;
+  this->activeLow = activeLow;
+  level = 255;
   pinMode( pin, OUTPUT );
-  digitalWrite( pin, _activeLow ? HIGH : LOW );
+  digitalWrite( pin, activeLow ? HIGH : LOW );
   on_timer.set( 500 );
   off_timer.set( 500 );
   repeat_count = ATM_COUNTER_OFF;
@@ -44,41 +44,41 @@ void Atm_led::action( int id ) {
       counter.set( repeat_count );
       return;
     case ACT_ON:
-      if ( _activeLow ) {
+      if ( activeLow ) {
         digitalWrite( pin, LOW );
       } else {
-        if ( _level == 255 ) {
+        if ( level == 255 ) {
           digitalWrite( pin, HIGH );
         } else {
-          analogWrite( pin, _level );
+          analogWrite( pin, level );
         }
       }
       return;
     case ACT_OFF:
       counter.decrement();
-      if ( !_activeLow ) {
+      if ( !activeLow ) {
         digitalWrite( pin, LOW );
       } else {
-        if ( _level == 255 ) {
+        if ( level == 255 ) {
           digitalWrite( pin, HIGH );
         } else {
-          analogWrite( pin, _level );
+          analogWrite( pin, level );
         }
       }
       return;
     case ACT_CHAIN:
-      _onfinish.push( 0 );
+      onfinish.push( 0 );
       return;
   }
 }
 
 Atm_led& Atm_led::onFinish( Machine& machine, int event /* = 0 */ ) {
-  _onfinish.set( &machine, event );
+  onfinish.set( &machine, event );
   return *this;
 }
 
 Atm_led& Atm_led::onFinish( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _onfinish.set( callback, idx );
+  onfinish.set( callback, idx );
   return *this;
 }
 
@@ -110,7 +110,7 @@ Atm_led& Atm_led::repeat( int repeat ) {
 }
 
 Atm_led& Atm_led::brightness( uint8_t level ) {
-  _level = level;
+  this->level = level;
   if ( current == ON || current == START ) {
     analogWrite( pin, level );
   }

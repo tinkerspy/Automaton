@@ -20,16 +20,15 @@ class Atm_encoder : public Machine {
 
  private:
   enum { ACT_SAMPLE, ACT_UP, ACT_DOWN };  // ACTIONS
-  short _pin1, _pin2;
-  const static char _enc_states[];
-  uint8_t _enc_bits;
-  uint8_t _enc_counter;
-  int8_t _enc_direction;
-  int _divider;
-  int _value, _min, _max;
-  bool _wrap;
-  atm_connector _onup;
-  atm_connector _ondown;
+  short pin1, pin2;
+  const static char enc_states[];
+  uint8_t enc_bits;
+  uint8_t enc_counter;
+  int8_t enc_direction;
+  int divider;
+  int value, min, max;
+  bool wrap;
+  atm_connector onup, ondown;
 
   bool count( int direction );
   int event( int id );

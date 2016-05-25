@@ -3,7 +3,7 @@
 
 // Loosely based on https://www.circuitsathome.com/mcu/reading-rotary-encoder-on-arduino (Oleg Mazurov)
 
-const char Atm_encoder::_enc_states[16] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0};
+const char Atm_encoder::enc_states[16] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0};
 
 Atm_encoder& Atm_encoder::begin( int pin1, int pin2, int divider /* = 1 */ ) {
   // clang-format off
@@ -15,25 +15,25 @@ Atm_encoder& Atm_encoder::begin( int pin1, int pin2, int divider /* = 1 */ ) {
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
-  _pin1 = pin1;
-  _pin2 = pin2;
-  _divider = divider;
-  pinMode( _pin1, INPUT );
-  pinMode( _pin2, INPUT );
-  digitalWrite( _pin1, HIGH );
-  digitalWrite( _pin2, HIGH );
-  _min = INT_MIN;
-  _max = INT_MAX;
-  _value = 0;
+  this->pin1 = pin1;
+  this->pin2 = pin2;
+  this->divider = divider;
+  pinMode( pin1, INPUT );
+  pinMode( pin2, INPUT );
+  digitalWrite( pin1, HIGH );
+  digitalWrite( pin2, HIGH );
+  min = INT_MIN;
+  max = INT_MAX;
+  value = 0;
   return *this;
 }
 
 int Atm_encoder::event( int id ) {
   switch ( id ) {
     case EVT_UP:
-      return _enc_direction == +1 && ( _enc_counter % _divider == 0 );
+      return enc_direction == +1 && ( enc_counter % divider == 0 );
     case EVT_DOWN:
-      return _enc_direction == -1 && ( _enc_counter % _divider == 0 );
+      return enc_direction == -1 && ( enc_counter % divider == 0 );
   }
   return 0;
 }
@@ -41,89 +41,89 @@ int Atm_encoder::event( int id ) {
 void Atm_encoder::action( int id ) {
   switch ( id ) {
     case ACT_SAMPLE:
-      _enc_bits = ( ( _enc_bits << 2 ) | ( digitalRead( _pin1 ) << 1 ) | ( digitalRead( _pin2 ) ) ) & 0x0f;
-      _enc_direction = _enc_states[_enc_bits];
-      if ( _enc_direction != 0 ) {
-        if ( ++_enc_counter % _divider == 0 ) {
-          if ( !count( _enc_direction ) ) {
-            _enc_direction = 0;
+      enc_bits = ( ( enc_bits << 2 ) | ( digitalRead( pin1 ) << 1 ) | ( digitalRead( pin2 ) ) ) & 0x0f;
+      enc_direction = enc_states[enc_bits];
+      if ( enc_direction != 0 ) {
+        if ( ++enc_counter % divider == 0 ) {
+          if ( !count( enc_direction ) ) {
+            enc_direction = 0;
           }
         }
       }
       return;
     case ACT_UP:
-      _onup.push( state(), 1 );
+      onup.push( state(), 1 );
       return;
     case ACT_DOWN:
-      _ondown.push( state(), 0 );
+      ondown.push( state(), 0 );
       return;
   }
 }
 
 Atm_encoder& Atm_encoder::range( int min, int max, bool wrap /* = false */ ) {
-  _min = min;
-  _max = max;
-  _wrap = wrap;
-  if ( _value < _min || _value > _max ) {
-    _value = min;
+  this->min = min;
+  this->max = max;
+  this->wrap = wrap;
+  if ( value < min || value > max ) {
+    value = min;
   }
   return *this;
 }
 
 Atm_encoder& Atm_encoder::set( int value ) {
-  _value = value;
+  this->value = value;
   return *this;
 }
 
 Atm_encoder& Atm_encoder::onChange( Machine& machine, int event /* = 0 */ ) {
-  _onup.set( &machine, event );
-  _ondown.set( &machine, event );
+  onup.set( &machine, event );
+  ondown.set( &machine, event );
   return *this;
 }
 
 Atm_encoder& Atm_encoder::onChange( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _onup.set( callback, idx );
-  _ondown.set( callback, idx );
+  onup.set( callback, idx );
+  ondown.set( callback, idx );
   return *this;
 }
 
 Atm_encoder& Atm_encoder::onChange( bool status, Machine& machine, int event /* = 0 */ ) {
   if ( status ) {
-    _onup.set( &machine, event );
+    onup.set( &machine, event );
   } else {
-    _ondown.set( &machine, event );
+    ondown.set( &machine, event );
   }
   return *this;
 }
 
 Atm_encoder& Atm_encoder::onChange( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
   if ( status ) {
-    _onup.set( callback, idx );
+    onup.set( callback, idx );
   } else {
-    _ondown.set( callback, idx );
+    ondown.set( callback, idx );
   }
   return *this;
 }
 
 int Atm_encoder::state( void ) {
-  return _value;
+  return value;
 }
 
 bool Atm_encoder::count( int direction ) {
-  if ( (long)_value + direction > _max ) {
-    if ( _wrap ) {
-      _value = _min;
+  if ( (long)value + direction > max ) {
+    if ( wrap ) {
+      value = min;
     } else {
       return false;
     }
-  } else if ( (long)_value + direction < _min ) {
-    if ( _wrap ) {
-      _value = _max;
+  } else if ( (long)value + direction < min ) {
+    if ( wrap ) {
+      value = max;
     } else {
       return false;
     }
   } else {
-    _value += direction;
+    value += direction;
   }
   return true;
 }

@@ -21,13 +21,13 @@ class Atm_led : public Machine {
 
  private:
   enum { ACT_INIT, ACT_ON, ACT_OFF, ACT_CHAIN };
-  uint8_t _level;
+  uint8_t level;
   short pin;
-  bool _activeLow;
+  bool activeLow;
   int repeat_count;
   atm_timer_millis on_timer, off_timer;
   atm_counter counter;
-  atm_connector _onfinish;
+  atm_connector onfinish;
 
   int event( int id );
   void action( int id );
