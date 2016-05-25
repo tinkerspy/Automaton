@@ -21,7 +21,7 @@ class Atm_digital : public Machine {
   Atm_digital& trace( Stream& stream );
 
  private:
-  enum { ACT_HIGH, ACT_LOW };                             // ACTIONS
+  enum { ENT_HIGH, ENT_LOW };                             // ACTIONS
   enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, _CONN_SIZE_ };  // CONNECTORS
   short pin;
   atm_timer_millis timer;

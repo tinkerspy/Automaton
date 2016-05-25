@@ -6,8 +6,8 @@ Atm_controller& Atm_controller::begin( bool initialState /* = false */ ) {
   // clang-format off
   const static state_t state_table[] PROGMEM = {
     /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON  EVT_OFF  EVT_INPUT ELSE */
-    /* OFF     */    ACT_OFF,        -1,      -1,     ON,      -1,       OFF,  -1,
-    /* ON      */     ACT_ON,        -1,      -1,     -1,     OFF,        ON,  -1,
+    /* OFF     */    ENT_OFF,        -1,      -1,     ON,      -1,       OFF,  -1,
+    /* ON      */     ENT_ON,        -1,      -1,     -1,     OFF,        ON,  -1,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -29,12 +29,12 @@ int Atm_controller::event( int id ) {
 
 void Atm_controller::action( int id ) {
   switch ( id ) {
-    case ACT_OFF:
+    case ENT_OFF:
       connector[last_state == current ? ON_INPUT_FALSE : ON_CHANGE_FALSE].push( state() );
       if ( indicator > -1 ) digitalWrite( indicator, !LOW != !indicatorActiveLow );
       last_state = current;
       return;
-    case ACT_ON:
+    case ENT_ON:
       if ( last_state != -1 ) connector[( last_state == current ) ? ON_INPUT_TRUE : ON_CHANGE_TRUE].push( state() );
       if ( indicator > -1 ) digitalWrite( indicator, !HIGH != !indicatorActiveLow );
       last_state = current;

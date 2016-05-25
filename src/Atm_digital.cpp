@@ -6,9 +6,9 @@ Atm_digital& Atm_digital::begin( int pin, int debounce /* = 20 */, bool activeLo
     /*              ON_ENTER    ON_LOOP      ON_EXIT  EVT_TIMER   EVT_HIGH  EVT_LOW   ELSE */
     /* IDLE    */         -1,        -1,          -1,        -1,     WAITH,      -1,    -1,
     /* WAITH   */         -1,        -1,          -1,     VHIGH,        -1,    IDLE,    -1,
-    /* VHIGH   */   ACT_HIGH,        -1,          -1,        -1,        -1,   WAITL,    -1, 
+    /* VHIGH   */   ENT_HIGH,        -1,          -1,        -1,        -1,   WAITL,    -1, 
     /* WAITL   */         -1,        -1,          -1,      VLOW,     VHIGH,      -1,    -1,
-    /* VLOW    */    ACT_LOW,        -1,          -1,        -1,        -1,      -1,  IDLE,
+    /* VLOW    */    ENT_LOW,        -1,          -1,        -1,        -1,      -1,  IDLE,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -34,11 +34,11 @@ int Atm_digital::event( int id ) {
 
 void Atm_digital::action( int id ) {
   switch ( id ) {
-    case ACT_HIGH:
+    case ENT_HIGH:
       connection[ON_CHANGE_TRUE].push( state() );
       if ( indicator > -1 ) digitalWrite( indicator, !HIGH != !indicatorActiveLow );
       return;
-    case ACT_LOW:
+    case ENT_LOW:
       connection[ON_CHANGE_FALSE].push( state() );
       if ( indicator > -1 ) digitalWrite( indicator, !LOW != !indicatorActiveLow );
       return;

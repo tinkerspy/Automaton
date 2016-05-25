@@ -29,7 +29,7 @@ class Atm_controller : public Machine {
   Atm_controller& trace( Stream& stream );
 
  private:
-  enum { ACT_ON, ACT_OFF, ACT_INPUT };                                                   // ACTIONS
+  enum { ENT_ON, ENT_OFF };                                                              // ACTIONS
   enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, ON_INPUT_FALSE, ON_INPUT_TRUE, _CONN_SIZE_ };  // CONNECTORS
   state_t last_state;
   atm_connector connector[_CONN_SIZE_];
