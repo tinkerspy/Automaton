@@ -13,6 +13,7 @@ void setup() {
   app.component( led2.begin( 5 ).blink( 200, 200 ) );
   app.component( led3.begin( 6 ).blink( 400, 400 ) );
 
+  // Send one event to many
   app.component(
     fan.begin()
       .onInput( led1, led1.EVT_TOGGLE_BLINK )
@@ -20,7 +21,7 @@ void setup() {
       .onInput( led3, led3.EVT_TOGGLE_BLINK )
   );
 
-  // Set up a button to send a trigger to all machines in the .LED class
+  // Button triggers the fan
   app.component( 
     btn.begin( 2 ) 
       .onPress( fan, fan.EVT_INPUT )
