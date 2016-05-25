@@ -21,12 +21,12 @@ class Atm_digital : public Machine {
   Atm_digital& trace( Stream& stream );
 
  private:
-  enum { ACT_HIGH, ACT_LOW };                           // ACTIONS
-  enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, CONN_SIZE };  // CONNECTORS
+  enum { ACT_HIGH, ACT_LOW };                             // ACTIONS
+  enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, _CONN_SIZE_ };  // CONNECTORS
   short pin;
   atm_timer_millis timer;
   bool activeLow;
-  atm_connector connection[CONN_SIZE];
+  atm_connector connection[_CONN_SIZE_];
   int8_t indicator;
   bool indicatorActiveLow;
 

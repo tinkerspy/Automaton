@@ -19,10 +19,10 @@ class Atm_bit : public Machine {
   Atm_bit& trace( Stream& stream );
 
  private:
-  enum { ACT_ON, ACT_OFF, ACT_INPUT };                                                 // ACTIONS
-  enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, ON_INPUT_FALSE, ON_INPUT_TRUE, CONN_SIZE };  // CONNECTORS
+  enum { ACT_ON, ACT_OFF, ACT_INPUT };                                                   // ACTIONS
+  enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, ON_INPUT_FALSE, ON_INPUT_TRUE, _CONN_SIZE_ };  // CONNECTORS
   state_t last_state;
-  atm_connector connector[CONN_SIZE];
+  atm_connector connector[_CONN_SIZE_];
   int8_t indicator;
   bool indicatorActiveLow;
 
