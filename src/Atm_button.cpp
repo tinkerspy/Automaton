@@ -9,16 +9,16 @@ Atm_button& Atm_button::begin( int attached_pin ) {
     /*                  ON_ENTER  ON_LOOP       ON_EXIT  EVT_LMODE  EVT_TIMER  EVT_DELAY  EVT_REPEAT EVT_PRESS  EVT_RELEASE  EVT_COUNTER   EVT_AUTO  ELSE */
     /* IDLE     */            -1,      -1,           -1,     LIDLE,        -1,        -1,         -1,     WAIT,          -1,          -1,      AUTO,   -1,
     /* WAIT     */            -1,      -1,           -1,        -1,   PRESSED,        -1,         -1,       -1,        IDLE,          -1,        -1,    -1,
-    /* PRESSED  */     ACT_PRESS,      -1,           -1,        -1,        -1,    REPEAT,         -1,       -1,     RELEASE,          -1,        -1,    -1,
-    /* REPEAT   */     ACT_PRESS,      -1,           -1,        -1,        -1,        -1,     REPEAT,       -1,     RELEASE,          -1,        -1,    -1,
-    /* RELEASE  */   ACT_RELEASE,      -1,           -1,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1,  IDLE,
+    /* PRESSED  */     ENT_PRESS,      -1,           -1,        -1,        -1,    REPEAT,         -1,       -1,     RELEASE,          -1,        -1,    -1,
+    /* REPEAT   */     ENT_PRESS,      -1,           -1,        -1,        -1,        -1,     REPEAT,       -1,     RELEASE,          -1,        -1,    -1,
+    /* RELEASE  */   ENT_RELEASE,      -1,           -1,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1,  IDLE,
     /* Long Press Mode: press/long press */	
     /* LIDLE    */            -1,      -1,           -1,        -1,        -1,        -1,         -1,    LWAIT,          -1,          -1,        -1,    -1,
-    /* LWAIT    */    ACT_LSTART,      -1,           -1,        -1,  LPRESSED,        -1,         -1,       -1,       LIDLE,          -1,        -1,    -1,
-    /* LPRESSED */    ACT_LCOUNT,      -1,           -1,        -1,        -1,  LPRESSED,         -1,       -1,    LRELEASE,    WRELEASE,        -1,    -1,
-    /* LRELEASE */  ACT_LRELEASE,      -1, ACT_WRELEASE,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1, LIDLE,
-    /* WRELEASE */  ACT_LRELEASE,      -1, ACT_WRELEASE,        -1,        -1,        -1,         -1,       -1,       LIDLE,          -1,        -1,    -1,
-    /* AUTO     */      ACT_AUTO,      -1,           -1,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1,  IDLE,
+    /* LWAIT    */    ENT_LSTART,      -1,           -1,        -1,  LPRESSED,        -1,         -1,       -1,       LIDLE,          -1,        -1,    -1,
+    /* LPRESSED */    ENT_LCOUNT,      -1,           -1,        -1,        -1,  LPRESSED,         -1,       -1,    LRELEASE,    WRELEASE,        -1,    -1,
+    /* LRELEASE */  ENT_LRELEASE,      -1, EXT_WRELEASE,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1, LIDLE,
+    /* WRELEASE */  ENT_LRELEASE,      -1, EXT_WRELEASE,        -1,        -1,        -1,         -1,       -1,       LIDLE,          -1,        -1,    -1,
+    /* AUTO     */      ENT_AUTO,      -1,           -1,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1,  IDLE,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -56,27 +56,27 @@ int Atm_button::event( int id ) {
 
 void Atm_button::action( int id ) {
   switch ( id ) {
-    case ACT_PRESS:
-    case ACT_AUTO:
+    case ENT_PRESS:
+    case ENT_AUTO:
       onpress.push( 1 );
       return;
-    case ACT_RELEASE:
-    case ACT_WRELEASE:
+    case ENT_RELEASE:
+    case EXT_WRELEASE:
       onrelease.push( 0 );
       if ( onpress.mode() == onpress.MODE_PUSHCB ) {
         onpress.push( 0 );
       }
       return;
-    case ACT_LSTART:
+    case ENT_LSTART:
       counter_longpress.set( longpress_max );
       return;
-    case ACT_LCOUNT:
+    case ENT_LCOUNT:
       counter_longpress.decrement();
       if ( onpress.mode() == onpress.MODE_PUSHCB ) {
         onpress.push( ( longpress_max - counter_longpress.value ) * -1 );
       }
       return;
-    case ACT_LRELEASE:
+    case ENT_LRELEASE:
       if ( onpress.mode() == onpress.MODE_PUSHCB ) {
         onpress.push( longpress_max - counter_longpress.value );
       }

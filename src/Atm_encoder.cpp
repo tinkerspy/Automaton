@@ -9,9 +9,9 @@ Atm_encoder& Atm_encoder::begin( int pin1, int pin2, int divider /* = 1 */ ) {
   // clang-format off
   const static state_t state_table[] PROGMEM = {
     /*          ON_ENTER     ON_LOOP  ON_EXIT  EVT_UP  EVT_DOWN  ELSE */
-    /* IDLE  */       -1, ACT_SAMPLE,      -1,     UP,     DOWN,   -1,
-    /* UP    */   ACT_UP,         -1,      -1,     -1,       -1, IDLE,
-    /* DOWN  */ ACT_DOWN,         -1,      -1,     -1,       -1, IDLE,
+    /* IDLE  */       -1, EXT_SAMPLE,      -1,     UP,     DOWN,   -1,
+    /* UP    */   ENT_UP,         -1,      -1,     -1,       -1, IDLE,
+    /* DOWN  */ ENT_DOWN,         -1,      -1,     -1,       -1, IDLE,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -40,7 +40,7 @@ int Atm_encoder::event( int id ) {
 
 void Atm_encoder::action( int id ) {
   switch ( id ) {
-    case ACT_SAMPLE:
+    case EXT_SAMPLE:
       enc_bits = ( ( enc_bits << 2 ) | ( digitalRead( pin1 ) << 1 ) | ( digitalRead( pin2 ) ) ) & 0x0f;
       enc_direction = enc_states[enc_bits];
       if ( enc_direction != 0 ) {
@@ -51,10 +51,10 @@ void Atm_encoder::action( int id ) {
         }
       }
       return;
-    case ACT_UP:
+    case ENT_UP:
       onup.push( state(), 1 );
       return;
-    case ACT_DOWN:
+    case ENT_DOWN:
       ondown.push( state(), 0 );
       return;
   }

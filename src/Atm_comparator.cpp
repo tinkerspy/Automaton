@@ -5,8 +5,8 @@ Atm_comparator& Atm_comparator::begin( int attached_pin, int samplerate /* = 50 
   const static state_t state_table[] PROGMEM = {
     /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_TRIGGER EVT_TIMER   ELSE */
     /* IDLE   */          -1,        -1,      -1,           -1,   SAMPLE,    -1,
-    /* SAMPLE */  ACT_SAMPLE,        -1,      -1,         SEND,       -1,  IDLE,
-    /* SEND   */    ACT_SEND,        -1,      -1,           -1,       -1,  IDLE,
+    /* SAMPLE */  ENT_SAMPLE,        -1,      -1,         SEND,       -1,  IDLE,
+    /* SEND   */    ENT_SEND,        -1,      -1,           -1,       -1,  IDLE,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -32,13 +32,13 @@ int Atm_comparator::event( int id ) {
 
 void Atm_comparator::action( int id ) {
   switch ( id ) {
-    case ACT_SAMPLE:
+    case ENT_SAMPLE:
       v_previous = v_sample;
       bitmap_previous = bitmap_sample;
       v_sample = sample();
       bitmap( v_sample );
       return;
-    case ACT_SEND:
+    case ENT_SEND:
       if ( v_sample >= v_previous ) {
         for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
           if ( ( bitmap_diff >> i ) & 1 ) {

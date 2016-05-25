@@ -20,7 +20,7 @@ class Atm_led : public Machine {
   Atm_led& onFinish( atm_cb_push_t callback, int idx = 0 );
 
  private:
-  enum { ACT_INIT, ACT_ON, ACT_OFF, ACT_CHAIN };
+  enum { ENT_INIT, ENT_ON, ENT_OFF, EXT_CHAIN };
   uint8_t level;
   short pin;
   bool activeLow;

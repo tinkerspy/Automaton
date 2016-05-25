@@ -21,7 +21,7 @@ class Atm_button : public Machine {
   Atm_button& autoPress( int delay, int press = 1 );
 
  protected:
-  enum { ACT_PRESS, ACT_RELEASE, ACT_LSTART, ACT_LCOUNT, ACT_LRELEASE, ACT_WRELEASE, ACT_AUTO };
+  enum { ENT_PRESS, ENT_RELEASE, ENT_LSTART, ENT_LCOUNT, ENT_LRELEASE, EXT_WRELEASE, ENT_AUTO };
   static const int DEBOUNCE = 5;
   atm_connector onpress, onrelease;
   short pin;

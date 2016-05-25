@@ -17,7 +17,7 @@ class Atm_analog : public Machine {
   Atm_analog& onChange( atm_cb_push_t callback, int idx = 0 );
 
  private:
-  enum { ACT_SAMPLE, ACT_SEND };  // ACTIONS
+  enum { ENT_SAMPLE, ENT_SEND };  // ACTIONS
   short pin;
   atm_timer_millis timer;
   int v_sample, v_threshold, v_previous;

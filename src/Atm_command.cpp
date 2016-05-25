@@ -5,8 +5,8 @@ Atm_command& Atm_command::begin( Stream& stream, char buffer[], int size ) {
   const static state_t state_table[] PROGMEM = {
     /*                  ON_ENTER    ON_LOOP    ON_EXIT  EVT_INPUT   EVT_EOL   ELSE */
     /* IDLE     */            -1,        -1,        -1,  READCHAR,       -1,    -1,
-    /* READCHAR */  ACT_READCHAR,        -1,        -1,  READCHAR,     SEND,    -1,
-    /* SEND     */      ACT_SEND,        -1,        -1,        -1,       -1,  IDLE,
+    /* READCHAR */  ENT_READCHAR,        -1,        -1,  READCHAR,     SEND,    -1,
+    /* SEND     */      ENT_SEND,        -1,        -1,        -1,       -1,  IDLE,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -31,7 +31,7 @@ int Atm_command::event( int id ) {
 
 void Atm_command::action( int id ) {
   switch ( id ) {
-    case ACT_READCHAR:
+    case ENT_READCHAR:
       if ( stream->available() ) {
         char ch = stream->read();
         if ( strchr( separatorChar, ch ) == NULL ) {
@@ -43,7 +43,7 @@ void Atm_command::action( int id ) {
         }
       }
       return;
-    case ACT_SEND:
+    case ENT_SEND:
       buffer[--bufptr] = '\0';
       oncommand.push( lookup( 0, commands ) );
       lastch = '\0';

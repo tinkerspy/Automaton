@@ -5,8 +5,8 @@ Atm_analog& Atm_analog::begin( int attached_pin, int samplerate /* = 50 */ ) {
   const static state_t state_table[] PROGMEM = {
     /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_TRIGGER  EVT_TIMER   ELSE */
     /* IDLE   */          -1,        -1,      -1,          -1,   SAMPLE,    -1,
-    /* SAMPLE */  ACT_SAMPLE,        -1,      -1,        SEND,       -1,  IDLE,
-    /* SEND   */    ACT_SEND,        -1,      -1,          -1,       -1,  IDLE,
+    /* SAMPLE */  ENT_SAMPLE,        -1,      -1,        SEND,       -1,  IDLE,
+    /* SEND   */    ENT_SEND,        -1,      -1,          -1,       -1,  IDLE,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -27,11 +27,11 @@ int Atm_analog::event( int id ) {
 
 void Atm_analog::action( int id ) {
   switch ( id ) {
-    case ACT_SAMPLE:
+    case ENT_SAMPLE:
       v_previous = v_sample;
       v_sample = sample();
       return;
-    case ACT_SEND:
+    case ENT_SEND:
       v_sample = sample();
       onchange.push( v_sample, v_sample > v_previous );
       return;

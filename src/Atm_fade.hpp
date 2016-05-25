@@ -17,7 +17,7 @@ class Atm_fade : public Machine {
   Atm_fade& repeat( int repeat );
 
  private:
-  enum { ACT_REPEAT, ACT_OFF, ACT_ON, ACT_UP, ACT_DOWN, ACT_START };
+  enum { ENT_REPEAT, ENT_OFF, ENT_ON, ENT_UP, ENT_DOWN, ENT_START };
   static const uint8_t SLOPE_SIZE = 32;
   uint8_t slope[SLOPE_SIZE] = {0, 0, 1, 1, 2, 2, 3, 4, 5, 6, 7, 8, 10, 12, 15, 18, 22, 26, 31, 37, 44, 54, 63, 76, 90, 108, 127, 153, 180, 217, 230, 255};
   short pin;

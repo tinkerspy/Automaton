@@ -4,14 +4,14 @@ Atm_fade& Atm_fade::begin( int attached_pin ) {
   // clang-format off
   const static state_t state_table[] PROGMEM = {
     /*               ON_ENTER    ON_LOOP       ON_EXIT  EVT_CNT_FADE EVT_TM_FADE   EVT_TM_ON  EVT_TM_OFF   EVT_CNT_RPT  EVT_ON EVT_OFF EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK    ELSE  */
-    /* IDLE   */      ACT_OFF, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     ON,   IDLE,    START,         ON,            START,     -1,  // LED off
-    /* ON     */       ACT_ON, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,  // LED on
-    /* START  */      ACT_OFF,        -1,           -1,           -1,         -1,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE, STARTU,  // Start fading
-    /* STARTU */    ACT_START,        -1,           -1,           -1,         -1,         -1,         UP,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,  
-    /* UP     */       ACT_UP,        -1,           -1,       STARTD,         UP,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,
-    /* STARTD */    ACT_START,        -1,           -1,           -1,         -1,       DOWN,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,
-    /* DOWN   */     ACT_DOWN,        -1,           -1,       REPEAT,       DOWN,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,
-    /* REPEAT */   ACT_REPEAT,        -1,           -1,           -1,         -1,         -1,         -1,         IDLE,     ON,   IDLE,    START,       IDLE,             IDLE, STARTU,
+    /* IDLE   */      ENT_OFF, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     ON,   IDLE,    START,         ON,            START,     -1,  // LED off
+    /* ON     */       ENT_ON, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,  // LED on
+    /* START  */      ENT_OFF,        -1,           -1,           -1,         -1,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE, STARTU,  // Start fading
+    /* STARTU */    ENT_START,        -1,           -1,           -1,         -1,         -1,         UP,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,  
+    /* UP     */       ENT_UP,        -1,           -1,       STARTD,         UP,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,
+    /* STARTD */    ENT_START,        -1,           -1,           -1,         -1,       DOWN,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,
+    /* DOWN   */     ENT_DOWN,        -1,           -1,       REPEAT,       DOWN,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,
+    /* REPEAT */   ENT_REPEAT,        -1,           -1,           -1,         -1,         -1,         -1,         IDLE,     ON,   IDLE,    START,       IDLE,             IDLE, STARTU,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -72,24 +72,24 @@ int Atm_fade::event( int id ) {
 
 void Atm_fade::action( int id ) {
   switch ( id ) {
-    case ACT_ON:
+    case ENT_ON:
       analogWrite( pin, 255 );
       return;
-    case ACT_REPEAT:
+    case ENT_REPEAT:
       counter_repeat.decrement();
       return;
-    case ACT_OFF:
+    case ENT_OFF:
       counter_repeat.set( repeat_count );
       analogWrite( pin, 0 );
       return;
-    case ACT_START:
+    case ENT_START:
       counter_fade.set( SLOPE_SIZE );
       return;
-    case ACT_UP:
+    case ENT_UP:
       analogWrite( pin, slope[SLOPE_SIZE - counter_fade.value] );
       counter_fade.decrement();
       return;
-    case ACT_DOWN:
+    case ENT_DOWN:
       analogWrite( pin, slope[counter_fade.value - 1] );
       counter_fade.decrement();
       return;

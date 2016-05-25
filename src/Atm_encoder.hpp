@@ -19,7 +19,7 @@ class Atm_encoder : public Machine {
   Atm_encoder& set( int value );
 
  private:
-  enum { ACT_SAMPLE, ACT_UP, ACT_DOWN };  // ACTIONS
+  enum { EXT_SAMPLE, ENT_UP, ENT_DOWN };  // ACTIONS
   short pin1, pin2;
   const static char enc_states[];
   uint8_t enc_bits;

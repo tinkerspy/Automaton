@@ -18,7 +18,7 @@ class Atm_command : public Machine {
   char* arg( int id );
 
  private:
-  enum { ACT_READCHAR, ACT_SEND };
+  enum { ENT_READCHAR, ENT_SEND };
   atm_connector oncommand;
   Stream* stream;
   char* buffer;

@@ -10,11 +10,11 @@ Atm_timer& Atm_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */, uint16_t repeats
   const static state_t state_table[] PROGMEM = {
     /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_DAYCNT  EVT_DAYTIMER  EVT_MSTIMER  EVT_REPCNT  EVT_STOP  EVT_START  EVT_TOGGLE   ELSE */
     /* IDLE    */          -1, ATM_SLEEP,        -1,         -1,           -1,          -1,         -1,       -1,     START,      START,    -1,
-    /* START   */   ACT_START,        -1,        -1,         -1,           -1,          -1,         -1,       -1,     WAITD,         -1, WAITD,  
-    /* WAITD   */          -1,        -1, ACT_WAITD,     WAITMS,        WAITD,          -1,         -1,     IDLE,     START,       IDLE,    -1,
+    /* START   */   ENT_START,        -1,        -1,         -1,           -1,          -1,         -1,       -1,     WAITD,         -1, WAITD,  
+    /* WAITD   */          -1,        -1, EXT_WAITD,     WAITMS,        WAITD,          -1,         -1,     IDLE,     START,       IDLE,    -1,
     /* WAITMS  */          -1,        -1,        -1,         -1,           -1,     TRIGGER,         -1,     IDLE,     START,       IDLE,    -1,
-    /* TRIGGER */ ACT_TRIGGER,        -1,        -1,         -1,           -1,          -1,     FINISH,     IDLE,     START,       IDLE, START,
-    /* FINISH  */  ACT_FINISH,        -1,        -1,         -1,           -1,          -1,         -1,       -1,        -1,         -1,  IDLE,
+    /* TRIGGER */ ENT_TRIGGER,        -1,        -1,         -1,           -1,          -1,     FINISH,     IDLE,     START,       IDLE, START,
+    /* FINISH  */  ENT_FINISH,        -1,        -1,         -1,           -1,          -1,         -1,       -1,        -1,         -1,  IDLE,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -41,17 +41,17 @@ int Atm_timer::event( int id ) {
 
 void Atm_timer::action( int id ) {
   switch ( id ) {
-    case ACT_START:
+    case ENT_START:
       daycounter.set( days );
       return;
-    case ACT_WAITD:
+    case EXT_WAITD:
       daycounter.decrement();
       return;
-    case ACT_TRIGGER:
+    case ENT_TRIGGER:
       repcounter.decrement();
       ontimer.push( 1 );
       return;
-    case ACT_FINISH:
+    case ENT_FINISH:
       onfinish.push( 0 );
       repcounter.set( repeat_cnt );
       return;

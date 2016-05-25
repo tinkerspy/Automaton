@@ -22,7 +22,7 @@ class Atm_comparator : public Machine {
   Atm_comparator& trace( Stream& stream );
 
  private:
-  enum { ACT_SAMPLE, ACT_SEND };  // ACTIONS
+  enum { ENT_SAMPLE, ENT_SEND };  // ACTIONS
   short pin;
   atm_timer_millis timer;
   int v_sample, v_threshold, v_previous;

@@ -5,7 +5,7 @@ Atm_fan& Atm_fan::begin() {
   const static state_t state_table[] PROGMEM = {
     /*            ON_ENTER    ON_LOOP  ON_EXIT  EVT_INPUT  ELSE */
     /* IDLE    */       -1, ATM_SLEEP,      -1,      SEND,   -1,
-    /* SEND    */ ACT_SEND,        -1,      -1,        -1, IDLE,
+    /* SEND    */ ENT_SEND,        -1,      -1,        -1, IDLE,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -18,7 +18,7 @@ int Atm_fan::event( int id ) {
 
 void Atm_fan::action( int id ) {
   switch ( id ) {
-    case ACT_SEND:
+    case ENT_SEND:
       for ( uint8_t i = 0; i < ATM_MULTIPLIER_COMMS_MAX; i++ ) {
         if ( connector[i].mode() != atm_connector::MODE_NULL ) {
           connector[i].push( 0, 0 );

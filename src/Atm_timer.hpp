@@ -20,7 +20,7 @@ class Atm_timer : public Machine {
   Atm_timer& repeat( uint16_t v );
 
  private:
-  enum { ACT_START, ACT_TRIGGER, ACT_WAITD, ACT_FINISH };
+  enum { ENT_START, ENT_TRIGGER, EXT_WAITD, ENT_FINISH };
   atm_timer_millis daytimer, mstimer;
   atm_counter daycounter, repcounter;
   uint16_t days;

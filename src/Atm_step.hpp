@@ -20,7 +20,7 @@ class Atm_step : public Machine {
   Atm_step& onStep( uint8_t id, Machine& machine, int event = 0 );
 
  private:
-  enum { ACT_S0, ACT_S1, ACT_S2, ACT_S3, ACT_S4, ACT_S5, ACT_S6, ACT_S7, ACT_S8, ACT_S9 };
+  enum { ENT_S0, ENT_S1, ENT_S2, ENT_S3, ENT_S4, ENT_S5, ENT_S6, ENT_S7, ENT_S8, ENT_S9 };
   atm_connector connector[ATM_STEP_MAX];
   int event( int id );
   void action( int id );
