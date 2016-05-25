@@ -22,34 +22,34 @@ Atm_button& Atm_button::begin( int attached_pin ) {
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
-  _pin = attached_pin;
-  _counter_longpress.set( 0 );
-  _timer_debounce.set( _DEBOUNCE );
-  _timer_delay.set( ATM_TIMER_OFF );
-  _timer_repeat.set( ATM_TIMER_OFF );
-  _timer_auto.set( ATM_TIMER_OFF );
-  pinMode( _pin, INPUT_PULLUP );
+  pin = attached_pin;
+  counter_longpress.set( 0 );
+  timer_debounce.set( DEBOUNCE );
+  timer_delay.set( ATM_TIMER_OFF );
+  timer_repeat.set( ATM_TIMER_OFF );
+  timer_auto.set( ATM_TIMER_OFF );
+  pinMode( pin, INPUT_PULLUP );
   return *this;
 }
 
 int Atm_button::event( int id ) {
   switch ( id ) {
     case EVT_LMODE:
-      return _counter_longpress.value > 0;
+      return counter_longpress.value > 0;
     case EVT_TIMER:
-      return _timer_debounce.expired( this );
+      return timer_debounce.expired( this );
     case EVT_DELAY:
-      return _timer_delay.expired( this );
+      return timer_delay.expired( this );
     case EVT_REPEAT:
-      return _timer_repeat.expired( this );
+      return timer_repeat.expired( this );
     case EVT_AUTO:
-      return _timer_auto.expired( this );
+      return timer_auto.expired( this );
     case EVT_PRESS:
-      return !digitalRead( _pin );
+      return !digitalRead( pin );
     case EVT_RELEASE:
-      return digitalRead( _pin );
+      return digitalRead( pin );
     case EVT_COUNTER:
-      return _counter_longpress.expired();
+      return counter_longpress.expired();
   }
   return 0;
 }
@@ -58,72 +58,72 @@ void Atm_button::action( int id ) {
   switch ( id ) {
     case ACT_PRESS:
     case ACT_AUTO:
-      _onpress.push( 1 );
+      onpress.push( 1 );
       return;
     case ACT_RELEASE:
     case ACT_WRELEASE:
-      _onrelease.push( 0 );
-      if ( _onpress.mode() == _onpress.MODE_PUSHCB ) {
-        _onpress.push( 0 );
+      onrelease.push( 0 );
+      if ( onpress.mode() == onpress.MODE_PUSHCB ) {
+        onpress.push( 0 );
       }
       return;
     case ACT_LSTART:
-      _counter_longpress.set( _longpress_max );
+      counter_longpress.set( longpress_max );
       return;
     case ACT_LCOUNT:
-      _counter_longpress.decrement();
-      if ( _onpress.mode() == _onpress.MODE_PUSHCB ) {
-        _onpress.push( ( _longpress_max - _counter_longpress.value ) * -1 );
+      counter_longpress.decrement();
+      if ( onpress.mode() == onpress.MODE_PUSHCB ) {
+        onpress.push( ( longpress_max - counter_longpress.value ) * -1 );
       }
       return;
     case ACT_LRELEASE:
-      if ( _onpress.mode() == _onpress.MODE_PUSHCB ) {
-        _onpress.push( _longpress_max - _counter_longpress.value );
+      if ( onpress.mode() == onpress.MODE_PUSHCB ) {
+        onpress.push( longpress_max - counter_longpress.value );
       }
       return;
   }
 }
 
 Atm_button& Atm_button::onPress( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _onpress.set( callback, idx );
+  onpress.set( callback, idx );
   return *this;
 }
 
 Atm_button& Atm_button::onPress( Machine& machine, int event /* = 0 */ ) {
-  _onpress.set( &machine, event );
+  onpress.set( &machine, event );
   return *this;
 }
 Atm_button& Atm_button::onRelease( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _onrelease.set( callback, idx );
+  onrelease.set( callback, idx );
   return *this;
 }
 
 Atm_button& Atm_button::onRelease( Machine& machine, int event /* = 0 */ ) {
-  _onrelease.set( &machine, event );
+  onrelease.set( &machine, event );
   return *this;
 }
 
 Atm_button& Atm_button::debounce( int delay ) {
-  _timer_debounce.set( delay );
+  timer_debounce.set( delay );
   return *this;
 }
 
 Atm_button& Atm_button::longPress( int max, int delay ) {
-  _longpress_max = max;
-  _counter_longpress.set( _longpress_max );
-  _timer_delay.set( delay );
+  longpress_max = max;
+  counter_longpress.set( longpress_max );
+  timer_delay.set( delay );
   return *this;
 }
 
 Atm_button& Atm_button::repeat( int delay /* = 500 */, int speed /* = 50 */ ) {
-  _timer_delay.set( delay );
-  _timer_repeat.set( speed );
+  timer_delay.set( delay );
+  timer_repeat.set( speed );
   return *this;
 }
 
 Atm_button& Atm_button::autoPress( int delay, int press /* = 1 */ ) {
-  _auto_press = press;
-  _timer_auto.set( delay );
+  auto_press = press;
+  timer_auto.set( delay );
   return *this;
 }
 

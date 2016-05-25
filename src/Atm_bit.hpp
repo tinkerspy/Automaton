@@ -21,10 +21,10 @@ class Atm_bit : public Machine {
  private:
   enum { ACT_ON, ACT_OFF, ACT_INPUT };                                                 // ACTIONS
   enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, ON_INPUT_FALSE, ON_INPUT_TRUE, CONN_SIZE };  // CONNECTORS
-  state_t _last_state;
-  atm_connector _connector[CONN_SIZE];
-  int8_t _indicator;
-  bool _indicatorActiveLow;
+  state_t last_state;
+  atm_connector connector[CONN_SIZE];
+  int8_t indicator;
+  bool indicatorActiveLow;
 
   int event( int id );
   void action( int id );

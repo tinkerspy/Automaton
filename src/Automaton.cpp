@@ -214,7 +214,7 @@ Machine& Machine::trigger( int evt /* = 0 */ ) {
 Machine& Machine::setTrace( Stream* stream, swcb_sym_t callback, const char symbols[] ) {
   callback_trace = callback;
   stream_trace = stream;
-  _symbols = symbols;
+  this->symbols = symbols;
   return *this;
 }
 
@@ -291,8 +291,8 @@ Machine& Machine::cycle( uint32_t time /* = 0 */ ) {
       if ( next != -1 ) {
         action( ATM_ON_SWITCH );
         if ( callback_trace ) {
-          callback_trace( stream_trace, *this, _symbols, mapSymbol( current == -1 ? current : current + state_width - ATM_ON_EXIT, _symbols ),
-                          mapSymbol( next == -1 ? next : next + state_width - ATM_ON_EXIT, _symbols ), mapSymbol( last_trigger + 1, _symbols ),
+          callback_trace( stream_trace, *this, symbols, mapSymbol( current == -1 ? current : current + state_width - ATM_ON_EXIT, symbols ),
+                          mapSymbol( next == -1 ? next : next + state_width - ATM_ON_EXIT, symbols ), mapSymbol( last_trigger + 1, symbols ),
                           millis() - state_millis, cycles );
         }
         if ( current > -1 ) action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );

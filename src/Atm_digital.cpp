@@ -12,22 +12,22 @@ Atm_digital& Atm_digital::begin( int pin, int debounce /* = 20 */, bool activeLo
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
-  _pin = pin;
-  _activeLow = activeLow;
-  _timer.set( debounce );
-  _indicator = -1;
-  pinMode( _pin, pullUp ? INPUT_PULLUP : INPUT );
+  this->pin = pin;
+  this->activeLow = activeLow;
+  timer.set( debounce );
+  indicator = -1;
+  pinMode( pin, pullUp ? INPUT_PULLUP : INPUT );
   return *this;
 }
 
 int Atm_digital::event( int id ) {
   switch ( id ) {
     case EVT_TIMER:
-      return _timer.expired( this );
+      return timer.expired( this );
     case EVT_HIGH:
-      return ( !digitalRead( _pin ) != !_activeLow );  // XOR
+      return ( !digitalRead( pin ) != !activeLow );  // XOR
     case EVT_LOW:
-      return !( !digitalRead( _pin ) != !_activeLow );
+      return !( !digitalRead( pin ) != !activeLow );
   }
   return 0;
 }
@@ -35,12 +35,12 @@ int Atm_digital::event( int id ) {
 void Atm_digital::action( int id ) {
   switch ( id ) {
     case ACT_HIGH:
-      _connection[ON_CHANGE_TRUE].push( state() );
-      if ( _indicator > -1 ) digitalWrite( _indicator, !HIGH != !_indicatorActiveLow );
+      connection[ON_CHANGE_TRUE].push( state() );
+      if ( indicator > -1 ) digitalWrite( indicator, !HIGH != !indicatorActiveLow );
       return;
     case ACT_LOW:
-      _connection[ON_CHANGE_FALSE].push( state() );
-      if ( _indicator > -1 ) digitalWrite( _indicator, !LOW != !_indicatorActiveLow );
+      connection[ON_CHANGE_FALSE].push( state() );
+      if ( indicator > -1 ) digitalWrite( indicator, !LOW != !indicatorActiveLow );
       return;
   }
 }
@@ -50,31 +50,31 @@ int Atm_digital::state( void ) {
 }
 
 Atm_digital& Atm_digital::led( int led, bool activeLow /* = false */ ) {
-  _indicator = led;
-  _indicatorActiveLow = activeLow;
-  pinMode( _indicator, OUTPUT );
+  indicator = led;
+  indicatorActiveLow = activeLow;
+  pinMode( indicator, OUTPUT );
   return *this;
 }
 
 Atm_digital& Atm_digital::onChange( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _connection[status ? ON_CHANGE_TRUE : ON_CHANGE_FALSE].set( callback, idx );
+  connection[status ? ON_CHANGE_TRUE : ON_CHANGE_FALSE].set( callback, idx );
   return *this;
 }
 
 Atm_digital& Atm_digital::onChange( bool status, Machine& machine, int event /* = 0 */ ) {
-  _connection[status ? ON_CHANGE_TRUE : ON_CHANGE_FALSE].set( &machine, event );
+  connection[status ? ON_CHANGE_TRUE : ON_CHANGE_FALSE].set( &machine, event );
   return *this;
 }
 
 Atm_digital& Atm_digital::onChange( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _connection[ON_CHANGE_FALSE].set( callback, idx );
-  _connection[ON_CHANGE_TRUE].set( callback, idx );
+  connection[ON_CHANGE_FALSE].set( callback, idx );
+  connection[ON_CHANGE_TRUE].set( callback, idx );
   return *this;
 }
 
 Atm_digital& Atm_digital::onChange( Machine& machine, int event /* = 0 */ ) {
-  _connection[ON_CHANGE_FALSE].set( &machine, event );
-  _connection[ON_CHANGE_TRUE].set( &machine, event );
+  connection[ON_CHANGE_FALSE].set( &machine, event );
+  connection[ON_CHANGE_TRUE].set( &machine, event );
   return *this;
 }
 

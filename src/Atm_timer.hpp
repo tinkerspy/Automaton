@@ -25,7 +25,7 @@ class Atm_timer : public Machine {
   atm_counter daycounter, repcounter;
   uint16_t days;
   uint16_t repeat_cnt;
-  atm_connector _ontimer, _onfinish;
+  atm_connector ontimer, onfinish;
 
   int event( int id );
   void action( int id );

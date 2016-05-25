@@ -49,32 +49,32 @@ void Atm_timer::action( int id ) {
       return;
     case ACT_TRIGGER:
       repcounter.decrement();
-      _ontimer.push( 1 );
+      ontimer.push( 1 );
       return;
     case ACT_FINISH:
-      _onfinish.push( 0 );
+      onfinish.push( 0 );
       repcounter.set( repeat_cnt );
       return;
   }
 }
 
 Atm_timer& Atm_timer::onTimer( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _ontimer.set( callback, idx );
+  ontimer.set( callback, idx );
   return *this;
 }
 
 Atm_timer& Atm_timer::onTimer( Machine& machine, int event /* = 0 */ ) {
-  _ontimer.set( &machine, event );
+  ontimer.set( &machine, event );
   return *this;
 }
 
 Atm_timer& Atm_timer::onFinish( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _onfinish.set( callback, idx );
+  onfinish.set( callback, idx );
   return *this;
 }
 
 Atm_timer& Atm_timer::onFinish( Machine& machine, int event /* = 0 */ ) {
-  _onfinish.set( &machine, event );
+  onfinish.set( &machine, event );
   return *this;
 }
 

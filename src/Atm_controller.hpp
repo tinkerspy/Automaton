@@ -31,12 +31,12 @@ class Atm_controller : public Machine {
  private:
   enum { ACT_ON, ACT_OFF, ACT_INPUT };                                                 // ACTIONS
   enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, ON_INPUT_FALSE, ON_INPUT_TRUE, CONN_SIZE };  // CONNECTORS
-  state_t _last_state;
-  atm_connector _connector[CONN_SIZE];
-  atm_connector _operand[ATM_CONDITION_OPERAND_MAX];
-  int8_t _indicator;
-  bool _indicatorActiveLow;
-  const static char _relOps[];
+  state_t last_state;
+  atm_connector connector[CONN_SIZE];
+  atm_connector operand[ATM_CONDITION_OPERAND_MAX];
+  int8_t indicator;
+  bool indicatorActiveLow;
+  const static char relOps[];
 
   int event( int id );
   void action( int id );

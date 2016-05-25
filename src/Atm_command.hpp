@@ -19,13 +19,13 @@ class Atm_command : public Machine {
 
  private:
   enum { ACT_READCHAR, ACT_SEND };
-  atm_connector _oncommand;
-  Stream* _stream;
-  char* _buffer;
-  int _bufsize, _bufptr;
-  char _eol, _lastch;
-  const char* _separator;
-  const char* _commands;
+  atm_connector oncommand;
+  Stream* stream;
+  char* buffer;
+  int bufsize, bufptr;
+  char eol, lastch;
+  const char* separatorChar;
+  const char* commands;
 
   int event( int id );
   void action( int id );

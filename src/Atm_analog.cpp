@@ -33,24 +33,24 @@ void Atm_analog::action( int id ) {
       return;
     case ACT_SEND:
       v_sample = sample();
-      _onchange.push( v_sample, v_sample > v_previous );
+      onchange.push( v_sample, v_sample > v_previous );
       return;
   }
 }
 
 Atm_analog& Atm_analog::range( int toLow, int toHigh ) {
-  _toLow = toLow;
-  _toHigh = toHigh;
+  this->toLow = toLow;
+  this->toHigh = toHigh;
   return *this;
 }
 
 Atm_analog& Atm_analog::onChange( Machine& machine, int event /* = 0 */ ) {
-  _onchange.set( &machine, event );
+  this->onchange.set( &machine, event );
   return *this;
 }
 
 Atm_analog& Atm_analog::onChange( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _onchange.set( callback, idx );
+  onchange.set( callback, idx );
   return *this;
 }
 
@@ -58,7 +58,7 @@ int Atm_analog::read_sample() {
   return analogRead( pin );
 }
 
-int Atm_analog::_avg() {
+int Atm_analog::avg() {
   uint16_t v = read_sample();
   avg_buf_total = avg_buf_total + v - avg_buf[avg_buf_head];
   avg_buf[avg_buf_head] = v;
@@ -71,9 +71,9 @@ int Atm_analog::_avg() {
 }
 
 int Atm_analog::sample() {
-  int v = avg_buf_size > 0 ? _avg() : read_sample();
-  if ( _toHigh ) {
-    return map( v, 0, 1023, _toLow, _toHigh );
+  int v = avg_buf_size > 0 ? avg() : read_sample();
+  if ( toHigh ) {
+    return map( v, 0, 1023, toLow, toHigh );
   } else {
     return v;
   }

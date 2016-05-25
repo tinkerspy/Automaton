@@ -10,21 +10,21 @@ Atm_command& Atm_command::begin( Stream& stream, char buffer[], int size ) {
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
-  _stream = &stream;
-  _buffer = buffer;
-  _bufsize = size;
-  _bufptr = 0;
-  _separator = " ";
-  _lastch = '\0';
+  this->stream = &stream;
+  this->buffer = buffer;
+  bufsize = size;
+  bufptr = 0;
+  separatorChar = " ";
+  lastch = '\0';
   return *this;
 }
 
 int Atm_command::event( int id ) {
   switch ( id ) {
     case EVT_INPUT:
-      return _stream->available();
+      return stream->available();
     case EVT_EOL:
-      return _buffer[_bufptr - 1] == '\n' || _buffer[_bufptr - 1] == '\r' || _bufptr >= _bufsize;
+      return buffer[bufptr - 1] == '\n' || buffer[bufptr - 1] == '\r' || bufptr >= bufsize;
   }
   return 0;
 }
@@ -32,54 +32,54 @@ int Atm_command::event( int id ) {
 void Atm_command::action( int id ) {
   switch ( id ) {
     case ACT_READCHAR:
-      if ( _stream->available() ) {
-        char ch = _stream->read();
-        if ( strchr( _separator, ch ) == NULL ) {
-          _buffer[_bufptr++] = ch;
-          _lastch = ch;
+      if ( stream->available() ) {
+        char ch = stream->read();
+        if ( strchr( separatorChar, ch ) == NULL ) {
+          buffer[bufptr++] = ch;
+          lastch = ch;
         } else {
-          if ( _lastch != '\0' ) _buffer[_bufptr++] = '\0';
-          _lastch = '\0';
+          if ( lastch != '\0' ) buffer[bufptr++] = '\0';
+          lastch = '\0';
         }
       }
       return;
     case ACT_SEND:
-      _buffer[--_bufptr] = '\0';
-      _oncommand.push( lookup( 0, _commands ) );
-      _lastch = '\0';
-      _bufptr = 0;
+      buffer[--bufptr] = '\0';
+      oncommand.push( lookup( 0, commands ) );
+      lastch = '\0';
+      bufptr = 0;
       return;
   }
 }
 
 Atm_command& Atm_command::onCommand( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _oncommand.set( callback, idx );
+  oncommand.set( callback, idx );
   return *this;
 }
 
 Atm_command& Atm_command::list( const char* cmds ) {
-  _commands = cmds;
+  commands = cmds;
   return *this;
 }
 
 Atm_command& Atm_command::separator( const char sep[] ) {
-  _separator = sep;
+  separatorChar = sep;
   return *this;
 }
 
 char* Atm_command::arg( int id ) {
   int cnt = 0;
   int i;
-  if ( id == 0 ) return _buffer;
-  for ( i = 0; i < _bufptr; i++ ) {
-    if ( _buffer[i] == '\0' ) {
+  if ( id == 0 ) return buffer;
+  for ( i = 0; i < bufptr; i++ ) {
+    if ( buffer[i] == '\0' ) {
       if ( ++cnt == id ) {
         i++;
         break;
       }
     }
   }
-  return &_buffer[i];
+  return &buffer[i];
 }
 
 int Atm_command::lookup( int id, const char* cmdlist ) {

@@ -23,12 +23,12 @@ class Atm_digital : public Machine {
  private:
   enum { ACT_HIGH, ACT_LOW };                           // ACTIONS
   enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, CONN_SIZE };  // CONNECTORS
-  short _pin;
-  atm_timer_millis _timer;
-  bool _activeLow;
-  atm_connector _connection[CONN_SIZE];
-  int8_t _indicator;
-  bool _indicatorActiveLow;
+  short pin;
+  atm_timer_millis timer;
+  bool activeLow;
+  atm_connector connection[CONN_SIZE];
+  int8_t indicator;
+  bool indicatorActiveLow;
 
   int event( int id );
   void action( int id );

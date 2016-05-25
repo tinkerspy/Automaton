@@ -17,7 +17,7 @@ class Atm_fan : public Machine {
 
  private:
   enum { ACT_SEND };  // ACTIONS
-  atm_connector _connector[ATM_MULTIPLIER_COMMS_MAX];
+  atm_connector connector[ATM_MULTIPLIER_COMMS_MAX];
   int event( int id );
   void action( int id );
 };

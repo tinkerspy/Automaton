@@ -21,14 +21,14 @@ class Atm_analog : public Machine {
   short pin;
   atm_timer_millis timer;
   int v_sample, v_threshold, v_previous;
-  atm_connector _onchange;
+  atm_connector onchange;
   uint16_t* avg_buf;
   uint16_t avg_buf_size;
   uint16_t avg_buf_head;
   uint32_t avg_buf_total;
-  uint16_t _toLow, _toHigh;
+  uint16_t toLow, toHigh;
 
-  int _avg();
+  int avg();
   int sample();
   virtual int read_sample();
   int event( int id );

@@ -54,31 +54,31 @@ int Atm_step::event( int id ) {
   int on_enter = read_state( state_table + ( current * state_width ) + ATM_ON_ENTER );
   switch ( id ) {
     case EVT_STEP:
-      return ( current < R0 || current > R9 ) && ( on_enter > -1 ) && ( _connector[on_enter].mode() == 0 );
+      return ( current < R0 || current > R9 ) && ( on_enter > -1 ) && ( connector[on_enter].mode() == 0 );
     case EVT_BACK:
-      return ( current >= R0 && current <= R9 ) && ( on_enter > -1 ) && ( _connector[on_enter].mode() == 0 );
+      return ( current >= R0 && current <= R9 ) && ( on_enter > -1 ) && ( connector[on_enter].mode() == 0 );
   }
   return 0;
 }
 
 void Atm_step::action( int id ) {
   if ( id > -1 ) {
-    _connector[id].push( id, 0 );
+    connector[id].push( id, 0 );
   }
 }
 
 Atm_step& Atm_step::onStep( uint8_t id ) {
-  _connector[id].mode_flags = atm_connector::MODE_NULL;
+  connector[id].mode_flags = atm_connector::MODE_NULL;
   return *this;
 }
 
 Atm_step& Atm_step::onStep( uint8_t id, atm_cb_push_t callback, int idx /* = 0 */ ) {
-  _connector[id].set( callback, idx );
+  connector[id].set( callback, idx );
   return *this;
 }
 
 Atm_step& Atm_step::onStep( uint8_t id, Machine& machine, int event /* = 0 */ ) {
-  _connector[id].set( &machine, event );
+  connector[id].set( &machine, event );
   return *this;
 }
 

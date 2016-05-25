@@ -134,7 +134,7 @@ class Machine {
   state_t next;
   state_t current = -1;
   state_t last_trigger = -1;
-  const char* _symbols;
+  const char* symbols;
   uint8_t state_width;
   swcb_sym_t callback_trace;
   Stream* stream_trace;

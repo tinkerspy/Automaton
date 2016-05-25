@@ -22,13 +22,13 @@ class Atm_button : public Machine {
 
  protected:
   enum { ACT_PRESS, ACT_RELEASE, ACT_LSTART, ACT_LCOUNT, ACT_LRELEASE, ACT_WRELEASE, ACT_AUTO };
-  static const int _DEBOUNCE = 5;
-  atm_connector _onpress, _onrelease;
-  short _pin;
-  atm_timer_millis _timer_debounce, _timer_delay, _timer_repeat, _timer_auto;
-  atm_counter _counter_longpress;
-  int _longpress_max;
-  int _auto_press = 1;
+  static const int DEBOUNCE = 5;
+  atm_connector onpress, onrelease;
+  short pin;
+  atm_timer_millis timer_debounce, timer_delay, timer_repeat, timer_auto;
+  atm_counter counter_longpress;
+  int longpress_max;
+  int auto_press = 1;
 
   int event( int id );
   void action( int id );

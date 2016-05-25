@@ -20,8 +20,8 @@ void Atm_fan::action( int id ) {
   switch ( id ) {
     case ACT_SEND:
       for ( uint8_t i = 0; i < ATM_MULTIPLIER_COMMS_MAX; i++ ) {
-        if ( _connector[i].mode() != atm_connector::MODE_NULL ) {
-          _connector[i].push( 0, 0 );
+        if ( connector[i].mode() != atm_connector::MODE_NULL ) {
+          connector[i].push( 0, 0 );
         }
       }
       return;
@@ -30,8 +30,8 @@ void Atm_fan::action( int id ) {
 
 Atm_fan& Atm_fan::onInput( atm_cb_push_t callback, int idx ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
-    if ( _connector[idx].mode() == atm_connector::MODE_NULL ) {
-      _connector[idx].set( callback, idx );
+    if ( connector[idx].mode() == atm_connector::MODE_NULL ) {
+      connector[idx].set( callback, idx );
       break;
     }
   }
@@ -40,8 +40,8 @@ Atm_fan& Atm_fan::onInput( atm_cb_push_t callback, int idx ) {
 
 Atm_fan& Atm_fan::onInput( Machine& machine, int event /* = 0 */ ) {
   for ( uint8_t idx = 0; idx < ATM_MULTIPLIER_COMMS_MAX; idx++ ) {
-    if ( _connector[idx].mode() == atm_connector::MODE_NULL ) {
-      _connector[idx].set( &machine, event );
+    if ( connector[idx].mode() == atm_connector::MODE_NULL ) {
+      connector[idx].set( &machine, event );
       break;
     }
   }
