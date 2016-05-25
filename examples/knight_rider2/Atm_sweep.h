@@ -9,7 +9,7 @@ class Atm_sweep: public Machine {
 
     enum { IDLE, U0, U1, U2, U3, U4, U5, D4, D3, D2, D1, D0 };
     enum { EVT_TIMER, EVT_START, EVT_STOP, EVT_TOGGLE, ELSE };
-    enum { ACT_L0, ACT_L1, ACT_L2, ACT_L3, ACT_L4, ACT_L5, ACT_OFF  };
+    enum { ENT_L0, ENT_L1, ENT_L2, ENT_L3, ENT_L4, ENT_L5, ENT_OFF  };
 
     Atm_sweep & begin( int p1, int p2, int p3, int p4, int p5, int p6 );
     Atm_sweep & speed( uint32_t v );
