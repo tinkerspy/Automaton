@@ -17,10 +17,7 @@ class Atm_comparator : public Machine {
   Atm_comparator& onChange( Machine& machine, int event = 0 );
   Atm_comparator& onChange( bool status, atm_comparator_cb_t callback, int idx = 0 );
   Atm_comparator& onChange( bool status, Machine& machine, int event = 0 );
-  int avg();
-  Atm_comparator& bitmap( uint16_t v );
   int state( void );
-  int sample();
   virtual int read_sample();
   Atm_comparator& trace( Stream& stream );
 
@@ -38,6 +35,9 @@ class Atm_comparator : public Machine {
   uint32_t avg_buf_total;
   atm_connector onup, ondown;
 
+  int avg();
+  Atm_comparator& bitmap( uint16_t v );
+  int sample();
   int event( int id );
   void action( int id );
 };
