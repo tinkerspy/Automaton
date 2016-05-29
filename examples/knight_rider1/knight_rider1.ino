@@ -3,6 +3,7 @@
 Atm_led led[6];
 Atm_timer timer;
 Atm_step step;
+Atm_analog pot;
 Appliance app;
 
 // Timer drives step sequencer in sweep mode, step sequencer blinks leds.
@@ -34,6 +35,14 @@ void setup() {
     ); 
     step.onStep( i, led[i], event );
   }
+
+  app.component(
+    pot.begin( A0 )
+      .range( 10, 200 )
+      .onChange( [] ( int idx, int v, int up ) {
+        timer.interval( v );
+      })
+  );
   
   // Move last led from step 5 to step 7 to make sweep work properly!
   step.onStep( 5 ).onStep( 9, led[5], event );
