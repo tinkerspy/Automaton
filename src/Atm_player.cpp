@@ -23,12 +23,6 @@ Atm_player& Atm_player::begin( int pin /* = - 1 */ ) {
   return *this;          
 }
 
-/* TODO
- *  - begin( pin, tone, duration, qduration = 0 ) - play one tone
- *  - .onFinish( ) -- Called when pattern finishes
- *  - use one timer instead of two
- */
-
 /* Add C++ code for each event (input)
  * The code must return 1 if the event should be triggered
  */
