@@ -14,7 +14,7 @@ Atm_player& Atm_player::begin( int pin /* = - 1 */ ) {
     /*  QUIET */  ENT_QUIET,        -1,      -1,        -1,     IDLE,       IDLE,      NEXT,        -1,         -1,    -1,
     /*   NEXT */   ENT_NEXT,        -1,      -1,        -1,     IDLE,       IDLE,        -1,    REPEAT,         -1, SOUND,
     /* REPEAT */ ENT_REPEAT,        -1,      -1,        -1,     IDLE,       IDLE,        -1,        -1,     FINISH, START,
-    /* FINISH */ ENT_FINISH,        -1,      -1,        -1,       -1,         -1,        -1,        -1,       IDLE,    -1,
+    /* FINISH */ ENT_FINISH,        -1,      -1,        -1,       -1,         -1,        -1,        -1,       IDLE, START,
   };
   Machine::begin( state_table, ELSE );
   Atm_player::pin = pin;
