@@ -1,4 +1,4 @@
-#include "Atm_player.h"
+#include "Atm_player.hpp"
 
 /* Add optional parameters for the state machine to begin()
  * Add extra initialization code
@@ -143,6 +143,7 @@ Atm_player& Atm_player::play( int freq, int period, int pause /* = 0 */ ) {
   stub[2] = pause;
   pattern = stub;
   patternsize = 6;  
+  counter_repeat.set( repeatCount );
   step = 0;
   return *this;
 }
