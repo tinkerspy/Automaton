@@ -165,4 +165,5 @@ class Appliance {
 #include <Atm_led.hpp>
 #include <Atm_fan.hpp>
 #include <Atm_step.hpp>
+#include <Atm_player.hpp>
 #include <Atm_timer.hpp>
