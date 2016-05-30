@@ -18,8 +18,8 @@ Atm_player& Atm_player::begin( int pin /* = - 1 */ ) {
   };
   Machine::begin( state_table, ELSE );
   Atm_player::pin = pin;
-  counter_repeat.set( repeatCount = 1 );
   speed( 100 );
+  repeat( 1 );
   return *this;          
 }
 
@@ -121,8 +121,8 @@ Atm_player& Atm_player::repeat( int v ) {
   return *this;
 }
 
-Atm_player& Atm_player::speed( int v ) {
-  speedFactor = 100 / float( v );
+Atm_player& Atm_player::speed( float v ) {
+  speedFactor = 100 / v;
   return *this;
 }
 

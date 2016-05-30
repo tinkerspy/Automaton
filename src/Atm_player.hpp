@@ -20,7 +20,7 @@ class Atm_player : public Machine {
   Atm_player& play( int* pat, int size );
   Atm_player& play( int freq, int period, int pause = 0 );
   Atm_player& repeat( int v );
-  Atm_player& speed( int v );
+  Atm_player& speed( float v );
 
  private:
   int pin;
