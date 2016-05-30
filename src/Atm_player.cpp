@@ -14,7 +14,7 @@ Atm_player& Atm_player::begin( int pin /* = - 1 */ ) {
     /*  QUIET */  ENT_QUIET,        -1,      -1,        -1,     IDLE,       IDLE,      NEXT,        -1,         -1,    -1,
     /*   NEXT */   ENT_NEXT,        -1,      -1,        -1,     IDLE,       IDLE,        -1,    REPEAT,         -1, SOUND,
     /* REPEAT */ ENT_REPEAT,        -1,      -1,        -1,     IDLE,       IDLE,        -1,        -1,     FINISH, START,
-    /* FINISH */ ENT_FINISH,        -1,      -1,        -1,       -1,         -1,        -1,        -1,       IDLE, START,
+    /* FINISH */ ENT_FINISH,        -1,      -1,        -1,     IDLE,         -1,        -1,        -1,       IDLE, START,
   };
   Machine::begin( state_table, ELSE );
   Atm_player::pin = pin;
@@ -133,6 +133,7 @@ Atm_player& Atm_player::speed( int v ) {
 Atm_player& Atm_player::play( int* pat, int patsize ) {
   pattern = pat;
   patternsize = patsize;  
+  counter_repeat.set( repeatCount );
   step = 0;
   return *this;
 }
@@ -143,7 +144,6 @@ Atm_player& Atm_player::play( int freq, int period, int pause /* = 0 */ ) {
   stub[2] = pause;
   pattern = stub;
   patternsize = 6;  
-  counter_repeat.set( repeatCount );
   step = 0;
   return *this;
 }
