@@ -128,7 +128,7 @@ Atm_player& Atm_player::speed( float v ) {
 }
 
 Atm_player& Atm_player::pitch( float v ) {
-  pitchFactor = 100 / v;
+  pitchFactor = v / 100;
   return *this;
 }
 
