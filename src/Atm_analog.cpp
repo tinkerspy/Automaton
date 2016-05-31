@@ -44,6 +44,10 @@ Atm_analog& Atm_analog::range( int toLow, int toHigh ) {
   return *this;
 }
 
+Atm_analog& Atm_analog::set( int value ) {  // Dummy method
+  return *this;
+}
+
 Atm_analog& Atm_analog::onChange( Machine& machine, int event /* = 0 */ ) {
   this->onchange.set( &machine, event );
   return *this;

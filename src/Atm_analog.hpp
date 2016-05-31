@@ -15,6 +15,7 @@ class Atm_analog : public Machine {
   Atm_analog& range( int toLow, int toHigh );
   Atm_analog& onChange( Machine& machine, int event = 0 );
   Atm_analog& onChange( atm_cb_push_t callback, int idx = 0 );
+  Atm_analog& set( int value );
 
  private:
   enum { ENT_SAMPLE, ENT_SEND };  // ACTIONS
