@@ -21,6 +21,7 @@ class Atm_player : public Machine {
   Atm_player& play( int freq, int period, int pause = 0 );
   Atm_player& repeat( int v );
   Atm_player& speed( float v );
+  Atm_player& pitch( float v );
 
  private:
   int pin;
@@ -28,7 +29,7 @@ class Atm_player : public Machine {
   int patternsize;
   int step;
   int repeatCount;
-  float speedFactor;
+  float speedFactor, pitchFactor;
   int stub[3];
   atm_timer_millis timer;
   atm_counter counter_repeat;

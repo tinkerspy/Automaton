@@ -19,6 +19,7 @@ Atm_player& Atm_player::begin( int pin /* = - 1 */ ) {
   Machine::begin( state_table, ELSE );
   Atm_player::pin = pin;
   speed( 100 );
+  pitch( 100 );
   repeat( 1 );
   return *this;          
 }
@@ -59,12 +60,12 @@ void Atm_player::action( int id ) {
       counter_repeat.decrement();
       return;
     case ENT_SOUND:
-      onnote[1].push( pattern[step * 3], 1 );
-      if ( pin >= 0 ) tone( pin, pattern[step * 3] );
+      onnote[1].push( pattern[step * 3] * pitchFactor, 1 );
+      if ( pin >= 0 ) tone( pin, pattern[step * 3] * pitchFactor );
       timer.set( pattern[step * 3 + 1] * speedFactor );
       return;
     case ENT_QUIET:
-      onnote[0].push( pattern[step * 3], 0 );
+      onnote[0].push( pattern[step * 3] * pitchFactor, 0 );
       if ( pin >= 0 ) noTone( pin );
       timer.set( pattern[step * 3 + 2] * speedFactor );
       return;
@@ -123,6 +124,11 @@ Atm_player& Atm_player::repeat( int v ) {
 
 Atm_player& Atm_player::speed( float v ) {
   speedFactor = 100 / v;
+  return *this;
+}
+
+Atm_player& Atm_player::pitch( float v ) {
+  pitchFactor = 100 / v;
   return *this;
 }
 
