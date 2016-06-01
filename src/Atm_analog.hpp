@@ -27,7 +27,7 @@ class Atm_analog : public Machine {
   uint16_t avg_buf_size;
   uint16_t avg_buf_head;
   uint32_t avg_buf_total;
-  uint16_t toLow, toHigh;
+  int toLow, toHigh;
 
   int avg();
   int sample();
