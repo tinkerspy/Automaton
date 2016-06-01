@@ -16,12 +16,13 @@ Atm_player& Atm_player::begin( int pin /* = - 1 */ ) {
     /* REPEAT */ ENT_REPEAT,        -1,      -1,        -1,     IDLE,       IDLE,        -1,        -1,     FINISH, START,
     /* FINISH */ ENT_FINISH,        -1,      -1,        -1,     IDLE,         -1,        -1,        -1,       IDLE, START,
   };
+  // clang-format on
   Machine::begin( state_table, ELSE );
   Atm_player::pin = pin;
   speed( 100 );
   pitch( 100 );
   repeat( 1 );
-  return *this;          
+  return *this;
 }
 
 /* Add C++ code for each event (input)
@@ -49,7 +50,7 @@ int Atm_player::event( int id ) {
 void Atm_player::action( int id ) {
   switch ( id ) {
     case ENT_FINISH:
-      onfinish.push();  
+      onfinish.push();
       return;
     case ENT_IDLE:
       if ( pin >= 0 ) noTone( pin );
@@ -78,7 +79,7 @@ void Atm_player::action( int id ) {
 }
 
 /* onNote/onFinish connector initialization
- *  
+ *
  */
 
 Atm_player& Atm_player::onNote( atm_cb_push_t callback, int idx /* = 0 */ ) {
@@ -94,12 +95,12 @@ Atm_player& Atm_player::onNote( Machine& machine, int event /* = 0 */ ) {
 }
 
 Atm_player& Atm_player::onNote( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
-  onnote[status?1:0].set( callback, idx );
+  onnote[status ? 1 : 0].set( callback, idx );
   return *this;
 }
 
 Atm_player& Atm_player::onNote( bool status, Machine& machine, int event /* = 0 */ ) {
-  onnote[status?1:0].set( &machine, event );
+  onnote[status ? 1 : 0].set( &machine, event );
   return *this;
 }
 
@@ -114,7 +115,7 @@ Atm_player& Atm_player::onFinish( Machine& machine, int event /* = 0 */ ) {
 }
 
 /* How many times to repeat the pattern
- *  
+ *
  */
 
 Atm_player& Atm_player::repeat( int v ) {
@@ -133,12 +134,12 @@ Atm_player& Atm_player::pitch( float v ) {
 }
 
 /* Sets the pattern and pattern length (in bytes)
- *  
+ *
  */
 
 Atm_player& Atm_player::play( int* pat, int patsize ) {
   pattern = pat;
-  patternsize = patsize;  
+  patternsize = patsize;
   counter_repeat.set( repeatCount );
   step = 0;
   return *this;
@@ -149,7 +150,7 @@ Atm_player& Atm_player::play( int freq, int period, int pause /* = 0 */ ) {
   stub[1] = period;
   stub[2] = pause;
   pattern = stub;
-  patternsize = 6;  
+  patternsize = 6;
   step = 0;
   return *this;
 }
@@ -175,8 +176,8 @@ int Atm_player::state( void ) {
  * Sets the symbol table and the default logging method for serial monitoring
  */
 
-Atm_player& Atm_player::trace( Stream & stream ) {
+Atm_player& Atm_player::trace( Stream& stream ) {
   Machine::setTrace( &stream, atm_serial_debug::trace,
-    "PLAYER\0EVT_START\0EVT_STOP\0EVT_TOGGLE\0EVT_TIMER\0EVT_EOPAT\0EVT_REPEAT\0ELSE\0IDLE\0START\0SOUND\0QUIET\0NEXT\0REPEAT\0FINISH" );
+                     "PLAYER\0EVT_START\0EVT_STOP\0EVT_TOGGLE\0EVT_TIMER\0EVT_EOPAT\0EVT_REPEAT\0ELSE\0IDLE\0START\0SOUND\0QUIET\0NEXT\0REPEAT\0FINISH" );
   return *this;
 }
