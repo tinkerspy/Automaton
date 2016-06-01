@@ -27,7 +27,7 @@ class Atm_encoder : public Machine {
   int8_t enc_direction;
   int divider;
   int value, min, max;
-  bool wrap;
+  bool wrap, range_invert;
   atm_connector onup, ondown;
 
   bool count( int direction );

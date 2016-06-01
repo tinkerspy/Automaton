@@ -61,8 +61,15 @@ void Atm_encoder::action( int id ) {
 }
 
 Atm_encoder& Atm_encoder::range( int min, int max, bool wrap /* = false */ ) {
-  this->min = min;
-  this->max = max;
+  if ( min > max ) {
+    range_invert = true;
+    this->min = max;
+    this->max = min;
+  } else {
+    range_invert = false;
+    this->min = min;
+    this->max = max;
+  }
   this->wrap = wrap;
   if ( value < min || value > max ) {
     value = min;
@@ -71,7 +78,7 @@ Atm_encoder& Atm_encoder::range( int min, int max, bool wrap /* = false */ ) {
 }
 
 Atm_encoder& Atm_encoder::set( int value ) {
-  this->value = value;
+  this->value = range_invert ? map( value, min, max, max, min ) : value;
   return *this;
 }
 
@@ -106,7 +113,7 @@ Atm_encoder& Atm_encoder::onChange( bool status, atm_cb_push_t callback, int idx
 }
 
 int Atm_encoder::state( void ) {
-  return value;
+  return range_invert ? map( value, min, max, max, min ) : value;
 }
 
 bool Atm_encoder::count( int direction ) {
