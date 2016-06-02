@@ -14,14 +14,18 @@ class Atm_step : public Machine {
 
   Atm_step( void ) : Machine(){};
   Atm_step& begin( void );
+  int state( void );
   Atm_step& trace( Stream& stream );
   Atm_step& onStep( uint8_t idx );  // fix id -> step???
   Atm_step& onStep( uint8_t id, atm_cb_push_t callback, int idx = 0 );
   Atm_step& onStep( uint8_t id, Machine& machine, int event = 0 );
+  Atm_step& onStep( atm_cb_push_t callback, int idx = 0 );
+  Atm_step& onStep( Machine& machine, int event = 0 );
 
  private:
   enum { ENT_S0, ENT_S1, ENT_S2, ENT_S3, ENT_S4, ENT_S5, ENT_S6, ENT_S7, ENT_S8, ENT_S9 };
   atm_connector connector[ATM_STEP_MAX];
+  atm_connector onstep;
   int event( int id );
   void action( int id );
 };
