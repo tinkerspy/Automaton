@@ -2,7 +2,7 @@
 #include "Atm_sweep.h"
 
 Atm_sweep sweep;
-Atm_analog pot;
+Atm_button button;
 Appliance app;
 
 void setup() {
@@ -14,11 +14,8 @@ void setup() {
   );
 
   app.component( 
-    pot.begin( A0 )
-      .range( 10, 200 )
-      .onChange( []( int idx, int v, int up ) {
-        sweep.speed( v );
-      })
+    button.begin( 2 )
+      .onPress( sweep, sweep.EVT_TOGGLE )
   );
   
 }
