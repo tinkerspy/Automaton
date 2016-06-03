@@ -1,10 +1,14 @@
 #pragma once
 
+// Note durations in milliseconds
+
 #define N01 1600 
 #define N02 800  
 #define N04 400  
 #define N08 200  
 #define N16 100  
+
+// Tone frequencies
 
 #define C3  130
 #define Db3 138
