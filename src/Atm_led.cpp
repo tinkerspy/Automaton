@@ -9,7 +9,7 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
     /* START     */    ENT_ON,        -1,        -1,    BLINK_OFF,            -1,        DONE,     ON,     OFF,     START,        OFF,              OFF,   -1, // Start blinking
     /* BLINK_OFF */   ENT_OFF,        -1,        -1,           -1,         START,        DONE,     ON,     OFF,     START,        OFF,             OFF,   -1,
     /* DONE      */        -1,        -1, EXT_CHAIN,           -1,           OFF,          -1,     ON,     OFF,     START,        OFF,             OFF,   -1, // Wait after last blink
-    /* OFF       */   ENT_OFF,        -1,        -1,           -1,            -1,          -1,     -1,      -1,        -1,         -1,               -1, IDLE, // All off -> IDLE
+    /* OFF       */   ENT_OFF,        -1,        -1,           -1,            -1,          -1,     ON,     OFF,     START,         -1,               -1, IDLE, // All off -> IDLE
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -103,8 +103,9 @@ Atm_led& Atm_led::fade( int fade ) {
   return *this;
 }  // Dummy for method compatibility with Atm_fade
 
-Atm_led& Atm_led::repeat( uint16_t repeat ) {
-  counter.set( repeat_count = repeat );
+Atm_led& Atm_led::repeat( int repeat ) {
+  repeat_count = repeat >= 0 ? repeat : ATM_COUNTER_OFF;
+  counter.set( repeat_count );
   return *this;
 }
 

@@ -14,14 +14,14 @@ class Atm_fade : public Machine {
   Atm_fade& blink( uint32_t duration );
   Atm_fade& pause( uint32_t duration );
   Atm_fade& fade( int fade );
-  Atm_fade& repeat( uint16_t repeat );
+  Atm_fade& repeat( int repeat );
 
  private:
   enum { ENT_REPEAT, ENT_OFF, ENT_ON, ENT_UP, ENT_DOWN, ENT_START };
   static const uint8_t SLOPE_SIZE = 32;
   uint8_t slope[SLOPE_SIZE] = {0, 0, 1, 1, 2, 2, 3, 4, 5, 6, 7, 8, 10, 12, 15, 18, 22, 26, 31, 37, 44, 54, 63, 76, 90, 108, 127, 153, 180, 217, 230, 255};
   short pin;
-  uint16_t repeat_count;
+  int repeat_count;
   atm_timer_millis timer_fade, timer_on, timer_off;
   atm_counter counter_fade, counter_repeat;
   int event( int id );

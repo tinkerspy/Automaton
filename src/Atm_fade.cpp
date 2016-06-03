@@ -48,8 +48,9 @@ Atm_fade& Atm_fade::fade( int fade ) {
   return *this;
 }
 
-Atm_fade& Atm_fade::repeat( uint16_t repeat ) {
-  counter_repeat.set( repeat_count = repeat );
+Atm_fade& Atm_fade::repeat( int repeat ) {
+  repeat_count = repeat >= 0 ? repeat : ATM_COUNTER_OFF;
+  counter_repeat.set( repeat_count );
   return *this;
 }
 
