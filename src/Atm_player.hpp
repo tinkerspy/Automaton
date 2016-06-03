@@ -76,7 +76,6 @@ Automaton::SMDL::begin - State Machine Definition Language
         <ELSE>START</ELSE>
       </REPEAT>
       <FINISH index="6" on_enter="ENT_FINISH">
-        <EVT_STOP>IDLE</EVT_STOP>
         <EVT_REPEAT>IDLE</EVT_REPEAT>
         <ELSE>START</ELSE>
       </FINISH>
