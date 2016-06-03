@@ -11,15 +11,15 @@
  *
  *********************************************************************************************
  *
- * push( v, up, noCallback ) - Calls a machine's trigger method or a callback
+ * push( v, up, overrideCallback ) - Calls a machine's trigger method or a callback
  *
- * Will return false if a callback is configured while the noCallback arg was specified
+ * Will return false if a callback is configured while the overrideCallback arg was specified
  */
 
-bool atm_connector::push( int v /* = 0 */, int up /* = 0 */, bool noCallback /* = false */ ) {
+bool atm_connector::push( int v /* = 0 */, int up /* = 0 */, bool overrideCallback /* = false */ ) {
   switch ( mode_flags & B00000111 ) {
     case MODE_PUSHCB:
-      if ( noCallback ) {
+      if ( overrideCallback ) {
         return false;
       } else {
         ( *push_callback )( callback_idx, v, up );
