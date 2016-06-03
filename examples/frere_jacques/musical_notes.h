@@ -71,5 +71,4 @@
 #define Bb7 3729
 #define B7  3951
 
-#define full 600
-#define half full / 2
+
