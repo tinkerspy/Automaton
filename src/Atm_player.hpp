@@ -19,7 +19,7 @@ class Atm_player : public Machine {
   Atm_player& onFinish( Machine& machine, int event = 0 );
   Atm_player& play( int* pat, int size );
   Atm_player& play( int freq, int period, int pause = 0 );
-  Atm_player& repeat( int v );
+  Atm_player& repeat( uint16_t v );
   Atm_player& speed( float v );
   Atm_player& pitch( float v );
 
@@ -28,7 +28,7 @@ class Atm_player : public Machine {
   int* pattern;
   int patternsize;
   int step;
-  int repeatCount;
+  uint16_t repeatCount;
   float speedFactor, pitchFactor;
   int stub[3];
   atm_timer_millis timer;
