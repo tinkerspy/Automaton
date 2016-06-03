@@ -118,7 +118,7 @@ Atm_player& Atm_player::onFinish( Machine& machine, int event /* = 0 */ ) {
  *
  */
 
-Atm_player& Atm_player::repeat( int v ) {
+Atm_player& Atm_player::repeat( uint16_t v ) {
   counter_repeat.set( repeatCount = v );
   return *this;
 }
