@@ -103,9 +103,8 @@ Atm_led& Atm_led::fade( int fade ) {
   return *this;
 }  // Dummy for method compatibility with Atm_fade
 
-Atm_led& Atm_led::repeat( int repeat ) {
-  repeat_count = repeat >= 0 ? repeat : ATM_COUNTER_OFF;
-  counter.set( repeat_count );
+Atm_led& Atm_led::repeat( uint16_t repeat ) {
+  counter.set( repeat_count = repeat );
   return *this;
 }
 
