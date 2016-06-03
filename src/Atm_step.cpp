@@ -63,8 +63,10 @@ int Atm_step::event( int id ) {
 
 void Atm_step::action( int id ) {
   if ( id > -1 ) {
-    connector[id].push( id );
-    onstep.push( id );
+    if ( connector[id].mode() ) {
+      connector[id].push( id );
+      onstep.push( id );
+    }
   }
 }
 
