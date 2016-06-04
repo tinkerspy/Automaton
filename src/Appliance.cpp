@@ -14,9 +14,11 @@
  *
  */
 
-Appliance& Appliance::component( Machine& machine ) {
-  machine.inventory_next = inventory_root;
-  inventory_root = &machine;
+Appliance& Appliance::component( Machine& machine, bool force /* = true */ ) {
+  if ( machine.inventory_next == 0 || force ) {
+    machine.inventory_next = inventory_root;
+    inventory_root = &machine;
+  }
   return *this;
 }
 

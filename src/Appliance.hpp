@@ -9,7 +9,7 @@
 
 class Appliance {
  public:
-  Appliance& component( Machine& machine );
+  Appliance& component( Machine& machine, bool force = true );
   Appliance& run( uint32_t time = 0 );
 
  private:
