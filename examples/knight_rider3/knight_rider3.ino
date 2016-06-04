@@ -1,7 +1,6 @@
 #include <Automaton.h>
 
 Atm_player player; // A player machine
-Appliance app;
 
 const int ledPinMin = 4; // Use pins 4..9
 const int ledPinMax = 9; 
@@ -20,21 +19,19 @@ int pattern[] = {  // Bitmapped pattern
 };
 
 void setup() {
-  app.component( 
-    player.begin() 
-      .play( pattern, sizeof( pattern ) ) //  Set up the pattern
-      .onNote( true, []( int idx, int v, int up ) { // Called on every note
-        for ( int i = ledPinMin; i <= ledPinMax; i++ ) {
-          pinMode( i, OUTPUT ); // LED on/off according to bit  
-          digitalWrite( i, v & ( 1 << ( i - ledPinMin ) ) ? HIGH : LOW ); 
-        }    
-      })
-      .repeat( -1 ) // Repeat forever
-      .trigger( player.EVT_START ) // Kickoff!
-  );
+  player.begin() 
+    .play( pattern, sizeof( pattern ) ) //  Set up the pattern
+    .onNote( true, []( int idx, int v, int up ) { // Called on every note
+      for ( int i = ledPinMin; i <= ledPinMax; i++ ) {
+        pinMode( i, OUTPUT ); // LED on/off according to bit  
+        digitalWrite( i, v & ( 1 << ( i - ledPinMin ) ) ? HIGH : LOW ); 
+      }    
+    })
+    .repeat( -1 ) // Repeat forever
+    .trigger( player.EVT_START ); // Kickoff!
 }
 
 void loop() {
-  app.run();
+  automaton.run();
 }
 

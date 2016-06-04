@@ -50,6 +50,13 @@ class Automaton {
   void runTiny( void );
 };
 
+// For backward compatibility with 'the old way': Appliance app/app.component()/app.run()
+
+class Appliance : Automaton {
+ public:
+  Appliance& component( Machine& machine );   
+  Appliance& run( uint32_t time = 0 );
+};
 
 // Main framework classes
 

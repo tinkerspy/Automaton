@@ -9,6 +9,6 @@ void setup() {
 }
 
 void loop() {
-  led.cycle();
+  automaton.run();
 }
 

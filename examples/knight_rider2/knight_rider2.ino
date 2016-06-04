@@ -3,23 +3,18 @@
 
 Atm_sweep sweep;
 Atm_button button;
-Appliance app;
 
 void setup() {
 
-  app.component( 
-    sweep.begin( 4, 5, 6, 7, 8, 9 )
-      .speed( 50 ) 
-      .trigger( sweep.EVT_START )
-  );
+  sweep.begin( 4, 5, 6, 7, 8, 9 )
+    .speed( 50 ) 
+    .trigger( sweep.EVT_START );
 
-  app.component( 
-    button.begin( 2 )
-      .onPress( sweep, sweep.EVT_TOGGLE )
-  );
-  
+  button.begin( 2 )
+    .onPress( sweep, sweep.EVT_TOGGLE );
+      
 }
 
 void loop() {
-  app.run();
+  automaton.run();
 }

@@ -47,3 +47,13 @@ Automaton& Automaton::run( uint32_t time /* = 0 */ )  // Is it safe to allow rec
   } while ( millis() - cycle_start < time );
   return *this;
 }
+
+Appliance& Appliance::component( Machine& machine ) {
+  Automaton::add( machine );
+  return *this;
+}
+
+Appliance& Appliance::run( uint32_t time /* = 0 */ ) {
+  Automaton::run( time );
+  return *this;
+}

@@ -6,7 +6,6 @@
 Atm_player player;
 Atm_button button;
 Atm_analog speed;
-Appliance app;
 
 int pattern[] = { 
   G4, N04, 0,  A4, N04, 0,  B4, N04, 0,  G4, N04, 0, // Frere Jacques
@@ -20,25 +19,21 @@ int pattern[] = {
 };
 
 void setup() {
-  app.component( 
-    player.begin( 19 ) // A passive buzzer or speaker on pin 19
-      .play( pattern, sizeof( pattern ) )
-      .repeat( -1 )
-  );  
-  app.component(
-    button.begin( 2 ) // A button on pin 2
-      .onPress( player, player.EVT_TOGGLE )
-  );
-  app.component( 
-    speed.begin( A0 ) // An analog pot on pin A0
-      .range( 50, 300 )
-      .onChange( []( int idx, int v, int up ) {
-        player.speed( v );    
-      })
-  );
+  player.begin( 19 ) // A passive buzzer or speaker on pin 19
+    .play( pattern, sizeof( pattern ) )
+    .repeat( -1 );
+
+  button.begin( 2 ) // A button on pin 2 toggle playback on and off
+    .onPress( player, player.EVT_TOGGLE );
+
+  speed.begin( A0 ) // An analog pot on pin A0 controls playback speed
+    .range( 50, 300 )
+    .onChange( []( int idx, int v, int up ) {
+      player.speed( v );    
+    });
 }
 
 void loop() {
-  app.run();
+  automaton.run();
 }
 
