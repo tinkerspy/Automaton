@@ -24,8 +24,8 @@ class Automaton;
 
 extern Automaton automaton;
 
-typedef void ( *swcb_sym_t )( Stream* stream, Machine& machine, const char label[], const char current[], const char next[], const char trigger[],
-                              uint32_t runtime, uint32_t cycles );
+typedef void ( *swcb_sym_t )( Stream* stream, Machine& machine, const char label[], const char current[], 
+                              const char next[], const char trigger[], uint32_t runtime, uint32_t cycles );
 
 const uint8_t ATM_UP = 1;
 const uint8_t ATM_DOWN = 0;
@@ -56,6 +56,12 @@ class Appliance : Automaton {
  public:
   Appliance& component( Machine& machine );   
   Appliance& run( uint32_t time = 0 );
+};
+
+class Factory : Automaton {
+ public:
+  Factory& add( Machine& machine );   
+  Factory& run( uint32_t time = 0 );
 };
 
 // Main framework classes

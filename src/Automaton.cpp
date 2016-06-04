@@ -57,3 +57,14 @@ Appliance& Appliance::run( uint32_t time /* = 0 */ ) {
   Automaton::run( time );
   return *this;
 }
+
+
+Factory& Factory::add( Machine& machine ) {
+  Automaton::add( machine );
+  return *this;
+}
+
+Factory& Factory::run( uint32_t time /* = 0 */ ) {
+  Automaton::run( time );
+  return *this;
+}
