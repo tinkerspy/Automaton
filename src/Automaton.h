@@ -20,9 +20,9 @@ const uint8_t ATM_USR_FLAGS = B11110000;
 #define read_state( addr ) ( state_t ) pgm_read_byte_near( addr )
 
 class Machine;
-class Appliance;
+class Automaton;
 
-extern Appliance automaton;
+extern Automaton automaton;
 
 typedef void ( *swcb_sym_t )( Stream* stream, Machine& machine, const char label[], const char current[], const char next[], const char trigger[],
                               uint32_t runtime, uint32_t cycles );
@@ -40,11 +40,20 @@ const state_t ATM_ON_EXIT = 2;
 const uint32_t ATM_TIMER_OFF = 0xffffffff;  // This timer value never expires
 const uint16_t ATM_COUNTER_OFF = 0xffff;    // This counter value never expires
 
+class Automaton {
+ public:
+  Automaton& add( Machine& machine, bool force = true );
+  Automaton& run( uint32_t time = 0 );
+
+ private:
+  Machine* inventory_root;
+  void runTiny( void );
+};
+
 
 // Main framework classes
 
 #include <Machine.hpp>
-#include <Appliance.hpp>
 
 // Support classes
 

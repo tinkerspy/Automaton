@@ -90,7 +90,8 @@ Machine& Machine::begin( const state_t* tbl, int width ) {
   state_table = tbl;
   state_width = ATM_ON_EXIT + width + 2;
   flags &= ~ATM_SLEEP_FLAG;
-  automaton.component( *this, false );
+  automaton.add( *this, false );
+  current = 0;
   return *this;
 }
 
