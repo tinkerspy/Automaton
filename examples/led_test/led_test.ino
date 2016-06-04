@@ -14,8 +14,7 @@ void setup() {
   button.trace( Serial );
   
   led.begin( ledPin )
-    .blink( 1000 )
-  );
+    .blink( 1000 ); 
   
   button.begin( buttonPin )
     .onPress( led, led.EVT_TOGGLE );
