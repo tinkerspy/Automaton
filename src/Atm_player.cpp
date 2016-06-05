@@ -66,7 +66,7 @@ void Atm_player::action( int id ) {
       timer.set( pattern[step * 3 + 1] * speedFactor );
       return;
     case ENT_QUIET:
-      onnote[0].push( pattern[step * 3] * pitchFactor, 0 );
+      onnote[0].push( pattern[step * 3], 0 );
       if ( pin >= 0 ) noTone( pin );
       timer.set( pattern[step * 3 + 2] * speedFactor );
       return;
