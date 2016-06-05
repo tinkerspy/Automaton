@@ -21,6 +21,7 @@ const uint8_t ATM_USR_FLAGS = B11110000;
 
 class Machine;
 class Automaton;
+class atm_connector;
 
 extern Automaton automaton;
 

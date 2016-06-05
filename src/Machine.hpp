@@ -21,7 +21,7 @@ class Machine {
 
  protected:
   Machine& state( int state );
-  Machine& begin( const state_t tbl[], int width );
+  Machine& begin( const state_t* tbl, int width, atm_connector connectors[] = 0 );
   const char* mapSymbol( int id, const char map[] );
   Machine& setTrace( Stream* stream, swcb_sym_t callback, const char symbols[] );
 
@@ -29,6 +29,7 @@ class Machine {
   state_t next;
   state_t current = -1;
   state_t last_trigger = -1;
+  atm_connector* connectorPtr;
   const char* symbols;
   uint8_t state_width;
   swcb_sym_t callback_trace;

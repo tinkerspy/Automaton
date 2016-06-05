@@ -86,7 +86,8 @@ uint8_t Machine::sleep( int8_t v /* = 1 */ ) {
  *
  */
 
-Machine& Machine::begin( const state_t* tbl, int width ) {
+Machine& Machine::begin( const state_t* tbl, int width, atm_connector connectors[] /* = 0 */ ) {
+  connectorPtr = connectors;
   state_table = tbl;
   state_width = ATM_ON_EXIT + width + 2;
   flags &= ~ATM_SLEEP_FLAG;
