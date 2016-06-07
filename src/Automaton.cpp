@@ -64,7 +64,7 @@ Factory& Factory::add( Machine& machine ) {
   return *this;
 }
 
-Factory& Factory::run( uint32_t time /* = 0 */ ) {
+Factory& Factory::cycle( uint32_t time /* = 0 */ ) {
   Automaton::run( time );
   return *this;
 }

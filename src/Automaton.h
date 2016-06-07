@@ -61,7 +61,7 @@ class Appliance : Automaton {
 class Factory : Automaton {
  public:
   Factory& add( Machine& machine );   
-  Factory& run( uint32_t time = 0 );
+  Factory& cycle( uint32_t time = 0 );
 };
 
 // Main framework classes
