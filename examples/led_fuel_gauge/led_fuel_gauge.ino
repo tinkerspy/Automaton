@@ -1,6 +1,6 @@
 #include <Automaton.h>
 
-// six leds on 4, 5, 6, 7, 8, 9 and a pot on A0
+// Turning a pot on A0 will change a led gauge on pins 4, 5, 6, 7, 8, 9
 
 Atm_comparator cmp;
 Atm_led led[6];
