@@ -40,7 +40,7 @@ class Atm_player : public Machine {
 };
 
 /*
-Automaton::SMDL::begin - State Machine Definition Language
+Automaton::ATML::begin - State Machine Definition Language
 
 <?xml version="1.0" encoding="UTF-8"?>
 <machines>
@@ -95,5 +95,5 @@ Automaton::SMDL::begin - State Machine Definition Language
   </machine>
 </machines>
 
-Automaton::SMDL::end
+Automaton::ATML::end
 */
