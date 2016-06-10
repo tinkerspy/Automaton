@@ -42,15 +42,13 @@ void Atm_comparator::action( int id ) {
       if ( v_sample >= v_previous ) {
         for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
           if ( ( bitmap_diff >> i ) & 1 ) {
-            lastThresholdIdx = i;
-            onup.push( v_sample, 0 );
+            onup.push( i, 1 );
           }
         }
       } else {
         for ( int i = p_threshold_size; i >= 0; i-- ) {
           if ( ( bitmap_diff >> i ) & 1 ) {
-            lastThresholdIdx = i;
-            ondown.push( v_sample, 0 );
+            ondown.push( i, 0 );
           }
         }
       }
@@ -109,7 +107,7 @@ int Atm_comparator::sample() {
 }
 
 int Atm_comparator::state( void ) {
-  return sample();
+  return v_sample;
 }
 
 Atm_comparator& Atm_comparator::threshold( uint16_t* v, uint16_t size, bool catchUp /* = false */ ) {
@@ -134,10 +132,6 @@ Atm_comparator& Atm_comparator::average( uint16_t* v, uint16_t size ) {
     avg_buf_total += avg_buf[i];
   }
   return *this;
-}
-
-int Atm_comparator::lastThreshold( void ) {
-  return lastThresholdIdx;
 }
 
 Atm_comparator& Atm_comparator::bitmap( uint16_t v ) {

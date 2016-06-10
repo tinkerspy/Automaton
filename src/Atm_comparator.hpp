@@ -17,7 +17,6 @@ class Atm_comparator : public Machine {
   Atm_comparator& onChange( bool status, Machine& machine, int event = 0 );
   int state( void );
   virtual int read_sample();
-  int lastThreshold( void );
   Atm_comparator& trace( Stream& stream );
 
  private:
@@ -28,7 +27,6 @@ class Atm_comparator : public Machine {
   uint64_t bitmap_sample, bitmap_previous, bitmap_diff;
   uint16_t* p_threshold;  // Max 64 values
   uint16_t p_threshold_size;
-  uint8_t lastThresholdIdx;
   uint16_t* avg_buf;
   uint16_t avg_buf_size;
   uint16_t avg_buf_head;
