@@ -2,8 +2,6 @@
 
 #include <Automaton.h>
 
-typedef void ( *atm_comparator_cb_t )( int idx, int v, int up, int idx_threshold, int v_threshold );
-
 class Atm_comparator : public Machine {
  public:
   enum { IDLE, SAMPLE, SEND };            // STATES
