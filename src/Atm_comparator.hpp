@@ -13,12 +13,13 @@ class Atm_comparator : public Machine {
   Atm_comparator& begin( int attached_pin, int sampleRate = 50 );
   Atm_comparator& threshold( uint16_t* v, uint16_t size, bool catchUp = false );
   Atm_comparator& average( uint16_t* v, uint16_t size );
-  Atm_comparator& onChange( atm_comparator_cb_t callback, int idx = 0 );
+  Atm_comparator& onChange( atm_cb_push_t callback, int idx = 0 );
   Atm_comparator& onChange( Machine& machine, int event = 0 );
-  Atm_comparator& onChange( bool status, atm_comparator_cb_t callback, int idx = 0 );
+  Atm_comparator& onChange( bool status, atm_cb_push_t callback, int idx = 0 );
   Atm_comparator& onChange( bool status, Machine& machine, int event = 0 );
   int state( void );
   virtual int read_sample();
+  int lastThreshold( void );
   Atm_comparator& trace( Stream& stream );
 
  private:
@@ -29,6 +30,7 @@ class Atm_comparator : public Machine {
   uint64_t bitmap_sample, bitmap_previous, bitmap_diff;
   uint16_t* p_threshold;  // Max 64 values
   uint16_t p_threshold_size;
+  uint8_t lastThresholdIdx;
   uint16_t* avg_buf;
   uint16_t avg_buf_size;
   uint16_t avg_buf_head;
