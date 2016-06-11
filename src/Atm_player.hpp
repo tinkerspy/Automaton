@@ -90,6 +90,8 @@ Automaton::ATML::begin - State Machine Definition Language
       <EVT_REPEAT index="5"/>
     </events>
     <connectors>
+      <FINISH autostore="0" broadcast="0" dir="PUSH" slots="1"/>
+      <NOTE autostore="0" broadcast="0" dir="PUSH" slots="2"/>
     </connectors>
     <methods>
     </methods>
