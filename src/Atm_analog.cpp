@@ -76,7 +76,7 @@ int Atm_analog::avg() {
 
 int Atm_analog::sample() {
   int v = avg_buf_size > 0 ? avg() : read_sample();
-  if ( toHigh ) {
+  if ( toHigh || toLow ) {
     return map( v, 0, 1023, toLow, toHigh );
   } else {
     return v;
