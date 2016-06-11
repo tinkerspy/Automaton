@@ -5,6 +5,7 @@
 
 #include "Automaton.h"
 
+
 /* The Machine class is a base class for creating and running State Machines
  *
  *********************************************************************************************
@@ -13,7 +14,7 @@
  *
  * (may be overridden by a subclass in which case it may return something else, like a value )
  */
-
+ 
 int Machine::state() {
   return current;
 }
@@ -93,6 +94,86 @@ Machine& Machine::begin( const state_t* tbl, int width ) {
   automaton.add( *this, false );
   current = 0;
   return *this;
+}
+
+/*
+ * Machine::onPush( connectors, id, sub, slots, multi, broadcasts, dest, arg ) - Registers a connector destination
+ *
+ * connectors Connector table
+ * id         Connector id
+ * sub        Connector sub id (for multi-slot connectors)
+ * slots      Number of slots reserved for this connector
+ * multi      Register multiple (all) slots in one call
+ * broadcast  Broadcast connector, replicate actions over all connectors
+ * dest       Destination: Machine object or callback
+ * arg        Argument for machine (event) or callback (idx)
+ *
+ */
+
+void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int multi, int broadcast, Machine &machine, int event ) {
+  if ( id == -1 ) { // auto store
+    id = 0;
+    for ( int i = id; i < slots; i++ ) {
+      if ( connectors[id + i].mode() == 0 ) {
+        id = i;
+      }        
+    }    
+  }
+  uint8_t flags2 = slots;
+  if ( broadcast ) flags2 |= B10000000;  
+  if ( slots > 1 && multi ) {
+    for ( int i = id; i < slots; i++ ) {
+      connectors[id + i].set( &machine, event );  
+      connectors[id + i].mode_flags2 = flags2; 
+    }
+  } else {
+    connectors[id + sub].set( &machine, event );  
+    connectors[id + sub].mode_flags2 = flags2; 
+  }
+}
+
+void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int multi, int broadcast, atm_cb_push_t callback, int idx ) {
+  if ( id == -1 ) { // auto store
+    id = 0;
+    for ( int i = id; i < slots; i++ ) {
+      if ( connectors[id + i].mode() == 0 ) {
+        id = i;
+      }        
+    }    
+  }
+  uint8_t flags2 = slots;
+  if ( broadcast ) flags2 |= B10000000;  
+  if ( slots > 1 && multi ) {
+    for ( int i = id; i < slots; i++ ) {
+      connectors[id + i].set( callback, idx );  
+      connectors[id + i].mode_flags2 = flags2; 
+    }
+  } else {
+    connectors[id + sub].set( callback, idx );  
+    connectors[id + sub].mode_flags2 = flags2; 
+  }
+}
+
+/*
+ * Machine::push( connectors, id, sub, v, up ) - Pushes an action through the specified connector
+ *
+ * connectors Connector table
+ * id         Connector id
+ * sub        Connector sub id (for multi-slot connectors)
+ * v          Value to pass to a callback as 'v'
+ * up         Value to pass to a callback as 'up'
+ *
+ */
+
+void Machine::push( atm_connector connectors[], int id, int sub, int v, int up ) {
+  if ( ( connectors[id + sub].mode_flags2 & B10000000 ) > 0 ) {
+    int slots = connectors[id + sub].mode_flags2 & ~B10000000;
+    for ( int i = id; i < slots; i++ ) {
+      connectors[id + i].push( v, up );
+    }
+  } else {
+    connectors[id + sub].push( v, up );
+  }
 }
 
 /*

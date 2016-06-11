@@ -16,7 +16,6 @@ class Machine {
   uint8_t sleep( int8_t v = -1 );
   virtual int event( int id ) = 0;  // Pure virtual methods -> make this an abstract class
   virtual void action( int id ) = 0;
-
   Machine* inventory_next;
 
  protected:
@@ -24,6 +23,9 @@ class Machine {
   Machine& begin( const state_t tbl[], int width );
   const char* mapSymbol( int id, const char map[] );
   Machine& setTrace( Stream* stream, swcb_sym_t callback, const char symbols[] );
+  void onPush( atm_connector connectors[], int id, int sub, int slots, int multi, int broadcast, Machine &machine, int event );
+  void onPush( atm_connector connectors[], int id, int sub, int slots, int multi, int broadcast, atm_cb_push_t callback, int idx );
+  void push( atm_connector connectors[], int id, int sub, int v, int up );
 
   const state_t* state_table;
   state_t next;

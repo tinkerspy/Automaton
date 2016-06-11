@@ -64,16 +64,16 @@ class Factory : Automaton {
   Factory& cycle( uint32_t time = 0 );
 };
 
-// Main framework classes
-
-#include <Machine.hpp>
-
 // Support classes
 
 #include <atm_connector.hpp>
 #include <atm_timer_millis.hpp>
 #include <atm_counter.hpp>
 #include <atm_serial_debug.hpp>
+
+// Main framework classes
+
+#include <Machine.hpp>
 
 // Bundled state machines (components)
 
