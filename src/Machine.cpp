@@ -122,7 +122,7 @@ void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, in
   uint8_t flags2 = slots;
   if ( broadcast ) flags2 |= B10000000;  
   if ( slots > 1 && multi ) {
-    for ( int i = id; i < slots; i++ ) {
+    for ( int i = 0; i < slots; i++ ) {
       connectors[id + i].set( &machine, event );  
       connectors[id + i].mode_flags2 = flags2; 
     }
@@ -144,7 +144,7 @@ void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, in
   uint8_t flags2 = slots;
   if ( broadcast ) flags2 |= B10000000;  
   if ( slots > 1 && multi ) {
-    for ( int i = id; i < slots; i++ ) {
+    for ( int i = 0; i < slots; i++ ) {
       connectors[id + i].set( callback, idx );  
       connectors[id + i].mode_flags2 = flags2; 
     }
