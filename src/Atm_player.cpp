@@ -50,7 +50,7 @@ int Atm_player::event( int id ) {
 void Atm_player::action( int id ) {
   switch ( id ) {
     case ENT_FINISH:
-      onfinish.push();
+      push( connectors, ON_FINISH, 0, 0, 0 );
       return;
     case ENT_IDLE:
       if ( pin >= 0 ) noTone( pin );
@@ -61,12 +61,12 @@ void Atm_player::action( int id ) {
       counter_repeat.decrement();
       return;
     case ENT_SOUND:
-      onnote[1].push( pattern[step * 3] * pitchFactor, 1 );
+      push( connectors, ON_NOTE, true, pattern[step * 3] * pitchFactor, 1 );
       if ( pin >= 0 ) tone( pin, pattern[step * 3] * pitchFactor );
       timer.set( pattern[step * 3 + 1] * speedFactor );
       return;
     case ENT_QUIET:
-      onnote[0].push( pattern[step * 3], 0 );
+      push( connectors, ON_NOTE, false, pattern[step * 3] * pitchFactor, 0 );
       if ( pin >= 0 ) noTone( pin );
       timer.set( pattern[step * 3 + 2] * speedFactor );
       return;
@@ -76,42 +76,6 @@ void Atm_player::action( int id ) {
     case ENT_REPEAT:
       return;
   }
-}
-
-/* onNote/onFinish connector initialization
- *
- */
-
-Atm_player& Atm_player::onNote( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  onnote[0].set( callback, idx );
-  onnote[1].set( callback, idx );
-  return *this;
-}
-
-Atm_player& Atm_player::onNote( Machine& machine, int event /* = 0 */ ) {
-  onnote[0].set( &machine, event );
-  onnote[1].set( &machine, event );
-  return *this;
-}
-
-Atm_player& Atm_player::onNote( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
-  onnote[status ? 1 : 0].set( callback, idx );
-  return *this;
-}
-
-Atm_player& Atm_player::onNote( bool status, Machine& machine, int event /* = 0 */ ) {
-  onnote[status ? 1 : 0].set( &machine, event );
-  return *this;
-}
-
-Atm_player& Atm_player::onFinish( atm_cb_push_t callback, int idx /* = 0 */ ) {
-  onfinish.set( callback, idx );
-  return *this;
-}
-
-Atm_player& Atm_player::onFinish( Machine& machine, int event /* = 0 */ ) {
-  onfinish.set( &machine, event );
-  return *this;
 }
 
 /* How many times to repeat the pattern
@@ -171,6 +135,29 @@ Atm_player& Atm_player::trigger( int event ) {
 int Atm_player::state( void ) {
   return Machine::state();
 }
+
+/* Nothing customizable below this line                          
+ ************************************************************************************************
+*/
+
+/* onFinish() push connector variants ( slots 1, autostore 0, broadcast 0 )
+ *
+ * Usage in action() handler: push( connectors, ON_FINISH, 0, v, up)
+ */
+
+Atm_player& Atm_player::onFinish( Machine& machine, int event ) { onPush( connectors, ON_FINISH, 0, 1, 1, 0, machine, event ); return *this; }
+Atm_player& Atm_player::onFinish( atm_cb_push_t callback, int idx ) { onPush( connectors, ON_FINISH, 0, 1, 1, 0, callback, idx ); return *this; }
+
+/* onNote() push connector variants ( slots 2, autostore 0, broadcast 0 )
+ *
+ * Usage in action() handler: push( connectors, ON_NOTE, sub, v, up)
+ */
+
+Atm_player& Atm_player::onNote( Machine& machine, int event ) { onPush( connectors, ON_NOTE, 0, 2, 1, 0, machine, event ); return *this; }
+Atm_player& Atm_player::onNote( atm_cb_push_t callback, int idx ) { onPush( connectors, ON_NOTE, 0, 2, 1, 0, callback, idx ); return *this; }
+Atm_player& Atm_player::onNote( int sub, Machine& machine, int event ) { onPush( connectors, ON_NOTE, sub, 2, 0, 0, machine, event ); return *this; }
+Atm_player& Atm_player::onNote( int sub, atm_cb_push_t callback, int idx ) { onPush( connectors, ON_NOTE, sub, 2, 0, 0, callback, idx ); return *this; }
+
 
 /* State trace method
  * Sets the symbol table and the default logging method for serial monitoring
