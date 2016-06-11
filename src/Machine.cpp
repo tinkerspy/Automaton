@@ -110,18 +110,18 @@ Machine& Machine::begin( const state_t* tbl, int width ) {
  *
  */
 
-void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int multi, int broadcast, Machine &machine, int event ) {
-  if ( id == -1 ) { // auto store
-    id = 0;
-    for ( int i = id; i < slots; i++ ) {
-      if ( connectors[id + i].mode() == 0 ) {
-        id = i;
+void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int fill, int broadcast, Machine &machine, int event ) {
+  if ( sub == -1 ) { // auto store
+    sub = 0;
+    for ( int i = 0; i < slots; i++ ) {
+      if ( connectors[id + i].mode() == 0 ) { // Find a free slot
+        sub = i;
       }        
     }    
   }
   uint8_t flags2 = slots;
   if ( broadcast ) flags2 |= B10000000;  
-  if ( slots > 1 && multi ) {
+  if ( slots > 1 && fill ) {
     for ( int i = 0; i < slots; i++ ) {
       connectors[id + i].set( &machine, event );  
       connectors[id + i].mode_flags2 = flags2; 
@@ -132,18 +132,18 @@ void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, in
   }
 }
 
-void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int multi, int broadcast, atm_cb_push_t callback, int idx ) {
-  if ( id == -1 ) { // auto store
-    id = 0;
-    for ( int i = id; i < slots; i++ ) {
-      if ( connectors[id + i].mode() == 0 ) {
-        id = i;
+void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int fill, int broadcast, atm_cb_push_t callback, int idx ) {
+  if ( sub == -1 ) { // auto store
+    sub = 0;
+    for ( int i = 0; i < slots; i++ ) {
+      if ( connectors[id + i].mode() == 0 ) { // Find a free slot
+        sub = i;
       }        
     }    
   }
   uint8_t flags2 = slots;
   if ( broadcast ) flags2 |= B10000000;  
-  if ( slots > 1 && multi ) {
+  if ( slots > 1 && fill ) {
     for ( int i = 0; i < slots; i++ ) {
       connectors[id + i].set( callback, idx );  
       connectors[id + i].mode_flags2 = flags2; 
