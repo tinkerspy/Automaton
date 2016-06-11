@@ -22,6 +22,7 @@ Atm_player& Atm_player::begin( int pin /* = - 1 */ ) {
   speed( 100 );
   pitch( 100 );
   repeat( 1 );
+  play( 880, 50 );
   return *this;
 }
 
