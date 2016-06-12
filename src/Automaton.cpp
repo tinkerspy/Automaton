@@ -5,7 +5,7 @@
 
 #include "Automaton.h"
 
-Automaton automaton; // The global automaton machine container/scheduler
+Automaton automaton;  // The global automaton machine container/scheduler
 
 /*
  * The Automaton class is a simple scheduler for running State Machines
@@ -57,7 +57,6 @@ Appliance& Appliance::run( uint32_t time /* = 0 */ ) {
   Automaton::run( time );
   return *this;
 }
-
 
 Factory& Factory::add( Machine& machine ) {
   Automaton::add( machine );

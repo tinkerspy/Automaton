@@ -5,7 +5,6 @@
 
 #include "Automaton.h"
 
-
 /* The Machine class is a base class for creating and running State Machines
  *
  *********************************************************************************************
@@ -14,7 +13,7 @@
  *
  * (may be overridden by a subclass in which case it may return something else, like a value )
  */
- 
+
 int Machine::state() {
   return current;
 }
@@ -110,47 +109,47 @@ Machine& Machine::begin( const state_t* tbl, int width ) {
  *
  */
 
-void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int fill, int broadcast, Machine &machine, int event ) {
-  if ( sub == -1 ) { // auto store
+void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int fill, int broadcast, Machine& machine, int event ) {
+  if ( sub == -1 ) {  // auto store
     sub = 0;
     for ( int i = 0; i < slots; i++ ) {
-      if ( connectors[id + i].mode() == 0 ) { // Find a free slot
+      if ( connectors[id + i].mode() == 0 ) {  // Find a free slot
         sub = i;
-      }        
-    }    
+      }
+    }
   }
   uint8_t flags2 = slots;
-  if ( broadcast ) flags2 |= B10000000;  
+  if ( broadcast ) flags2 |= B10000000;
   if ( slots > 1 && fill ) {
     for ( int i = 0; i < slots; i++ ) {
-      connectors[id + i].set( &machine, event );  
-      connectors[id + i].mode_flags2 = flags2; 
+      connectors[id + i].set( &machine, event );
+      connectors[id + i].mode_flags2 = flags2;
     }
   } else {
-    connectors[id + sub].set( &machine, event );  
-    connectors[id + sub].mode_flags2 = flags2; 
+    connectors[id + sub].set( &machine, event );
+    connectors[id + sub].mode_flags2 = flags2;
   }
 }
 
 void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int fill, int broadcast, atm_cb_push_t callback, int idx ) {
-  if ( sub == -1 ) { // auto store
+  if ( sub == -1 ) {  // auto store
     sub = 0;
     for ( int i = 0; i < slots; i++ ) {
-      if ( connectors[id + i].mode() == 0 ) { // Find a free slot
+      if ( connectors[id + i].mode() == 0 ) {  // Find a free slot
         sub = i;
-      }        
-    }    
+      }
+    }
   }
   uint8_t flags2 = slots;
-  if ( broadcast ) flags2 |= B10000000;  
+  if ( broadcast ) flags2 |= B10000000;
   if ( slots > 1 && fill ) {
     for ( int i = 0; i < slots; i++ ) {
-      connectors[id + i].set( callback, idx );  
-      connectors[id + i].mode_flags2 = flags2; 
+      connectors[id + i].set( callback, idx );
+      connectors[id + i].mode_flags2 = flags2;
     }
   } else {
-    connectors[id + sub].set( callback, idx );  
-    connectors[id + sub].mode_flags2 = flags2; 
+    connectors[id + sub].set( callback, idx );
+    connectors[id + sub].mode_flags2 = flags2;
   }
 }
 
@@ -227,11 +226,9 @@ Machine& Machine::cycle( uint32_t time /* = 0 */ ) {
       if ( next != -1 ) {
         action( ATM_ON_SWITCH );
         if ( callback_trace ) {
-          callback_trace( stream_trace, *this, symbols, 
-            mapSymbol( current == -1 ? current : current + state_width - ATM_ON_EXIT, symbols ),
-            mapSymbol( next == -1 ? next : next + state_width - ATM_ON_EXIT, symbols ), 
-            mapSymbol( last_trigger == -1 ? -1 : last_trigger + 1, symbols ),
-            millis() - state_millis, cycles );
+          callback_trace( stream_trace, *this, symbols, mapSymbol( current == -1 ? current : current + state_width - ATM_ON_EXIT, symbols ),
+                          mapSymbol( next == -1 ? next : next + state_width - ATM_ON_EXIT, symbols ),
+                          mapSymbol( last_trigger == -1 ? -1 : last_trigger + 1, symbols ), millis() - state_millis, cycles );
         }
         if ( current > -1 ) action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
         current = next;

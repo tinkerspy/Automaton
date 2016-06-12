@@ -22,7 +22,7 @@ class Atm_player : public Machine {
   Atm_player& onNote( atm_cb_push_t callback, int idx = 0 );
   Atm_player& onNote( int sub, Machine& machine, int event = 0 );
   Atm_player& onNote( int sub, atm_cb_push_t callback, int idx = 0 );
-  
+
  private:
   int pin;
   int* pattern;
@@ -34,7 +34,7 @@ class Atm_player : public Machine {
   atm_timer_millis timer;
   atm_counter counter_repeat;
   enum { ENT_IDLE, ENT_START, ENT_SOUND, ENT_QUIET, ENT_NEXT, ENT_REPEAT, ENT_FINISH };  // ACTIONS
-  enum { ON_FINISH, ON_NOTE, CONN_MAX = 3 }; // CONNECTORS
+  enum { ON_FINISH, ON_NOTE, CONN_MAX = 3 };                                             // CONNECTORS
   atm_connector connectors[CONN_MAX];
   int event( int id );
   void action( int id );

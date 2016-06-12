@@ -23,7 +23,7 @@ class Machine {
   Machine& begin( const state_t tbl[], int width );
   const char* mapSymbol( int id, const char map[] );
   Machine& setTrace( Stream* stream, swcb_sym_t callback, const char symbols[] );
-  void onPush( atm_connector connectors[], int id, int sub, int slots, int fill, int broadcast, Machine &machine, int event );
+  void onPush( atm_connector connectors[], int id, int sub, int slots, int fill, int broadcast, Machine& machine, int event );
   void onPush( atm_connector connectors[], int id, int sub, int slots, int fill, int broadcast, atm_cb_push_t callback, int idx );
   void push( atm_connector connectors[], int id, int sub, int v, int up );
 
