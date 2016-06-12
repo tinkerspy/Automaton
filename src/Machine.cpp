@@ -166,8 +166,8 @@ void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, in
  */
 
 void Machine::push( atm_connector connectors[], int id, int sub, int v, int up ) {
-  if ( ( connectors[id + sub].mode_flags2 & B10000000 ) > 0 ) {
-    int slots = connectors[id + sub].mode_flags2 & ~B10000000;
+  if ( ( connectors[id].mode_flags2 & B10000000 ) > 0 ) {
+    int slots = connectors[id].mode_flags2 & ~B10000000;
     for ( int i = id; i < slots; i++ ) {
       connectors[id + i].push( v, up );
     }
