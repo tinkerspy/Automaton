@@ -24,7 +24,6 @@ Atm_fan& Atm_fan::begin() {
 int Atm_fan::event( int id ) {
   switch ( id ) {
     case EVT_INPUT:
-      push( connectors, ON_INPUT, 0, 1, 1 );
       return 0;
   }
   return 0;
@@ -37,6 +36,7 @@ int Atm_fan::event( int id ) {
 void Atm_fan::action( int id ) {
   switch ( id ) {
     case ENT_SEND:
+      push( connectors, ON_INPUT, 0, 1, 1 );
       return;
   }
 }
