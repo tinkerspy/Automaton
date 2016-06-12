@@ -2,8 +2,6 @@
 
 #include <Automaton.h>
 
-typedef void ( *atm_comparator_cb_t )( int idx, int v, int up, int idx_threshold, int v_threshold );
-
 class Atm_comparator : public Machine {
  public:
   enum { IDLE, SAMPLE, SEND };            // STATES
@@ -13,9 +11,9 @@ class Atm_comparator : public Machine {
   Atm_comparator& begin( int attached_pin, int sampleRate = 50 );
   Atm_comparator& threshold( uint16_t* v, uint16_t size, bool catchUp = false );
   Atm_comparator& average( uint16_t* v, uint16_t size );
-  Atm_comparator& onChange( atm_comparator_cb_t callback, int idx = 0 );
+  Atm_comparator& onChange( atm_cb_push_t callback, int idx = 0 );
   Atm_comparator& onChange( Machine& machine, int event = 0 );
-  Atm_comparator& onChange( bool status, atm_comparator_cb_t callback, int idx = 0 );
+  Atm_comparator& onChange( bool status, atm_cb_push_t callback, int idx = 0 );
   Atm_comparator& onChange( bool status, Machine& machine, int event = 0 );
   int state( void );
   virtual int read_sample();

@@ -76,7 +76,7 @@ int Atm_analog::avg() {
 
 int Atm_analog::sample() {
   int v = avg_buf_size > 0 ? avg() : read_sample();
-  if ( toHigh ) {
+  if ( toHigh || toLow ) {
     return map( v, 0, 1023, toLow, toHigh );
   } else {
     return v;
@@ -89,7 +89,7 @@ int Atm_analog::state( void ) {
 
 Atm_analog& Atm_analog::average( uint16_t* v, uint16_t size ) {
   avg_buf = v;
-  avg_buf_size = size;
+  avg_buf_size = size / sizeof( uint16_t );
   avg_buf_head = 0;
   avg_buf_total = 0;
   for ( uint16_t i = 0; i < avg_buf_size; i++ ) {

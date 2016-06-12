@@ -42,17 +42,13 @@ void Atm_comparator::action( int id ) {
       if ( v_sample >= v_previous ) {
         for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
           if ( ( bitmap_diff >> i ) & 1 ) {
-            if ( !onup.push( 0, 0, true ) ) {
-              ( *(atm_comparator_cb_t)onup.push_callback )( onup.callback_idx, v_sample, 1, i, p_threshold[i] );
-            }
+            onup.push( i, 1 );
           }
         }
       } else {
         for ( int i = p_threshold_size; i >= 0; i-- ) {
           if ( ( bitmap_diff >> i ) & 1 ) {
-            if ( !ondown.push( 0, 0, true ) ) {
-              ( *(atm_comparator_cb_t)ondown.push_callback )( onup.callback_idx, v_sample, 0, i, p_threshold[i] );
-            }
+            ondown.push( i, 0 );
           }
         }
       }
@@ -60,9 +56,9 @@ void Atm_comparator::action( int id ) {
   }
 }
 
-Atm_comparator& Atm_comparator::onChange( atm_comparator_cb_t callback, int idx /* = 0 */ ) {
-  onup.set( (atm_cb_push_t)callback, idx );
-  ondown.set( (atm_cb_push_t)callback, idx );
+Atm_comparator& Atm_comparator::onChange( atm_cb_push_t callback, int idx /* = 0 */ ) {
+  onup.set( callback, idx );
+  ondown.set( callback, idx );
   return *this;
 }
 
@@ -72,11 +68,11 @@ Atm_comparator& Atm_comparator::onChange( Machine& machine, int event /* = 0 */ 
   return *this;
 }
 
-Atm_comparator& Atm_comparator::onChange( bool status, atm_comparator_cb_t callback, int idx /* = 0 */ ) {
+Atm_comparator& Atm_comparator::onChange( bool status, atm_cb_push_t callback, int idx /* = 0 */ ) {
   if ( status ) {
-    onup.set( (atm_cb_push_t)callback, idx );
+    onup.set( callback, idx );
   } else {
-    ondown.set( (atm_cb_push_t)callback, idx );
+    ondown.set( callback, idx );
   }
   return *this;
 }
@@ -111,12 +107,12 @@ int Atm_comparator::sample() {
 }
 
 int Atm_comparator::state( void ) {
-  return sample();
+  return v_sample;
 }
 
 Atm_comparator& Atm_comparator::threshold( uint16_t* v, uint16_t size, bool catchUp /* = false */ ) {
   p_threshold = v;
-  p_threshold_size = size;
+  p_threshold_size = size / sizeof( uint16_t );
   if ( !catchUp ) {
     v_sample = sample();
     bitmap( v_sample );
@@ -128,7 +124,7 @@ Atm_comparator& Atm_comparator::threshold( uint16_t* v, uint16_t size, bool catc
 
 Atm_comparator& Atm_comparator::average( uint16_t* v, uint16_t size ) {
   avg_buf = v;
-  avg_buf_size = size;
+  avg_buf_size = size / sizeof( uint16_t );
   avg_buf_head = 0;
   avg_buf_total = 0;
   for ( uint16_t i = 0; i < avg_buf_size; i++ ) {

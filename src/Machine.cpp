@@ -5,6 +5,7 @@
 
 #include "Automaton.h"
 
+
 /* The Machine class is a base class for creating and running State Machines
  *
  *********************************************************************************************
@@ -13,7 +14,7 @@
  *
  * (may be overridden by a subclass in which case it may return something else, like a value )
  */
-
+ 
 int Machine::state() {
   return current;
 }
@@ -92,8 +93,88 @@ Machine& Machine::begin( const state_t* tbl, int width, atm_connector connectors
   state_width = ATM_ON_EXIT + width + 2;
   flags &= ~ATM_SLEEP_FLAG;
   automaton.add( *this, false );
-  current = 0;
+  current = -1;
   return *this;
+}
+
+/*
+ * Machine::onPush( connectors, id, sub, slots, multi, broadcasts, dest, arg ) - Registers a connector destination
+ *
+ * connectors Connector table
+ * id         Connector id
+ * sub        Connector sub id (for multi-slot connectors)
+ * slots      Number of slots reserved for this connector
+ * multi      Register multiple (all) slots in one call
+ * broadcast  Broadcast connector, replicate actions over all connectors
+ * dest       Destination: Machine object or callback
+ * arg        Argument for machine (event) or callback (idx)
+ *
+ */
+
+void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int fill, int broadcast, Machine &machine, int event ) {
+  if ( sub == -1 ) { // auto store
+    sub = 0;
+    for ( int i = 0; i < slots; i++ ) {
+      if ( connectors[id + i].mode() == 0 ) { // Find a free slot
+        sub = i;
+      }        
+    }    
+  }
+  uint8_t flags2 = slots;
+  if ( broadcast ) flags2 |= B10000000;  
+  if ( slots > 1 && fill ) {
+    for ( int i = 0; i < slots; i++ ) {
+      connectors[id + i].set( &machine, event );  
+      connectors[id + i].mode_flags2 = flags2; 
+    }
+  } else {
+    connectors[id + sub].set( &machine, event );  
+    connectors[id + sub].mode_flags2 = flags2; 
+  }
+}
+
+void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int fill, int broadcast, atm_cb_push_t callback, int idx ) {
+  if ( sub == -1 ) { // auto store
+    sub = 0;
+    for ( int i = 0; i < slots; i++ ) {
+      if ( connectors[id + i].mode() == 0 ) { // Find a free slot
+        sub = i;
+      }        
+    }    
+  }
+  uint8_t flags2 = slots;
+  if ( broadcast ) flags2 |= B10000000;  
+  if ( slots > 1 && fill ) {
+    for ( int i = 0; i < slots; i++ ) {
+      connectors[id + i].set( callback, idx );  
+      connectors[id + i].mode_flags2 = flags2; 
+    }
+  } else {
+    connectors[id + sub].set( callback, idx );  
+    connectors[id + sub].mode_flags2 = flags2; 
+  }
+}
+
+/*
+ * Machine::push( connectors, id, sub, v, up ) - Pushes an action through the specified connector
+ *
+ * connectors Connector table
+ * id         Connector id
+ * sub        Connector sub id (for multi-slot connectors)
+ * v          Value to pass to a callback as 'v'
+ * up         Value to pass to a callback as 'up'
+ *
+ */
+
+void Machine::push( atm_connector connectors[], int id, int sub, int v, int up ) {
+  if ( ( connectors[id + sub].mode_flags2 & B10000000 ) > 0 ) {
+    int slots = connectors[id + sub].mode_flags2 & ~B10000000;
+    for ( int i = id; i < slots; i++ ) {
+      connectors[id + i].push( v, up );
+    }
+  } else {
+    connectors[id + sub].push( v, up );
+  }
 }
 
 /*
@@ -147,9 +228,11 @@ Machine& Machine::cycle( uint32_t time /* = 0 */ ) {
       if ( next != -1 ) {
         action( ATM_ON_SWITCH );
         if ( callback_trace ) {
-          callback_trace( stream_trace, *this, symbols, mapSymbol( current == -1 ? current : current + state_width - ATM_ON_EXIT, symbols ),
-                          mapSymbol( next == -1 ? next : next + state_width - ATM_ON_EXIT, symbols ), mapSymbol( last_trigger + 1, symbols ),
-                          millis() - state_millis, cycles );
+          callback_trace( stream_trace, *this, symbols, 
+            mapSymbol( current == -1 ? current : current + state_width - ATM_ON_EXIT, symbols ),
+            mapSymbol( next == -1 ? next : next + state_width - ATM_ON_EXIT, symbols ), 
+            mapSymbol( last_trigger == -1 ? -1 : last_trigger + 1, symbols ),
+            millis() - state_millis, cycles );
         }
         if ( current > -1 ) action( read_state( state_table + ( current * state_width ) + ATM_ON_EXIT ) );
         current = next;

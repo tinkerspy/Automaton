@@ -11,7 +11,11 @@ class atm_connector {
   enum { LOG_AND, LOG_OR, LOG_XOR };                                     // bits 3, 4    - Logical operator
   enum { REL_NULL, REL_EQ, REL_NEQ, REL_LT, REL_GT, REL_LTE, REL_GTE };  // bits 5, 6, 7 - Relational operator
   uint8_t mode_flags;
+<<<<<<< HEAD
   uint8_t extend = 1;
+=======
+  uint8_t mode_flags2; // Broadcast, autostore & slots
+>>>>>>> 89d27a3101ffa24769e02d1ae95befec1c0dc586
   union {
     struct {
       union {

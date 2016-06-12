@@ -11,18 +11,18 @@ class Atm_player : public Machine {
   Atm_player& trace( Stream& stream );
   Atm_player& trigger( int event );
   int state( void );
-  Atm_player& onNote( atm_cb_push_t callback, int idx = 0 );
-  Atm_player& onNote( Machine& machine, int event = 0 );
-  Atm_player& onNote( bool status, atm_cb_push_t callback, int idx = 0 );
-  Atm_player& onNote( bool status, Machine& machine, int event = 0 );
-  Atm_player& onFinish( atm_cb_push_t callback, int idx = 0 );
-  Atm_player& onFinish( Machine& machine, int event = 0 );
   Atm_player& play( int* pat, int size );
   Atm_player& play( int freq, int period, int pause = 0 );
   Atm_player& repeat( uint16_t v );
   Atm_player& speed( float v );
   Atm_player& pitch( float v );
-
+  Atm_player& onFinish( Machine& machine, int event = 0 );
+  Atm_player& onFinish( atm_cb_push_t callback, int idx = 0 );
+  Atm_player& onNote( Machine& machine, int event = 0 );
+  Atm_player& onNote( atm_cb_push_t callback, int idx = 0 );
+  Atm_player& onNote( int sub, Machine& machine, int event = 0 );
+  Atm_player& onNote( int sub, atm_cb_push_t callback, int idx = 0 );
+  
  private:
   int pin;
   int* pattern;
@@ -33,14 +33,15 @@ class Atm_player : public Machine {
   int stub[3];
   atm_timer_millis timer;
   atm_counter counter_repeat;
-  atm_connector onnote[2], onfinish;
   enum { ENT_IDLE, ENT_START, ENT_SOUND, ENT_QUIET, ENT_NEXT, ENT_REPEAT, ENT_FINISH };  // ACTIONS
+  enum { ON_FINISH, ON_NOTE, CONN_MAX = 3 }; // CONNECTORS
+  atm_connector connectors[CONN_MAX];
   int event( int id );
   void action( int id );
 };
 
 /*
-Automaton::SMDL::begin - State Machine Definition Language
+Automaton::ATML::begin - Automaton Markup Language
 
 <?xml version="1.0" encoding="UTF-8"?>
 <machines>
@@ -89,11 +90,13 @@ Automaton::SMDL::begin - State Machine Definition Language
       <EVT_REPEAT index="5"/>
     </events>
     <connectors>
+      <FINISH autostore="0" broadcast="0" dir="PUSH" slots="1"/>
+      <NOTE autostore="0" broadcast="0" dir="PUSH" slots="2"/>
     </connectors>
     <methods>
     </methods>
   </machine>
 </machines>
 
-Automaton::SMDL::end
+Automaton::ATML::end
 */
