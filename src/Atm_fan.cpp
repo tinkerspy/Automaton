@@ -64,7 +64,7 @@ int Atm_fan::state( void ) {
 
 /* onInput() push connector variants ( slots 4, autostore 1, broadcast 1 )
  *
- * Usage in action() handler: push( connectors, ON_INPUT, -1, v, up );
+ * Usage in action() handler: push( connectors, ON_INPUT, 0, v, up );
  */
 
 Atm_fan& Atm_fan::onInput( Machine& machine, int event ) {
