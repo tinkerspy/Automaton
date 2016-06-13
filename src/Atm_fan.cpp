@@ -14,10 +14,10 @@ Atm_fan& Atm_fan::begin() {
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
-  return *this;          
+  return *this;
 }
 
-/* Add C++ code for each internally handled event (input) 
+/* Add C++ code for each internally handled event (input)
  * The code must return 1 to trigger the event
  */
 
@@ -58,7 +58,7 @@ int Atm_fan::state( void ) {
   return Machine::state();
 }
 
-/* Nothing customizable below this line                          
+/* Nothing customizable below this line
  ************************************************************************************************
 */
 
@@ -81,10 +81,7 @@ Atm_fan& Atm_fan::onInput( atm_cb_push_t callback, int idx ) {
  * Sets the symbol table and the default logging method for serial monitoring
  */
 
-Atm_fan& Atm_fan::trace( Stream & stream ) {
-  Machine::setTrace( &stream, atm_serial_debug::trace,
-    "FAN\0EVT_INPUT\0ELSE\0IDLE\0SEND" );
+Atm_fan& Atm_fan::trace( Stream& stream ) {
+  Machine::setTrace( &stream, atm_serial_debug::trace, "FAN\0EVT_INPUT\0ELSE\0IDLE\0SEND" );
   return *this;
 }
-
-

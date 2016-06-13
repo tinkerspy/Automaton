@@ -2,26 +2,24 @@
 
 #include <Automaton.h>
 
-class Atm_fan: public Machine {
-
+class Atm_fan : public Machine {
  public:
-  enum { IDLE, SEND }; // STATES
-  enum { EVT_INPUT, ELSE }; // EVENTS
-  Atm_fan( void ) : Machine() {};
+  enum { IDLE, SEND };       // STATES
+  enum { EVT_INPUT, ELSE };  // EVENTS
+  Atm_fan( void ) : Machine(){};
   Atm_fan& begin( void );
-  Atm_fan& trace( Stream & stream );
+  Atm_fan& trace( Stream& stream );
   Atm_fan& trigger( int event );
   int state( void );
   Atm_fan& onInput( Machine& machine, int event = 0 );
   Atm_fan& onInput( atm_cb_push_t callback, int idx = 0 );
 
  private:
-  enum { ENT_SEND }; // ACTIONS
-  enum { ON_INPUT, CONN_MAX = 4 }; // CONNECTORS
+  enum { ENT_SEND };                // ACTIONS
+  enum { ON_INPUT, CONN_MAX = 4 };  // CONNECTORS
   atm_connector connectors[CONN_MAX];
-  int event( int id ); 
-  void action( int id ); 
-
+  int event( int id );
+  void action( int id );
 };
 
 /*
@@ -51,4 +49,3 @@ Automaton::ATML::begin - Automaton Markup Language
 
 Automaton::ATML::end
 */
-
