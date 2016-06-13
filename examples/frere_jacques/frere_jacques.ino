@@ -8,14 +8,14 @@ Atm_button button;
 Atm_analog speed;
 
 int pattern[] = { 
-  G4, N04, 0,  A4, N04, 0,  B4, N04, 0,  G4, N04, 0, // Frere Jacques
-  G4, N04, 0,  A4, N04, 0,  B4, N04, 0,  G4, N04, 0, 
-  B4, N04, 0,  C5, N04, 0,  D5, N04, N04, // Dormez vous?
-  B4, N04, 0,  C5, N04, 0,  D5, N04, N04, 
-  D5, N08, 0, E5, N08, 0, D5, N08, 0, C5, N08, 0,  B4, N04, 0, G4, N04, 0, // Sonnez les matines 
-  D5, N08, 0, E5, N08, 0, D5, N08, 0, C5, N08, 0,  B4, N04, 0, G4, N04, 0, 
-  G4, N04, 0, D4, N04, 0, G4, N04, N04, // Ding dang dong
-  G4, N04, 0, D4, N04, 0, G4, N04, N04,
+  _G4, _N04, 0, _A4, _N04, 0, _B4, _N04, 0, _G4, _N04, 0, // Frere Jacques
+  _G4, _N04, 0, _A4, _N04, 0, _B4, _N04, 0, _G4, _N04, 0, 
+  _B4, _N04, 0, _C5, _N04, 0, _D5, _N04, _N04, // Dormez vous?
+  _B4, _N04, 0, _C5, _N04, 0, _D5, _N04, _N04, 
+  _D5, _N08, 0, _E5, _N08, 0, _D5, _N08, 0, _C5, _N08, 0, _B4, _N04, 0, _G4, _N04, 0, // Sonnez les matines 
+  _D5, _N08, 0, _E5, _N08, 0, _D5, _N08, 0, _C5, _N08, 0, _B4, _N04, 0, _G4, _N04, 0, 
+  _G4, _N04, 0, _D4, _N04, 0, _G4, _N04, _N04, // Ding dang dong
+  _G4, _N04, 0, _D4, _N04, 0, _G4, _N04, _N04,
 };
 
 void setup() {
