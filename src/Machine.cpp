@@ -96,20 +96,19 @@ Machine& Machine::begin( const state_t* tbl, int width ) {
 }
 
 /*
- * Machine::onPush( connectors, id, sub, slots, multi, broadcasts, dest, arg ) - Registers a connector destination
+ * Machine::onPush( connectors, id, sub, slots, multi, dest, arg ) - Registers a connector destination
  *
  * connectors Connector table
  * id         Connector id
  * sub        Connector sub id (for multi-slot connectors)
  * slots      Number of slots reserved for this connector
  * multi      Register multiple (all) slots in one call
- * broadcast  Broadcast connector, replicate actions over all connectors
  * dest       Destination: Machine object or callback
  * arg        Argument for machine (event) or callback (idx)
  *
  */
 
-void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int fill, int broadcast, Machine& machine, int event ) {
+void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int fill, Machine& machine, int event ) {
   if ( sub == -1 ) {  // auto store
     sub = 0;
     for ( int i = 0; i < slots; i++ ) {
@@ -127,7 +126,7 @@ void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, in
   }
 }
 
-void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int fill, int broadcast, atm_cb_push_t callback, int idx ) {
+void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int fill, atm_cb_push_t callback, int idx ) {
   if ( sub == -1 ) {  // auto store
     sub = 0;
     for ( int i = 0; i < slots; i++ ) {

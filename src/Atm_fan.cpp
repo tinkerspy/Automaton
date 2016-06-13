@@ -68,12 +68,12 @@ int Atm_fan::state( void ) {
  */
 
 Atm_fan& Atm_fan::onInput( Machine& machine, int event ) {
-  onPush( connectors, ON_INPUT, -1, 4, 0, 1, machine, event );
+  onPush( connectors, ON_INPUT, -1, 4, 0, machine, event );
   return *this;
 }
 
 Atm_fan& Atm_fan::onInput( atm_cb_push_t callback, int idx ) {
-  onPush( connectors, ON_INPUT, -1, 4, 0, 1, callback, idx );
+  onPush( connectors, ON_INPUT, -1, 4, 0, callback, idx );
   return *this;
 }
 
