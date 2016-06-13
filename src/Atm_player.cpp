@@ -147,11 +147,11 @@ int Atm_player::state( void ) {
  */
 
 Atm_player& Atm_player::onFinish( Machine& machine, int event ) {
-  onPush( connectors, ON_FINISH, 0, 1, 1, 0, machine, event );
+  onPush( connectors, ON_FINISH, 0, 1, 1, machine, event );
   return *this;
 }
 Atm_player& Atm_player::onFinish( atm_cb_push_t callback, int idx ) {
-  onPush( connectors, ON_FINISH, 0, 1, 1, 0, callback, idx );
+  onPush( connectors, ON_FINISH, 0, 1, 1, callback, idx );
   return *this;
 }
 
@@ -161,19 +161,19 @@ Atm_player& Atm_player::onFinish( atm_cb_push_t callback, int idx ) {
  */
 
 Atm_player& Atm_player::onNote( Machine& machine, int event ) {
-  onPush( connectors, ON_NOTE, 0, 2, 1, 0, machine, event );
+  onPush( connectors, ON_NOTE, 0, 2, 1, machine, event );
   return *this;
 }
 Atm_player& Atm_player::onNote( atm_cb_push_t callback, int idx ) {
-  onPush( connectors, ON_NOTE, 0, 2, 1, 0, callback, idx );
+  onPush( connectors, ON_NOTE, 0, 2, 1, callback, idx );
   return *this;
 }
 Atm_player& Atm_player::onNote( int sub, Machine& machine, int event ) {
-  onPush( connectors, ON_NOTE, sub, 2, 0, 0, machine, event );
+  onPush( connectors, ON_NOTE, sub, 2, 0, machine, event );
   return *this;
 }
 Atm_player& Atm_player::onNote( int sub, atm_cb_push_t callback, int idx ) {
-  onPush( connectors, ON_NOTE, sub, 2, 0, 0, callback, idx );
+  onPush( connectors, ON_NOTE, sub, 2, 0, callback, idx );
   return *this;
 }
 
