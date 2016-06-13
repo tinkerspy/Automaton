@@ -118,16 +118,12 @@ void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, in
       }
     }
   }
-  uint8_t flags2 = slots;
-  if ( broadcast ) flags2 |= B10000000;
   if ( slots > 1 && fill ) {
     for ( int i = 0; i < slots; i++ ) {
       connectors[id + i].set( &machine, event );
-      connectors[id + i].mode_flags2 = flags2;
     }
   } else {
     connectors[id + sub].set( &machine, event );
-    connectors[id + sub].mode_flags2 = flags2;
   }
 }
 
@@ -140,16 +136,12 @@ void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, in
       }
     }
   }
-  uint8_t flags2 = slots;
-  if ( broadcast ) flags2 |= B10000000;
   if ( slots > 1 && fill ) {
     for ( int i = 0; i < slots; i++ ) {
       connectors[id + i].set( callback, idx );
-      connectors[id + i].mode_flags2 = flags2;
     }
   } else {
     connectors[id + sub].set( callback, idx );
-    connectors[id + sub].mode_flags2 = flags2;
   }
 }
 
@@ -165,9 +157,9 @@ void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, in
  */
 
 void Machine::push( atm_connector connectors[], int id, int sub, int v, int up ) {
-  if ( ( connectors[id].mode_flags2 & B10000000 ) > 0 ) {
-    int slots = connectors[id].mode_flags2 & ~B10000000;
-    for ( int i = id; i < slots; i++ ) {
+  if ( ( id & ATM_BROADCAST ) > 0 ) {
+    id = id & ~ATM_BROADCAST;
+    for ( int i = id; i < sub; i++ ) {
       connectors[id + i].push( v, up );
     }
   } else {

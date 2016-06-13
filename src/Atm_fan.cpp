@@ -36,7 +36,7 @@ int Atm_fan::event( int id ) {
 void Atm_fan::action( int id ) {
   switch ( id ) {
     case ENT_SEND:
-      push( connectors, ON_INPUT, 0, 1, 1 );
+      push( connectors, ON_INPUT | ATM_BROADCAST, 4, 1, 1 );
       return;
   }
 }
@@ -64,7 +64,7 @@ int Atm_fan::state( void ) {
 
 /* onInput() push connector variants ( slots 4, autostore 1, broadcast 1 )
  *
- * Usage in action() handler: push( connectors, ON_INPUT, 0, v, up );
+ * Usage in action() handler: push( connectors, ON_INPUT | ATM_BROADCAST, 4, v, up );
  */
 
 Atm_fan& Atm_fan::onInput( Machine& machine, int event ) {
