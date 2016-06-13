@@ -21,13 +21,13 @@ Atm_servo& Atm_servo::begin( int pin, int pos ) {
   servo.attach( pin );
   servo_pos = pos;
   servo_dest = pos;
-  step_size = 180; 
+  step_size = 180;
   timer.set( step_time = 0 );
   servo.write( servo_dest );
-  return *this;          
+  return *this;
 }
 
-/* Add C++ code for each internally handled event (input) 
+/* Add C++ code for each internally handled event (input)
  * The code must return 1 to trigger the event
  */
 
@@ -91,14 +91,14 @@ int Atm_servo::position( void ) {
  */
 
 Atm_servo& Atm_servo::trigger( int event ) {
-  switch( event ) {
+  switch ( event ) {
     case EVT_UP:
       servo_dest += step_size;
-      if ( servo_dest > 180 ) servo_dest = 180;      
+      if ( servo_dest > 180 ) servo_dest = 180;
       return *this;
     case EVT_DOWN:
       servo_dest -= step_size;
-      if ( servo_dest < 0 ) servo_dest = 0;      
+      if ( servo_dest < 0 ) servo_dest = 0;
       return *this;
   }
   Machine::trigger( event );
@@ -113,7 +113,7 @@ int Atm_servo::state( void ) {
   return Machine::state();
 }
 
-/* Nothing customizable below this line                          
+/* Nothing customizable below this line
  ************************************************************************************************
 */
 
@@ -122,28 +122,42 @@ int Atm_servo::state( void ) {
  * Usage in action() handler: push( connectors, ON_CHANGE, sub, v, up );
  */
 
-Atm_servo& Atm_servo::onChange( Machine& machine, int event ) { onPush( connectors, ON_CHANGE, 0, 2, 1, machine, event ); return *this; }
-Atm_servo& Atm_servo::onChange( atm_cb_push_t callback, int idx ) { onPush( connectors, ON_CHANGE, 0, 2, 1, callback, idx ); return *this; }
-Atm_servo& Atm_servo::onChange( int sub, Machine& machine, int event ) { onPush( connectors, ON_CHANGE, sub, 2, 0, machine, event ); return *this; }
-Atm_servo& Atm_servo::onChange( int sub, atm_cb_push_t callback, int idx ) { onPush( connectors, ON_CHANGE, sub, 2, 0, callback, idx ); return *this; }
+Atm_servo& Atm_servo::onChange( Machine& machine, int event ) {
+  onPush( connectors, ON_CHANGE, 0, 2, 1, machine, event );
+  return *this;
+}
+Atm_servo& Atm_servo::onChange( atm_cb_push_t callback, int idx ) {
+  onPush( connectors, ON_CHANGE, 0, 2, 1, callback, idx );
+  return *this;
+}
+Atm_servo& Atm_servo::onChange( int sub, Machine& machine, int event ) {
+  onPush( connectors, ON_CHANGE, sub, 2, 0, machine, event );
+  return *this;
+}
+Atm_servo& Atm_servo::onChange( int sub, atm_cb_push_t callback, int idx ) {
+  onPush( connectors, ON_CHANGE, sub, 2, 0, callback, idx );
+  return *this;
+}
 
 /* onFinish() push connector variants ( slots 1, autostore 0, broadcast 0 )
  *
  * Usage in action() handler: push( connectors, ON_FINISH, 0, v, up );
  */
 
-Atm_servo& Atm_servo::onFinish( Machine& machine, int event ) { onPush( connectors, ON_FINISH, 0, 1, 1, machine, event ); return *this; }
-Atm_servo& Atm_servo::onFinish( atm_cb_push_t callback, int idx ) { onPush( connectors, ON_FINISH, 0, 1, 1, callback, idx ); return *this; }
+Atm_servo& Atm_servo::onFinish( Machine& machine, int event ) {
+  onPush( connectors, ON_FINISH, 0, 1, 1, machine, event );
+  return *this;
+}
+Atm_servo& Atm_servo::onFinish( atm_cb_push_t callback, int idx ) {
+  onPush( connectors, ON_FINISH, 0, 1, 1, callback, idx );
+  return *this;
+}
 
 /* State trace method
  * Sets the symbol table and the default logging method for serial monitoring
  */
 
-Atm_servo& Atm_servo::trace( Stream & stream ) {
-  Machine::setTrace( &stream, atm_serial_debug::trace,
-    "SERVO\0EVT_UP\0EVT_DOWN\0EVT_TIMER\0ELSE\0IDLE\0UP\0UP_NEXT\0DOWN\0DOWN_NEXT\0FINISHED" );
+Atm_servo& Atm_servo::trace( Stream& stream ) {
+  Machine::setTrace( &stream, atm_serial_debug::trace, "SERVO\0EVT_UP\0EVT_DOWN\0EVT_TIMER\0ELSE\0IDLE\0UP\0UP_NEXT\0DOWN\0DOWN_NEXT\0FINISHED" );
   return *this;
 }
-
-
-

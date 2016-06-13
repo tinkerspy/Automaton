@@ -18,7 +18,6 @@ const uint8_t ATM_USR4_FLAG = B10000000;
 const uint8_t ATM_USR_FLAGS = B11110000;
 const uint8_t ATM_BROADCAST = B10000000;
 
-
 #define read_state( addr ) ( state_t ) pgm_read_byte_near( addr )
 
 class Machine;
