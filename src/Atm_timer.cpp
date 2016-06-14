@@ -102,6 +102,16 @@ Atm_timer& Atm_timer::repeat( uint16_t v ) {
   return *this;
 }
 
+Atm_timer& Atm_timer::start() {
+  trigger( EVT_START );
+  return *this;
+}
+
+Atm_timer& Atm_timer::stop() {
+  trigger( EVT_START );
+  return *this;
+}
+
 Atm_timer& Atm_timer::trace( Stream& stream ) {
   setTrace( &stream, atm_serial_debug::trace,
             "TIMER\0EVT_DAYCNT\0EVT_DAYTIMER\0EVT_MSTIMER\0EVT_REPCNT\0EVT_OFF\0EVT_START\0EVT_TOGGLE\0"

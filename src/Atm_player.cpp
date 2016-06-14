@@ -98,6 +98,16 @@ Atm_player& Atm_player::pitch( float v ) {
   return *this;
 }
 
+Atm_player& Atm_player::start() {
+  trigger( EVT_START );
+  return *this;
+}
+
+Atm_player& Atm_player::stop() {
+  trigger( EVT_STOP );
+  return *this;
+}
+
 /* Sets the pattern and pattern length (in bytes)
  *
  */

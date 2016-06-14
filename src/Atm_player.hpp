@@ -16,6 +16,8 @@ class Atm_player : public Machine {
   Atm_player& repeat( uint16_t v );
   Atm_player& speed( float v );
   Atm_player& pitch( float v );
+  Atm_player& start();
+  Atm_player& stop();
   Atm_player& onFinish( Machine& machine, int event = 0 );
   Atm_player& onFinish( atm_cb_push_t callback, int idx = 0 );
   Atm_player& onNote( Machine& machine, int event = 0 );
