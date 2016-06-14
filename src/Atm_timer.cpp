@@ -102,12 +102,12 @@ Atm_timer& Atm_timer::repeat( uint16_t v ) {
   return *this;
 }
 
-Atm_timer& Atm_timer::start() {
+Atm_timer& Atm_timer::start( void ) {
   trigger( EVT_START );
   return *this;
 }
 
-Atm_timer& Atm_timer::stop() {
+Atm_timer& Atm_timer::stop( void ) {
   trigger( EVT_START );
   return *this;
 }
