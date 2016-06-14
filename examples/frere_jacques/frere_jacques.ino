@@ -27,7 +27,7 @@ void setup() {
     .onPress( player, player.EVT_TOGGLE );
 
   speed.begin( A0 ) // An analog pot on pin A0 controls playback speed
-    .range( 50, 300 )
+    .range( 50, 300 ) // From 50% to 300% of original speed
     .onChange( []( int idx, int v, int up ) {
       player.speed( v );    
     });
