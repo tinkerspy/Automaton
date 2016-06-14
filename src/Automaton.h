@@ -44,7 +44,8 @@ const uint16_t ATM_COUNTER_OFF = 0xffff;    // This counter value never expires
 class Automaton {
  public:
   Automaton& add( Machine& machine, bool force = true );
-  Automaton& run( uint32_t time = 0 );
+  Automaton& delay( uint32_t time );
+  Automaton& run( void );
 
  private:
   Machine* inventory_root;

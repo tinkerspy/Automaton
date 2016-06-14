@@ -25,25 +25,27 @@ Automaton& Automaton::add( Machine& machine, bool force /* = true */ ) {
 }
 
 /*
- * Automaton::run( time ) - Runs the appliance
+ * Automaton::run() - Runs the appliance
  *
- * If the 'time' argument is given, loops until that time has passed
- * otherwise executes only one cycle of each machine and exits
+ * executes one cycle of each machine and exits
  *
  */
 
-Automaton& Automaton::run( uint32_t time /* = 0 */ )  // Is it safe to allow recursion here???
-{
+Automaton& Automaton::run( void ) {
   Machine* m;
+  m = inventory_root;
+  while ( m ) {
+    if ( ( m->flags & ( ATM_SLEEP_FLAG | ATM_CYCLE_FLAG ) ) == 0 ) m->cycle();
+    // Move to the next machine
+    m = m->inventory_next;
+  }
+  return *this;
+}
+
+Automaton& Automaton::delay( uint32_t time )  { 
   uint32_t cycle_start = millis();
   do {
-    m = inventory_root;
-    while ( m ) {
-      if ( ( m->flags & ( ATM_SLEEP_FLAG | ATM_CYCLE_FLAG ) ) == 0 ) m->cycle();
-      // Move to the next machine
-      m = m->inventory_next;
-      // if ( time > 0 && ( millis() - cycle_start ) < time ) break;
-    }
+      run();
   } while ( millis() - cycle_start < time );
   return *this;
 }
@@ -54,7 +56,7 @@ Appliance& Appliance::component( Machine& machine ) {
 }
 
 Appliance& Appliance::run( uint32_t time /* = 0 */ ) {
-  Automaton::run( time );
+  Automaton::delay( time );
   return *this;
 }
 
@@ -64,6 +66,6 @@ Factory& Factory::add( Machine& machine ) {
 }
 
 Factory& Factory::cycle( uint32_t time /* = 0 */ ) {
-  Automaton::run( time );
+  Automaton::delay( time );
   return *this;
 }
