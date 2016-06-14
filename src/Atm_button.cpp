@@ -63,9 +63,6 @@ void Atm_button::action( int id ) {
     case ENT_RELEASE:
     case EXT_WRELEASE:
       onrelease.push( 0 );
-      if ( onpress.mode() == onpress.MODE_PUSHCB ) {
-        onpress.push( 0 );
-      }
       return;
     case ENT_LSTART:
       counter_longpress.set( longpress_max );
