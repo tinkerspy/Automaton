@@ -15,7 +15,12 @@ class Atm_fade : public Machine {
   Atm_fade& pause( uint32_t duration );
   Atm_fade& fade( int fade );
   Atm_fade& repeat( uint16_t repeat );
-
+  Atm_fade& on( void );
+  Atm_fade& off( void );
+  Atm_fade& toggle( void );
+  Atm_fade& toggleBlink( void );
+  Atm_fade& start( void );
+  
  private:
   enum { ENT_REPEAT, ENT_OFF, ENT_ON, ENT_UP, ENT_DOWN, ENT_START };
   static const uint8_t SLOPE_SIZE = 32;

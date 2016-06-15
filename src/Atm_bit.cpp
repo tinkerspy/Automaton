@@ -35,6 +35,26 @@ void Atm_bit::action( int id ) {
   }
 }
 
+Atm_bit& Atm_bit::on( void ) {
+  trigger( EVT_ON );
+  return *this;
+}
+
+Atm_bit& Atm_bit::off( void ) {
+  trigger( EVT_OFF );
+  return *this;
+}
+
+Atm_bit& Atm_bit::toggle( void ) {
+  trigger( EVT_TOGGLE );
+  return *this;
+}
+
+Atm_bit& Atm_bit::input( void ) {
+  trigger( EVT_INPUT );
+  return *this;
+}
+
 Atm_bit& Atm_bit::led( int led, bool activeLow /* = false */ ) {
   indicator = led;
   indicatorActiveLow = activeLow;

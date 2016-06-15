@@ -18,8 +18,8 @@ class Atm_timer : public Machine {
   Atm_timer& interval_millis( uint32_t v );
   Atm_timer& interval( uint32_t v );
   Atm_timer& repeat( uint16_t v );
-  Atm_timer& start();
-  Atm_timer& stop();
+  Atm_timer& start( void );
+  Atm_timer& stop( void );
 
  private:
   enum { ENT_START, ENT_TRIGGER, EXT_WAITD, ENT_FINISH };

@@ -98,13 +98,18 @@ Atm_player& Atm_player::pitch( float v ) {
   return *this;
 }
 
-Atm_player& Atm_player::start() {
+Atm_player& Atm_player::start( void ) {
   trigger( EVT_START );
   return *this;
 }
 
-Atm_player& Atm_player::stop() {
+Atm_player& Atm_player::stop( void ) {
   trigger( EVT_STOP );
+  return *this;
+}
+
+Atm_player& Atm_player::toggle( void ) {
+  trigger( EVT_TOGGLE );
   return *this;
 }
 
