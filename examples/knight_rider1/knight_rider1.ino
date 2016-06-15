@@ -38,7 +38,7 @@ void setup() {
       
   // Move last led from step 5 to step 7 to make sweep work properly!
   step.onStep( 5 ).onStep( 9, led[5], event );
-  timer.trigger( timer.EVT_START );
+  timer.start();
 }
 
 void loop() {

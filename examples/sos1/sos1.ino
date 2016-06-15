@@ -15,7 +15,7 @@ void setup() {
 
 void loop() {
   // Set the led to blink 3 times and trigger it
-  led.blink( dotTime, waitTime, 3 ).trigger( Atm_led::EVT_BLINK );
+  led.blink( dotTime, waitTime, 3 ).start();
   
   // Loop until the blinking has finished
   while ( led.cycle().state() ); 
@@ -23,11 +23,11 @@ void loop() {
   // Cycle idly for a while
   led.cycle( longwaitTime );
        
-  led.blink( dashTime, waitTime, 3 ).trigger( Atm_led::EVT_BLINK );
+  led.blink( dashTime, waitTime, 3 ).start();
   while ( led.cycle().state() );
   led.cycle( longwaitTime );  
    
-  led.blink( dotTime, waitTime, 3 ).trigger( Atm_led::EVT_BLINK );
+  led.blink( dotTime, waitTime, 3 ).start();
   while ( led.cycle().state() );
   led.cycle( longerwaitTime );   
 }

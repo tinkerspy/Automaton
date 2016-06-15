@@ -30,7 +30,7 @@ void setup() {
   timer[2].begin( longerwaitTime )
     .onTimer( led[0], Atm_led::EVT_BLINK );    
 
-  led[0].trigger( Atm_led::EVT_BLINK );
+  led[0].start();
 }
 
 void loop() {

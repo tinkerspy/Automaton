@@ -30,7 +30,7 @@ void setup() {
   stepTimer.onTimer( step, Atm_step::EVT_STEP );  
   
   // Start the timer
-  stepTimer.trigger( Atm_timer::EVT_START );
+  stepTimer.start();
 }
 
 void loop() {

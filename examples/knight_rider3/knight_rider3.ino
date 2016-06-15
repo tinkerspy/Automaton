@@ -28,7 +28,7 @@ void setup() {
       }    
     })
     .repeat( -1 ) // Repeat forever
-    .trigger( player.EVT_START ); // Kickoff!
+    .start(); // Kickoff!
 }
 
 void loop() {
