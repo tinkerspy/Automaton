@@ -95,6 +95,31 @@ void Atm_fade::action( int id ) {
   }
 }
 
+Atm_fade& Atm_fade::on( void ) {
+  trigger( EVT_ON );  
+  return *this;
+}
+
+Atm_fade& Atm_fade::off( void ) {
+  trigger( EVT_OFF );  
+  return *this;
+}
+
+Atm_fade& Atm_fade::toggle( void ) {
+  trigger( EVT_TOGGLE );  
+  return *this;
+}
+
+Atm_fade& Atm_fade::toggleBlink( void ) {
+  trigger( EVT_TOGGLE_BLINK );  
+  return *this;
+}
+
+Atm_fade& Atm_fade::start( void ) {
+  trigger( EVT_BLINK );  
+  return *this;
+}
+
 Atm_fade& Atm_fade::trace( Stream& stream ) {
 #ifndef TINYMachine
   setTrace( &stream, atm_serial_debug::trace,

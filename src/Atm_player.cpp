@@ -108,6 +108,11 @@ Atm_player& Atm_player::stop( void ) {
   return *this;
 }
 
+Atm_player& Atm_player::toggle( void ) {
+  trigger( EVT_TOGGLE );
+  return *this;
+}
+
 /* Sets the pattern and pattern length (in bytes)
  *
  */
