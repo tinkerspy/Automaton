@@ -16,6 +16,10 @@ class Atm_bit : public Machine {
   Atm_bit& onInput( bool status, atm_cb_push_t callback, int idx = 0 );
   Atm_bit& onInput( bool status, Machine& machine, int event = 0 );
   Atm_bit& led( int led, bool activeLow = false );
+  Atm_bit& on( void );
+  Atm_bit& off( void );
+  Atm_bit& toggle( void );
+  Atm_bit& input( void );
   Atm_bit& trace( Stream& stream );
 
  private:
