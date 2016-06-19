@@ -101,7 +101,7 @@ Atm_servo& Atm_servo::trigger( int event ) {
       if ( servo_dest < 0 ) servo_dest = 0;
       break;
     default:
-      servo_dest = pos;
+      servo_dest = event;
       break;      
   }
   return *this;
