@@ -6,7 +6,8 @@
 class Atm_servo : public Machine {
  public:
   enum { IDLE, UP, UP_NEXT, DOWN, DOWN_NEXT, FINISHED };  // STATES
-  enum { EVT_UP, EVT_DOWN, EVT_TIMER, ELSE };             // EVENTS
+  enum { EVT_MVUP, EVT_MVDN, EVT_TIMER, ELSE };           // EVENTS
+  enum { EVT_UP = 181, EVT_DOWN = 182 };                  // EXTERNAL
   Atm_servo( void ) : Machine(){};
   Atm_servo& begin( int pin, int pos = 0 );
   Atm_servo& trace( Stream& stream );
@@ -43,23 +44,23 @@ Automaton::ATML::begin - Automaton Markup Language
   <machine name="Atm_servo">
     <states>
       <IDLE index="0" sleep="1" on_enter="ENT_IDLE">
-        <EVT_UP>UP</EVT_UP>
-        <EVT_DOWN>DOWN</EVT_DOWN>
+        <EVT_MVUP>UP</EVT_MVUP>
+        <EVT_MVDN>DOWN</EVT_MVDN>
       </IDLE>
       <UP index="1" on_enter="ENT_UP">
         <EVT_TIMER>UP_NEXT</EVT_TIMER>
       </UP>
       <UP_NEXT index="2">
-        <EVT_UP>UP</EVT_UP>
-        <EVT_DOWN>DOWN</EVT_DOWN>
+        <EVT_MVUP>UP</EVT_MVUP>
+        <EVT_MVDN>DOWN</EVT_MVDN>
         <ELSE>FINISHED</ELSE>
       </UP_NEXT>
       <DOWN index="3" on_enter="ENT_DOWN">
         <EVT_TIMER>DOWN_NEXT</EVT_TIMER>
       </DOWN>
       <DOWN_NEXT index="4">
-        <EVT_UP>UP</EVT_UP>
-        <EVT_DOWN>DOWN</EVT_DOWN>
+        <EVT_MVUP>UP</EVT_MVUP>
+        <EVT_MVDN>DOWN</EVT_MVDN>
         <ELSE>FINISHED</ELSE>
       </DOWN_NEXT>
       <FINISHED index="5" on_enter="ENT_FINISHED">
@@ -67,8 +68,8 @@ Automaton::ATML::begin - Automaton Markup Language
       </FINISHED>
     </states>
     <events>
-      <EVT_UP index="0"/>
-      <EVT_DOWN index="1"/>
+      <EVT_MVUP index="0"/>
+      <EVT_MVDN index="1"/>
       <EVT_TIMER index="2"/>
     </events>
     <connectors>

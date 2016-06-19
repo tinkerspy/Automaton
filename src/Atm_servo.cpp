@@ -7,13 +7,13 @@
 Atm_servo& Atm_servo::begin( int pin, int pos ) {
   // clang-format off
   const static state_t state_table[] PROGMEM = {
-    /*                  ON_ENTER    ON_LOOP  ON_EXIT  EVT_UP  EVT_DOWN  EVT_TIMER      ELSE */
-    /*      IDLE */     ENT_IDLE,        -1,      -1,     UP,     DOWN,        -1,       -1,
-    /*        UP */       ENT_UP,        -1,      -1,     -1,       -1,   UP_NEXT,       -1,
-    /*   UP_NEXT */           -1,        -1,      -1,     UP,     DOWN,        -1, FINISHED,
-    /*      DOWN */     ENT_DOWN,        -1,      -1,     -1,       -1, DOWN_NEXT,       -1,
-    /* DOWN_NEXT */           -1,        -1,      -1,     UP,     DOWN,        -1, FINISHED,
-    /*  FINISHED */ ENT_FINISHED,        -1,      -1,     -1,       -1,        -1,     IDLE,
+    /*                  ON_ENTER    ON_LOOP  ON_EXIT  EVT_MVUP  EVT_MVDN  EVT_TIMER      ELSE */
+    /*      IDLE */     ENT_IDLE,        -1,      -1,       UP,     DOWN,        -1,       -1,
+    /*        UP */       ENT_UP,        -1,      -1,       -1,       -1,   UP_NEXT,       -1,
+    /*   UP_NEXT */           -1,        -1,      -1,       UP,     DOWN,        -1, FINISHED,
+    /*      DOWN */     ENT_DOWN,        -1,      -1,       -1,       -1, DOWN_NEXT,       -1,
+    /* DOWN_NEXT */           -1,        -1,      -1,       UP,     DOWN,        -1, FINISHED,
+    /*  FINISHED */ ENT_FINISHED,        -1,      -1,       -1,       -1,        -1,     IDLE,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -33,9 +33,9 @@ Atm_servo& Atm_servo::begin( int pin, int pos ) {
 
 int Atm_servo::event( int id ) {
   switch ( id ) {
-    case EVT_UP:
+    case EVT_MVUP:
       return servo_dest > servo_pos;
-    case EVT_DOWN:
+    case EVT_MVDN:
       return servo_dest < servo_pos;
     case EVT_TIMER:
       return timer.expired( this );
@@ -92,16 +92,18 @@ int Atm_servo::position( void ) {
 
 Atm_servo& Atm_servo::trigger( int event ) {
   switch ( event ) {
-    case EVT_UP:
+    case EVT_MVUP:
       servo_dest += step_size;
       if ( servo_dest > 180 ) servo_dest = 180;
-      return *this;
-    case EVT_DOWN:
+      break;
+    case EVT_MVDN:
       servo_dest -= step_size;
       if ( servo_dest < 0 ) servo_dest = 0;
-      return *this;
+      break;
+    default:
+      servo_dest = pos;
+      break;      
   }
-  Machine::trigger( event );
   return *this;
 }
 
@@ -158,6 +160,6 @@ Atm_servo& Atm_servo::onFinish( atm_cb_push_t callback, int idx ) {
  */
 
 Atm_servo& Atm_servo::trace( Stream& stream ) {
-  Machine::setTrace( &stream, atm_serial_debug::trace, "SERVO\0EVT_UP\0EVT_DOWN\0EVT_TIMER\0ELSE\0IDLE\0UP\0UP_NEXT\0DOWN\0DOWN_NEXT\0FINISHED" );
+  Machine::setTrace( &stream, atm_serial_debug::trace, "SERVO\0EVT_MVUP\0EVT_MVDN\0EVT_TIMER\0ELSE\0IDLE\0UP\0UP_NEXT\0DOWN\0DOWN_NEXT\0FINISHED" );
   return *this;
 }
