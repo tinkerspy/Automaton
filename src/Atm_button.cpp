@@ -57,6 +57,8 @@ int Atm_button::event( int id ) {
 void Atm_button::action( int id ) {
   switch ( id ) {
     case ENT_PRESS:
+      onpress.push( auto_press );
+      return;
     case ENT_AUTO:
       onpress.push( 1 );
       return;
