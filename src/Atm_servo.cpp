@@ -92,11 +92,11 @@ int Atm_servo::position( void ) {
 
 Atm_servo& Atm_servo::trigger( int event ) {
   switch ( event ) {
-    case EVT_MVUP:
+    case EVT_UP:
       servo_dest += step_size;
       if ( servo_dest > 180 ) servo_dest = 180;
       break;
-    case EVT_MVDN:
+    case EVT_DOWN:
       servo_dest -= step_size;
       if ( servo_dest < 0 ) servo_dest = 0;
       break;
