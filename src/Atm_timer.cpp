@@ -102,6 +102,13 @@ Atm_timer& Atm_timer::repeat( uint16_t v ) {
   return *this;
 }
 
+uint32_t Atm_timer::left() {
+  
+  uint32_t r = daycounter.value * DIVIDER;
+  r += mstimer.value - ( millis() - state_millis );
+  return current == WAITD || current == WAITMS ? r : 0;
+}
+
 Atm_timer& Atm_timer::start( void ) {
   trigger( EVT_START );
   return *this;
