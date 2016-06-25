@@ -49,7 +49,7 @@ void Atm_timer::action( int id ) {
       return;
     case ENT_TRIGGER:
       repcounter.decrement();
-      ontimer.push( 1 );
+      ontimer.push( repcounter.value );
       return;
     case ENT_FINISH:
       onfinish.push( 0 );
