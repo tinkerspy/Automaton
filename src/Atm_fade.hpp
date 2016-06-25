@@ -20,7 +20,7 @@ class Atm_fade : public Machine {
   Atm_fade& toggle( void );
   Atm_fade& toggleBlink( void );
   Atm_fade& start( void );
-  
+
  private:
   enum { ENT_REPEAT, ENT_OFF, ENT_ON, ENT_UP, ENT_DOWN, ENT_START };
   static const uint8_t SLOPE_SIZE = 32;

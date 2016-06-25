@@ -102,7 +102,7 @@ Atm_servo& Atm_servo::trigger( int event ) {
       break;
     default:
       servo_dest = event;
-      break;      
+      break;
   }
   return *this;
 }

@@ -73,30 +73,29 @@ void Atm_led::action( int id ) {
 }
 
 Atm_led& Atm_led::on( void ) {
-  trigger( EVT_ON );  
+  trigger( EVT_ON );
   return *this;
 }
 
 Atm_led& Atm_led::off( void ) {
-  trigger( EVT_OFF );  
+  trigger( EVT_OFF );
   return *this;
 }
 
 Atm_led& Atm_led::toggle( void ) {
-  trigger( EVT_TOGGLE );  
+  trigger( EVT_TOGGLE );
   return *this;
 }
 
 Atm_led& Atm_led::toggleBlink( void ) {
-  trigger( EVT_TOGGLE_BLINK );  
+  trigger( EVT_TOGGLE_BLINK );
   return *this;
 }
 
 Atm_led& Atm_led::start( void ) {
-  trigger( EVT_BLINK );  
+  trigger( EVT_BLINK );
   return *this;
 }
-
 
 Atm_led& Atm_led::onFinish( Machine& machine, int event /* = 0 */ ) {
   onfinish.set( &machine, event );

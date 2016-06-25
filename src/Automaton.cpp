@@ -42,10 +42,10 @@ Automaton& Automaton::run( void ) {
   return *this;
 }
 
-Automaton& Automaton::delay( uint32_t time )  { 
+Automaton& Automaton::delay( uint32_t time ) {
   uint32_t cycle_start = millis();
   do {
-      run();
+    run();
   } while ( millis() - cycle_start < time );
   return *this;
 }
