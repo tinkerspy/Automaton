@@ -3,7 +3,7 @@
 
 // Loosely based on https://www.circuitsathome.com/mcu/reading-rotary-encoder-on-arduino (Oleg Mazurov)
 
-const char Atm_encoder::enc_states[16] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0};
+const char Atm_encoder::enc_states[16] = {0, (char)-1, 1, 0, 1, 0, 0, (char)-1, (char)-1, 0, 0, 1, 0, 1, (char)-1, 0};
 
 Atm_encoder& Atm_encoder::begin( int pin1, int pin2, int divider /* = 1 */ ) {
   // clang-format off

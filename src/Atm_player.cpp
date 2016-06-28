@@ -54,7 +54,7 @@ void Atm_player::action( int id ) {
       push( connectors, ON_FINISH, 0, 0, 0 );
       return;
     case ENT_IDLE:
-      if ( pin >= 0 ) noTone( pin );
+      if ( pin >= 0 ) noTone( pin );  // Tone takes up 7 bytes extra SRAM
       counter_repeat.set( repeatCount );
       return;
     case ENT_START:
