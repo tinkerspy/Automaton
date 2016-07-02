@@ -11,6 +11,7 @@ class Atm_comparator : public Machine {
   Atm_comparator& begin( int attached_pin, int sampleRate = 50 );
   Atm_comparator& threshold( uint16_t* v, uint16_t size, bool catchUp = false );
   Atm_comparator& average( uint16_t* v, uint16_t size );
+  Atm_comparator& skip();
   Atm_comparator& onChange( atm_cb_push_t callback, int idx = 0 );
   Atm_comparator& onChange( Machine& machine, int event = 0 );
   Atm_comparator& onChange( bool status, atm_cb_push_t callback, int idx = 0 );
@@ -32,6 +33,7 @@ class Atm_comparator : public Machine {
   uint16_t avg_buf_head;
   uint32_t avg_buf_total;
   atm_connector onup, ondown;
+  int skip_mode;
 
   int avg();
   Atm_comparator& bitmap( uint16_t v );

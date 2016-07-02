@@ -14,6 +14,7 @@ Atm_comparator& Atm_comparator::begin( int attached_pin, int samplerate /* = 50 
   timer.set( samplerate );
   bitmap_sample = 0;
   bitmap_previous = 0;
+  skip_mode = 0; 
   return *this;
 }
 
@@ -39,17 +40,33 @@ void Atm_comparator::action( int id ) {
       bitmap( v_sample );
       return;
     case ENT_SEND:
+      int final_step = -1;
       if ( v_sample >= v_previous ) {
         for ( uint16_t i = 0; i < p_threshold_size; i++ ) {
           if ( ( bitmap_diff >> i ) & 1 ) {
-            onup.push( i, 1 );
+            if ( skip_mode == 0 ) {
+              onup.push( i, 1 );
+            } else {
+              final_step = i;
+            }
           }
         }
       } else {
         for ( int i = p_threshold_size; i >= 0; i-- ) {
           if ( ( bitmap_diff >> i ) & 1 ) {
-            ondown.push( i, 0 );
+            if ( skip_mode == 0 ) {
+              ondown.push( i, 0 );
+            } else {
+              final_step = i;
+            }
           }
+        }
+      }
+      if ( final_step > -1 ) {
+        if ( v_sample >= v_previous ) {
+          onup.push( final_step, 0 );
+        } else {
+          ondown.push( final_step, 0 );
         }
       }
       return;
@@ -83,6 +100,11 @@ Atm_comparator& Atm_comparator::onChange( bool status, Machine& machine, int eve
   } else {
     ondown.set( &machine, event );
   }
+  return *this;
+}
+
+Atm_comparator&  Atm_comparator::skip() {
+  skip_mode = 1;
   return *this;
 }
 

@@ -90,7 +90,6 @@ class Factory : Automaton {
 #include <Atm_fade.hpp>
 #include <Atm_led.hpp>
 #include <Atm_fan.hpp>
-#include <Atm_servo.hpp>
 #include <Atm_step.hpp>
 #include <Atm_player.hpp>
 #include <Atm_timer.hpp>
