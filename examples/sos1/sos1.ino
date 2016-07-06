@@ -2,7 +2,7 @@
 
 Atm_led led;
 
-const int pin = 4;
+const int pin = LED_BUILTIN;
 const int dotTime = 100;
 const int dashTime = 300;
 const int waitTime = 200;

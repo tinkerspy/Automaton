@@ -2,7 +2,7 @@
 
 // This example demonstrates running state machines logging their state changes to the serial port
 
-int ledPin = 4;
+int ledPin = LED_BUILTIN;
 int buttonPin = 2;
 
 Atm_led led;

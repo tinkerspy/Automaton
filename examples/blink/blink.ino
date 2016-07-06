@@ -49,7 +49,7 @@ class Atm_blink : public Machine {
 Atm_blink led;
 
 void setup() {
-  led.begin( 4, 200 );        // Setup a blink machine
+  led.begin( LED_BUILTIN, 200 );        // Setup a blink machine
   led.trigger( led.EVT_ON );  // Turn it on
 }
 
