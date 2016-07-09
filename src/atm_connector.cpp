@@ -22,11 +22,15 @@ bool atm_connector::push( int v /* = 0 */, int up /* = 0 */, bool overrideCallba
       if ( overrideCallback ) {
         return false;
       } else {
-        ( *push_callback )( callback_idx, v, up );
+        if ( push_callback ) {
+          ( *push_callback )( callback_idx, v, up );
+        }
       }
       return true;
     case MODE_MACHINE:
-      machine->trigger( event );
+      if ( machine != 0 ) { 
+        machine->trigger( event );
+      }
       return true;
   }
   return true;
