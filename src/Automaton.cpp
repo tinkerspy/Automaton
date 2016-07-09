@@ -17,9 +17,10 @@ Automaton automaton;  // The global automaton machine container/scheduler
  */
 
 Automaton& Automaton::add( Machine& machine, bool force /* = true */ ) {
-  if ( machine.inventory_next == 0 || force ) {
+  if ( ( machine.flags & ATM_SLINK_FLAG ) == 0 || force ) { 
     machine.inventory_next = inventory_root;
     inventory_root = &machine;
+    machine.flags |= ATM_SLINK_FLAG;
   }
   return *this;
 }

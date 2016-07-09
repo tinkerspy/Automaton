@@ -92,6 +92,8 @@ Machine& Machine::begin( const state_t* tbl, int width ) {
   flags &= ~ATM_SLEEP_FLAG;
   automaton.add( *this, false );
   current = -1;
+  next = 0;
+  next_trigger = -1;
   return *this;
 }
 
