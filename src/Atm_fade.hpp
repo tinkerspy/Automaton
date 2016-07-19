@@ -26,10 +26,13 @@ class Atm_fade : public Machine {
   enum { ENT_REPEAT, ENT_OFF, ENT_ON, ENT_UP, ENT_DOWN, ENT_START };
   uint8_t fade_first;
   uint8_t fade_last;
+  unsigned long fade_length; // the millisecond time from fade_first to fade_last, OR back from fade_last to fade_first
+  unsigned long fade_accu; // the accumulate time from the start. <= fade_length
+  unsigned long fade_prev_tm; // the last update time, for fade_accu
   short pin;
   uint16_t repeat_count;
   atm_timer_millis timer_fade, timer_on, timer_off;
-  atm_counter counter_fade, counter_repeat;
+  atm_counter counter_repeat;
   int event( int id );
   void action( int id );
 };
