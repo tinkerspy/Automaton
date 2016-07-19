@@ -28,8 +28,22 @@ Atm_button& Atm_button::begin( int attached_pin ) {
   timer_delay.set( ATM_TIMER_OFF );
   timer_repeat.set( ATM_TIMER_OFF );
   timer_auto.set( ATM_TIMER_OFF );
-  pinMode( pin, INPUT_PULLUP );
+  if (digitalRead(attached_pin)) {
+	  this->released_state = HIGH;
+  } else {
+	  this->released_state = LOW;
+  }
   return *this;
+}
+
+bool
+Atm_button::is_pressed(uint8_t cur_state)
+{
+    if (this->released_state == cur_state) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 int Atm_button::event( int id ) {
@@ -45,9 +59,9 @@ int Atm_button::event( int id ) {
     case EVT_AUTO:
       return timer_auto.expired( this );
     case EVT_PRESS:
-      return !digitalRead( pin );
+      return is_pressed(digitalRead( pin ));
     case EVT_RELEASE:
-      return digitalRead( pin );
+      return !is_pressed(digitalRead( pin ));
     case EVT_COUNTER:
       return counter_longpress.expired();
   }
