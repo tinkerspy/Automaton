@@ -123,6 +123,7 @@ Atm_controller& Atm_controller::IF( Machine& machine, char relOp /* = '>' */, in
   return OP( atm_connector::LOG_AND, machine, relOp, match );
 }
 
+// BUG: pull operator does not pass the idx value!!!
 Atm_controller& Atm_controller::IF( atm_cb_pull_t callback, char relOp /* = '>' */, int match /* = 0 */ ) {
   return OP( atm_connector::LOG_AND, callback, relOp, match );
 }
@@ -172,6 +173,6 @@ Atm_controller& Atm_controller::OP( char logOp, atm_cb_pull_t callback, char rel
 }
 
 Atm_controller& Atm_controller::trace( Stream& stream ) {
-  Machine::setTrace( &stream, atm_serial_debug::trace, "CONTROLLER\0EVT_ON\0EVT_OFF\0EVT_TOGGLE\0EVT_INPUT\0ELSE\0OFF\0ON" );
+  Machine::setTrace( &stream, atm_serial_debug::trace, "CONTROLLER\0EVT_ON\0EVT_OFF\0EVT_INPUT\0ELSE\0OFF\0ON" );
   return *this;
 }
