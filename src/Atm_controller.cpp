@@ -44,17 +44,17 @@ void Atm_controller::action( int id ) {
 
 bool Atm_controller::eval_one( atm_connector& connector ) {
   switch ( connector.relOp() ) {
-    case connector.REL_EQ:
+	case atm_connector::REL_EQ:
       return connector.pull() == connector.event;
-    case connector.REL_NEQ:
+    case atm_connector::REL_NEQ:
       return connector.pull() != connector.event;
-    case connector.REL_LT:
+    case atm_connector::REL_LT:
       return connector.pull() < connector.event;
-    case connector.REL_GT:
+    case atm_connector::REL_GT:
       return connector.pull() > connector.event;
-    case connector.REL_LTE:
+    case atm_connector::REL_LTE:
       return connector.pull() <= connector.event;
-    case connector.REL_GTE:
+    case atm_connector::REL_GTE:
       return connector.pull() >= connector.event;
   }
   return false;

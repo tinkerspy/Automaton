@@ -30,6 +30,9 @@ class Atm_button : public Machine {
   int longpress_max;
   int auto_press = 1;
 
+  uint8_t released_state;
+  bool is_pressed(uint8_t cur_state);
+  
   int event( int id );
   void action( int id );
 };

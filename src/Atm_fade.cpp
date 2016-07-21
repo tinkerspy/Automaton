@@ -1,5 +1,34 @@
 #include "Atm_fade.hpp"
 
+#define DEBUG_FADE 0
+
+#if 0
+static const PROGMEM uint8_t etable[256] = {
+	0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+	1,  1,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
+	2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  3,  3,  3,  3,  3,
+	3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  4,  4,  4,  4,  4,  4,
+	4,  4,  4,  4,  4,  4,  5,  5,  5,  5,  5,  5,  5,  5,  5,  6,
+	6,  6,  6,  6,  6,  6,  6,  7,  7,  7,  7,  7,  7,  8,  8,  8,
+	8,  8,  8,  9,  9,  9,  9,  9, 10, 10, 10, 10, 10, 11, 11, 11,
+	11, 12, 12, 12, 12, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 16,
+	16, 16, 17, 17, 18, 18, 18, 19, 19, 20, 20, 21, 21, 21, 22, 22,
+	23, 23, 24, 24, 25, 25, 26, 27, 27, 28, 28, 29, 30, 30, 31, 32,
+	32, 33, 34, 35, 35, 36, 37, 38, 39, 39, 40, 41, 42, 43, 44, 45,
+	46, 47, 48, 49, 50, 51, 52, 53, 55, 56, 57, 58, 59, 61, 62, 63,
+	65, 66, 68, 69, 71, 72, 74, 76, 77, 79, 81, 82, 84, 86, 88, 90,
+	92, 94, 96, 98,100,102,105,107,109,112,114,117,119,122,124,127,
+	130,133,136,139,142,145,148,151,155,158,162,165,169,172,176,180,
+	184,188,192,196,201,205,210,214,219,224,229,234,239,244,250,255,
+};
+
+#define NUM_ETAB (sizeof(etable)/sizeof(etable[0]))
+#define READ_ETAB(i) pgm_read_byte(&etable[i])
+#else
+#define NUM_ETAB (256)
+#define READ_ETAB(i) (i)
+#endif
+
 Atm_fade& Atm_fade::begin( int attached_pin ) {
   // clang-format off
   const static state_t state_table[] PROGMEM = {
@@ -20,7 +49,6 @@ Atm_fade& Atm_fade::begin( int attached_pin ) {
   timer_fade.set( 0 );   // Number of ms per slope step (slope duration: rate * 32 ms)
   timer_on.set( 500 );   // Plateau between slopes (in which led is fully on)
   timer_off.set( 500 );  // Pause between slopes (in which led is fully off)
-  counter_fade.set( SLOPE_SIZE );
   counter_repeat.set( ATM_COUNTER_OFF );
   repeat_count = ATM_COUNTER_OFF;
   return *this;
@@ -43,7 +71,38 @@ Atm_fade& Atm_fade::pause( uint32_t duration ) {  // Pause between slopes (in wh
   return *this;
 }
 
+Atm_fade& Atm_fade::fade( unsigned long time_ms, uint8_t pwm_first, uint8_t pwm_last) {
+	this->fade_first = pwm_first % NUM_ETAB;
+	this->fade_last = pwm_last % NUM_ETAB;
+	this->fade_length = time_ms / 2;
+	this->fade_accu = 0;
+	int fade;
+	unsigned long color_diff;
+	if (this->fade_last >= this->fade_first) {
+		color_diff = this->fade_last - this->fade_first + 1;
+	} else {
+		color_diff = this->fade_first - this->fade_last + 1;
+	}
+	fade = time_ms / 2 / color_diff;
+	if (fade == 0) fade = 1;
+#if DEBUG_FADE
+	if (stream_trace) {stream_trace->print ("setup: time_ms="); stream_trace->println (time_ms); }
+	if (stream_trace) {stream_trace->print ("setup: color_diff="); stream_trace->println (color_diff); }
+	if (stream_trace) {stream_trace->print ("setup: fade="); stream_trace->println (fade); }
+	if (stream_trace) { stream_trace->print ("setup: fade_first="); stream_trace->println (this->fade_first); }
+	if (stream_trace) { stream_trace->print ("setup: fade_last="); stream_trace->println (this->fade_last); }
+	if (stream_trace) { stream_trace->print ("setup: fade_length="); stream_trace->println (this->fade_length); }
+	if (stream_trace) { stream_trace->print ("setup: fade_accu="); stream_trace->println (this->fade_accu); }
+#endif
+	timer_fade.set( time_ms / 2 > 0 ? fade : ATM_TIMER_OFF );  // Number of ms per slope step (slope duration: rate * 32 ms)
+	return *this;
+}
+
 Atm_fade& Atm_fade::fade( int fade ) {
+  this->fade_first = 0;
+  this->fade_last = NUM_ETAB - 1;
+  this->fade_length = (this->fade_last - this->fade_first + 1) * fade;
+  this->fade_accu = 0;
   timer_fade.set( fade >= 0 ? fade : ATM_TIMER_OFF );  // Number of ms per slope step (slope duration: rate * 32 ms)
   return *this;
 }
@@ -62,7 +121,7 @@ int Atm_fade::event( int id ) {
     case EVT_TM_OFF:
       return timer_off.expired( this );
     case EVT_CNT_FADE:
-      return counter_fade.expired();
+      return (this->fade_accu > 0) && (this->fade_accu >= this->fade_length);
     case EVT_CNT_RPT:
       return counter_repeat.expired();
   }
@@ -82,16 +141,87 @@ void Atm_fade::action( int id ) {
       analogWrite( pin, 0 );
       return;
     case ENT_START:
-      counter_fade.set( SLOPE_SIZE );
+	  this->fade_prev_tm = millis();
+	  this->fade_accu = 0;
       return;
     case ENT_UP:
-      analogWrite( pin, slope[SLOPE_SIZE - counter_fade.value] );
-      counter_fade.decrement();
+	{
+	  unsigned long color_diff;
+	  int incval;
+	  unsigned long now;
+	  now = millis();
+	  unsigned int time_diff = now;
+	  if (now >= this->fade_prev_tm) {
+		  time_diff = now - this->fade_prev_tm;
+	  }
+	  this->fade_accu += time_diff;
+	  if (this->fade_accu >= this->fade_length) {
+		this->fade_accu = this->fade_length;
+	  }
+	  if (this->fade_last >= this->fade_first) {
+		  color_diff = this->fade_last - this->fade_first + 1;
+		  incval = (this->fade_accu * color_diff / this->fade_length);
+		  if (incval > 0) incval --;
+		  //READ_ETAB(this->fade_last - this->fade_first + 1 - counter_fade.value + this->fade_first)
+		  //analogWrite( pin, READ_ETAB((int)this->fade_last + 1 - counter_fade.value) );
+#if DEBUG_FADE
+          if (stream_trace) {stream_trace->print ("color_diff="); stream_trace->println (color_diff); }
+          if (stream_trace) {stream_trace->print ("incval="); stream_trace->println (incval); }
+          if (stream_trace) { stream_trace->print ("write analog up="); stream_trace->println (this->fade_first + incval); }
+#endif
+		  analogWrite( pin, READ_ETAB(this->fade_first + incval) );
+	  } else {
+		  color_diff = this->fade_first - this->fade_last + 1;
+		  incval = (this->fade_accu * color_diff / this->fade_length);
+		  if (incval > 0) incval --;
+		  //READ_ETAB(this->fade_first - (this->fade_first - this->fade_last + 1 - .value) )
+		  //analogWrite( pin, READ_ETAB((int)this->fade_last - 1 + counter_fade.value) );
+#if DEBUG_FADE
+          if (stream_trace) {stream_trace->print ("color_diff="); stream_trace->println (color_diff); }
+          if (stream_trace) {stream_trace->print ("incval="); stream_trace->println (incval); }
+          if (stream_trace) { stream_trace->print ("write analog up="); stream_trace->println (this->fade_first - incval); }
+#endif
+		  analogWrite( pin, READ_ETAB(this->fade_first - incval) );
+	  }
       return;
+	}
     case ENT_DOWN:
-      analogWrite( pin, slope[counter_fade.value - 1] );
-      counter_fade.decrement();
+	{
+	  unsigned long color_diff;
+	  int incval;
+	  unsigned long now;
+	  now = millis();
+	  unsigned int time_diff = now;
+	  if (now >= this->fade_prev_tm) {
+	    time_diff = now - this->fade_prev_tm;
+	  }
+	  this->fade_accu += time_diff;
+	  if (this->fade_accu >= this->fade_length) {
+	    this->fade_accu = this->fade_length;
+	  }
+	  if (this->fade_last >= this->fade_first) {
+		  color_diff = this->fade_last - this->fade_first + 1;
+		  incval = (this->fade_accu * color_diff / this->fade_length);
+		  if (incval > 0) incval --;
+#if DEBUG_FADE
+          if (stream_trace) {stream_trace->print ("color_diff="); stream_trace->println (color_diff); }
+          if (stream_trace) {stream_trace->print ("incval="); stream_trace->println (incval); }
+          if (stream_trace) {stream_trace->print ("write analog down="); stream_trace->println (this->fade_last - incval); }
+#endif
+		  analogWrite( pin, READ_ETAB(this->fade_last - incval) );
+	  } else {
+		  color_diff = this->fade_first - this->fade_last + 1;
+		  incval = (this->fade_accu * color_diff / this->fade_length);
+		  if (incval > 0) incval --;
+#if DEBUG_FADE
+          if (stream_trace) {stream_trace->print ("color_diff="); stream_trace->println (color_diff); }
+          if (stream_trace) {stream_trace->print ("incval="); stream_trace->println (incval); }
+          if (stream_trace) {stream_trace->print ("write analog down="); stream_trace->println (this->fade_last + incval); }
+#endif
+		  analogWrite( pin, READ_ETAB(this->fade_last + incval) );
+	  }
       return;
+	}
   }
 }
 
