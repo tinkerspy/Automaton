@@ -14,6 +14,14 @@ Atm_fade	KEYWORD1
 Atm_button	KEYWORD1
 Atm_timer	KEYWORD1
 Atm_comparator	KEYWORD1
+Atm_controller	KEYWORD1
+Atm_bit	KEYWORD1
+Atm_player	KEYWORD1
+Atm_command	KEYWORD1
+Atm_blink	KEYWORD1
+Atm_digital	KEYWORD1
+Atm_analog	KEYWORD1
+Atm_encoder	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -66,4 +74,4 @@ ATM_COUNTER_OFF	LITERAL1
 
 MSG_ON	LITERAL1
 MSG_OFF	LITERAL1
-MSG_BLINK	LITERAL1
+MSG_BLINK LITERAL1
