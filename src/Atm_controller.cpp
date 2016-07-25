@@ -43,6 +43,7 @@ void Atm_controller::action( int id ) {
 }
 
 bool Atm_controller::eval_one( atm_connector& connector ) {
+
   switch ( connector.relOp() ) {
     case connector.REL_EQ:
       return connector.pull() == connector.event;
@@ -57,7 +58,7 @@ bool Atm_controller::eval_one( atm_connector& connector ) {
     case connector.REL_GTE:
       return connector.pull() >= connector.event;
   }
-  return false;
+  return connector.pull();
 }
 
 bool Atm_controller::eval_all() {
@@ -123,33 +124,32 @@ Atm_controller& Atm_controller::IF( Machine& machine, char relOp /* = '>' */, in
   return OP( atm_connector::LOG_AND, machine, relOp, match );
 }
 
-// BUG: pull operator does not pass the idx value!!!
-Atm_controller& Atm_controller::IF( atm_cb_pull_t callback, char relOp /* = '>' */, int match /* = 0 */ ) {
-  return OP( atm_connector::LOG_AND, callback, relOp, match );
+Atm_controller& Atm_controller::IF( atm_cb_pull_t callback, int idx /* = 0 */ ) {
+  return OP( atm_connector::LOG_AND, callback, idx );
 }
 
 Atm_controller& Atm_controller::AND( Machine& machine, char relOp /* = '>' */, int match /* = 0 */ ) {
   return OP( atm_connector::LOG_AND, machine, relOp, match );
 }
 
-Atm_controller& Atm_controller::AND( atm_cb_pull_t callback, char relOp /* = '>' */, int match /* = 0 */ ) {
-  return OP( atm_connector::LOG_AND, callback, relOp, match );
+Atm_controller& Atm_controller::AND( atm_cb_pull_t callback, int idx /* = 0 */ ) {
+  return OP( atm_connector::LOG_AND, callback, idx );
 }
 
 Atm_controller& Atm_controller::OR( Machine& machine, char relOp /* = '>' */, int match /* = 0 */ ) {
   return OP( atm_connector::LOG_OR, machine, relOp, match );
 }
 
-Atm_controller& Atm_controller::OR( atm_cb_pull_t callback, char relOp /* = '>' */, int match /* = 0 */ ) {
-  return OP( atm_connector::LOG_OR, callback, relOp, match );
+Atm_controller& Atm_controller::OR( atm_cb_pull_t callback, int idx /* = 0 */ ) {
+  return OP( atm_connector::LOG_OR, callback, idx );
 }
 
 Atm_controller& Atm_controller::XOR( Machine& machine, char relOp /* = '>' */, int match /* = 0 */ ) {
   return OP( atm_connector::LOG_XOR, machine, relOp, match );
 }
 
-Atm_controller& Atm_controller::XOR( atm_cb_pull_t callback, char relOp /* = '>' */, int match /* = 0 */ ) {
-  return OP( atm_connector::LOG_XOR, callback, relOp, match );
+Atm_controller& Atm_controller::XOR( atm_cb_pull_t callback, int idx /* = 0 */ ) {
+  return OP( atm_connector::LOG_XOR, callback, idx );
 }
 
 Atm_controller& Atm_controller::OP( char logOp, Machine& machine, char relOp, int match ) {
@@ -162,10 +162,10 @@ Atm_controller& Atm_controller::OP( char logOp, Machine& machine, char relOp, in
   return *this;
 }
 
-Atm_controller& Atm_controller::OP( char logOp, atm_cb_pull_t callback, char relOp, int match ) {
+Atm_controller& Atm_controller::OP( char logOp, atm_cb_pull_t callback, int idx ) {
   for ( uint8_t i = 0; i < ATM_CONDITION_OPERAND_MAX; i++ ) {
     if ( operand[i].mode() == atm_connector::MODE_NULL ) {  // Pick the first free slot
-      operand[i].set( callback, match, logOp, (int)( strchr( relOps, relOp ) - relOps ) );
+      operand[i].set( callback, idx );
       break;
     }
   }
