@@ -1,5 +1,6 @@
 {
     "name": "Automaton",
+    "version": "1.0.1",
     "keywords": "state, machine",
     "description": "A multi tasking table driven finite state machine framework for Arduino",
     "authors":
