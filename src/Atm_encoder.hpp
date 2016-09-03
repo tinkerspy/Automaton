@@ -23,7 +23,7 @@ class Atm_encoder : public Machine {
   short pin1, pin2;
   const static char enc_states[];
   uint8_t enc_bits;
-  uint8_t enc_counter;
+  int8_t enc_counter;
   int8_t enc_direction;
   int divider;
   int value, min, max;

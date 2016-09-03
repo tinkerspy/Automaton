@@ -44,7 +44,7 @@ void Atm_encoder::action( int id ) {
       enc_bits = ( ( enc_bits << 2 ) | ( digitalRead( pin1 ) << 1 ) | ( digitalRead( pin2 ) ) ) & 0x0f;
       enc_direction = enc_states[enc_bits];
       if ( enc_direction != 0 ) {
-    	  enc_counter = enc_counter+enc_direction;
+    	  enc_counter = enc_counter + enc_direction;
         if ( (enc_counter != 0) && (enc_counter % divider == 0) ) {
           if ( !count( enc_direction ) ) {
             enc_direction = 0;
