@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-clang-format -i src/Automaton.h src/*.cpp src/*.hpp
+clang-format -i src/*.h src/*.cpp src/*.hpp
 
 (
 chmod -x *.cpp *.hpp *.h *.ino

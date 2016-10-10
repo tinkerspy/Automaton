@@ -14,7 +14,7 @@ Atm_comparator& Atm_comparator::begin( int attached_pin, int samplerate /* = 50 
   timer.set( samplerate );
   bitmap_sample = 0;
   bitmap_previous = 0;
-  skip_mode = 0; 
+  skip_mode = 0;
   return *this;
 }
 
@@ -103,7 +103,7 @@ Atm_comparator& Atm_comparator::onChange( bool status, Machine& machine, int eve
   return *this;
 }
 
-Atm_comparator&  Atm_comparator::skip() {
+Atm_comparator& Atm_comparator::skip() {
   skip_mode = 1;
   return *this;
 }

@@ -43,7 +43,6 @@ void Atm_controller::action( int id ) {
 }
 
 bool Atm_controller::eval_one( atm_connector& connector ) {
-
   switch ( connector.relOp() ) {
     case atm_connector::REL_EQ:
       return connector.pull() == connector.event;

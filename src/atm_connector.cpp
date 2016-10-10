@@ -28,7 +28,7 @@ bool atm_connector::push( int v /* = 0 */, int up /* = 0 */, bool overrideCallba
       }
       return true;
     case MODE_MACHINE:
-      if ( machine != 0 ) { 
+      if ( machine != 0 ) {
         machine->trigger( event );
       }
       return true;
