@@ -4,12 +4,13 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   // clang-format off
   static const state_t state_table[] PROGMEM = {
     /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK  ELSE */
-    /* IDLE      */  ENT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,     ON,      -1,     START,         ON,            START,   -1, // LED off
-    /* ON        */    ENT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,     -1,     OFF,     START,        OFF,              OFF,   -1, // LED on
-    /* START     */    ENT_ON,        -1,        -1,    BLINK_OFF,            -1,        DONE,     ON,     OFF,        -1,        OFF,              OFF,   -1, // Start blinking
-    /* BLINK_OFF */   ENT_OFF,        -1,        -1,           -1,         START,        DONE,     ON,     OFF,        -1,        OFF,              OFF,   -1,
-    /* DONE      */        -1,        -1, EXT_CHAIN,           -1,           OFF,          -1,     ON,     OFF,     START,        OFF,              OFF,   -1, // Wait after last blink
-    /* OFF       */   ENT_OFF,        -1,        -1,           -1,            -1,          -1,     ON,     OFF,     START,         -1,               -1, IDLE, // All off -> IDLE
+    /* IDLE      */  ENT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,     ON,      -1,     START,         ON,            START,    -1, // LED off
+    /* ON        */    ENT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,     -1,     OFF,     START,        OFF,              OFF,    -1, // LED on
+    /* START     */    ENT_ON,        -1,        -1,    BLINK_OFF,            -1,          -1,     ON,     OFF,        -1,        OFF,              OFF,    -1, // Start blinking
+    /* BLINK_OFF */   ENT_OFF,        -1,        -1,           -1,          LOOP,          -1,     ON,     OFF,        -1,        OFF,              OFF,    -1,
+    /* LOOP      */        -1,        -1,        -1,           -1,            -1,        DONE,     ON,     OFF,        -1,        OFF,              OFF, START,    
+    /* DONE      */        -1,        -1, EXT_CHAIN,           -1,           OFF,          -1,     ON,     OFF,     START,        OFF,              OFF,    -1, // Wait after last blink
+    /* OFF       */   ENT_OFF,        -1,        -1,           -1,            -1,          -1,     ON,     OFF,     START,         -1,               -1,  IDLE, // All off -> IDLE
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -145,6 +146,6 @@ Atm_led& Atm_led::trace( Stream& stream ) {
   setTrace( &stream, atm_serial_debug::trace,
             "LED\0EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_"
             "BLINK\0EVT_TOGGLE\0EVT_TOGGLE_BLINK\0ELSE\0"
-            "IDLE\0ON\0START\0BLINK_OFF\0DONE\0OFF" );
+            "IDLE\0ON\0START\0BLINK_OFF\0LOOP\0DONE\0OFF" );
   return *this;
 }
