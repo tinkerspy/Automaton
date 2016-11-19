@@ -4,7 +4,7 @@
 
 class Atm_led : public Machine {
  public:
-  enum { IDLE, ON, START, BLINK_OFF, DONE, OFF };
+  enum { IDLE, ON, START, BLINK_OFF, LOOP, DONE, OFF };
   enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, EVT_TOGGLE, EVT_TOGGLE_BLINK, ELSE };
   enum { EVT_START = EVT_BLINK };
 

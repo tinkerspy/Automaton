@@ -96,7 +96,7 @@ Atm_timer& Atm_timer::interval( uint32_t v ) {
   return interval_millis( v );
 }
 
-Atm_timer& Atm_timer::repeat( uint16_t v ) {
+Atm_timer& Atm_timer::repeat( uint16_t v /* = ATM_COUNTER_OFF */ ) {
   repeat_cnt = v;
   repcounter.set( v );
   return *this;
