@@ -114,7 +114,7 @@ Atm_timer& Atm_timer::start( void ) {
 }
 
 Atm_timer& Atm_timer::stop( void ) {
-  trigger( EVT_START );
+  trigger( EVT_STOP );
   return *this;
 }
 
