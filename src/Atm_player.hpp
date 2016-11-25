@@ -29,7 +29,7 @@ class Atm_player : public Machine {
  private:
   int pin;
   int* pattern;
-  int patternsize;
+  uint16_t patternsize;
   int step;
   uint16_t repeatCount;
   float speedFactor, pitchFactor;

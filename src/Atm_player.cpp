@@ -37,7 +37,7 @@ int Atm_player::event( int id ) {
     case EVT_TIMER:
       return timer.expired( this );
     case EVT_EOPAT:
-      return ( step * 6 ) >= patternsize;
+      return ( step * 3 * sizeof( int ) ) >= patternsize;
     case EVT_REPEAT:
       return counter_repeat.expired();
   }
@@ -130,7 +130,7 @@ Atm_player& Atm_player::play( int freq, int period, int pause /* = 0 */ ) {
   stub[1] = period;
   stub[2] = pause;
   pattern = stub;
-  patternsize = 6;
+  patternsize = 3 * sizeof( int );
   step = 0;
   return *this;
 }
