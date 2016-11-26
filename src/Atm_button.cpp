@@ -81,9 +81,7 @@ void Atm_button::action( int id ) {
       return;
     case ENT_LRELEASE:
       press = ( longpress_max - counter_longpress.value );
-      if ( onpress.mode() == atm_connector::MODE_PUSHCB ) {
-        onpress.push( press );
-      }
+      onpress.push( press );
       if ( press == 1 || press == 2 ) {
         longpress[press-1].push( press );
       } 
