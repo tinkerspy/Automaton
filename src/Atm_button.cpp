@@ -55,12 +55,15 @@ int Atm_button::event( int id ) {
 }
 
 void Atm_button::action( int id ) {
+  int press;
   switch ( id ) {
     case ENT_PRESS:
       onpress.push( auto_press );
+      longpress[0].push( 1 );
       return;
     case ENT_AUTO:
       onpress.push( 1 );
+      longpress[0].push( 1 );
       return;
     case ENT_RELEASE:
     case EXT_WRELEASE:
@@ -71,14 +74,19 @@ void Atm_button::action( int id ) {
       return;
     case ENT_LCOUNT:
       counter_longpress.decrement();
-      if ( onpress.mode() == onpress.MODE_PUSHCB ) {
-        onpress.push( ( longpress_max - counter_longpress.value ) * -1 );
+      press = ( longpress_max - counter_longpress.value );
+      if ( onpress.mode() == atm_connector::MODE_PUSHCB ) {
+        onpress.push( press * -1 );
       }
       return;
     case ENT_LRELEASE:
-      if ( onpress.mode() == onpress.MODE_PUSHCB ) {
-        onpress.push( longpress_max - counter_longpress.value );
+      press = ( longpress_max - counter_longpress.value );
+      if ( onpress.mode() == atm_connector::MODE_PUSHCB ) {
+        onpress.push( press );
       }
+      if ( press == 1 || press == 2 ) {
+        longpress[press-1].push( press );
+      } 
       return;
   }
 }
@@ -92,6 +100,19 @@ Atm_button& Atm_button::onPress( Machine& machine, int event /* = 0 */ ) {
   onpress.set( &machine, event );
   return *this;
 }
+
+Atm_button& Atm_button::onPress( int id, atm_cb_push_t callback, int idx /* = 0 */ ) {
+  if ( id == 1 || id == 2 )
+    longpress[id-1].set( callback, idx );
+  return *this;
+}
+
+Atm_button& Atm_button::onPress( int id, Machine& machine, int event /* = 0 */ ) {
+  if ( id == 1 || id == 2 )
+    longpress[id-1].set( &machine, event );
+  return *this;
+}
+
 Atm_button& Atm_button::onRelease( atm_cb_push_t callback, int idx /* = 0 */ ) {
   onrelease.set( callback, idx );
   return *this;

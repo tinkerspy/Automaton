@@ -13,6 +13,8 @@ class Atm_button : public Machine {
   Atm_button& trace( Stream& stream );
   Atm_button& onPress( atm_cb_push_t callback, int idx = 0 );
   Atm_button& onPress( Machine& machine, int event = 0 );
+  Atm_button& onPress( int id, atm_cb_push_t callback, int idx = 0 );
+  Atm_button& onPress( int id, Machine& machine, int event = 0 );
   Atm_button& onRelease( atm_cb_push_t callback, int idx = 0 );
   Atm_button& onRelease( Machine& machine, int event = 0 );
   Atm_button& debounce( int delay );
@@ -24,6 +26,7 @@ class Atm_button : public Machine {
   enum { ENT_PRESS, ENT_RELEASE, ENT_LSTART, ENT_LCOUNT, ENT_LRELEASE, EXT_WRELEASE, ENT_AUTO };
   static const int DEBOUNCE = 5;
   atm_connector onpress, onrelease;
+  atm_connector longpress[2];
   short pin;
   atm_timer_millis timer_debounce, timer_delay, timer_repeat, timer_auto;
   atm_counter counter_longpress;
