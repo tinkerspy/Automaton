@@ -13,6 +13,7 @@ class Atm_fade : public Machine {
   Atm_fade& trace( Stream& stream );
   Atm_fade& blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );
   Atm_fade& blink( uint32_t duration );
+  Atm_fade& blink( void );
   Atm_fade& pause( uint32_t duration );
   Atm_fade& fade( int fade );
   Atm_fade& repeat( uint16_t repeat );

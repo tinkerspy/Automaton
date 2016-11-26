@@ -10,6 +10,7 @@ class Atm_led : public Machine {
 
   Atm_led( void ) : Machine(){};
   Atm_led& begin( int attached_pin, bool activeLow = false );
+  Atm_led& blink( void );
   Atm_led& blink( uint32_t duration );
   Atm_led& blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );
   Atm_led& pause( uint32_t duration );
