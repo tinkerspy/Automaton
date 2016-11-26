@@ -11,7 +11,9 @@ Atm_fade& Atm_fade::begin( int attached_pin ) {
     /* UP     */       ENT_UP,        -1,           -1,       STARTD,         UP,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,
     /* STARTD */    ENT_START,        -1,           -1,           -1,         -1,       DOWN,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,
     /* DOWN   */     ENT_DOWN,        -1,           -1,       REPEAT,       DOWN,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,
-    /* REPEAT */   ENT_REPEAT,        -1,           -1,           -1,         -1,         -1,         -1,         IDLE,     ON,   IDLE,    START,       IDLE,             IDLE, STARTU,
+    /* REPEAT */   ENT_REPEAT,        -1,           -1,           -1,         -1,         -1,         -1,         DONE,     ON,   IDLE,    START,       IDLE,             IDLE, STARTU,
+    /* DONE   */     ENT_DONE,        -1,           -1,           -1,         -1,         -1,         -1,           -1,     -1,     -1,       -1,         -1,               -1,   IDLE,
+
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -92,6 +94,9 @@ void Atm_fade::action( int id ) {
       analogWrite( pin, slope[counter_fade.value - 1] );
       counter_fade.decrement();
       return;
+    case ENT_DONE:
+      onfinish.push( 0 );
+      return;    
   }
 }
 
@@ -120,9 +125,19 @@ Atm_fade& Atm_fade::start( void ) {
   return *this;
 }
 
+Atm_fade& Atm_fade::onFinish( Machine& machine, int event /* = 0 */ ) {
+  onfinish.set( &machine, event );
+  return *this;
+}
+
+Atm_fade& Atm_fade::onFinish( atm_cb_push_t callback, int idx /* = 0 */ ) {
+  onfinish.set( callback, idx );
+  return *this;
+}
+
 Atm_fade& Atm_fade::trace( Stream& stream ) {
   setTrace( &stream, atm_serial_debug::trace,
             "FADE\0EVT_CNT_FADE\0EVT_TM_FADE\0EVT_TM_ON\0EVT_TM_OFF\0EVT_CNT_RPT\0EVT_ON\0EVT_OFF\0EVT_"
-            "BLINK\0ELSE\0IDLE\0ON\0START\0STARTU\0UP\0STARTD\0DOWN\0REPEAT" );
+            "BLINK\0ELSE\0IDLE\0ON\0START\0STARTU\0UP\0STARTD\0DOWN\0REPEAT\0DONE" );
   return *this;
 }
