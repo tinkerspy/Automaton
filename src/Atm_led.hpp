@@ -15,7 +15,7 @@ class Atm_led : public Machine {
   Atm_led& blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );
   Atm_led& pause( uint32_t duration );
   Atm_led& fade( int fade );
-  Atm_led& wait( uint32_t ms );
+  Atm_led& lead( uint32_t ms );
   Atm_led& repeat( uint16_t repeat );
   Atm_led& brightness( uint8_t level );
   Atm_led& on( void );
@@ -33,7 +33,7 @@ class Atm_led : public Machine {
   short pin;
   bool activeLow;
   uint16_t repeat_count;
-  atm_timer_millis on_timer, off_timer, wait_timer;
+  atm_timer_millis on_timer, off_timer, lead_timer;
   atm_counter counter;
   atm_connector onfinish;
 

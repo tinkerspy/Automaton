@@ -23,7 +23,7 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   digitalWrite( pin, activeLow ? HIGH : LOW );
   on_timer.set( 500 );
   off_timer.set( 500 );
-  wait_timer.set( 0 );
+  lead_timer.set( 0 );
   repeat_count = ATM_COUNTER_OFF;
   counter.set( repeat_count );
   while ( state() != 0 ) cycle();
@@ -37,7 +37,7 @@ int Atm_led::event( int id ) {
     case EVT_OFF_TIMER:
       return off_timer.expired( this );
     case EVT_WT_TIMER:
-      return wait_timer.expired( this );
+      return lead_timer.expired( this );
     case EVT_COUNTER:
       return counter.expired();
   }
@@ -139,8 +139,8 @@ Atm_led& Atm_led::fade( int fade ) {
   return *this;
 }  // Dummy for method compatibility with Atm_fade
 
-Atm_led& Atm_led::wait( uint32_t ms ) {
-  wait_timer.set( ms );
+Atm_led& Atm_led::lead( uint32_t ms ) {
+  lead_timer.set( ms );
   return *this;
 } 
 
