@@ -4,15 +4,19 @@ Atm_fade& Atm_fade::begin( int attached_pin ) {
   // clang-format off
   const static state_t state_table[] PROGMEM = {
     /*               ON_ENTER    ON_LOOP       ON_EXIT  EVT_CNT_FADE EVT_TM_FADE   EVT_TM_ON  EVT_TM_OFF   EVT_CNT_RPT  EVT_ON EVT_OFF EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK    ELSE  */
-    /* IDLE   */      ENT_OFF, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     ON,   IDLE,    START,         ON,            START,     -1,  // LED off
-    /* ON     */       ENT_ON, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,  // LED on
-    /* START  */      ENT_OFF,        -1,           -1,           -1,         -1,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE, STARTU,  // Start fading
-    /* STARTU */    ENT_START,        -1,           -1,           -1,         -1,         -1,         UP,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,  
-    /* UP     */       ENT_UP,        -1,           -1,       STARTD,         UP,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,
-    /* STARTD */    ENT_START,        -1,           -1,           -1,         -1,       DOWN,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,
-    /* DOWN   */     ENT_DOWN,        -1,           -1,       REPEAT,       DOWN,         -1,         -1,           -1,     ON,   IDLE,    START,       IDLE,             IDLE,     -1,
-    /* REPEAT */   ENT_REPEAT,        -1,           -1,           -1,         -1,         -1,         -1,         DONE,     ON,   IDLE,    START,       IDLE,             IDLE, STARTU,
+    /* IDLE   */      ENT_OFF, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,OSTARTU,   IDLE,    START,    OSTARTU,            START,     -1,  // LED off
+    /* ON     */       ENT_ON, ATM_SLEEP,           -1,           -1,         -1,         -1,         -1,           -1,     -1,OSTARTD,    START,    OSTARTD,          OSTARTD,     -1,  // LED on
+    /* START  */      ENT_OFF,        -1,           -1,           -1,         -1,         -1,         -1,           -1,OSTARTU,   IDLE,    START,       IDLE,             IDLE, STARTU,  // Start fading
+    /* STARTU */    ENT_START,        -1,           -1,           -1,         -1,         -1,         UP,           -1,OSTARTU,   IDLE,    START,       IDLE,             IDLE,     -1,  
+    /* UP     */       ENT_UP,        -1,           -1,       STARTD,         UP,         -1,         -1,           -1,OSTARTU,   IDLE,    START,       IDLE,             IDLE,     -1,
+    /* STARTD */    ENT_START,        -1,           -1,           -1,         -1,       DOWN,         -1,           -1,OSTARTU,   IDLE,    START,       IDLE,             IDLE,     -1,
+    /* DOWN   */     ENT_DOWN,        -1,           -1,       REPEAT,       DOWN,         -1,         -1,           -1,OSTARTU,   IDLE,    START,       IDLE,             IDLE,     -1,
+    /* REPEAT */   ENT_REPEAT,        -1,           -1,           -1,         -1,         -1,         -1,         DONE,OSTARTU,   IDLE,    START,       IDLE,             IDLE, STARTU,
     /* DONE   */     ENT_DONE,        -1,           -1,           -1,         -1,         -1,         -1,           -1,     -1,     -1,       -1,         -1,               -1,   IDLE,
+    /* OSTARTU*/    ENT_START,        -1,           -1,           -1,         -1,         -1,         -1,           -1,     -1,   IDLE,    START,       IDLE,             IDLE,    OUP,  
+    /* OUP    */       ENT_UP,        -1,           -1,           ON,        OUP,         -1,         -1,           -1,     -1,   IDLE,    START,       IDLE,             IDLE,     -1,
+    /* OSTARTD*/    ENT_START,        -1,           -1,           -1,         -1,         -1,         -1,           -1,OSTARTU,   IDLE,    START,       IDLE,             IDLE,  ODOWN,
+    /* ODOWN  */     ENT_DOWN,        -1,           -1,         IDLE,      ODOWN,         -1,         -1,           -1,OSTARTU,   IDLE,    START,       IDLE,             IDLE,     -1,
 
   };
   // clang-format on
@@ -142,7 +146,7 @@ Atm_fade& Atm_fade::onFinish( atm_cb_push_t callback, int idx /* = 0 */ ) {
 
 Atm_fade& Atm_fade::trace( Stream& stream ) {
   setTrace( &stream, atm_serial_debug::trace,
-            "FADE\0EVT_CNT_FADE\0EVT_TM_FADE\0EVT_TM_ON\0EVT_TM_OFF\0EVT_CNT_RPT\0EVT_ON\0EVT_OFF\0EVT_"
-            "BLINK\0ELSE\0IDLE\0ON\0START\0STARTU\0UP\0STARTD\0DOWN\0REPEAT\0DONE" );
+            "FADE\0EVT_CNT_FADE\0EVT_TM_FADE\0EVT_TM_ON\0EVT_TM_OFF\0EVT_CNT_RPT\0EVT_ON\0EVT_OFF\0EVT_BLINK\0EVT_TOGGLE\0EVT_TOGGLE_BLINK\0ELSE\0"
+            "IDLE\0ON\0START\0STARTU\0UP\0STARTD\0DOWN\0REPEAT\0DONE\0OSTARTU\0OUP\0OSTARTD\0ODOWN" );
   return *this;
 }
