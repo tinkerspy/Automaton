@@ -4,8 +4,8 @@
 
 class Atm_led : public Machine {
  public:
-  enum { IDLE, ON, START, BLINK_OFF, LOOP, DONE, OFF };
-  enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, EVT_TOGGLE, EVT_TOGGLE_BLINK, ELSE };
+  enum { IDLE, ON, START, BLINK_OFF, LOOP, DONE, OFF, WT_ON, WT_START };
+  enum { EVT_ON_TIMER, EVT_OFF_TIMER, EVT_WT_TIMER, EVT_COUNTER, EVT_ON, EVT_OFF, EVT_BLINK, EVT_TOGGLE, EVT_TOGGLE_BLINK, ELSE };
   enum { EVT_START = EVT_BLINK };
 
   Atm_led( void ) : Machine(){};
@@ -14,6 +14,7 @@ class Atm_led : public Machine {
   Atm_led& blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );
   Atm_led& pause( uint32_t duration );
   Atm_led& fade( int fade );
+  Atm_led& wait( uint32_t ms );
   Atm_led& repeat( uint16_t repeat );
   Atm_led& brightness( uint8_t level );
   Atm_led& on( void );
@@ -31,7 +32,7 @@ class Atm_led : public Machine {
   short pin;
   bool activeLow;
   uint16_t repeat_count;
-  atm_timer_millis on_timer, off_timer;
+  atm_timer_millis on_timer, off_timer, wait_timer;
   atm_counter counter;
   atm_connector onfinish;
 

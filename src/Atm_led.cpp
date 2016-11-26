@@ -3,14 +3,16 @@
 Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   // clang-format off
   static const state_t state_table[] PROGMEM = {
-    /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER  EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK  ELSE */
-    /* IDLE      */  ENT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,     ON,      -1,     START,         ON,            START,    -1, // LED off
-    /* ON        */    ENT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,     -1,     OFF,     START,        OFF,              OFF,    -1, // LED on
-    /* START     */    ENT_ON,        -1,        -1,    BLINK_OFF,            -1,          -1,     ON,     OFF,        -1,        OFF,              OFF,    -1, // Start blinking
-    /* BLINK_OFF */   ENT_OFF,        -1,        -1,           -1,          LOOP,          -1,     ON,     OFF,        -1,        OFF,              OFF,    -1,
-    /* LOOP      */        -1,        -1,        -1,           -1,            -1,        DONE,     ON,     OFF,        -1,        OFF,              OFF, START,    
-    /* DONE      */        -1,        -1, EXT_CHAIN,           -1,           OFF,          -1,     ON,     OFF,     START,        OFF,              OFF,    -1, // Wait after last blink
-    /* OFF       */   ENT_OFF,        -1,        -1,           -1,            -1,          -1,     ON,     OFF,     START,         -1,               -1,  IDLE, // All off -> IDLE
+    /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER EVT_WT_TIMER EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK  ELSE */
+    /* IDLE      */  ENT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,         -1,  WT_ON,      -1,  WT_START,         ON,         WT_START,    -1, // LED off
+    /* ON        */    ENT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,         -1,     -1,     OFF,  WT_START,        OFF,              OFF,    -1, // LED on
+    /* START     */    ENT_ON,        -1,        -1,    BLINK_OFF,            -1,          -1,         -1,  WT_ON,     OFF,        -1,        OFF,              OFF,    -1, // Start blinking
+    /* BLINK_OFF */   ENT_OFF,        -1,        -1,           -1,          LOOP,          -1,         -1,  WT_ON,     OFF,        -1,        OFF,              OFF,    -1,
+    /* LOOP      */        -1,        -1,        -1,           -1,            -1,          -1,       DONE,  WT_ON,     OFF,        -1,        OFF,              OFF, START,    
+    /* DONE      */        -1,        -1, EXT_CHAIN,           -1,           OFF,          -1,         -1,  WT_ON,     OFF,  WT_START,        OFF,              OFF,    -1, // Wait after last blink
+    /* OFF       */   ENT_OFF,        -1,        -1,           -1,            -1,          -1,         -1,  WT_ON,     OFF,  WT_START,         -1,               -1,  IDLE, // All off -> IDLE
+    /* WT_ON     */        -1,        -1,        -1,           -1,            -1,          ON,         -1,  WT_ON,     OFF,  WT_START,         -1,               -1,    -1, // All off -> IDLE
+    /* WT_START  */        -1,        -1,        -1,           -1,            -1,       START,         -1,  WT_ON,     OFF,  WT_START,         -1,               -1,    -1, // All off -> IDLE
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -21,6 +23,7 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   digitalWrite( pin, activeLow ? HIGH : LOW );
   on_timer.set( 500 );
   off_timer.set( 500 );
+  wait_timer.set( 0 );
   repeat_count = ATM_COUNTER_OFF;
   counter.set( repeat_count );
   while ( state() != 0 ) cycle();
@@ -33,6 +36,8 @@ int Atm_led::event( int id ) {
       return on_timer.expired( this );
     case EVT_OFF_TIMER:
       return off_timer.expired( this );
+    case EVT_WT_TIMER:
+      return wait_timer.expired( this );
     case EVT_COUNTER:
       return counter.expired();
   }
@@ -129,6 +134,11 @@ Atm_led& Atm_led::fade( int fade ) {
   return *this;
 }  // Dummy for method compatibility with Atm_fade
 
+Atm_led& Atm_led::wait( uint32_t ms ) {
+  wait_timer.set( ms );
+  return *this;
+} 
+
 Atm_led& Atm_led::repeat( uint16_t repeat ) {
   counter.set( repeat_count = repeat );
   return *this;
@@ -144,8 +154,8 @@ Atm_led& Atm_led::brightness( uint8_t level ) {
 
 Atm_led& Atm_led::trace( Stream& stream ) {
   setTrace( &stream, atm_serial_debug::trace,
-            "LED\0EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_"
+            "LED\0EVT_ON_TIMER\0EVT_OFF_TIMER\0EVT_WT_TIMER\0EVT_COUNTER\0EVT_ON\0EVT_OFF\0EVT_"
             "BLINK\0EVT_TOGGLE\0EVT_TOGGLE_BLINK\0ELSE\0"
-            "IDLE\0ON\0START\0BLINK_OFF\0LOOP\0DONE\0OFF" );
+            "IDLE\0ON\0START\0BLINK_OFF\0LOOP\0DONE\0OFF\0WT_ON\0WT_START" );
   return *this;
 }
