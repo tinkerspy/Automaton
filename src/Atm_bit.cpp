@@ -36,9 +36,11 @@ void Atm_bit::action( int id ) {
       return;
     case ENT_REFR_ON:
       connector[ON_CHANGE_TRUE].push( ON );
+      last_state = -1;
       return;      
     case ENT_REFR_OFF:
       connector[ON_CHANGE_FALSE].push( OFF );
+      last_state = -1;
       return;      
   }
 }
