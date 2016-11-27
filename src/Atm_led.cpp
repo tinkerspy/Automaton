@@ -3,7 +3,7 @@
 Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   // clang-format off
   static const state_t state_table[] PROGMEM = {
-    /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER EVT_WT_TIMER EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK  ELSE */
+    /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER EVT_WT_TIMER EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK   ELSE */
     /* IDLE      */  ENT_INIT, ATM_SLEEP,        -1,           -1,            -1,          -1,         -1,  WT_ON,      -1,  WT_START,         ON,         WT_START,    -1, // LED off
     /* ON        */    ENT_ON, ATM_SLEEP,        -1,           -1,            -1,          -1,         -1,     -1,     OFF,  WT_START,        OFF,              OFF,    -1, // LED on
     /* START     */    ENT_ON,        -1,        -1,    BLINK_OFF,            -1,          -1,         -1,  WT_ON,     OFF,        -1,        OFF,              OFF,    -1, // Start blinking
@@ -11,14 +11,17 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
     /* LOOP      */        -1,        -1,        -1,           -1,            -1,          -1,       DONE,  WT_ON,     OFF,        -1,        OFF,              OFF, START,    
     /* DONE      */        -1,        -1, EXT_CHAIN,           -1,           OFF,          -1,         -1,  WT_ON,     OFF,  WT_START,        OFF,              OFF,    -1, // Wait after last blink
     /* OFF       */   ENT_OFF,        -1,        -1,           -1,            -1,          -1,         -1,  WT_ON,     OFF,  WT_START,         -1,               -1,  IDLE, // All off -> IDLE
-    /* WT_ON     */        -1,        -1,        -1,           -1,            -1,          ON,         -1,  WT_ON,     OFF,  WT_START,         -1,               -1,    -1, // All off -> IDLE
-    /* WT_START  */        -1,        -1,        -1,           -1,            -1,       START,         -1,  WT_ON,     OFF,  WT_START,         -1,               -1,    -1, // All off -> IDLE
-  };
+    /* WT_ON     */        -1,        -1,        -1,           -1,            -1,          ON,         -1,  WT_ON,     OFF,  WT_START,         -1,               -1,    -1, // LEAD for ON
+    /* WT_START  */        -1,        -1,        -1,           -1,            -1,       START,         -1,  WT_ON,     OFF,  WT_START,         -1,               -1,    -1, // LEAD for BLINK
+  }; 
   // clang-format on
   Machine::begin( state_table, ELSE );
   pin = attached_pin;
   this->activeLow = activeLow;
   level = 255;
+  toLow = 0;
+  toHigh = 255;
+  wrap = false;
   pinMode( pin, OUTPUT );
   digitalWrite( pin, activeLow ? HIGH : LOW );
   on_timer.set( 500 );
@@ -53,10 +56,10 @@ void Atm_led::action( int id ) {
       if ( activeLow ) {
         digitalWrite( pin, LOW );
       } else {
-        if ( level == 255 ) {
+        if ( level == toHigh ) {
           digitalWrite( pin, HIGH );
         } else {
-          analogWrite( pin, level );
+          analogWrite( pin, mapLevel( level ) );
         }
       }
       return;
@@ -65,16 +68,24 @@ void Atm_led::action( int id ) {
       if ( !activeLow ) {
         digitalWrite( pin, LOW );
       } else {
-        if ( level == 255 ) {
+        if ( level == toHigh ) {
           digitalWrite( pin, HIGH );
         } else {
-          analogWrite( pin, level );
+          analogWrite( pin, mapLevel( level ) );
         }
       }
       return;
     case EXT_CHAIN:
       onfinish.push( 0 );
       return;
+  }
+}
+
+int Atm_led::mapLevel( int level ) {
+  if ( levelMapSize ) {
+    return levelMap[level];
+  } else {
+    return map( level, toLow, toHigh, 0, 255 );
   }
 }
 
@@ -130,6 +141,21 @@ Atm_led& Atm_led::blink( void ) {
   return *this;
 }
 
+Atm_led& Atm_led::range( int toLow, int toHigh, bool wrap /* = false */ ) {
+  this->toLow = toLow; 
+  this->toHigh = toHigh; 
+  this->wrap = wrap;
+  level = toHigh;
+  return *this;
+}
+
+Atm_led& Atm_led::levels( unsigned char* map, int mapsize, bool wrap /* = false */ ) {
+  this->levelMap = map;
+  levelMapSize = mapsize;
+  range( 0, mapsize - 1, wrap );
+  return *this;
+}
+
 Atm_led& Atm_led::pause( uint32_t duration ) {  // Time in which led is fully off
   off_timer.set( duration ? duration : 1 );     // Make sure off_timer is never 0 (work around)
   return *this;
@@ -149,10 +175,33 @@ Atm_led& Atm_led::repeat( uint16_t repeat ) {
   return *this;
 }
 
-Atm_led& Atm_led::brightness( uint8_t level ) {
-  this->level = level;
-  if ( current == ON || current == START ) {
-    analogWrite( pin, level );
+int Atm_led::brightness( int level /* = -1 */ ) {
+  if ( level > -1 ) {
+    this->level = level;
+    if ( current == ON || current == START ) {
+      analogWrite( pin, mapLevel( level ) );
+    }
+  }
+  return this->level;
+}
+
+int Atm_led::brighten( int v ) {
+  if ( abs( v ) == 1 ) {
+    int br = (int)this->level + v;
+    if ( br > toHigh ) 
+      br = wrap ? toLow : toHigh;
+    if ( br < toLow ) 
+      br = wrap ? toHigh : toLow;
+    brightness( br );
+  }
+  return this->level;
+}
+
+Atm_led& Atm_led::trigger( int event ) {
+  if ( event > ELSE ) {
+    brighten( event == EVT_BRUP ? 1 : -1 );
+  } else {
+    Machine::trigger( event );
   }
   return *this;
 }
