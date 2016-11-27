@@ -3,9 +3,11 @@
 Atm_bit& Atm_bit::begin( bool initialState /* = false */ ) {
   // clang-format off
   const static state_t state_table[] PROGMEM = {
-    /*              ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON  EVT_OFF  EVT_TOGGLE EVT_INPUT ELSE */
-    /* OFF     */    ENT_OFF, ATM_SLEEP,      -1,     ON,      -1,         ON,      OFF,  -1,
-    /* ON      */     ENT_ON, ATM_SLEEP,      -1,     -1,     OFF,        OFF,       ON,  -1,
+    /*                ON_ENTER    ON_LOOP  ON_EXIT  EVT_ON  EVT_OFF  EVT_TOGGLE EVT_INPUT EVT_REFRESH ELSE */
+    /* OFF     */      ENT_OFF, ATM_SLEEP,      -1,     ON,      -1,         ON,      OFF,   REFR_OFF,  -1,
+    /* ON      */       ENT_ON, ATM_SLEEP,      -1,     -1,     OFF,        OFF,       ON,    REFR_ON,  -1,
+    /* REFR_ON */  ENT_REFR_ON,        -1,      -1,     -1,      -1,         -1,       -1,         -1,  ON,
+    /* REFR_OFF*/ ENT_REFR_OFF,        -1,      -1,     -1,      -1,         -1,       -1,         -1, OFF,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
@@ -32,6 +34,12 @@ void Atm_bit::action( int id ) {
       if ( indicator > -1 ) digitalWrite( indicator, !HIGH != !indicatorActiveLow );
       last_state = current;
       return;
+    case ENT_REFR_ON:
+      connector[ON_CHANGE_TRUE].push( ON );
+      return;      
+    case ENT_REFR_OFF:
+      connector[ON_CHANGE_FALSE].push( OFF );
+      return;      
   }
 }
 
@@ -52,6 +60,11 @@ Atm_bit& Atm_bit::toggle( void ) {
 
 Atm_bit& Atm_bit::input( void ) {
   trigger( EVT_INPUT );
+  return *this;
+}
+
+Atm_bit& Atm_bit::refresh( void ) {
+  trigger( EVT_REFRESH );
   return *this;
 }
 
@@ -95,6 +108,6 @@ Atm_bit& Atm_bit::onInput( bool status, Machine& machine, int event /* = 0 */ ) 
 }
 
 Atm_bit& Atm_bit::trace( Stream& stream ) {
-  Machine::setTrace( &stream, atm_serial_debug::trace, "BIT\0EVT_ON\0EVT_OFF\0EVT_TOGGLE\0EVT_INPUT\0ELSE\0OFF\0ON\0INPUTM" );
+  Machine::setTrace( &stream, atm_serial_debug::trace, "BIT\0EVT_ON\0EVT_OFF\0EVT_TOGGLE\0EVT_INPUT\0EVT_REFRESH\0ELSE\0OFF\0ON\0REFR_ON\0REFR_OFF" );
   return *this;
 }

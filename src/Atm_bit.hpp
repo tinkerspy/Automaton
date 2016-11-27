@@ -4,8 +4,8 @@
 
 class Atm_bit : public Machine {
  public:
-  enum { OFF, ON };                                       // STATES
-  enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, ELSE };  // EVENTS
+  enum { OFF, ON, REFR_ON, REFR_OFF };                                       // STATES
+  enum { EVT_ON, EVT_OFF, EVT_TOGGLE, EVT_INPUT, EVT_REFRESH, ELSE };  // EVENTS
 
   Atm_bit( void ) : Machine(){};
   Atm_bit& begin( bool initialState = false );
@@ -20,10 +20,11 @@ class Atm_bit : public Machine {
   Atm_bit& off( void );
   Atm_bit& toggle( void );
   Atm_bit& input( void );
+  Atm_bit& refresh( void );
   Atm_bit& trace( Stream& stream );
 
  private:
-  enum { ENT_ON, ENT_OFF };                                                              // ACTIONS
+  enum { ENT_ON, ENT_OFF, ENT_REFR_ON, ENT_REFR_OFF };                                                              // ACTIONS
   enum { ON_CHANGE_FALSE, ON_CHANGE_TRUE, ON_INPUT_FALSE, ON_INPUT_TRUE, _CONN_SIZE_ };  // CONNECTORS
   state_t last_state;
   atm_connector connector[_CONN_SIZE_];
