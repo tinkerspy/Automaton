@@ -48,12 +48,14 @@ void Atm_timer::action( int id ) {
       daycounter.decrement();
       return;
     case ENT_TRIGGER:
+      abscounter++;
       repcounter.decrement();
-      ontimer.push( repcounter.value );
+      ontimer.push( repcounter.value, abscounter );
       return;
     case ENT_FINISH:
       onfinish.push( 0 );
       repcounter.set( repeat_cnt );
+      abscounter = 0;
       return;
   }
 }

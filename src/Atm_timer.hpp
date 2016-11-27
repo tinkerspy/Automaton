@@ -30,6 +30,7 @@ class Atm_timer : public Machine {
   enum { ENT_START, ENT_TRIGGER, EXT_WAITD, ENT_FINISH };
   atm_timer_millis daytimer, mstimer;
   atm_counter daycounter, repcounter;
+  uint32_t abscounter;
   uint16_t days;
   uint16_t repeat_cnt;
   atm_connector ontimer, onfinish;
