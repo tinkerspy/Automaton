@@ -67,7 +67,8 @@ void Atm_player::action( int id ) {
       return;
     case ENT_SOUND:
       if ( patternwidth == 32 ) {
-        push( connectors, ON_NOTE, true, pattern32[step * 3] * pitchFactor, 1 );
+        uint32_t v = pattern32[step * 3] * (uint32_t)pitchFactor;
+        push( connectors, ON_NOTE, true, v & 0xFFFF, v >> 16 & 0xFFFF );
         if ( pin >= 0 ) tone( pin, pattern32[step * 3] * pitchFactor );
         timer.set( pattern32[step * 3 + 1] * speedFactor );
       } else {
@@ -78,7 +79,8 @@ void Atm_player::action( int id ) {
       return;
     case ENT_QUIET:
       if ( patternwidth == 32 ) {
-        push( connectors, ON_NOTE, false, pattern32[step * 3] * pitchFactor, 0 );
+        uint32_t v = pattern32[step * 3] * (uint32_t)pitchFactor;
+        push( connectors, ON_NOTE, false, v & 0xFFFF, v >> 16 & 0xFFFF );
         if ( pin >= 0 ) noTone( pin );
         timer.set( pattern32[step * 3 + 2] * speedFactor );
       } else {
