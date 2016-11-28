@@ -37,7 +37,7 @@ int Atm_player::event( int id ) {
     case EVT_TIMER:
       return timer.expired( this );
     case EVT_EOPAT:
-      if ( mode32 ) {
+      if ( patternwidth == 32 ) {
         return ( step * 3 * sizeof( uint32_t ) ) >= patternsize;
       } else {
         return ( step * 3 * sizeof( int ) ) >= patternsize;
@@ -66,7 +66,7 @@ void Atm_player::action( int id ) {
       counter_repeat.decrement();
       return;
     case ENT_SOUND:
-      if ( mode32 ) {
+      if ( patternwidth == 32 ) {
         push( connectors, ON_NOTE, true, pattern32[step * 3] * pitchFactor, 1 );
         if ( pin >= 0 ) tone( pin, pattern32[step * 3] * pitchFactor );
         timer.set( pattern32[step * 3 + 1] * speedFactor );
@@ -77,7 +77,7 @@ void Atm_player::action( int id ) {
       }
       return;
     case ENT_QUIET:
-      if ( mode32 ) {
+      if ( patternwidth == 32 ) {
         push( connectors, ON_NOTE, false, pattern32[step * 3] * pitchFactor, 0 );
         if ( pin >= 0 ) noTone( pin );
         timer.set( pattern32[step * 3 + 2] * speedFactor );
@@ -134,7 +134,7 @@ Atm_player& Atm_player::toggle( void ) {
  */
 
 Atm_player& Atm_player::play( int* pat, int patsize ) {
-  mode32 = false;
+  patternwidth = 16;
   pattern16 = pat;
   patternsize = patsize;
   counter_repeat.set( repeatCount );
@@ -143,7 +143,7 @@ Atm_player& Atm_player::play( int* pat, int patsize ) {
 }
 
 Atm_player& Atm_player::play( uint32_t* pat, int patsize ) {
-  mode32 = true;
+  patternwidth = 32;
   pattern32 = pat;
   patternsize = patsize;
   counter_repeat.set( repeatCount );
@@ -152,7 +152,7 @@ Atm_player& Atm_player::play( uint32_t* pat, int patsize ) {
 }
 
 Atm_player& Atm_player::play( int freq, int period, int pause /* = 0 */ ) {
-  mode32 = false;
+  patternwidth = 16;
   stub[0] = freq;
   stub[1] = period;
   stub[2] = pause;

@@ -32,7 +32,7 @@ class Atm_player : public Machine {
   int* pattern16; // Can also be 32 bit on some hardware (teensy 3.x)
   uint32_t* pattern32;
   uint16_t patternsize;
-  bool mode32;
+  uint8_t patternwidth;
   int step;
   uint16_t repeatCount;
   float speedFactor, pitchFactor;
