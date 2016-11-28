@@ -12,8 +12,9 @@ class Atm_player : public Machine {
   Atm_player& trigger( int event );
   int state( void );
   Atm_player& play( int* pat, int size );
+  Atm_player& play( uint32_t* pat, int size );
   Atm_player& play( int freq, int period, int pause = 0 );
-  Atm_player& repeat( uint16_t v );
+  Atm_player& repeat( uint16_t v = -1 );
   Atm_player& speed( float v );
   Atm_player& pitch( float v );
   Atm_player& start( void );
@@ -28,8 +29,10 @@ class Atm_player : public Machine {
 
  private:
   int pin;
-  int* pattern;
+  int* pattern16; // Can also be 32 bit on some hardware (teensy 3.x)
+  uint32_t* pattern32;
   uint16_t patternsize;
+  bool mode32;
   int step;
   uint16_t repeatCount;
   float speedFactor, pitchFactor;

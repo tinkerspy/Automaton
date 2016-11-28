@@ -37,7 +37,11 @@ int Atm_player::event( int id ) {
     case EVT_TIMER:
       return timer.expired( this );
     case EVT_EOPAT:
-      return ( step * 3 * sizeof( int ) ) >= patternsize;
+      if ( mode32 ) {
+        return ( step * 3 * sizeof( uint32_t ) ) >= patternsize;
+      } else {
+        return ( step * 3 * sizeof( int ) ) >= patternsize;
+      }
     case EVT_REPEAT:
       return counter_repeat.expired();
   }
@@ -62,14 +66,26 @@ void Atm_player::action( int id ) {
       counter_repeat.decrement();
       return;
     case ENT_SOUND:
-      push( connectors, ON_NOTE, true, pattern[step * 3] * pitchFactor, 1 );
-      if ( pin >= 0 ) tone( pin, pattern[step * 3] * pitchFactor );
-      timer.set( pattern[step * 3 + 1] * speedFactor );
+      if ( mode32 ) {
+        push( connectors, ON_NOTE, true, pattern32[step * 3] * pitchFactor, 1 );
+        if ( pin >= 0 ) tone( pin, pattern32[step * 3] * pitchFactor );
+        timer.set( pattern32[step * 3 + 1] * speedFactor );
+      } else {
+        push( connectors, ON_NOTE, true, pattern16[step * 3] * pitchFactor, 1 );
+        if ( pin >= 0 ) tone( pin, pattern16[step * 3] * pitchFactor );
+        timer.set( pattern16[step * 3 + 1] * speedFactor );        
+      }
       return;
     case ENT_QUIET:
-      push( connectors, ON_NOTE, false, pattern[step * 3] * pitchFactor, 0 );
-      if ( pin >= 0 ) noTone( pin );
-      timer.set( pattern[step * 3 + 2] * speedFactor );
+      if ( mode32 ) {
+        push( connectors, ON_NOTE, false, pattern32[step * 3] * pitchFactor, 0 );
+        if ( pin >= 0 ) noTone( pin );
+        timer.set( pattern32[step * 3 + 2] * speedFactor );
+      } else {
+        push( connectors, ON_NOTE, false, pattern16[step * 3] * pitchFactor, 0 );
+        if ( pin >= 0 ) noTone( pin );
+        timer.set( pattern16[step * 3 + 2] * speedFactor );
+      }
       return;
     case ENT_NEXT:
       step++;
@@ -83,7 +99,7 @@ void Atm_player::action( int id ) {
  *
  */
 
-Atm_player& Atm_player::repeat( uint16_t v ) {
+Atm_player& Atm_player::repeat( uint16_t v /* = -1 */) {
   counter_repeat.set( repeatCount = v );
   return *this;
 }
@@ -118,7 +134,17 @@ Atm_player& Atm_player::toggle( void ) {
  */
 
 Atm_player& Atm_player::play( int* pat, int patsize ) {
-  pattern = pat;
+  mode32 = false;
+  pattern16 = pat;
+  patternsize = patsize;
+  counter_repeat.set( repeatCount );
+  step = 0;
+  return *this;
+}
+
+Atm_player& Atm_player::play( uint32_t* pat, int patsize ) {
+  mode32 = true;
+  pattern32 = pat;
   patternsize = patsize;
   counter_repeat.set( repeatCount );
   step = 0;
@@ -126,10 +152,11 @@ Atm_player& Atm_player::play( int* pat, int patsize ) {
 }
 
 Atm_player& Atm_player::play( int freq, int period, int pause /* = 0 */ ) {
+  mode32 = false;
   stub[0] = freq;
   stub[1] = period;
   stub[2] = pause;
-  pattern = stub;
+  pattern16 = stub;
   patternsize = 3 * sizeof( int );
   step = 0;
   return *this;
