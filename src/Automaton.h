@@ -21,6 +21,9 @@ const uint8_t ATM_BROADCAST = B10000000;
 
 #define read_state( addr ) ( state_t ) pgm_read_byte_near( addr )
 
+#define B2INT( hibyte, lobyte ) ((int)( hibyte << 8 | lobyte ))
+#define B4INT( byte4, byte3, byte2, byte1) ((uint32_t)( (uint32_t)byte4 << 24 | (uint32_t)byte3 << 16 | (uint32_t)byte2 << 8 | (uint32_t)byte1 ))
+
 class Machine;
 class Automaton;
 
