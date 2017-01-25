@@ -53,13 +53,15 @@ void Atm_led::action( int id ) {
       counter.set( repeat_count );
       return;
     case ENT_ON:
-      if ( activeLow ) {
-        digitalWrite( pin, LOW );
-      } else {
-        if ( level == toHigh ) {
-          digitalWrite( pin, HIGH );
+      if ( on_timer.value > 0 ) { // Never turn if on_timer is zero (duty cycle 0 must be dark)
+        if ( activeLow ) {
+          digitalWrite( pin, LOW );
         } else {
-          analogWrite( pin, mapLevel( level ) );
+          if ( level == toHigh ) {
+            digitalWrite( pin, HIGH );
+          } else {
+            analogWrite( pin, mapLevel( level ) );
+          }
         }
       }
       return;

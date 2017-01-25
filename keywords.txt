@@ -50,6 +50,9 @@ repeat	KEYWORD2
 interval	KEYWORD2
 onTimer	KEYWORD2
 onPress	KEYWORD2
+onChange	KEYWORD2
+onRelease	KEYWORD2
+onInput
 msgWrite	KEYWORD2
 id	KEYWORD2
 onSwitch	KEYWORD2
