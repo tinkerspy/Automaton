@@ -58,7 +58,9 @@ void Atm_player::action( int id ) {
       push( connectors, ON_FINISH, 0, 0, 0 );
       return;
     case ENT_IDLE:
+#ifdef _VARIANT_ARDUINO_DUE_X_    
       if ( pin >= 0 ) noTone( pin );  // Tone takes up 7 bytes extra SRAM
+#endif
       counter_repeat.set( repeatCount );
       return;
     case ENT_START:
@@ -69,11 +71,15 @@ void Atm_player::action( int id ) {
       if ( patternwidth == 32 ) {
         uint32_t v = pattern32[step * 3] * (uint32_t)pitchFactor;
         push( connectors, ON_NOTE, true, v & 0xFFFF, v >> 16 & 0xFFFF );
+#ifdef _VARIANT_ARDUINO_DUE_X_        
         if ( pin >= 0 ) tone( pin, pattern32[step * 3] * pitchFactor );
+#endif
         timer.set( pattern32[step * 3 + 1] * speedFactor );
       } else {
         push( connectors, ON_NOTE, true, pattern16[step * 3] * pitchFactor, 1 );
+#ifdef _VARIANT_ARDUINO_DUE_X_        
         if ( pin >= 0 ) tone( pin, pattern16[step * 3] * pitchFactor );
+#endif
         timer.set( pattern16[step * 3 + 1] * speedFactor );        
       }
       return;
@@ -81,11 +87,15 @@ void Atm_player::action( int id ) {
       if ( patternwidth == 32 ) {
         uint32_t v = pattern32[step * 3] * (uint32_t)pitchFactor;
         push( connectors, ON_NOTE, false, v & 0xFFFF, v >> 16 & 0xFFFF );
+#ifdef _VARIANT_ARDUINO_DUE_X_
         if ( pin >= 0 ) noTone( pin );
+#endif        
         timer.set( pattern32[step * 3 + 2] * speedFactor );
       } else {
         push( connectors, ON_NOTE, false, pattern16[step * 3] * pitchFactor, 0 );
+#ifdef _VARIANT_ARDUINO_DUE_X_
         if ( pin >= 0 ) noTone( pin );
+#endif
         timer.set( pattern16[step * 3 + 2] * speedFactor );
       }
       return;
