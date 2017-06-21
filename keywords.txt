@@ -48,11 +48,15 @@ pause	KEYWORD2
 fade	KEYWORD2
 repeat	KEYWORD2
 interval	KEYWORD2
+interval_seconds	KEYWORD2
+interval_millis	KEYWORD2
 onTimer	KEYWORD2
+onFinish	KEYWORD2
 onPress	KEYWORD2
+longPress	KEYWORD2
 onChange	KEYWORD2
 onRelease	KEYWORD2
-onInput
+onInput	KEYWORD2
 msgWrite	KEYWORD2
 id	KEYWORD2
 onSwitch	KEYWORD2
