@@ -48,6 +48,7 @@ const uint16_t ATM_COUNTER_OFF = 0xffff;    // This counter value never expires
 class Automaton {
  public:
   Automaton& add( Machine& machine, bool force = true );
+  void printf(Stream & stream, const char *format, ...);
   Automaton& delay( uint32_t time );
   Automaton& run( void );
 

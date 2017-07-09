@@ -43,6 +43,22 @@ Automaton& Automaton::run( void ) {
   return *this;
 }
 
+void Automaton::printf(Stream & stream, const char *format, ...) {
+  static char line[80];
+  va_list args;
+  va_start(args, format);
+  uint8_t len = vsnprintf(line, sizeof(line), format, args);
+  va_end(args);
+  for (char *p = &line[0]; *p; p++) {
+      if (*p == '\n') {
+          stream.write('\r');
+      }
+      stream.write(*p);
+  }
+  if (len >= sizeof(line))
+      stream.write('$');
+}
+
 Automaton& Automaton::delay( uint32_t time ) {
   uint32_t cycle_start = millis();
   do {
