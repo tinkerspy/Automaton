@@ -2,6 +2,10 @@
 
 #include <Automaton.h>
 
+#if defined( _VARIANT_ARDUINO_DUE_X ) || defined( ARDUINO_FEATHER52 ) 
+#define ATM_PLAYER_DISABLE_TONE
+#endif
+
 class Atm_player : public Machine {
  public:
   enum { IDLE, START, SOUND, QUIET, NEXT, REPEAT, FINISH };                          // STATES
