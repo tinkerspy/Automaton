@@ -9,11 +9,12 @@ class Atm_led : public Machine {
   enum { EVT_START = EVT_BLINK };
 
   Atm_led( void ) : Machine(){};
-  Atm_led& begin( int attached_pin, bool activeLow = false );
+  Atm_led& begin( int attached_pin, bool activeLow = false, byte* blinkPattern = NULL, int blinkPatternSize = 0);
   Atm_led& blink( void );
   Atm_led& blink( uint32_t duration );
   Atm_led& blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count = ATM_COUNTER_OFF );
   Atm_led& pause( uint32_t duration );
+  Atm_led& setpattern( byte* pattern, uint32_t patternSize );
   Atm_led& fade( int fade );
   Atm_led& lead( uint32_t ms );
   Atm_led& repeat( uint16_t repeat );
@@ -42,11 +43,17 @@ class Atm_led : public Machine {
   atm_timer_millis on_timer, off_timer, lead_timer;
   atm_counter counter;
   atm_connector onfinish;
+  byte* pattern;
+
   unsigned char* levelMap;
   int levelMapSize;  
   int mapLevel( int level );
 
+  uint32_t patternSize; 
+  uint32_t onDuration = 500;
+  uint32_t offDuration = 500;
 
+  void reset();
   int event( int id );
   void action( int id );
 };

@@ -1,6 +1,6 @@
 #include "Atm_led.hpp"
 
-Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
+Atm_led& Atm_led::begin( int attached_pin, bool activeLow, byte* blinkPattern, int blinkPatternSize ) {
   // clang-format off
   static const state_t state_table[] PROGMEM = {
     /*               ON_ENTER    ON_LOOP    ON_EXIT  EVT_ON_TIMER  EVT_OFF_TIMER EVT_WT_TIMER EVT_COUNTER  EVT_ON  EVT_OFF  EVT_BLINK  EVT_TOGGLE  EVT_TOGGLE_BLINK   ELSE */
@@ -24,13 +24,23 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   wrap = false;
   pinMode( pin, OUTPUT );
   digitalWrite( pin, activeLow ? HIGH : LOW );
-  on_timer.set( 500 );
-  off_timer.set( 500 );
-  lead_timer.set( 0 );
-  repeat_count = ATM_COUNTER_OFF;
-  counter.set( repeat_count );
+  pattern = blinkPattern;
+  patternSize = blinkPatternSize;
+  reset();
   while ( state() != 0 ) cycle();
   return *this;
+}
+
+void Atm_led::reset() {
+  off_timer.set( offDuration );
+  if( pattern == NULL ) {
+    on_timer.set( onDuration );
+    repeat_count = ATM_COUNTER_OFF;
+  } else {
+    repeat_count = patternSize;
+    on_timer.set( onDuration * pattern[0] );
+  }
+  counter.set( repeat_count );
 }
 
 int Atm_led::event( int id ) {
@@ -76,8 +86,18 @@ void Atm_led::action( int id ) {
           analogWrite( pin, mapLevel( level ) );
         }
       }
+      if( state() == OFF ) {
+        // End of sequence, reset the counter in case it gets called again (eg, by an OnFinish connector)
+        counter.set( repeat_count );
+      }
+      if(pattern != NULL ) {
+        // Change the timer for the next On cycle.
+        int i = patternSize - counter.value;
+        on_timer.set(onDuration * pattern[i]);
+      }
       return;
     case EXT_CHAIN:
+      reset();
       onfinish.push( 0 );
       return;
   }
@@ -129,11 +149,13 @@ Atm_led& Atm_led::onFinish( atm_cb_push_t callback, int idx /* = 0 */ ) {
 Atm_led& Atm_led::blink( uint32_t duration, uint32_t pause_duration, uint16_t repeat_count /* = ATM_COUNTER_OFF */ ) {
   blink( duration );  // Time in which led is fully on
   pause( pause_duration );
-  repeat( repeat_count );
+  if( patternSize == 0)
+    repeat( repeat_count );
   return *this;
 }
 
 Atm_led& Atm_led::blink( uint32_t duration ) {
+  onDuration = duration;
   on_timer.set( duration );  // Time in which led is fully on
   return *this;
 }
@@ -159,7 +181,14 @@ Atm_led& Atm_led::levels( unsigned char* map, int mapsize, bool wrap /* = false 
 }
 
 Atm_led& Atm_led::pause( uint32_t duration ) {  // Time in which led is fully off
+  offDuration = duration;
   off_timer.set( duration ? duration : 1 );     // Make sure off_timer is never 0 (work around)
+  return *this;
+}
+
+Atm_led& Atm_led::setpattern( byte* blinkPattern, uint32_t blinkPatternSize ) {
+  pattern = blinkPattern;
+  this->patternSize = blinkPatternSize;
   return *this;
 }
 
