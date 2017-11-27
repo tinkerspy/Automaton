@@ -21,8 +21,8 @@ Atm_button& Atm_button::begin( int attached_pin ) {
     /* AUTO_ST   */      ENT_AUTO,      -1,           -1,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1,  IDLE,
   };
   // clang-format on
-  pin = attached_pin;
   Machine::begin( state_table, ELSE );
+  pin = attached_pin;
   counter_longpress.set( 0 );
   timer_debounce.set( DEBOUNCE );
   timer_delay.set( ATM_TIMER_OFF );
