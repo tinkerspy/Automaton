@@ -21,14 +21,14 @@ Atm_button& Atm_button::begin( int attached_pin ) {
     /* AUTO_ST   */      ENT_AUTO,      -1,           -1,        -1,        -1,        -1,         -1,       -1,          -1,          -1,        -1,  IDLE,
   };
   // clang-format on
-  Machine::begin( state_table, ELSE );
   pin = attached_pin;
+  Machine::begin( state_table, ELSE );
   counter_longpress.set( 0 );
   timer_debounce.set( DEBOUNCE );
   timer_delay.set( ATM_TIMER_OFF );
   timer_repeat.set( ATM_TIMER_OFF );
   timer_auto.set( ATM_TIMER_OFF );
-  pinMode( pin, INPUT_PULLUP );
+  initButton();
   return *this;
 }
 
@@ -45,9 +45,9 @@ int Atm_button::event( int id ) {
     case EVT_AUTO:
       return timer_auto.expired( this );
     case EVT_PRESS:
-      return !digitalRead( pin );
+    	return isPressed();
     case EVT_RELEASE:
-      return digitalRead( pin );
+    	return isReleased();
     case EVT_COUNTER:
       return counter_longpress.expired();
   }
@@ -150,4 +150,16 @@ Atm_button& Atm_button::trace( Stream& stream ) {
             "BUTTON\0EVT_LMODE\0EVT_TIMER\0EVT_DELAY\0EVT_REPEAT\0EVT_PRESS\0EVT_RELEASE\0EVT_COUNTER\0EVT_"
             "AUTO_ST\0ELSE\0IDLE\0WAIT\0PRESSED\0REPEAT\0RELEASE\0LIDLE\0LWAIT\0LPRESSED\0LRELEASE\0WRELEASE\0AUTO" );
   return *this;
+}
+
+void Atm_button::initButton() {
+	pinMode( pin, INPUT_PULLUP );
+}
+
+bool Atm_button::isPressed() {
+	return !digitalRead( pin );
+}
+
+bool Atm_button::isReleased() {
+	return digitalRead( pin );
 }
