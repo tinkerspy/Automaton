@@ -146,6 +146,25 @@ void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, in
   }
 }
 
+void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, int fill, atm_cb_lambda_t lambdacallback, int idx ) {
+  if ( sub == -1 ) {  // auto store
+    sub = 0;
+    for ( int i = 0; i < slots; i++ ) {
+      if ( connectors[id + i].mode() == 0 ) {  // Find a free slot
+        sub = i;
+      }
+    }
+  }
+  if ( slots > 1 && fill ) {
+    for ( int i = 0; i < slots; i++ ) {
+      connectors[id + i].set( lambdacallback, idx );
+    }
+  } else {
+    connectors[id + sub].set( lambdacallback, idx );
+  }
+}
+
+
 /*
  * Machine::push( connectors, id, sub, v, up ) - Pushes an action through the specified connector
  *

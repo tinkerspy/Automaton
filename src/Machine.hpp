@@ -25,6 +25,8 @@ class Machine {
   Machine& setTrace( Stream* stream, swcb_sym_t callback, const char symbols[] );
   void onPush( atm_connector connectors[], int id, int sub, int slots, int fill, Machine& machine, int event );
   void onPush( atm_connector connectors[], int id, int sub, int slots, int fill, atm_cb_push_t callback, int idx );
+  void onPush( atm_connector connectors[], int id, int sub, int slots, int fill, atm_cb_lambda_t lambdacallback, int idx );
+
   void push( atm_connector connectors[], int id, int sub, int v, int up );
 
   const state_t* state_table;

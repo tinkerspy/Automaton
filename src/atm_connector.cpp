@@ -32,6 +32,10 @@ bool atm_connector::push( int v /* = 0 */, int up /* = 0 */, bool overrideCallba
         machine->trigger( event );
       }
       return true;
+
+    case MODE_LAMBDA:
+           (*lambda_callback)( callback_idx, v, up );
+           return true;
   }
   return true;
 }
@@ -102,6 +106,12 @@ void atm_connector::set( Machine* m, int evt, int8_t logOp /* = 0 */, int8_t rel
   event = evt;
 }
 
+void atm_connector::set(atm_cb_lambda_t callback, int idx, int8_t logOp, int8_t relOp) {
+	  mode_flags = MODE_LAMBDA | ( logOp << 3 ) | ( relOp << 5 );
+	  lambda_callback = callback;
+	  callback_idx = idx;
+}
+
 /*
  * mode() - Returns the mode part of the mode_flags byte
  *
@@ -110,3 +120,4 @@ void atm_connector::set( Machine* m, int evt, int8_t logOp /* = 0 */, int8_t rel
 int8_t atm_connector::mode( void ) {
   return mode_flags & B00000111;
 }
+
