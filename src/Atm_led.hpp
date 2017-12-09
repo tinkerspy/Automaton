@@ -34,19 +34,24 @@ class Atm_led : public Machine {
  private:
   enum { ENT_INIT, ENT_ON, ENT_OFF, EXT_CHAIN };
   uint8_t level;
-  short pin;
-  bool activeLow;
-  uint8_t toHigh, toLow;
-  bool wrap;
   uint16_t repeat_count;
   atm_timer_millis on_timer, off_timer, lead_timer;
   atm_counter counter;
   atm_connector onfinish;
   unsigned char* levelMap;
   int levelMapSize;  
-  int mapLevel( int level );
 
 
   int event( int id );
   void action( int id );
+ protected:
+  short pin;
+  bool activeLow;
+  uint8_t toHigh, toLow;
+  bool wrap;
+  virtual void initLED();
+  virtual void switchOn();
+  virtual void switchOff();
+  virtual void setBrightness(int value);
+  virtual int mapLevel( int level );
 };
