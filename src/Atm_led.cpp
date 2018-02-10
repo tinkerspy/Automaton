@@ -26,11 +26,35 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   digitalWrite( pin, activeLow ? HIGH : LOW );
   on_timer.set( 500 );
   off_timer.set( 500 );
+  pwm( 512, 1 );
   lead_timer.set( 0 );
   repeat_count = ATM_COUNTER_OFF;
   counter.set( repeat_count );
   while ( state() != 0 ) cycle();
   return *this;
+}
+
+Atm_led& Atm_led::pwm( uint16_t width, float freq ) {
+
+    if ( freq > -1 ) {	
+		this->freq = freq;
+	} else {
+		freq = this->freq;
+	}
+	this->width = width;
+	float cycle_width = 1000 / freq;
+	on_timer.set( cycle_width / 1024 * this->width );
+	off_timer.set( cycle_width / 1024 * ( 1024 - this->width ) );
+	return *this;
+}
+
+Atm_led& Atm_led::frequency( float freq ) {
+
+	this->freq = freq;
+	float cycle_width = 1000 / freq;
+	on_timer.set( cycle_width / 1024 * this->width );
+	off_timer.set( cycle_width / 1024 * ( 1024 - this->width ) );
+	return *this;
 }
 
 int Atm_led::event( int id ) {
