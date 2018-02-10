@@ -14,7 +14,7 @@ Atm_timer& Atm_timer::begin( uint32_t ms /* = ATM_TIMER_OFF */, uint16_t repeats
     /* WAITD   */          -1,        -1, EXT_WAITD,     WAITMS,        WAITD,          -1,         -1,     IDLE,     START,       IDLE,    -1,
     /* WAITMS  */          -1,        -1,        -1,         -1,           -1,     TRIGGER,         -1,     IDLE,     START,       IDLE,    -1,
     /* TRIGGER */ ENT_TRIGGER,        -1,        -1,         -1,           -1,          -1,     FINISH,     IDLE,     START,       IDLE, START,
-    /* FINISH  */  ENT_FINISH,        -1,        -1,         -1,           -1,          -1,         -1,       -1,        -1,         -1,  IDLE,
+    /* FINISH  */  ENT_FINISH,        -1,        -1,         -1,           -1,          -1,         -1,       -1,     START,         -1,  IDLE,
   };
   // clang-format on
   Machine::begin( state_table, ELSE );
