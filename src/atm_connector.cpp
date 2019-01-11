@@ -34,7 +34,7 @@ bool atm_connector::push( int v /* = 0 */, int up /* = 0 */, bool overrideCallba
       return true;
 
     case MODE_LAMBDA:
-           (*lambda_callback)( callback_idx, v, up );
+           (lambda_callback)( callback_idx, v, up );
            return true;
   }
   return true;

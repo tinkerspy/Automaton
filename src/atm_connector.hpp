@@ -18,8 +18,6 @@ class atm_connector {
       union {
         atm_cb_push_t push_callback;
         atm_cb_pull_t pull_callback;
-        atm_cb_lambda_t lambda_callback; // FIXME: UNTESTED: Pointer to lambda function for callback
-
       };
       int callback_idx;  // +2 = 5 bytes per connector/object
     };
@@ -30,6 +28,8 @@ class atm_connector {
       int event;
     };
   };
+  atm_cb_lambda_t lambda_callback; // FIXME: UNTESTED: Pointer to lambda function for callback
+
   void set( Machine* m, int evt, int8_t logOp = 0, int8_t relOp = 0 );
   void set( atm_cb_push_t callback, int idx, int8_t logOp = 0, int8_t relOp = 0 );
   void set( atm_cb_pull_t callback, int idx, int8_t logOp = 0, int8_t relOp = 0 );
