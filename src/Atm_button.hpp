@@ -35,4 +35,8 @@ class Atm_button : public Machine {
 
   int event( int id );
   void action( int id );
+
+  virtual void initButton();
+  virtual bool isPressed();
+  virtual bool isReleased();
 };

@@ -22,8 +22,7 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   toLow = 0;
   toHigh = 255;
   wrap = false;
-  pinMode( pin, OUTPUT );
-  digitalWrite( pin, activeLow ? HIGH : LOW );
+  initLED();
   on_timer.set( 500 );
   off_timer.set( 500 );
   pwm( 512, 1 );
@@ -77,29 +76,11 @@ void Atm_led::action( int id ) {
       counter.set( repeat_count );
       return;
     case ENT_ON:
-      if ( on_timer.value > 0 ) { // Never turn if on_timer is zero (duty cycle 0 must be dark)
-        if ( activeLow ) {
-          digitalWrite( pin, LOW );
-        } else {
-          if ( level == toHigh ) {
-            digitalWrite( pin, HIGH );
-          } else {
-            analogWrite( pin, mapLevel( level ) );
-          }
-        }
-      }
+   	  switchOn();
       return;
     case ENT_OFF:
       counter.decrement();
-      if ( !activeLow ) {
-        digitalWrite( pin, LOW );
-      } else {
-        if ( level == toHigh ) {
-          digitalWrite( pin, HIGH );
-        } else {
-          analogWrite( pin, mapLevel( level ) );
-        }
-      }
+      switchOff();
       return;
     case EXT_CHAIN:
       onfinish.push( 0 );
@@ -205,7 +186,7 @@ int Atm_led::brightness( int level /* = -1 */ ) {
   if ( level > -1 ) {
     this->level = level;
     if ( current == ON || current == START ) {
-      analogWrite( pin, mapLevel( level ) );
+      setBrightness(mapLevel(level));
     }
   }
   return this->level;
@@ -238,4 +219,39 @@ Atm_led& Atm_led::trace( Stream& stream ) {
             "BLINK\0EVT_TOGGLE\0EVT_TOGGLE_BLINK\0ELSE\0"
             "IDLE\0ON\0START\0BLINK_OFF\0LOOP\0DONE\0OFF\0WT_ON\0WT_START" );
   return *this;
+}
+
+void Atm_led::initLED() {
+	pinMode(pin, OUTPUT);
+	digitalWrite(pin, activeLow ? HIGH : LOW);
+}
+
+void Atm_led::switchOn() {
+	// Never turn if on_timer is zero (duty cycle 0 must be dark)
+	if (on_timer.value == 0) return;
+	if (activeLow) {
+		digitalWrite(pin, LOW);
+	} else {
+		if (level == toHigh) {
+			digitalWrite(pin, HIGH);
+		} else {
+			analogWrite(pin, mapLevel(level));
+		}
+	}
+}
+
+void Atm_led::switchOff() {
+	if (!activeLow) {
+		digitalWrite(pin, LOW);
+	} else {
+		if (level == toHigh) {
+			digitalWrite(pin, HIGH);
+		} else {
+			analogWrite(pin, mapLevel(level));
+		}
+	}
+}
+
+void Atm_led::setBrightness(int value) {
+	analogWrite( pin, value );
 }
