@@ -89,6 +89,20 @@ void Atm_button::action( int id ) {
   }
 }
 
+Atm_button& Atm_button::pinMode( int v ) {
+	::pinMode( this->pin, v );
+	return *this;
+}
+
+Atm_button& Atm_button::active( int v ) {
+	if ( v == HIGH ) {
+		this->activeLow = false;
+	} else {
+		this->activeLow = true;
+	}
+	return *this;
+}
+
 Atm_button& Atm_button::onPress( atm_cb_push_t callback, int idx /* = 0 */ ) {
   onpress.set( callback, idx );
   return *this;
@@ -153,13 +167,13 @@ Atm_button& Atm_button::trace( Stream& stream ) {
 }
 
 void Atm_button::initButton() {
-	pinMode( pin, INPUT_PULLUP );
+	::pinMode( this->pin, INPUT_PULLUP );
 }
 
 bool Atm_button::isPressed() {
-	return !digitalRead( pin );
+	return ( !digitalRead( pin ) != !this->activeLow );
 }
 
 bool Atm_button::isReleased() {
-	return digitalRead( pin );
+	return ! ( !digitalRead( pin ) != !this->activeLow );
 }

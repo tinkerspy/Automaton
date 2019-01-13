@@ -21,6 +21,8 @@ class Atm_button : public Machine {
   Atm_button& longPress( int max, int delay );
   Atm_button& repeat( int delay = 500, int speed = 50 );
   Atm_button& autoPress( int delay, int press = 1 );
+  Atm_button& pinMode( int v );
+  Atm_button& active( int v );
 
  protected:
   enum { ENT_PRESS, ENT_RELEASE, ENT_LSTART, ENT_LCOUNT, ENT_LRELEASE, EXT_WRELEASE, ENT_AUTO };
@@ -32,6 +34,7 @@ class Atm_button : public Machine {
   atm_counter counter_longpress;
   int longpress_max;
   int auto_press = 1;
+  int activeLow = false;
 
   int event( int id );
   void action( int id );
