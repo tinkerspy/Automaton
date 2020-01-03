@@ -9,15 +9,15 @@
 
 typedef int8_t state_t;
 
-const uint8_t ATM_SLEEP_FLAG = B00000001;
-const uint8_t ATM_CYCLE_FLAG = B00000010;
-const uint8_t ATM_SLINK_FLAG = B00000100;
-const uint8_t ATM_USR1_FLAG = B00010000;
-const uint8_t ATM_USR2_FLAG = B00100000;
-const uint8_t ATM_USR3_FLAG = B01000000;
-const uint8_t ATM_USR4_FLAG = B10000000;
-const uint8_t ATM_USR_FLAGS = B11110000;
-const uint8_t ATM_BROADCAST = B10000000;
+const uint8_t ATM_SLEEP_FLAG = 0b00000001;
+const uint8_t ATM_CYCLE_FLAG = 0b00000010;
+const uint8_t ATM_SLINK_FLAG = 0b00000100;
+const uint8_t ATM_USR1_FLAG = 0b00010000;
+const uint8_t ATM_USR2_FLAG = 0b00100000;
+const uint8_t ATM_USR3_FLAG = 0b01000000;
+const uint8_t ATM_USR4_FLAG = 0b10000000;
+const uint8_t ATM_USR_FLAGS = 0b11110000;
+const uint8_t ATM_BROADCAST = 0b10000000;
 
 #define read_state( addr ) ( state_t ) pgm_read_byte_near( addr )
 
