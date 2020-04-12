@@ -1,5 +1,5 @@
 #pragma once
-
+#ifndef ATM_DISABLE_LED
 #include <Automaton.h>
 
 class Atm_led : public Machine {
@@ -54,3 +54,4 @@ class Atm_led : public Machine {
   int event( int id );
   void action( int id );
 };
+#endif //ATM_DISABLE_LED
