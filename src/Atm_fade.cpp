@@ -1,3 +1,4 @@
+#ifndef ATM_DISABLE_FADE
 #include "Atm_fade.hpp"
 
 Atm_fade& Atm_fade::begin( int attached_pin ) {
@@ -150,3 +151,4 @@ Atm_fade& Atm_fade::trace( Stream& stream ) {
             "IDLE\0ON\0START\0STARTU\0UP\0STARTD\0DOWN\0REPEAT\0DONE\0OSTARTU\0OUP\0OSTARTD\0ODOWN" );
   return *this;
 }
+#endif // ATM_DISABLE_FADE

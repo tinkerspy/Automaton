@@ -1,5 +1,5 @@
 #pragma once
-
+#ifndef ATM_DISABLE_COMPARATOR
 #include <Automaton.h>
 
 class Atm_comparator : public Machine {
@@ -41,3 +41,4 @@ class Atm_comparator : public Machine {
   int event( int id );
   void action( int id );
 };
+#endif //ATM_DISABLE_COMPARATOR

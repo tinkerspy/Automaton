@@ -1,5 +1,5 @@
 #pragma once
-
+#ifndef ATM_DISABLE_PLAYER
 #include <Automaton.h>
 
 #if defined( _VARIANT_ARDUINO_DUE_X ) || defined( ARDUINO_FEATHER52 ) 
@@ -49,7 +49,7 @@ class Atm_player : public Machine {
   int event( int id );
   void action( int id );
 };
-
+#endif //ATM_DISABLE_PLAYER
 /*
 Automaton::ATML::begin - Automaton Markup Language
 

@@ -1,3 +1,5 @@
+#ifndef ATM_DISABLE_ANALOG
+
 #include "Atm_analog.hpp"
 
 Atm_analog& Atm_analog::begin( int attached_pin, int samplerate /* = 50 */ ) {
@@ -106,3 +108,4 @@ Atm_analog& Atm_analog::trace( Stream& stream ) {
 
   return *this;
 }
+#endif // ATM_DISABLE_ANALOG
