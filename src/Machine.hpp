@@ -8,7 +8,7 @@
 class Machine {
  public:
   virtual int state( void );
-  virtual Machine& trigger( int evt = 0 );
+  virtual Machine& trigger( int evt = 0, const std::function<void(Machine&)>& transition = {} );
   Machine& cycle( uint32_t time = 0 );
   uint32_t state_millis;
   uint8_t flags = ATM_SLEEP_FLAG;
