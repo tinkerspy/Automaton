@@ -4,7 +4,7 @@
 */
 
 #pragma once
-
+#include <functional>
 class Machine {
  public:
   virtual int state( void );
