@@ -1,3 +1,4 @@
+#ifndef ATM_DISABLE_COMPARATOR
 #include "Atm_comparator.hpp"
 
 Atm_comparator& Atm_comparator::begin( int attached_pin, int samplerate /* = 50 */ ) {
@@ -171,3 +172,4 @@ Atm_comparator& Atm_comparator::trace( Stream& stream ) {
             "IDLE\0SAMPLE\0SEND" );
   return *this;
 }
+#endif //ATM_DISABLE_COMPARATOR

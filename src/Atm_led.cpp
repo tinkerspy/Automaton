@@ -1,3 +1,4 @@
+#ifndef ATM_DISABLE_LED
 #include "Atm_led.hpp"
 
 Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
@@ -239,3 +240,4 @@ Atm_led& Atm_led::trace( Stream& stream ) {
             "IDLE\0ON\0START\0BLINK_OFF\0LOOP\0DONE\0OFF\0WT_ON\0WT_START" );
   return *this;
 }
+#endif //ATM_DISABLE_LED

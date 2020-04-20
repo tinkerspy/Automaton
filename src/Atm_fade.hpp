@@ -1,5 +1,5 @@
 #pragma once
-
+#ifndef ATM_DISABLE_FADE
 #include <Automaton.h>
 
 class Atm_fade : public Machine {
@@ -37,3 +37,4 @@ class Atm_fade : public Machine {
   int event( int id );
   void action( int id );
 };
+#endif //ATM_DISABLE_FADE

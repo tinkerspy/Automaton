@@ -1,3 +1,4 @@
+#ifndef ATM_DISABLE_PLAYER
 #include "Atm_player.hpp"
 
 /* Add optional parameters for the state machine to begin()
@@ -240,3 +241,4 @@ Atm_player& Atm_player::trace( Stream& stream ) {
                      "PLAYER\0EVT_START\0EVT_STOP\0EVT_TOGGLE\0EVT_TIMER\0EVT_EOPAT\0EVT_REPEAT\0ELSE\0IDLE\0START\0SOUND\0QUIET\0NEXT\0REPEAT\0FINISH" );
   return *this;
 }
+#endif // ATM_DISABLE_PLAYER

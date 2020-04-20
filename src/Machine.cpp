@@ -39,7 +39,7 @@ Machine& Machine::state( int state ) {
  *
  */
 
-Machine& Machine::trigger( int evt /* = 0 */ ) {
+Machine& Machine::trigger( int evt /* = 0 */, const std::function<void(Machine&)>& transition /* = {} */ ) {
   int new_state;
   int max_cycle = 8;
   do {
@@ -48,6 +48,8 @@ Machine& Machine::trigger( int evt /* = 0 */ ) {
     new_state = read_state( state_table + ( current * state_width ) + evt + ATM_ON_EXIT + 1 );
   } while ( --max_cycle && ( new_state == -1 || next_trigger != -1 ) );
   if ( new_state > -1 ) {
+    // Event triggers transition. Call transition callback to make some state change.
+    if (transition) transition(*this);
     next_trigger = evt;
     flags &= ~ATM_SLEEP_FLAG;
     cycle();  // Pick up the trigger
