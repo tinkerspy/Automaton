@@ -7,6 +7,17 @@
 
 #include "Arduino.h"
 
+/*
+  fixing bug cause by new ardiuino api version
+  See https://github.com/arduino/ArduinoCore-API/issues/25
+*/
+#if (ARDUINO_API_VERSION >= 10000)
+  
+  inline void digitalWrite(unsigned pin, bool status) { 
+    digitalWrite(pin, status ? 1 : 0); 
+  };
+#endif
+
 typedef int8_t state_t;
 
 const uint8_t ATM_SLEEP_FLAG = 0b00000001;
