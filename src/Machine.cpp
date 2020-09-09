@@ -160,7 +160,7 @@ void Machine::onPush( atm_connector connectors[], int id, int sub, int slots, in
 void Machine::push( atm_connector connectors[], int id, int sub, int v, int up ) {
   if ( ( id & ATM_BROADCAST ) > 0 ) {
     id = id & ~ATM_BROADCAST;
-    for ( int i = id; i < sub; i++ ) {
+    for ( int i = 0; i < sub; i++ ) {
       connectors[id + i].push( v, up );
     }
   } else {
