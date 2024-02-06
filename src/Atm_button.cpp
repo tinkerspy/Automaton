@@ -2,7 +2,7 @@
 
 // Add option for button press callback (for reading i2c buttons etc)
 
-Atm_button& Atm_button::begin( int attached_pin ) {
+Atm_button& Atm_button::begin( int attached_pin, int _active_high ) {
   // clang-format off
   const static state_t state_table[] PROGMEM = {
     /* Standard Mode: press/repeat */
@@ -23,12 +23,17 @@ Atm_button& Atm_button::begin( int attached_pin ) {
   // clang-format on
   Machine::begin( state_table, ELSE );
   pin = attached_pin;
+  active_high = _active_high;
   counter_longpress.set( 0 );
   timer_debounce.set( DEBOUNCE );
   timer_delay.set( ATM_TIMER_OFF );
   timer_repeat.set( ATM_TIMER_OFF );
   timer_auto.set( ATM_TIMER_OFF );
-  pinMode( pin, INPUT_PULLUP );
+  if (active_high) {
+    pinMode( pin, INPUT_PULLUP );
+  } else {
+    pinMode( pin, INPUT_PULLDOWN );
+  }
   return *this;
 }
 
@@ -45,9 +50,9 @@ int Atm_button::event( int id ) {
     case EVT_AUTO:
       return timer_auto.expired( this );
     case EVT_PRESS:
-      return !digitalRead( pin );
+      return digitalRead( pin ) == active_high;
     case EVT_RELEASE:
-      return digitalRead( pin );
+      return digitalRead( pin ) != active_high;
     case EVT_COUNTER:
       return counter_longpress.expired();
   }

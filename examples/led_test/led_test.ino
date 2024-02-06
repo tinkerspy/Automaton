@@ -16,7 +16,7 @@ void setup() {
   led.begin( ledPin )
     .blink( 1000 ); 
   
-  button.begin( buttonPin )
+  button.begin( buttonPin , LOW)
     .onPress( led, led.EVT_TOGGLE );
 }
 
