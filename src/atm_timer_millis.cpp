@@ -23,8 +23,8 @@ void atm_timer_millis::setFromNow( Machine* machine, uint32_t v ) {
  * This is a rollover-safe 32 bit unsigned integer
  *
  */
-uint32_t elapsed( Machine* machine ) {
-    return value == ATM_TIMER_OFF ? 0 : millis() - machine->state_millis
+uint32_t atm_timer_millis::elapsed( Machine* machine ) {
+    return value == ATM_TIMER_OFF ? 0 : millis() - machine->state_millis;
 }
 
 /*
