@@ -10,7 +10,7 @@ void setup() {
     .speed( 50 ) 
     .trigger( sweep.EVT_START );
 
-  button.begin( 2 )
+  button.begin( 2 , LOW)
     .onPress( sweep, sweep.EVT_TOGGLE );
       
 }

@@ -23,7 +23,7 @@ void setup() {
     .play( pattern, sizeof( pattern ) )
     .repeat( -1 );
 
-  button.begin( 2 ) // A button on pin 2 toggles playback on and off
+  button.begin( 2 , LOW) // A button on pin 2 toggles playback on and off
     .onPress( player, player.EVT_TOGGLE );
 
   speed.begin( A0 ) // An analog pot on pin A0 controls playback speed

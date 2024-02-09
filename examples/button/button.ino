@@ -19,7 +19,7 @@ void setup() {
     .onInput( led3, led3.EVT_TOGGLE_BLINK );
       
   // Button triggers the fan
-  btn.begin( 2 ) 
+  btn.begin( 2 , LOW) 
     .onPress( fan, fan.EVT_INPUT );
   
   // Start the blinking

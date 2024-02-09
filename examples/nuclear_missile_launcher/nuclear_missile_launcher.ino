@@ -19,7 +19,7 @@ const int countdownFlashOff = 900;
 
 void setup() {
   // Self resetting button 1
-  button1.begin( pinButton1 )
+  button1.begin( pinButton1 , LOW)
     .onPress( bit1, bit1.EVT_ON );
 
   timer1.begin( buttonIntervalMax )
@@ -29,7 +29,7 @@ void setup() {
     .onChange( true, timer1, timer1.EVT_START );
  
   // Self resetting button 2
-  button2.begin( pinButton2 )
+  button2.begin( pinButton2 , LOW)
     .onPress( bit2, bit2.EVT_ON );
 
   timer2.begin( buttonIntervalMax )

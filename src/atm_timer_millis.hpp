@@ -12,5 +12,6 @@ class atm_timer_millis {
   uint32_t value;
   void set( uint32_t v );
   void setFromNow( Machine* machine, uint32_t v );
+  uint32_t elapsed( Machine* machine );
   int expired( Machine* machine );
 };

@@ -9,7 +9,7 @@ class Atm_button : public Machine {
   enum { BTN_PASS4 = -4, BTN_PASS3 = -3, BTN_PASS2 = -2, BTN_PASS1 = -1, BTN_RELEASE = 0, BTN_PRESS1 = 1, BTN_PRESS2 = 2, BTN_PRESS3 = 3, BTN_PRESS4 = 4 };
 
   Atm_button( void ) : Machine(){};
-  Atm_button& begin( int attached_pin );
+  Atm_button& begin( int attached_pin, int _active_high );
   Atm_button& trace( Stream& stream );
   Atm_button& onPress( atm_cb_push_t callback, int idx = 0 );
   Atm_button& onPress( Machine& machine, int event = 0 );
@@ -28,6 +28,7 @@ class Atm_button : public Machine {
   atm_connector onpress, onrelease;
   atm_connector longpress[2];
   short pin;
+  short active_high;
   atm_timer_millis timer_debounce, timer_delay, timer_repeat, timer_auto;
   atm_counter counter_longpress;
   int longpress_max;
